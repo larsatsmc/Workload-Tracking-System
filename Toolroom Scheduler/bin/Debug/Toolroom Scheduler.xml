@@ -1,0 +1,352 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Toolroom Scheduler</name>
+    </assembly>
+    <members>
+        <member name="F:Toolroom_Scheduler.AddResourceForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.AddResourceForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.AddResourceForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.BackDateWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.BackDateWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.BackDateWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.Bulk_Assign_Resources_Form.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Bulk_Assign_Resources_Form.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.Bulk_Assign_Resources_Form.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:Toolroom_Scheduler.Component.Name">
+            <summary>
+            Gets the name property of a Component object.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.#ctor">
+            <summary>
+            Creates instance of a component and sets TaskIDCount property to 0.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.#ctor(System.String)">
+            <summary>
+            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object)">
+            <summary>
+            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetName(System.String)">
+            <summary>
+            Sets the name of a component.
+            </summary>   
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.AddTask(System.String,System.String)">
+            <summary>
+            Adds a task to a component.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.AddTask(Toolroom_Scheduler.TaskInfo)">
+            <summary>
+            Adds a task to a component.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.AddTaskList(System.Collections.Generic.List{Toolroom_Scheduler.TaskInfo})">
+            <summary>
+            Adds a task to a component.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.AddPicture(System.String)">
+            <summary>
+            Adds a picture to a component's picture list from a filepath.
+            </summary>        
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.AddPicture">
+            <summary>
+            Adds a picture to a component's picture list from the clipboard.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.RemoveTask(System.Int32)">
+            <summary>
+            Removes a task from a component.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.MoveTaskUp(System.Int32)">
+            <summary>
+            Moves a task up the task list.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.MoveTaskDown(System.Int32)">
+            <summary>
+            Moves a task down the task list.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetNote(System.String)">
+            <summary>
+            Sets the note property of a component.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetPosition(System.Int32)">
+            <summary>
+            Sets the position property of a component.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.GetTask(System.Int32)">
+            <summary>
+            Gets a task with matching ID from list of tasks for component.
+            </summary> 
+        </member>
+        <member name="F:Toolroom_Scheduler.ForwardDateWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.ForwardDateWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.ForwardDateWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.MainWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.MainWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.MainWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.ManageResourcesForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.ManageResourcesForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.ManageResourcesForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.Project_Creation_Form.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Project_Creation_Form.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.Project_Creation_Form.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.RenameNodeWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.RenameNodeWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.RenameNodeWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Toolroom_Scheduler.SelectComponentsWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.SelectComponentsWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Toolroom_Scheduler.SelectComponentsWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor">
+            <summary>
+            Initializes an empty instance of TaskInfo.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor(System.Int32,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Int32,System.DateTime,System.String)">
+            <summary>
+            This constructor is for reading tasks from a project file into the database.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor(System.Int32,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Int32,System.DateTime,System.String)">
+            <summary>
+            This constructor is for reading tasks from a project file into the database (2).
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.TaskInfo.SetTaskInfo(System.Decimal,System.String,System.Object,System.Object,System.String,System.String)">
+            <summary>
+            Sets the task info for a given task from task info tab.
+            </summary> 
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSet.TasksDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSet.TasksRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSet.TasksRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TasksTableAdapter">
+             <summary>
+            Represents the connection and commands used to retrieve and save data.
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager">
+             <summary>
+            TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.UpdateUpdatedRows(Toolroom_Scheduler.Workload_Tracking_SystemDataSet,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Update rows in top-down order.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.UpdateInsertedRows(Toolroom_Scheduler.Workload_Tracking_SystemDataSet,System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Insert rows in top-down order.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.UpdateDeletedRows(Toolroom_Scheduler.Workload_Tracking_SystemDataSet,System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Delete rows in bottom-up order.
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+            </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.UpdateAll(Toolroom_Scheduler.Workload_Tracking_SystemDataSet)">
+             <summary>
+            Update all changes to the dataset.
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.UpdateOrderOption">
+             <summary>
+            Update Order Option
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSetTableAdapters.TableAdapterManager.SelfReferenceComparer">
+             <summary>
+            Used to sort self-referenced table's rows
+            </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Toolroom_Scheduler.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Toolroom_Scheduler.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>
