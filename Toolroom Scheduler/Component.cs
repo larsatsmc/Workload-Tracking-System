@@ -23,6 +23,8 @@ namespace Toolroom_Scheduler
         public int Priority { get; private set; }
         public int Position { get; private set; }
         public int TaskIDCount { get; private set; }
+        public int Quantity { get; private set; }
+        public int Spares { get; private set; }
 
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
@@ -199,6 +201,27 @@ namespace Toolroom_Scheduler
         public void SetPosition(int position)
         {
             this.Position = position;
+        }
+        /// <summary>
+        /// Sets the quantity property of a component.
+        /// </summary> 
+        public void SetQuantity(int quantity)
+        {
+            this.Quantity = quantity;
+        }
+        /// <summary>
+        /// Sets the spares property of a component.
+        /// </summary> 
+        public void SetSpares(int spares)
+        {
+            this.Spares = spares;
+        }
+        /// <summary>
+        /// Sets the material property of a component.
+        /// </summary> 
+        public void SetMaterial(string material)
+        {
+            this.Material = material;
         }
         /// <summary>
         /// Gets a task with matching ID from list of tasks for component.

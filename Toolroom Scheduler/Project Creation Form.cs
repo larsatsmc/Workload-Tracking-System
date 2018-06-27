@@ -460,7 +460,7 @@ namespace Toolroom_Scheduler
 
                 selectedNode.Nodes[4].Text = predecessorString;
 
-                selectedNode.Nodes[5].Text = notesTextBox.Text;
+                selectedNode.Nodes[5].Text = taskNotesTextBox.Text;
 
                 task.HasInfo = true;
             }
@@ -483,7 +483,7 @@ namespace Toolroom_Scheduler
 
                 selectedNode.Nodes[4].Text = predecessorString;
 
-                selectedNode.Nodes[5].Text = notesTextBox.Text;
+                selectedNode.Nodes[5].Text = taskNotesTextBox.Text;
 
                 task.HasInfo = true;
             }
@@ -495,7 +495,7 @@ namespace Toolroom_Scheduler
                 machineComboBox.SelectedItem,
                 personnelComboBox.SelectedItem,
                 predecessorString,
-                notesTextBox.Text
+                taskNotesTextBox.Text
             );
 
             selectNextTask();
@@ -607,7 +607,7 @@ namespace Toolroom_Scheduler
                 machineComboBox.Text == "" && 
                 personnelComboBox.Text == "" && 
                 predecessorsListBox.Text == "" && 
-                notesTextBox.Text == "")
+                taskNotesTextBox.Text == "")
             {
                 return true;
             }
@@ -1521,9 +1521,8 @@ namespace Toolroom_Scheduler
             updateInfoButton.BackColor = Color.Orange;
         }
 
-        private void notesTextBox_TextChanged(object sender, EventArgs e)
+        private void taskNotesTextBox_TextChanged(object sender, EventArgs e)
         {
-            //AddTaskInfoToSelectedTask("Note", notesTextBox.Text);
             updateInfoButton.BackColor = Color.Orange;
         }
 
@@ -1580,7 +1579,12 @@ namespace Toolroom_Scheduler
                     machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
                     personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
                     predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-                    notesTextBox.TextChanged -= new System.EventHandler(notesTextBox_TextChanged);
+                    taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
+
+                    quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
+                    sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
+                    materialComboBox.SelectedIndexChanged -= new System.EventHandler(materialComboBox_SelectedIndexChanged);
+                    componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
 
                     tabControl1.SelectedTab = tabPage4;
 
@@ -1627,7 +1631,7 @@ namespace Toolroom_Scheduler
                         //    predecessorsListBox.SelectedIndex = Convert.ToInt32(item) - baseCount - 1;
                         //}
 
-                        notesTextBox.Text = selectedNode.Nodes[5].Text;
+                        taskNotesTextBox.Text = selectedNode.Nodes[5].Text;
                     }
                     else
                     {
@@ -1646,7 +1650,7 @@ namespace Toolroom_Scheduler
                         //    }
                         //}
 
-                        notesTextBox.Text = "";
+                        taskNotesTextBox.Text = "";
                     }
 
                     SelectPredecessors(selectedNode);
@@ -1658,7 +1662,7 @@ namespace Toolroom_Scheduler
                     machineComboBox.TextChanged += new System.EventHandler(machineComboBox_TextChanged);
                     personnelComboBox.TextChanged += new System.EventHandler(personnelComboBox_TextChanged);
                     predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-                    notesTextBox.TextChanged += new System.EventHandler(notesTextBox_TextChanged);
+                    taskNotesTextBox.TextChanged += new System.EventHandler(taskNotesTextBox_TextChanged);
                 }
                 catch (Exception er)
                 {
@@ -1786,6 +1790,54 @@ namespace Toolroom_Scheduler
             quoteLoaded = true;
 
             Console.WriteLine($"{Project.QuoteInfo.ProgramRoughHours} {Project.QuoteInfo.ProgramFinishHours} {Project.QuoteInfo.ProgramElectrodeHours} {Project.QuoteInfo.CNCRoughHours} {Project.QuoteInfo.CNCFinishHours} {Project.QuoteInfo.CNCElectrodeHours} {Project.QuoteInfo.EDMSinkerHours}");
+        }
+
+        private void quantityNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetQuantity(Convert.ToInt16(quantityNumericUpDown.Value));
+            }
+        }
+
+        private void sparesNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetQuantity(Convert.ToInt16(sparesNumericUpDown.Value));
+            }
+        }
+
+        private void materialComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetMaterial(materialComboBox.Text);
+            }
+        }
+
+        private void componentNotesTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetNote(componentNotesTextBox.Text);
+            }
         }
 
         private void loadTemplateButton_Click(object sender, EventArgs e)

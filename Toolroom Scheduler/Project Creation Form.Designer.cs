@@ -50,17 +50,18 @@
             this.button3 = new System.Windows.Forms.Button();
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.sparesNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.quantityNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.materialComboBox = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.componentPictureBox = new System.Windows.Forms.PictureBox();
             this.clipboardButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.componentNotesTextBox = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.matchHoursCheckBox = new System.Windows.Forms.CheckBox();
             this.durationUnitsComboBox = new System.Windows.Forms.ComboBox();
@@ -69,7 +70,7 @@
             this.machineComboBox = new System.Windows.Forms.ComboBox();
             this.personnelComboBox = new System.Windows.Forms.ComboBox();
             this.predecessorsListBox = new System.Windows.Forms.ListBox();
-            this.notesTextBox = new System.Windows.Forms.TextBox();
+            this.taskNotesTextBox = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.AddTasksButton = new System.Windows.Forms.Button();
@@ -104,13 +105,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.label23 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sparesNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quantityNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.componentPictureBox)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hoursNumericUpDown)).BeginInit();
@@ -317,15 +317,15 @@
             this.tabPage5.Controls.Add(this.label23);
             this.tabPage5.Controls.Add(this.label22);
             this.tabPage5.Controls.Add(this.label21);
-            this.tabPage5.Controls.Add(this.numericUpDown2);
-            this.tabPage5.Controls.Add(this.numericUpDown1);
-            this.tabPage5.Controls.Add(this.comboBox1);
+            this.tabPage5.Controls.Add(this.sparesNumericUpDown);
+            this.tabPage5.Controls.Add(this.quantityNumericUpDown);
+            this.tabPage5.Controls.Add(this.materialComboBox);
             this.tabPage5.Controls.Add(this.label11);
-            this.tabPage5.Controls.Add(this.pictureBox1);
+            this.tabPage5.Controls.Add(this.componentPictureBox);
             this.tabPage5.Controls.Add(this.clipboardButton);
             this.tabPage5.Controls.Add(this.browseButton);
             this.tabPage5.Controls.Add(this.label20);
-            this.tabPage5.Controls.Add(this.textBox1);
+            this.tabPage5.Controls.Add(this.componentNotesTextBox);
             this.tabPage5.Location = new System.Drawing.Point(4, 25);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
@@ -333,6 +333,16 @@
             this.tabPage5.TabIndex = 11;
             this.tabPage5.Text = "Component Info";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(15, 72);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(69, 19);
+            this.label23.TabIndex = 61;
+            this.label23.Text = "Material:";
             // 
             // label22
             // 
@@ -354,27 +364,41 @@
             this.label21.TabIndex = 59;
             this.label21.Text = "Quantity:";
             // 
-            // numericUpDown2
+            // sparesNumericUpDown
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(208, 43);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(47, 22);
-            this.numericUpDown2.TabIndex = 58;
+            this.sparesNumericUpDown.Location = new System.Drawing.Point(208, 43);
+            this.sparesNumericUpDown.Name = "sparesNumericUpDown";
+            this.sparesNumericUpDown.Size = new System.Drawing.Size(47, 22);
+            this.sparesNumericUpDown.TabIndex = 58;
+            this.sparesNumericUpDown.ValueChanged += new System.EventHandler(this.sparesNumericUpDown_ValueChanged);
             // 
-            // numericUpDown1
+            // quantityNumericUpDown
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(90, 43);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(47, 22);
-            this.numericUpDown1.TabIndex = 57;
+            this.quantityNumericUpDown.Location = new System.Drawing.Point(90, 43);
+            this.quantityNumericUpDown.Name = "quantityNumericUpDown";
+            this.quantityNumericUpDown.Size = new System.Drawing.Size(47, 22);
+            this.quantityNumericUpDown.TabIndex = 57;
+            this.quantityNumericUpDown.ValueChanged += new System.EventHandler(this.quantityNumericUpDown_ValueChanged);
             // 
-            // comboBox1
+            // materialComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(90, 71);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(236, 24);
-            this.comboBox1.TabIndex = 56;
+            this.materialComboBox.FormattingEnabled = true;
+            this.materialComboBox.Items.AddRange(new object[] {
+            "Aluminum",
+            "Copper",
+            "H13",
+            "HRC60",
+            "Moldmax",
+            "Moldstar 90",
+            "P20",
+            "S7",
+            "SS",
+            "W360"});
+            this.materialComboBox.Location = new System.Drawing.Point(90, 71);
+            this.materialComboBox.Name = "materialComboBox";
+            this.materialComboBox.Size = new System.Drawing.Size(236, 24);
+            this.materialComboBox.TabIndex = 56;
+            this.materialComboBox.SelectedIndexChanged += new System.EventHandler(this.materialComboBox_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -387,13 +411,13 @@
             this.label11.TabIndex = 55;
             this.label11.Text = "Picture:";
             // 
-            // pictureBox1
+            // componentPictureBox
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(18, 143);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(381, 264);
-            this.pictureBox1.TabIndex = 54;
-            this.pictureBox1.TabStop = false;
+            this.componentPictureBox.Location = new System.Drawing.Point(18, 143);
+            this.componentPictureBox.Name = "componentPictureBox";
+            this.componentPictureBox.Size = new System.Drawing.Size(381, 264);
+            this.componentPictureBox.TabIndex = 54;
+            this.componentPictureBox.TabStop = false;
             // 
             // clipboardButton
             // 
@@ -425,13 +449,14 @@
             this.label20.TabIndex = 3;
             this.label20.Text = "Notes:";
             // 
-            // textBox1
+            // componentNotesTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(18, 450);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(381, 261);
-            this.textBox1.TabIndex = 2;
+            this.componentNotesTextBox.Location = new System.Drawing.Point(18, 450);
+            this.componentNotesTextBox.Multiline = true;
+            this.componentNotesTextBox.Name = "componentNotesTextBox";
+            this.componentNotesTextBox.Size = new System.Drawing.Size(381, 261);
+            this.componentNotesTextBox.TabIndex = 2;
+            this.componentNotesTextBox.TextChanged += new System.EventHandler(this.componentNotesTextBox_TextChanged);
             // 
             // tabPage4
             // 
@@ -442,7 +467,7 @@
             this.tabPage4.Controls.Add(this.machineComboBox);
             this.tabPage4.Controls.Add(this.personnelComboBox);
             this.tabPage4.Controls.Add(this.predecessorsListBox);
-            this.tabPage4.Controls.Add(this.notesTextBox);
+            this.tabPage4.Controls.Add(this.taskNotesTextBox);
             this.tabPage4.Controls.Add(this.label18);
             this.tabPage4.Controls.Add(this.label17);
             this.tabPage4.Controls.Add(this.label16);
@@ -525,13 +550,14 @@
             this.predecessorsListBox.TabIndex = 31;
             this.predecessorsListBox.SelectedIndexChanged += new System.EventHandler(this.predecessorsListBox_SelectedIndexChanged);
             // 
-            // notesTextBox
+            // taskNotesTextBox
             // 
-            this.notesTextBox.Location = new System.Drawing.Point(23, 486);
-            this.notesTextBox.Multiline = true;
-            this.notesTextBox.Name = "notesTextBox";
-            this.notesTextBox.Size = new System.Drawing.Size(333, 140);
-            this.notesTextBox.TabIndex = 30;
+            this.taskNotesTextBox.Location = new System.Drawing.Point(23, 486);
+            this.taskNotesTextBox.Multiline = true;
+            this.taskNotesTextBox.Name = "taskNotesTextBox";
+            this.taskNotesTextBox.Size = new System.Drawing.Size(333, 140);
+            this.taskNotesTextBox.TabIndex = 30;
+            this.taskNotesTextBox.TextChanged += new System.EventHandler(this.taskNotesTextBox_TextChanged);
             // 
             // label17
             // 
@@ -944,16 +970,6 @@
             this.tabControl1.Size = new System.Drawing.Size(425, 760);
             this.tabControl1.TabIndex = 1;
             // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(15, 72);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(69, 19);
-            this.label23.TabIndex = 61;
-            this.label23.Text = "Material:";
-            // 
             // Project_Creation_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -982,9 +998,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sparesNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quantityNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.componentPictureBox)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationNumericUpDown)).EndInit();
@@ -1024,15 +1040,15 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.NumericUpDown sparesNumericUpDown;
+        private System.Windows.Forms.NumericUpDown quantityNumericUpDown;
+        private System.Windows.Forms.ComboBox materialComboBox;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox componentPictureBox;
         private System.Windows.Forms.Button clipboardButton;
         private System.Windows.Forms.Button browseButton;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox componentNotesTextBox;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.CheckBox matchHoursCheckBox;
         private System.Windows.Forms.ComboBox durationUnitsComboBox;
@@ -1041,7 +1057,7 @@
         private System.Windows.Forms.ComboBox machineComboBox;
         private System.Windows.Forms.ComboBox personnelComboBox;
         private System.Windows.Forms.ListBox predecessorsListBox;
-        private System.Windows.Forms.TextBox notesTextBox;
+        private System.Windows.Forms.TextBox taskNotesTextBox;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
