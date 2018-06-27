@@ -100,12 +100,7 @@
             Adds a task to a component.
             </summary>
         </member>
-        <member name="M:Toolroom_Scheduler.Component.AddPicture(System.String)">
-            <summary>
-            Adds a picture to a component's picture list from a filepath.
-            </summary>        
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.AddPicture">
+        <member name="M:Toolroom_Scheduler.Component.SetPicture">
             <summary>
             Adds a picture to a component's picture list from the clipboard.
             </summary>

@@ -15,7 +15,7 @@ namespace Toolroom_Scheduler
         /// </summary>
         public string Name { get; private set; }
         public string OldName { get; private set; }
-        public List<Image> PictureList { get; private set; }
+        public Image Picture { get; private set; }
         public string Material { get; private set; }
         public string Notes { get; private set; }
         public List<TaskInfo> TaskList { get; private set; }
@@ -39,7 +39,7 @@ namespace Toolroom_Scheduler
         public Component(string name)
         {
             TaskIDCount = 0;
-            this.Quantity = 0;
+            this.Quantity = 1;
             this.Spares = 0;
             this.Notes = "";
             this.Material = "";
@@ -52,7 +52,7 @@ namespace Toolroom_Scheduler
         public Component(object name)
         {
             TaskIDCount = 0;
-            this.Quantity = 0;
+            this.Quantity = 1;
             this.Spares = 0;
             this.Notes = "";
             this.Material = "";
@@ -115,28 +115,28 @@ namespace Toolroom_Scheduler
         /// <summary>
         /// Adds a picture to a component's picture list from a filepath.
         /// </summary>        
-        public void AddPicture(string filePath)
-        {
-            try
-            {
-                Image image = Image.FromFile(filePath);
-                PictureList.Add(image);
-            }
-            catch (OutOfMemoryException)
-            {
-                MessageBox.Show("The chosen file is not an image.");
-            }
+        //public void AddPicture(string filePath)
+        //{
+        //    try
+        //    {
+        //        Image image = Image.FromFile(filePath);
+        //        PictureList.Add(image);
+        //    }
+        //    catch (OutOfMemoryException)
+        //    {
+        //        MessageBox.Show("The chosen file is not an image.");
+        //    }
             
-        }
+        //}
         /// <summary>
         /// Adds a picture to a component's picture list from the clipboard.
         /// </summary>
-        public void AddPicture()
+        public void SetPicture()
         {
             try
             {
                 Image image = Clipboard.GetImage();
-                PictureList.Add(image);
+                Picture = image;
             }
             catch (OutOfMemoryException)
             {

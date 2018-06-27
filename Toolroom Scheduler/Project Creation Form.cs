@@ -1627,6 +1627,18 @@ namespace Toolroom_Scheduler
                 quantityNumericUpDown.Value = component.Quantity;
                 sparesNumericUpDown.Value = component.Spares;
                 materialComboBox.Text = component.Material;
+
+                componentPictureBox.Image = component.Picture;
+
+                //if(component.Picture.Count > 0)
+                //{
+                //    componentPictureBox.Image = component.Picture[0];
+                //}
+                //else
+                //{
+                //    componentPictureBox.Image = null;
+                //}
+                
                 componentNotesTextBox.Text = component.Notes;
 
                 tabControl1.SelectedTab = tabPage3;
@@ -1883,6 +1895,22 @@ namespace Toolroom_Scheduler
             {
                 selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
                 selectedComponent.SetNote(componentNotesTextBox.Text);
+            }
+        }
+
+        private void clipboardButton_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                if (Clipboard.ContainsImage())
+                {
+                    selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                    selectedComponent.SetPicture();
+                    componentPictureBox.Image = selectedComponent.Picture;
+                }
             }
         }
 

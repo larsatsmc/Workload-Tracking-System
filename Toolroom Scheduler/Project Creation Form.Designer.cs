@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tool Number*");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Tool Number*");
             this.MoldBuildTreeView = new System.Windows.Forms.TreeView();
             this.CreateProjectButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -126,10 +126,10 @@
             this.MoldBuildTreeView.Location = new System.Drawing.Point(30, 52);
             this.MoldBuildTreeView.Margin = new System.Windows.Forms.Padding(4);
             this.MoldBuildTreeView.Name = "MoldBuildTreeView";
-            treeNode1.Name = "Node0";
-            treeNode1.Text = "Tool Number*";
+            treeNode2.Name = "Node0";
+            treeNode2.Text = "Tool Number*";
             this.MoldBuildTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.MoldBuildTreeView.Size = new System.Drawing.Size(300, 736);
             this.MoldBuildTreeView.TabIndex = 0;
             this.MoldBuildTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.MoldBuildTreeView_BeforeSelect);
@@ -396,14 +396,13 @@
             "W360"});
             this.materialComboBox.Location = new System.Drawing.Point(90, 71);
             this.materialComboBox.Name = "materialComboBox";
-            this.materialComboBox.Size = new System.Drawing.Size(236, 24);
+            this.materialComboBox.Size = new System.Drawing.Size(165, 24);
             this.materialComboBox.TabIndex = 56;
             this.materialComboBox.SelectedIndexChanged += new System.EventHandler(this.materialComboBox_SelectedIndexChanged);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Enabled = false;
             this.label11.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(15, 123);
             this.label11.Name = "label11";
@@ -416,18 +415,19 @@
             this.componentPictureBox.Location = new System.Drawing.Point(18, 143);
             this.componentPictureBox.Name = "componentPictureBox";
             this.componentPictureBox.Size = new System.Drawing.Size(381, 264);
+            this.componentPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.componentPictureBox.TabIndex = 54;
             this.componentPictureBox.TabStop = false;
             // 
             // clipboardButton
             // 
-            this.clipboardButton.Enabled = false;
             this.clipboardButton.Location = new System.Drawing.Point(319, 106);
             this.clipboardButton.Name = "clipboardButton";
             this.clipboardButton.Size = new System.Drawing.Size(80, 31);
             this.clipboardButton.TabIndex = 53;
             this.clipboardButton.Text = "Clipboard";
             this.clipboardButton.UseVisualStyleBackColor = true;
+            this.clipboardButton.Click += new System.EventHandler(this.clipboardButton_Click);
             // 
             // browseButton
             // 
