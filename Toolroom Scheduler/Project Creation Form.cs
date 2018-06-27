@@ -14,6 +14,9 @@ using System.Runtime.InteropServices;
 
 namespace Toolroom_Scheduler
 {
+    /// <summary>
+    /// Class for the Project Creation Form.
+    /// </summary> 
     public partial class Project_Creation_Form : Form
     {
 		MSProject msp;
@@ -27,6 +30,9 @@ namespace Toolroom_Scheduler
         public ProjectInfo Project { get; private set; }
         public bool DataValidated { get; private set; }
 
+        /// <summary>
+        /// Initializes a new Project Form.
+        /// </summary> 
         public Project_Creation_Form()
         {
 			Console.WriteLine("Project Creation Form Load");
@@ -36,7 +42,9 @@ namespace Toolroom_Scheduler
 
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Initializes a new Project Form and sets the project property of the form to an instance of a property.
+        /// </summary> 
         public Project_Creation_Form(ProjectInfo project)
         {
             Console.WriteLine("Project Creation Form Load");
@@ -47,7 +55,7 @@ namespace Toolroom_Scheduler
             InitializeComponent();
         }
 
-		private void populateComboBox(ComboBox cb)
+		private void PopulateComboBox(ComboBox cb)
 		{
             Database db = new Database();
 
@@ -100,7 +108,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private int countTasks(TreeView treeView, string component)
+        private int CountTasks(TreeView treeView, string component)
         {
             taskCount = 0;
             TreeNodeCollection nodes = treeView.Nodes[0].Nodes;
@@ -312,7 +320,7 @@ namespace Toolroom_Scheduler
             MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0].LastNode;
         }
 
-        private void selectInterdependentTasks(string selectedTask)
+        private void SelectInterdependentTasks(string selectedTask)
         {
             if(selectedTask == "Program Rough" || selectedTask == "CNC Rough" || selectedTask == "Inspection Post CNC Rough")
             {
@@ -353,7 +361,7 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            if (selectedNode.Nodes.Count == 0 && !taskInfoIsEmpty())
+            if (selectedNode.Nodes.Count == 0 && !TaskInfoIsEmpty())
             {
                 foreach (string text in fieldList)
                 {
@@ -361,7 +369,7 @@ namespace Toolroom_Scheduler
                 }
                 
             }
-            else if (selectedNode.Nodes.Count != 0 && taskInfoIsEmpty())
+            else if (selectedNode.Nodes.Count != 0 && TaskInfoIsEmpty())
             {
                 for(int i = selectedNode.Nodes.Count - 1; i >= 0; i--)
                 {
@@ -411,7 +419,7 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            string predecessorString = getSelectedPredecessorIndices(predecessorsListBox, 0); // countTasks(MoldBuildTreeView, selectedNode.Parent.Text)
+            string predecessorString = GetSelectedPredecessorIndices(predecessorsListBox, 0); // countTasks(MoldBuildTreeView, selectedNode.Parent.Text)
 
             // Check if selected task is set as its own predecessor.
             foreach (int index in predecessorsListBox.SelectedIndices)
@@ -436,7 +444,7 @@ namespace Toolroom_Scheduler
 
             // Check if selected node contains nodes and if task info fields are empty.
             // If true remove all task info nodes from selected task.
-            if (selectedNode.Nodes.Count != 0 && taskInfoIsEmpty()) 
+            if (selectedNode.Nodes.Count != 0 && TaskInfoIsEmpty()) 
             {
                 for (int i = selectedNode.Nodes.Count - 1; i >= 0; i--)
                 {
@@ -447,7 +455,7 @@ namespace Toolroom_Scheduler
             }
             // Check if selected task node contains any task info nodes.
             // If true change existing task info nodes to reflect changes in field (if any).
-            else if (selectedNode.Nodes.Count != 0 && !taskInfoIsEmpty())
+            else if (selectedNode.Nodes.Count != 0 && !TaskInfoIsEmpty())
             {
 
                 selectedNode.Nodes[0].Text = hoursNumericUpDown.Value.ToString() + " Hour(s)";
@@ -498,17 +506,17 @@ namespace Toolroom_Scheduler
                 taskNotesTextBox.Text
             );
 
-            selectNextTask();
+            SelectNextTask();
         }
 
-        private void setObjectTaskInfo(string component, string taskName)
+        private void SetObjectTaskInfo(string component, string taskName)
         {
 
 
 
         }
 
-        private void loadTaskListToTree(List<TaskInfo> tiList)
+        private void LoadTaskListToTree(List<TaskInfo> tiList)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
             int componentCount = 0, taskCount = 0;
@@ -542,7 +550,7 @@ namespace Toolroom_Scheduler
         {
             TreeNode currentComponentNode, currentTaskNode;
 
-            printObjectTree();
+            PrintObjectTree();
 
             if(project.HasProjectInfo)
             {
@@ -599,11 +607,11 @@ namespace Toolroom_Scheduler
             quoteNode.Expand();
         }
 
-        private bool taskInfoIsEmpty()
+        private bool TaskInfoIsEmpty()
         {
             if (
-                getValue(hoursNumericUpDown.Value.ToString()) == 0 && 
-                getValue(durationNumericUpDown.Value.ToString()) == 0 && 
+                GetValue(hoursNumericUpDown.Value.ToString()) == 0 && 
+                GetValue(durationNumericUpDown.Value.ToString()) == 0 && 
                 machineComboBox.Text == "" && 
                 personnelComboBox.Text == "" && 
                 predecessorsListBox.Text == "" && 
@@ -617,7 +625,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private int getValue(string value)
+        private int GetValue(string value)
         {
             if(value == "")
             {
@@ -629,7 +637,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private decimal getDecimal(string value)
+        private decimal GetDecimal(string value)
         {
             if (value == "")
             {
@@ -641,14 +649,14 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void updateDuration()
+        private void UpdateDuration()
         {
             decimal duration;
             decimal days;
 
             if (matchHoursCheckBox.Checked == true)
             {
-                days = getDecimal(hoursNumericUpDown.Value.ToString()) / 8;
+                days = GetDecimal(hoursNumericUpDown.Value.ToString()) / 8;
                 duration = Convert.ToDecimal(Math.Round(days, 0));
                 durationNumericUpDown.Value = duration;
                 durationUnitsComboBox.SelectedIndex = 1;
@@ -816,7 +824,7 @@ namespace Toolroom_Scheduler
             return ti;
         }
 
-        private List<string> getPredecessorList(TreeNode node)
+        private List<string> GetPredecessorList(TreeNode node)
         {
             List<string> predecessorList = new List<string>();
 
@@ -828,7 +836,7 @@ namespace Toolroom_Scheduler
             return predecessorList;
         }
 
-        private void setSelectedPredecessors(ListBox listBox, string taskName)
+        private void SetSelectedPredecessors(ListBox listBox, string taskName)
         {
             if(taskName == "CNC Rough")
             {
@@ -836,7 +844,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private string getSelectedPredecessorText(ListBox listBox)
+        private string GetSelectedPredecessorText(ListBox listBox)
         {
             StringBuilder predecessorString = new StringBuilder();
 
@@ -856,7 +864,7 @@ namespace Toolroom_Scheduler
             return predecessorString.ToString();
         }
 
-        private string getSelectedPredecessorIndices(ListBox listBox, int baseCount)
+        private string GetSelectedPredecessorIndices(ListBox listBox, int baseCount)
         {
             StringBuilder predecessorString = new StringBuilder();
             int index;
@@ -879,7 +887,7 @@ namespace Toolroom_Scheduler
             return predecessorString.ToString();
         }
 
-        private string getSelectedPredecessorIndexText(ListBox listBox)
+        private string GetSelectedPredecessorIndexText(ListBox listBox)
         {
             StringBuilder predecessorIndexString = new StringBuilder();
 
@@ -899,7 +907,7 @@ namespace Toolroom_Scheduler
             return predecessorIndexString.ToString();
         }
 
-        private bool nodeExists(TreeNode task, string node)
+        private bool NodeExists(TreeNode task, string node)
         {
             foreach(TreeNode item in task.Parent.Nodes)
             {
@@ -912,7 +920,7 @@ namespace Toolroom_Scheduler
             return false;
         }
 
-        private List<string> predecessorsToPreselectList(TreeNode task)
+        private List<string> PredecessorsToPreselectList(TreeNode task)
         {
             List<string> list = new List<string>();
             string[] taskNameArr;
@@ -948,7 +956,7 @@ namespace Toolroom_Scheduler
             }
             else if (task.Text == "Heat Treat")
             {
-                if (nodeExists(task, "Inspection Post CNC Rough"))
+                if (NodeExists(task, "Inspection Post CNC Rough"))
                 {
                     list.Add("Inspection Post CNC Rough");
                 }
@@ -970,11 +978,11 @@ namespace Toolroom_Scheduler
             {
                 if (task.Text == "EDM Sinker")
                 {
-                    if(nodeExists(task, "Inspection Post CNC Electrodes"))
+                    if(NodeExists(task, "Inspection Post CNC Electrodes"))
                     {
                         list.Add("Inspection Post CNC Electrodes");
                     }
-                    else if(nodeExists(task, "CNC Electrodes"))
+                    else if(NodeExists(task, "CNC Electrodes"))
                     {
                         list.Add("CNC Electrodes");
                     }
@@ -994,11 +1002,11 @@ namespace Toolroom_Scheduler
                 }
                 else if (task.Text.Contains("Inspection"))
                 {
-                    if (nodeExists(task, "Polish (In-House)"))
+                    if (NodeExists(task, "Polish (In-House)"))
                     {
                         list.Add("Polish (In-House)");
                     }
-                    else if (nodeExists(task, "Polish (Outsource)"))
+                    else if (NodeExists(task, "Polish (Outsource)"))
                     {
                         list.Add("Polish (Outsource)");
                     }
@@ -1091,7 +1099,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void selectNextTask()
+        private void SelectNextTask()
         {
             if(MoldBuildTreeView.SelectedNode.Level == 2)
             {
@@ -1106,7 +1114,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-		private void openWorkloadSheet()
+		private void OpenWorkloadSheet()
 		{
 			FileInfo fi = new FileInfo(@"X:\TOOLROOM\FORMS\Work Load.xlsm");
 
@@ -1120,7 +1128,7 @@ namespace Toolroom_Scheduler
 			}
 		}
 
-		private void openWorkloadSheetExcelCOM()
+		private void OpenWorkloadSheetExcelCOM()
 		{
 			FileInfo fi = new FileInfo(@"X:\TOOLROOM\FORMS\Work Load.xlsm");
 
@@ -1138,7 +1146,7 @@ namespace Toolroom_Scheduler
 			}
 		}
 
-        private void printObjectTree()
+        private void PrintObjectTree()
         {
             Console.WriteLine($"{Project.JobNumber} {Project.ProjectNumber} {Project.DueDate} {Project.ToolMaker} {Project.Designer} {Project.RoughProgrammer} {Project.FinishProgrammer} {Project.ElectrodeProgrammer}");
 
@@ -1237,7 +1245,7 @@ namespace Toolroom_Scheduler
             }
             else
             {
-                predecessorList = predecessorsToPreselectList(selectedNode);
+                predecessorList = PredecessorsToPreselectList(selectedNode);
 
                 foreach (string item in predecessorList)
                 {
@@ -1249,7 +1257,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void checkForTasksWithNoSuccessors()
+        private void CheckForTasksWithNoSuccessors()
         {
             string[] preds = null;
 
@@ -1308,7 +1316,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void checkComponentForTasksWithNoSuccessors(TreeNode selectedNode)
+        private void CheckComponentForTasksWithNoSuccessors(TreeNode selectedNode)
         {
             string[] preds = null;
 
@@ -1367,6 +1375,52 @@ namespace Toolroom_Scheduler
             }
         }
 
+        private void ActivateTaskHandlers()
+        {
+            // TaskInfo controls.
+            hoursNumericUpDown.ValueChanged -= new System.EventHandler(hoursNumericUpDown_ValueChanged);
+            durationNumericUpDown.ValueChanged -= new System.EventHandler(durationNumericUpDown_ValueChanged);
+            durationUnitsComboBox.TextChanged -= new System.EventHandler(durationUnitsComboBox_TextChanged);
+            matchHoursCheckBox.CheckStateChanged -= new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
+            machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
+            personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
+            predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
+
+        }
+
+        private void DeactivateTaskHandlers()
+        {
+            // TaskInfo controls.
+            hoursNumericUpDown.ValueChanged += new System.EventHandler(hoursNumericUpDown_ValueChanged);
+            durationNumericUpDown.ValueChanged += new System.EventHandler(durationNumericUpDown_ValueChanged);
+            durationUnitsComboBox.TextChanged += new System.EventHandler(durationUnitsComboBox_TextChanged);
+            matchHoursCheckBox.CheckStateChanged += new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
+            machineComboBox.TextChanged += new System.EventHandler(machineComboBox_TextChanged);
+            personnelComboBox.TextChanged += new System.EventHandler(personnelComboBox_TextChanged);
+            predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            taskNotesTextBox.TextChanged += new System.EventHandler(taskNotesTextBox_TextChanged);
+
+        }
+
+        private void ActivateComponentHandlers()
+        {
+            // ComponentInfo controls.
+            quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
+            sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
+            materialComboBox.SelectedIndexChanged -= new System.EventHandler(materialComboBox_SelectedIndexChanged);
+            componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
+        }
+
+        private void DeactivateComponentHandlers()
+        {
+            // ComponentInfo controls.
+            quantityNumericUpDown.ValueChanged += new System.EventHandler(quantityNumericUpDown_ValueChanged);
+            sparesNumericUpDown.ValueChanged += new System.EventHandler(sparesNumericUpDown_ValueChanged);
+            materialComboBox.SelectedIndexChanged += new System.EventHandler(materialComboBox_SelectedIndexChanged);
+            componentNotesTextBox.TextChanged += new System.EventHandler(componentNotesTextBox_TextChanged);
+        }
+
         private void RenameButton_Click(object sender, EventArgs e)
         {
             string input = Interaction.InputBox("Enter a new name:", "Change Name", MoldBuildTreeView.SelectedNode.Text, -1, -1);
@@ -1382,7 +1436,7 @@ namespace Toolroom_Scheduler
             {
                 predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
 
-                predecessorsListBox.DataSource = getPredecessorList(selectedNode.Parent);
+                predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
 
                 predecessorsListBox.ClearSelected();
 
@@ -1438,32 +1492,32 @@ namespace Toolroom_Scheduler
         private void LookupDataButton_Click(object sender, EventArgs e)
         {
             //openWorkloadSheetExcelCOM();
-            openWorkloadSheet();
+            OpenWorkloadSheet();
         }
 
         private void ToolMakerComboBox_DropDown(object sender, EventArgs e)
         {
-            populateComboBox((ComboBox)sender);
+            PopulateComboBox((ComboBox)sender);
         }
 
         private void DesignerComboBox_DropDown(object sender, EventArgs e)
         {
-            populateComboBox((ComboBox)sender);
+            PopulateComboBox((ComboBox)sender);
         }
 
         private void RoughProgrammerComboBox_DropDown(object sender, EventArgs e)
         {
-            populateComboBox((ComboBox)sender);
+            PopulateComboBox((ComboBox)sender);
         }
 
         private void FinishProgrammerComboBox_DropDown(object sender, EventArgs e)
         {
-            populateComboBox((ComboBox)sender);
+            PopulateComboBox((ComboBox)sender);
         }
 
         private void ElectrodeProgrammerComboBox_DropDown(object sender, EventArgs e)
         {
-            populateComboBox((ComboBox)sender);
+            PopulateComboBox((ComboBox)sender);
         }
 
         private void Project_Creation_Form_Load(object sender, EventArgs e)
@@ -1482,7 +1536,7 @@ namespace Toolroom_Scheduler
         private void hoursNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             //AddTaskInfoToSelectedTask("Hours", hoursNumericUpDown.Value.ToString() + " Hour(s)");
-            updateDuration();
+            UpdateDuration();
             updateInfoButton.BackColor = Color.Orange;
         }
 
@@ -1556,6 +1610,7 @@ namespace Toolroom_Scheduler
         private void MoldBuildTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component component;
             string[] str1Arr, str2Arr;
             List<string> predecessorList = new List<string>();
             TaskInfo ti;
@@ -1566,31 +1621,29 @@ namespace Toolroom_Scheduler
             }
             else if (selectedNode.Level == 1)
             {
+                DeactivateComponentHandlers();
+
+                component = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                quantityNumericUpDown.Value = component.Quantity;
+                sparesNumericUpDown.Value = component.Spares;
+                materialComboBox.Text = component.Material;
+                componentNotesTextBox.Text = component.Notes;
+
                 tabControl1.SelectedTab = tabPage3;
+
+                ActivateComponentHandlers();
             }
             else if (selectedNode.Level == 2)
             {
                 try
                 {
-                    hoursNumericUpDown.ValueChanged -= new System.EventHandler(hoursNumericUpDown_ValueChanged);
-                    durationNumericUpDown.ValueChanged -= new System.EventHandler(durationNumericUpDown_ValueChanged);
-                    durationUnitsComboBox.TextChanged -= new System.EventHandler(durationUnitsComboBox_TextChanged);
-                    matchHoursCheckBox.CheckStateChanged -= new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
-                    machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
-                    personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
-                    predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-                    taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
-
-                    quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
-                    sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
-                    materialComboBox.SelectedIndexChanged -= new System.EventHandler(materialComboBox_SelectedIndexChanged);
-                    componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
+                    DeactivateTaskHandlers();
 
                     tabControl1.SelectedTab = tabPage4;
 
                     machineComboBox.DataSource = getMachineList(selectedNode.Text);
                     personnelComboBox.DataSource = getPersonnelList(selectedNode.Text);
-                    predecessorsListBox.DataSource = getPredecessorList(selectedNode.Parent);
+                    predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
 
                     predecessorsListBox.ClearSelected();
 
@@ -1632,6 +1685,8 @@ namespace Toolroom_Scheduler
                         //}
 
                         taskNotesTextBox.Text = selectedNode.Nodes[5].Text;
+
+                        ActivateTaskHandlers();
                     }
                     else
                     {
@@ -1654,15 +1709,6 @@ namespace Toolroom_Scheduler
                     }
 
                     SelectPredecessors(selectedNode);
-
-                    hoursNumericUpDown.ValueChanged += new System.EventHandler(hoursNumericUpDown_ValueChanged);
-                    durationNumericUpDown.ValueChanged += new System.EventHandler(durationNumericUpDown_ValueChanged);
-                    durationUnitsComboBox.TextChanged += new System.EventHandler(durationUnitsComboBox_TextChanged);
-                    matchHoursCheckBox.CheckStateChanged += new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
-                    machineComboBox.TextChanged += new System.EventHandler(machineComboBox_TextChanged);
-                    personnelComboBox.TextChanged += new System.EventHandler(personnelComboBox_TextChanged);
-                    predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-                    taskNotesTextBox.TextChanged += new System.EventHandler(taskNotesTextBox_TextChanged);
                 }
                 catch (Exception er)
                 {
@@ -1690,7 +1736,7 @@ namespace Toolroom_Scheduler
 
         private void matchHoursCheckBox_CheckStateChanged(object sender, EventArgs e)
         {
-            updateDuration();
+            UpdateDuration();
         }
 
         private void ProjectNumberTextBox_TextChanged(object sender, EventArgs e)

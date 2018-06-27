@@ -135,6 +135,21 @@
             Sets the position property of a component.
             </summary> 
         </member>
+        <member name="M:Toolroom_Scheduler.Component.SetQuantity(System.Int32)">
+            <summary>
+            Sets the quantity property of a component.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetSpares(System.Int32)">
+            <summary>
+            Sets the spares property of a component.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetMaterial(System.String)">
+            <summary>
+            Sets the material property of a component.
+            </summary> 
+        </member>
         <member name="M:Toolroom_Scheduler.Component.GetTask(System.Int32)">
             <summary>
             Gets a task with matching ID from list of tasks for component.
@@ -195,6 +210,21 @@
             <summary>
             The main entry point for the application.
             </summary>
+        </member>
+        <member name="T:Toolroom_Scheduler.Project_Creation_Form">
+            <summary>
+            Class for the Project Creation Form.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Project_Creation_Form.#ctor">
+            <summary>
+            Initializes a new Project Form.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Project_Creation_Form.#ctor(Toolroom_Scheduler.ProjectInfo)">
+            <summary>
+            Initializes a new Project Form and sets the project property of the form to an instance of a property.
+            </summary> 
         </member>
         <member name="F:Toolroom_Scheduler.Project_Creation_Form.components">
             <summary>

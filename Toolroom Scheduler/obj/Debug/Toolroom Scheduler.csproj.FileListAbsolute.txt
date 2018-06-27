@@ -72,7 +72,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\es\DevExpress.Pdf.v17.2.Core.resources.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ja\DevExpress.Pdf.v17.2.Core.resources.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ru\DevExpress.Pdf.v17.2.Core.resources.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csprojResolveAssemblyReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Interop.Microsoft.Office.Interop.MSProject.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.ResolveComReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.AddResourceForm.resources
@@ -96,5 +95,5 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ru\DevExpress.Spreadsheet.v17.2.Core.resources.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.ForwardDateWindow.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.SelectComponentsWindow.resources
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\Toolroom Scheduler.exe.CodeAnalysisLog.xml
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\Toolroom Scheduler.exe.lastcodeanalysissucceeded
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csprojAssemblyReference.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.CopyComplete

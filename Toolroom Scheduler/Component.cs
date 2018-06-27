@@ -39,6 +39,8 @@ namespace Toolroom_Scheduler
         public Component(string name)
         {
             TaskIDCount = 0;
+            this.Quantity = 0;
+            this.Spares = 0;
             this.Notes = "";
             this.Material = "";
             TaskList = new List<TaskInfo>();
@@ -50,6 +52,8 @@ namespace Toolroom_Scheduler
         public Component(object name)
         {
             TaskIDCount = 0;
+            this.Quantity = 0;
+            this.Spares = 0;
             this.Notes = "";
             this.Material = "";
             TaskList = new List<TaskInfo>();
