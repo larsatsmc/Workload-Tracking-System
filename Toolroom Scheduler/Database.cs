@@ -125,7 +125,7 @@ namespace Toolroom_Scheduler
             else
             {
                 if(addProjectDataToDatabase(project) && 
-                addComponentDataTableToDatabase(createDataTableFromComponentList(project)) &&
+                addComponentDataTableToDatabase(CreateDataTableFromComponentList(project)) &&
                 addTaskDataTableToDatabase(createDataTableFromTaskList(project)))
                 {
                     MessageBox.Show("Project Loaded!");
@@ -222,7 +222,7 @@ namespace Toolroom_Scheduler
                 }
                 else
                 {
-                    addComponentDataTableToDatabase(createDataTableFromComponentList(project));
+                    addComponentDataTableToDatabase(CreateDataTableFromComponentList(project));
                 }
 
                 return true;
@@ -676,7 +676,6 @@ namespace Toolroom_Scheduler
 
             if (sheetNExists("Mold"))
 				wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
-
 		}
 
 		public List<string> GetResourceList(string role)
@@ -727,7 +726,7 @@ namespace Toolroom_Scheduler
             return ResourceList;
         }
 
-        private int getResourceID(string resourceName)
+        private int GetResourceID(string resourceName)
         {
             DataTable dt = new DataTable();
             string queryString3 = "SELECT ID FROM Resources WHERE ResourceName = @resourceName";
@@ -771,7 +770,7 @@ namespace Toolroom_Scheduler
             {
                 OleDbCommand cmd = new OleDbCommand("INSERT INTO Roles (ResourceID, Role) VALUES (@resourceID, @role)", Connection);
 
-                cmd.Parameters.AddWithValue("resourceID", getResourceID(resourceName));
+                cmd.Parameters.AddWithValue("resourceID", GetResourceID(resourceName));
                 cmd.Parameters.AddWithValue("@role", role);
 
                 Connection.Open();
@@ -790,7 +789,7 @@ namespace Toolroom_Scheduler
             {
                 OleDbCommand cmd = new OleDbCommand("DELETE FROM Roles WHERE ResourceID = @resourceID AND Role = @role", Connection);
 
-                cmd.Parameters.AddWithValue("resourceID", getResourceID(resourceName));
+                cmd.Parameters.AddWithValue("resourceID", GetResourceID(resourceName));
                 cmd.Parameters.AddWithValue("@role", role);
 
                 Connection.Open();
@@ -829,8 +828,8 @@ namespace Toolroom_Scheduler
                 OleDbCommand cmd1 = new OleDbCommand("DELETE FROM Roles WHERE ResourceID = @resourceID ", Connection);
                 OleDbCommand cmd2 = new OleDbCommand("DELETE FROM Resources WHERE ID = @resourceID ", Connection);
 
-                cmd1.Parameters.AddWithValue("resourceID", getResourceID(resourceName));
-                cmd2.Parameters.AddWithValue("ID", getResourceID(resourceName));
+                cmd1.Parameters.AddWithValue("resourceID", GetResourceID(resourceName));
+                cmd2.Parameters.AddWithValue("ID", GetResourceID(resourceName));
 
                 Connection.Open();
                 cmd1.ExecuteNonQuery();
@@ -994,11 +993,14 @@ namespace Toolroom_Scheduler
                         {
                             component = new Component
                             (
-                                    name: rdr["Component"],
-                                    notes: rdr["Notes"],
-                                    priority: rdr["Priority"],
-                                    position: rdr["Position"],
-                                    material: rdr["Material"],
+                                           name: rdr["Component"],
+                                          notes: rdr["Notes"],
+                                       priority: rdr["Priority"],
+                                       position: rdr["Position"],
+                                       quantity: rdr["Quantity"],
+                                         spares: rdr["Spares"],
+                                        picture: rdr["Pictures"],
+                                       material: rdr["Material"],
                                     taskIDCount: rdr["TaskIDCount"]
                             );
 
@@ -1046,11 +1048,14 @@ namespace Toolroom_Scheduler
                         {
                             componentList.Add(new Component
                             (
-                                    name: rdr["Component"],
-                                    notes: rdr["Notes"],
-                                    priority: rdr["Priority"],
-                                    position: rdr["Position"],
-                                    material: rdr["Material"],
+                                           name: rdr["Component"],
+                                          notes: rdr["Notes"],
+                                       priority: rdr["Priority"],
+                                       position: rdr["Position"],
+                                       quantity: rdr["Quantity"],
+                                         spares: rdr["Spares"],
+                                        picture: rdr["Picture"],
+                                       material: rdr["Material"],
                                     taskIDCount: rdr["TaskIDCount"]
                             ));
                         }
@@ -1170,6 +1175,10 @@ namespace Toolroom_Scheduler
                                    component: rdr["Component"],
                                        hours: rdr["Hours"],
                                     duration: rdr["Duration"],
+                                   startDate: rdr["StartDate"],
+                                  finishDate: rdr["FinishDate"],
+                               dateCompleted: rdr["DateCompleted"],
+                                    initials: rdr["Initials"],
                                      machine: rdr["Machine"],
                                    personnel: rdr["Resource"],
                                 predecessors: rdr["Predecessors"],
@@ -2301,7 +2310,7 @@ namespace Toolroom_Scheduler
             //MessageBox.Show("Done!");
         }
 
-        private DataTable createDataTableFromComponentList(ProjectInfo project)
+        private DataTable CreateDataTableFromComponentList(ProjectInfo project)
         {
             DataTable dt = new DataTable();
             int position = 0;
@@ -2312,7 +2321,7 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Notes", typeof(string));
             dt.Columns.Add("Position", typeof(int));
             dt.Columns.Add("Priority", typeof(int));
-            dt.Columns.Add("Pictures", typeof(object)); // ADD LATER.
+            dt.Columns.Add("Pictures", typeof(byte[]));
             dt.Columns.Add("Material", typeof(string));
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
@@ -2325,7 +2334,11 @@ namespace Toolroom_Scheduler
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
                 row["Component"] = component.Name;
-                //row["Notes"] = component.Notes;
+                row["Quantity"] = component.Quantity;
+                row["Spares"] = component.Spares;
+                row["Material"] = component.Material;
+                row["Pictures"] = component.GetPictureByteArray();
+                row["Notes"] = component.Notes;
                 row["Position"] = position++;
                 row["TaskIDCount"] = component.TaskIDCount;
 
@@ -2353,7 +2366,7 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Notes", typeof(string));
             dt.Columns.Add("Position", typeof(int));
             dt.Columns.Add("Priority", typeof(int));
-            dt.Columns.Add("Pictures", typeof(object)); // ADD LATER.
+            dt.Columns.Add("Pictures", typeof(byte[])); // ADD LATER.
             dt.Columns.Add("Material", typeof(string));
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
@@ -2369,6 +2382,8 @@ namespace Toolroom_Scheduler
                 row["Notes"] = component.Notes;
                 row["Priority"] = component.Priority;
                 row["Position"] = component.Position;
+                row["Quantity"] = component.Quantity;
+                row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
                 row["TaskIDCount"] = component.TaskIDCount;
 
@@ -2554,7 +2569,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        private void setKanBanWorkbookPath(string path, string jn, int pn)
+        public void setKanBanWorkbookPath(string path, string jn, int pn)
         {
             try
             {
@@ -3027,7 +3042,7 @@ namespace Toolroom_Scheduler
                 string queryString;
 
                 queryString = "UPDATE Components " +
-                              "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Material = @material, TaskIDCount = @taskIDCount " +
+                              "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Quantity = @quantity, Spares = @spares, Pictures = @picture, Material = @material, TaskIDCount = @taskIDCount " +
                               "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName";
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -3036,6 +3051,9 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
                 adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
+                adapter.UpdateCommand.Parameters.AddWithValue("@quantity", component.Quantity);
+                adapter.UpdateCommand.Parameters.AddWithValue("@spares", component.Spares);
+                adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.GetPictureByteArray());
                 adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
                 adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
                 //adapter.UpdateCommand.Parameters.AddWithValue("@pictures", component.PictureList);  // Add when database is ready to receive pictures.

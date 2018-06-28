@@ -17,6 +17,8 @@ namespace Toolroom_Scheduler
         public string TaskName { get; private set; }
         public bool IsSummary { get; private set; }
         public string Duration { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public DateTime FinishDate { get; private set; }
         public string Predecessors { get; set; }
         public string Machine { get; private set; }
         public string Personnel { get; private set; }
@@ -32,7 +34,9 @@ namespace Toolroom_Scheduler
         public string Text { get; private set; }
         public int Level { get; private set; }
         public int Position { get; private set; }
-        public bool HasInfo { get; set; } 
+        public bool HasInfo { get; set; }
+        public string Initials { get; private set; }
+        public DateTime DateCompleted { get; private set; }
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
         /// </summary>
@@ -212,13 +216,17 @@ namespace Toolroom_Scheduler
 
         // This constructor is for reading tasks from the database.
 
-        public TaskInfo(object taskName, object id, object component, object hours, object duration, object machine, object personnel, object predecessors, object notes)
+        public TaskInfo(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object dateCompleted, object initials, object machine, object personnel, object predecessors, object notes)
         {
             this.TaskName = convertObjectToString(taskName);
             this.ID = Convert.ToInt32(id);
             this.Component = convertObjectToString(component);
             this.Hours = Convert.ToInt32(hours);
             this.Duration = convertObjectToString(duration);
+            this.StartDate = Convert.ToDateTime(startDate);
+            this.FinishDate = Convert.ToDateTime(finishDate);
+            this.DateCompleted = Convert.ToDateTime(finishDate);
+            this.Initials = convertObjectToString(initials);
             this.Machine = convertObjectToString(machine);
             this.Personnel = convertObjectToString(personnel);
             this.Predecessors = convertObjectToString(predecessors);

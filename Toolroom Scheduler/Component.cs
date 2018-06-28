@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Toolroom_Scheduler
 {
@@ -25,6 +26,7 @@ namespace Toolroom_Scheduler
         public int TaskIDCount { get; private set; }
         public int Quantity { get; private set; }
         public int Spares { get; private set; }
+        public string Initials { get; private set; }
 
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
@@ -57,21 +59,24 @@ namespace Toolroom_Scheduler
             this.Notes = "";
             this.Material = "";
             TaskList = new List<TaskInfo>();
-            this.Name = convertObjectToString(name);
+            this.Name = ConvertObjectToString(name);
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
         /// </summary> 
-        public Component(object name, object notes, object priority, object position, object material, object taskIDCount)
+        public Component(object name, object notes, object priority, object position, object quantity, object spares, object picture, object material, object taskIDCount)
         {
             TaskList = new List<TaskInfo>();
-            this.Name = convertObjectToString(name);
+            this.Name = ConvertObjectToString(name);
             this.OldName = this.Name;
-            this.Notes = convertObjectToString(notes);
-            this.Priority = nullIntegerCheck(priority);
-            this.Position = nullIntegerCheck(position);
-            this.Material = convertObjectToString(material);
-            this.TaskIDCount = nullIntegerCheck(taskIDCount);
+            this.Notes = ConvertObjectToString(notes);
+            this.Priority = NullIntegerCheck(priority);
+            this.Position = NullIntegerCheck(position);
+            this.Quantity = NullIntegerCheck(quantity);
+            this.Spares = NullIntegerCheck(spares);
+            this.Picture = NullByteArrayCheck(picture);
+            this.Material = ConvertObjectToString(material);
+            this.TaskIDCount = NullIntegerCheck(taskIDCount);
         }
         /// <summary>
         /// Sets the name of a component.
@@ -135,13 +140,49 @@ namespace Toolroom_Scheduler
         {
             try
             {
-                Image image = Clipboard.GetImage();
-                Picture = image;
+                if(Clipboard.ContainsImage())
+                {
+                    this.Picture = Clipboard.GetImage();
+                }
+                else
+                {
+                    MessageBox.Show("The clipboard contains no image.");
+                }
             }
             catch (OutOfMemoryException)
             {
                 MessageBox.Show("The item in the clipboard is not an image.");
             }
+        }
+        /// <summary>
+        /// Gets a picture from component class in the form of a byte array.
+        /// </summary> 
+        public byte[] GetPictureByteArray()
+        {
+            if(this.Picture != null)
+            {
+                return ImageToByteArray(this.Picture);
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+        /// <summary>
+        /// Sets a picture in component class from a byte array.
+        /// </summary> 
+        public void SetPictureFromByteArray(byte[] pictureByteArr)
+        {
+            if (pictureByteArr != null)
+            {
+                this.Picture = ByteArrayToImage(pictureByteArr);
+            }
+            else
+            {
+                MessageBox.Show("Byte array was null.");
+            }
+
         }
         /// <summary>
         /// Removes a task from a component.
@@ -237,7 +278,7 @@ namespace Toolroom_Scheduler
             return task;
         }
 
-        private string convertObjectToString(object obj)
+        private string ConvertObjectToString(object obj)
         {
             if (obj != null)
             {
@@ -249,7 +290,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private int nullIntegerCheck(object checkValue)
+        private int NullIntegerCheck(object checkValue)
         {
             if (!DBNull.Value.Equals(checkValue))
             {
@@ -259,6 +300,39 @@ namespace Toolroom_Scheduler
             {
                 return 0;
             }
+        }
+
+        private Image NullByteArrayCheck(object obj)
+        {
+            if (!DBNull.Value.Equals(obj))
+            {
+                return ByteArrayToImage((byte[]) obj);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        {
+            //MemoryStream ms = new MemoryStream();
+            //imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            //return ms.ToArray();
+
+            ImageConverter converter = new ImageConverter();
+            return (byte[])converter.ConvertTo(imageIn, typeof(byte[]));
+        }
+
+        private Image ByteArrayToImage(byte[] byteArrayIn)
+        {
+            //MemoryStream ms = new MemoryStream(byteArrayIn);
+            //Image returnImage = Image.FromStream(ms);
+            //return returnImage;
+
+            ImageConverter ic = new ImageConverter();
+            Image img = (Image)ic.ConvertFrom(byteArrayIn);
+            return img;
         }
     }
 }

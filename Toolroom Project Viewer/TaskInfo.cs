@@ -34,6 +34,8 @@ namespace Toolroom_Scheduler
         public string Text { get; private set; }
         public int Level { get; private set; }
         public int Position { get; private set; }
+        public string Initials { get; private set; }
+        public DateTime DateCompleted { get; private set; }
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
         /// </summary>

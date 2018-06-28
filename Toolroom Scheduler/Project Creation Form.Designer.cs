@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Tool Number*");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tool Number*");
             this.MoldBuildTreeView = new System.Windows.Forms.TreeView();
             this.CreateProjectButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -126,10 +126,10 @@
             this.MoldBuildTreeView.Location = new System.Drawing.Point(30, 52);
             this.MoldBuildTreeView.Margin = new System.Windows.Forms.Padding(4);
             this.MoldBuildTreeView.Name = "MoldBuildTreeView";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Tool Number*";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Tool Number*";
             this.MoldBuildTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.MoldBuildTreeView.Size = new System.Drawing.Size(300, 736);
             this.MoldBuildTreeView.TabIndex = 0;
             this.MoldBuildTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.MoldBuildTreeView_BeforeSelect);
@@ -431,13 +431,13 @@
             // 
             // browseButton
             // 
-            this.browseButton.Enabled = false;
             this.browseButton.Location = new System.Drawing.Point(233, 106);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(80, 31);
             this.browseButton.TabIndex = 52;
-            this.browseButton.Text = "Browse";
+            this.browseButton.Text = "Copy";
             this.browseButton.UseVisualStyleBackColor = true;
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // label20
             // 

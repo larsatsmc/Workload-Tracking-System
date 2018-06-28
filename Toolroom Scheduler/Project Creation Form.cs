@@ -1843,7 +1843,7 @@ namespace Toolroom_Scheduler
         {
             //checkForTasksWithNoSuccessors();
             ExcelInteractions ei = new ExcelInteractions();
-            Project.SetQuoteInfo(ei.getQuoteInfo());
+            Project.SetQuoteInfo(ei.GetQuoteInfo());
             LoadQuotedProjectToForm(Project);
             quoteLoaded = true;
 
@@ -1870,7 +1870,7 @@ namespace Toolroom_Scheduler
             if (selectedNode.Level == 1)
             {
                 selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
-                selectedComponent.SetQuantity(Convert.ToInt16(sparesNumericUpDown.Value));
+                selectedComponent.SetSpares(Convert.ToInt16(sparesNumericUpDown.Value));
             }
         }
 
@@ -1905,11 +1905,27 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetPicture();
+                componentPictureBox.Image = selectedComponent.Picture;
+            }
+            else
+            {
+                MessageBox.Show("Please select a component to add a picture to.");
+            }
+        }
+
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
                 if (Clipboard.ContainsImage())
                 {
                     selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
-                    selectedComponent.SetPicture();
-                    componentPictureBox.Image = selectedComponent.Picture;
+                    Clipboard.SetImage(selectedComponent.Picture);
                 }
             }
         }

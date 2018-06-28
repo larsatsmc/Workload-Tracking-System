@@ -450,7 +450,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void createKanBanWorkbook()
+        private void CreateKanBanWorkbook()
         {
             if (JobNumberComboBox.Text == "All")
             {
@@ -460,6 +460,7 @@ namespace Toolroom_Scheduler
             else
             {
                 Database db = new Database();
+                ExcelInteractions ei = new ExcelInteractions();
                 var number = getComboBoxInfo();
                 
                 //if(kanBanExists(number.jobNumber, number.projectNumber))
@@ -482,10 +483,10 @@ namespace Toolroom_Scheduler
                 //    }
                 //}
 
-
                 //CreateKanBan:;
-                ProjectInfo pi = db.GetProjectInfo(number.jobNumber, number.projectNumber);
-                db.GenerateKanBanWorkbook(pi);
+                ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
+                //db.GenerateKanBanWorkbook(pi);
+                ei.GenerateKanBanWorkbook(pi);
             }
         }
 
@@ -1372,7 +1373,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void createProject()
+        private void CreateProject()
         {
             try
             {
@@ -1405,7 +1406,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void editProject(ProjectInfo project)
+        private void EditProject(ProjectInfo project)
         {
             try
             {
@@ -1545,7 +1546,7 @@ namespace Toolroom_Scheduler
         {
 			Console.WriteLine("click");
 
-            createProject();
+            CreateProject();
         }
 
         private void BulkAssignButton_Click(object sender, EventArgs e)
@@ -1570,7 +1571,7 @@ namespace Toolroom_Scheduler
             }    
         }
 
-        private DateTime getLatestPredecessorFinishDate(string jn, int pn, string component, string predecessors)
+        private DateTime GetLatestPredecessorFinishDate(string jn, int pn, string component, string predecessors)
         {
             Database db = new Database();
             DateTime? latestFinishDate = null;
@@ -1615,7 +1616,7 @@ namespace Toolroom_Scheduler
             {
                 startDate = oDateTimePicker.Value;
 
-                if (predecessors != "" && startDate < getLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors))
+                if (predecessors != "" && startDate < GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors))
                 {
                     MessageBox.Show("You cannot put a task start date before its predecessor's finish date.");
                     return;
@@ -1663,7 +1664,7 @@ namespace Toolroom_Scheduler
                 // If the selected column is start date and the task has a predecessor set the date to the finish date of the predecessor.
                 if(columnName == "StartDate" && DataGridView1.Rows[e.RowIndex].Cells["Predecessors"].Value.ToString() != "")
                 {
-                    oDateTimePicker.Value = getLatestPredecessorFinishDate(
+                    oDateTimePicker.Value = GetLatestPredecessorFinishDate(
                         DataGridView1.Rows[e.RowIndex].Cells["JobNumber"].Value.ToString(),
                         Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells["ProjectNumber"].Value),
                         DataGridView1.Rows[e.RowIndex].Cells["Component"].Value.ToString(),
@@ -1793,9 +1794,9 @@ namespace Toolroom_Scheduler
             //    }
         }
 
-        private void ReportsButton_Click(object sender, EventArgs e)
+        private void CreateKanBanButton_Click(object sender, EventArgs e)
         {
-            createKanBanWorkbook();
+            CreateKanBanWorkbook();
         }
 
 		private void ManageResourcesButton_Click(object sender, EventArgs e)
@@ -1899,7 +1900,7 @@ namespace Toolroom_Scheduler
                 Database db = new Database();
                 var number = getComboBoxInfo();
                 ProjectInfo project = db.GetProject(number.jobNumber, number.projectNumber);
-                editProject(project);
+                EditProject(project);
             }
         }
 

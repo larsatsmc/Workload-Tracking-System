@@ -3433,7 +3433,7 @@
             this.CreateKanBanButton.TabIndex = 87;
             this.CreateKanBanButton.Text = "Kan Ban";
             this.CreateKanBanButton.UseVisualStyleBackColor = true;
-            this.CreateKanBanButton.Click += new System.EventHandler(this.ReportsButton_Click);
+            this.CreateKanBanButton.Click += new System.EventHandler(this.CreateKanBanButton_Click);
             // 
             // DeleteButton
             // 

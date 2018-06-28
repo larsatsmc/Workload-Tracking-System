@@ -75,7 +75,7 @@
             Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
             </summary> 
         </member>
-        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
             <summary>
             Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
             </summary> 
@@ -104,6 +104,16 @@
             <summary>
             Adds a picture to a component's picture list from the clipboard.
             </summary>
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.GetPictureByteArray">
+            <summary>
+            Gets a picture from component class in the form of a byte array.
+            </summary> 
+        </member>
+        <member name="M:Toolroom_Scheduler.Component.SetPictureFromByteArray(System.Byte[])">
+            <summary>
+            Sets a picture in component class from a byte array.
+            </summary> 
         </member>
         <member name="M:Toolroom_Scheduler.Component.RemoveTask(System.Int32)">
             <summary>
