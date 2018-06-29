@@ -309,7 +309,7 @@ namespace Toolroom_Scheduler
                 ws.Cells[r, 8].value = "   Predecessors";
                 ws.Cells[r, 9].value = "Status";
                 ws.Cells[r, 10].value = "Initials";
-                ws.Cells[r, 11].value = "Date";
+                ws.Cells[r, 11].value = "Due Date";
 
                 r++;
 
@@ -374,7 +374,20 @@ namespace Toolroom_Scheduler
 
                 ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
 
-                if(component.Picture != null)
+                if(component.Notes.Contains('\n'))
+                {
+                    foreach (string section in component.Notes.Split('\n'))
+                    {
+                        ws.Cells[r++ + 1, 2].value = section;
+                    }
+                }
+                else
+                {
+                    ws.Cells[r++ + 1, 2].value = component.Notes;
+                }
+                
+
+                if (component.Picture != null)
                 {
                     Clipboard.SetImage(component.Picture);
                     ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
