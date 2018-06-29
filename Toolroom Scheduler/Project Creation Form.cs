@@ -1378,20 +1378,6 @@ namespace Toolroom_Scheduler
         private void ActivateTaskHandlers()
         {
             // TaskInfo controls.
-            hoursNumericUpDown.ValueChanged -= new System.EventHandler(hoursNumericUpDown_ValueChanged);
-            durationNumericUpDown.ValueChanged -= new System.EventHandler(durationNumericUpDown_ValueChanged);
-            durationUnitsComboBox.TextChanged -= new System.EventHandler(durationUnitsComboBox_TextChanged);
-            matchHoursCheckBox.CheckStateChanged -= new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
-            machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
-            personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
-            predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-            taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
-
-        }
-
-        private void DeactivateTaskHandlers()
-        {
-            // TaskInfo controls.
             hoursNumericUpDown.ValueChanged += new System.EventHandler(hoursNumericUpDown_ValueChanged);
             durationNumericUpDown.ValueChanged += new System.EventHandler(durationNumericUpDown_ValueChanged);
             durationUnitsComboBox.TextChanged += new System.EventHandler(durationUnitsComboBox_TextChanged);
@@ -1400,25 +1386,37 @@ namespace Toolroom_Scheduler
             personnelComboBox.TextChanged += new System.EventHandler(personnelComboBox_TextChanged);
             predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
             taskNotesTextBox.TextChanged += new System.EventHandler(taskNotesTextBox_TextChanged);
+        }
 
+        private void DeactivateTaskHandlers()
+        {
+            // TaskInfo controls.
+            hoursNumericUpDown.ValueChanged -= new System.EventHandler(hoursNumericUpDown_ValueChanged);
+            durationNumericUpDown.ValueChanged -= new System.EventHandler(durationNumericUpDown_ValueChanged);
+            durationUnitsComboBox.TextChanged -= new System.EventHandler(durationUnitsComboBox_TextChanged);
+            matchHoursCheckBox.CheckStateChanged -= new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
+            machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
+            personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
+            predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
         }
 
         private void ActivateComponentHandlers()
-        {
-            // ComponentInfo controls.
-            quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
-            sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
-            materialComboBox.SelectedIndexChanged -= new System.EventHandler(materialComboBox_SelectedIndexChanged);
-            componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
-        }
-
-        private void DeactivateComponentHandlers()
         {
             // ComponentInfo controls.
             quantityNumericUpDown.ValueChanged += new System.EventHandler(quantityNumericUpDown_ValueChanged);
             sparesNumericUpDown.ValueChanged += new System.EventHandler(sparesNumericUpDown_ValueChanged);
             materialComboBox.SelectedIndexChanged += new System.EventHandler(materialComboBox_SelectedIndexChanged);
             componentNotesTextBox.TextChanged += new System.EventHandler(componentNotesTextBox_TextChanged);
+        }
+
+        private void DeactivateComponentHandlers()
+        {
+            // ComponentInfo controls.
+            quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
+            sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
+            materialComboBox.SelectedIndexChanged -= new System.EventHandler(materialComboBox_SelectedIndexChanged);
+            componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
         }
 
         private void RenameButton_Click(object sender, EventArgs e)
@@ -1698,6 +1696,8 @@ namespace Toolroom_Scheduler
 
                         taskNotesTextBox.Text = selectedNode.Nodes[5].Text;
 
+                        SelectPredecessors(selectedNode);
+
                         ActivateTaskHandlers();
                     }
                     else
@@ -1719,8 +1719,6 @@ namespace Toolroom_Scheduler
 
                         taskNotesTextBox.Text = "";
                     }
-
-                    SelectPredecessors(selectedNode);
                 }
                 catch (Exception er)
                 {
@@ -1842,10 +1840,35 @@ namespace Toolroom_Scheduler
         private void button3_Click(object sender, EventArgs e)
         {
             //checkForTasksWithNoSuccessors();
+
             ExcelInteractions ei = new ExcelInteractions();
-            Project.SetQuoteInfo(ei.GetQuoteInfo());
-            LoadQuotedProjectToForm(Project);
-            quoteLoaded = true;
+            string filename;
+
+            OpenFileDialog snapshotOpenFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = @"C:\Users\" + Environment.UserName + @"\Downloads",
+                Filter = "Excel Files (*.xlsm, *.xlsx)|*.xlsm;*.xlsx"
+            };
+
+            Nullable<bool> result = Convert.ToBoolean(snapshotOpenFileDialog.ShowDialog());
+
+            if(result == true)
+            {
+                filename = snapshotOpenFileDialog?.FileName;
+
+                if (filename == "")
+                {
+                    return;
+                }
+                
+                Project.SetQuoteInfo(ei.GetQuoteInfo(filename));
+                LoadQuotedProjectToForm(Project);
+                quoteLoaded = true;
+            }
+            else
+            {
+                return;
+            }
 
             Console.WriteLine($"{Project.QuoteInfo.ProgramRoughHours} {Project.QuoteInfo.ProgramFinishHours} {Project.QuoteInfo.ProgramElectrodeHours} {Project.QuoteInfo.CNCRoughHours} {Project.QuoteInfo.CNCFinishHours} {Project.QuoteInfo.CNCElectrodeHours} {Project.QuoteInfo.EDMSinkerHours}");
         }

@@ -18,9 +18,13 @@ namespace Toolroom_Scheduler
             QuoteInfo quote;
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
-            Excel.Workbook workbook = workbooks.Open(Filename:filePath, Password:"ENG505");
-            Excel.Worksheet quoteWorksheet = workbook.Sheets[1];
-            Excel.Worksheet quoteLetter = workbook.Sheets[2];
+            Excel.Workbook workbook;
+            Excel.Worksheet quoteWorksheet;
+            Excel.Worksheet quoteLetter;
+
+            workbook = workbooks.Open(Filename: filePath, Password: "ENG505");
+            quoteWorksheet = workbook.Sheets[1];
+            quoteLetter = workbook.Sheets[2];
 
             quote = new QuoteInfo(
 
