@@ -310,14 +310,31 @@ namespace Toolroom_Project_Viewer
             {
                 gridView1.ActiveFilterString = "[TaskName] = 'CNC Electrodes' AND [Status] = NULL";
             }
+            else if (departmentComboBox2.Text == "Grind")
+            {
+                gridView1.ActiveFilterString = "[TaskName] LIKE '%Grind' AND [Status] = NULL";
+            }
+            else if (departmentComboBox2.Text == "EDM Sinker")
+            {
+                gridView1.ActiveFilterString = "[TaskName] = 'EDM Sinker' AND [Status] = NULL";
+            }
+            else if (departmentComboBox2.Text == "Polish")
+            {
+                gridView1.ActiveFilterString = "[TaskName] LIKE 'Polish%' AND [Status] = NULL";
+            }
             else if (departmentComboBox2.Text == "Inspection")
             {
                 gridView1.ActiveFilterString = "[TaskName] LIKE 'Inspection%' AND [Status] = NULL";
+            }
+            else if (departmentComboBox2.Text == "All")
+            {
+                gridView1.ActiveFilterString = String.Empty;
             }
 
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
         }
 
+        // This header is for when the datagrid gets printed.
         private void createHeaderRTFString()
         {
             StringBuilder tableRtf = new StringBuilder();

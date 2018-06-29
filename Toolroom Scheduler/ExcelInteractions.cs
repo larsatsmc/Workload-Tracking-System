@@ -274,7 +274,7 @@ namespace Toolroom_Scheduler
             ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
             ws.Select();
 
-            foreach (Component component in pi.ComponentList) // Iterates through each component
+            foreach (Component component in pi.ComponentList)
             {
                 wb.Sheets[1].Copy(After: wb.Sheets[n++]);
                 ws = wb.Sheets[n];
