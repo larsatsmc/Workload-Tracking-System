@@ -1,0 +1,6 @@
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb

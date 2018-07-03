@@ -76,7 +76,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.ResolveComReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.AddResourceForm.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.BackDateWindow.resources
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.Bulk_Assign_Resources_Form.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.MainWindow.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.ManageResourcesForm.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.Project_Creation_Form.resources
@@ -97,3 +96,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.SelectComponentsWindow.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csprojAssemblyReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.CopyComplete
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.BulkAssignResourcesForm.resources
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ClassLibrary.pdb

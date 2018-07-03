@@ -231,3 +231,5 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.pdb
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csprojAssemblyReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.CopyComplete
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ClassLibrary.pdb

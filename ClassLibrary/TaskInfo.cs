@@ -230,6 +230,24 @@ namespace Toolroom_Scheduler
 
         // This constructor is for reading tasks from the database.
 
+        public TaskInfo(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object status, object machine, object personnel, object predecessors, object notes)
+        {
+            this.TaskName = ConvertObjectToString(taskName);
+            this.ID = Convert.ToInt32(id);
+            this.Component = ConvertObjectToString(component);
+            this.Hours = Convert.ToInt32(hours);
+            this.Duration = ConvertObjectToString(duration);
+            this.StartDate = Convert.ToDateTime(startDate);
+            this.FinishDate = Convert.ToDateTime(finishDate);
+            this.Status = ConvertObjectToString(status);
+            this.Machine = ConvertObjectToString(machine);
+            this.Personnel = ConvertObjectToString(personnel);
+            this.Predecessors = ConvertObjectToString(predecessors);
+            this.Notes = ConvertObjectToString(notes);
+        }
+
+        // This constructor is for reading tasks from the database.
+
         public TaskInfo(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object dateCompleted, object initials, object machine, object personnel, object predecessors, object notes)
         {
             this.TaskName = ConvertObjectToString(taskName);

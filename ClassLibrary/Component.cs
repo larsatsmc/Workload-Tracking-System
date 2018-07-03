@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Toolroom_Scheduler
 {
@@ -59,6 +60,20 @@ namespace Toolroom_Scheduler
             this.Material = "";
             TaskList = new List<TaskInfo>();
             this.Name = ConvertObjectToString(name);
+        }
+        /// <summary>
+        /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
+        /// </summary> 
+        public Component(object name, object notes, object priority, object position, object material, object taskIDCount)
+        {
+            TaskList = new List<TaskInfo>();
+            this.Name = ConvertObjectToString(name);
+            this.OldName = this.Name;
+            this.Notes = ConvertObjectToString(notes);
+            this.Priority = NullIntegerCheck(priority);
+            this.Position = NullIntegerCheck(position);
+            this.Material = ConvertObjectToString(material);
+            this.TaskIDCount = NullIntegerCheck(taskIDCount);
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.

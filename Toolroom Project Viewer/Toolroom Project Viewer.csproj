@@ -92,7 +92,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component.cs" />
     <Compile Include="CustomObjects.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="MainWindow.cs">
@@ -102,9 +101,7 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskInfo.cs" />
     <Compile Include="TimeObjects.cs" />
     <Compile Include="Workload_Tracking_System_DBDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -189,6 +186,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+      <Project>{ea263ff2-afef-4570-8909-65446ffcd783}</Project>
+      <Name>ClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

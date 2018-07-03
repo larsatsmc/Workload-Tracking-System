@@ -38,127 +38,22 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="F:Toolroom_Scheduler.Bulk_Assign_Resources_Form.components">
+        <member name="F:Toolroom_Scheduler.BulkAssignResourcesForm.components">
             <summary>
             Required designer variable.
             </summary>
         </member>
-        <member name="M:Toolroom_Scheduler.Bulk_Assign_Resources_Form.Dispose(System.Boolean)">
+        <member name="M:Toolroom_Scheduler.BulkAssignResourcesForm.Dispose(System.Boolean)">
             <summary>
             Clean up any resources being used.
             </summary>
             <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         </member>
-        <member name="M:Toolroom_Scheduler.Bulk_Assign_Resources_Form.InitializeComponent">
+        <member name="M:Toolroom_Scheduler.BulkAssignResourcesForm.InitializeComponent">
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
-        </member>
-        <member name="P:Toolroom_Scheduler.Component.Name">
-            <summary>
-            Gets the name property of a Component object.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.#ctor">
-            <summary>
-            Creates instance of a component and sets TaskIDCount property to 0.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.#ctor(System.String)">
-            <summary>
-            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object)">
-            <summary>
-            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.#ctor(System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetName(System.String)">
-            <summary>
-            Sets the name of a component.
-            </summary>   
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.AddTask(System.String,System.String)">
-            <summary>
-            Adds a task to a component.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.AddTask(Toolroom_Scheduler.TaskInfo)">
-            <summary>
-            Adds a task to a component.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.AddTaskList(System.Collections.Generic.List{Toolroom_Scheduler.TaskInfo})">
-            <summary>
-            Adds a task to a component.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetPicture">
-            <summary>
-            Adds a picture to a component's picture list from the clipboard.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.GetPictureByteArray">
-            <summary>
-            Gets a picture from component class in the form of a byte array.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetPictureFromByteArray(System.Byte[])">
-            <summary>
-            Sets a picture in component class from a byte array.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.RemoveTask(System.Int32)">
-            <summary>
-            Removes a task from a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.MoveTaskUp(System.Int32)">
-            <summary>
-            Moves a task up the task list.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.MoveTaskDown(System.Int32)">
-            <summary>
-            Moves a task down the task list.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetNote(System.String)">
-            <summary>
-            Sets the note property of a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetPosition(System.Int32)">
-            <summary>
-            Sets the position property of a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetQuantity(System.Int32)">
-            <summary>
-            Sets the quantity property of a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetSpares(System.Int32)">
-            <summary>
-            Sets the spares property of a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.SetMaterial(System.String)">
-            <summary>
-            Sets the material property of a component.
-            </summary> 
-        </member>
-        <member name="M:Toolroom_Scheduler.Component.GetTask(System.Int32)">
-            <summary>
-            Gets a task with matching ID from list of tasks for component.
-            </summary> 
         </member>
         <member name="F:Toolroom_Scheduler.ForwardDateWindow.components">
             <summary>
@@ -281,26 +176,6 @@
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor">
-            <summary>
-            Initializes an empty instance of TaskInfo.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor(System.Int32,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Int32,System.DateTime,System.String)">
-            <summary>
-            This constructor is for reading tasks from a project file into the database.
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.TaskInfo.#ctor(System.Int32,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Int32,System.DateTime,System.String)">
-            <summary>
-            This constructor is for reading tasks from a project file into the database (2).
-            </summary>
-        </member>
-        <member name="M:Toolroom_Scheduler.TaskInfo.SetTaskInfo(System.Decimal,System.String,System.Object,System.Object,System.String,System.String)">
-            <summary>
-            Sets the task info for a given task from task info tab.
-            </summary> 
         </member>
         <member name="T:Toolroom_Scheduler.Workload_Tracking_SystemDataSet">
              <summary>
