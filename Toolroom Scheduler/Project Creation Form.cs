@@ -19,7 +19,6 @@ namespace Toolroom_Scheduler
     /// </summary> 
     public partial class Project_Creation_Form : Form
     {
-		MSProject msp;
 		Excel.Application excelApp;
 		string prefix, component, taskName;
         int ID, taskCount;
@@ -663,7 +662,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private List<string> getMachineList(string taskName)
+        private List<string> GetMachineList(string taskName)
         {
             List<string> machineList;
 
@@ -699,7 +698,7 @@ namespace Toolroom_Scheduler
             return machineList;
         }
 
-        private List<string> getPersonnelList (string taskName)
+        private List<string> GetPersonnelList (string taskName)
         {
             List<string> personnelList;
 
@@ -735,7 +734,7 @@ namespace Toolroom_Scheduler
             return personnelList;
         }
 
-        private string getPresetPersonnel(string taskName)
+        private string GetPresetPersonnel(string taskName)
         {
             if(taskName == "Program Rough")
             {
@@ -755,12 +754,12 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private string getPresetHours(string taskName)
+        private string GetPresetHours(string taskName)
         {
             return "";
         }
 
-        private TaskInfo getPresets(string taskName)
+        private TaskInfo GetPresets(string taskName)
         {
             TaskInfo ti;
 
@@ -1651,13 +1650,13 @@ namespace Toolroom_Scheduler
 
                     tabControl1.SelectedTab = tabPage4;
 
-                    machineComboBox.DataSource = getMachineList(selectedNode.Text);
-                    personnelComboBox.DataSource = getPersonnelList(selectedNode.Text);
+                    machineComboBox.DataSource = GetMachineList(selectedNode.Text);
+                    personnelComboBox.DataSource = GetPersonnelList(selectedNode.Text);
                     predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
 
                     predecessorsListBox.ClearSelected();
 
-                    ti = getPresets(selectedNode.Text);
+                    ti = GetPresets(selectedNode.Text);
 
                     if (selectedNode.Nodes.Count > 0)
                     {

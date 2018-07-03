@@ -15,14 +15,14 @@ namespace Toolroom_Scheduler
     class MSProject
     {
 		OpenFileDialog projectOpenDialog;
-		Project.Application ProjApp;
+		Project.Application projApp;
         Project.Project proj;
         Task task;
 
 		public string OpenProjectFile()
 		{
 			string filename;
-			ProjApp = new Project.Application();
+			projApp = new Project.Application();
 			projectOpenDialog = new OpenFileDialog();
 			//MessageBox.Show("Make Project file is saved if it is currently open! Then click OK.");
 			projectOpenDialog.InitialDirectory = @"C:\Users\joshua.meservey\Desktop\Toolroom Schedules";
@@ -33,8 +33,8 @@ namespace Toolroom_Scheduler
 
 			if (projectOpenDialog.FileName != "")
 			{
-				this.ProjApp.FileOpenEx(filename);
-				this.proj = ProjApp.ActiveProject;
+				this.projApp.FileOpenEx(filename);
+				this.proj = projApp.ActiveProject;
 				//ProjApp.Visible = true;
 
 			}
@@ -63,10 +63,10 @@ namespace Toolroom_Scheduler
 			nameArr = proj.Name.Split('.');
 			nameArr2 = nameArr[0].Split('-');
 
-            if(db.projectTasksExist(nameArr2[0], nameArr2[1]))
+            if(db.ProjectTasksExist(nameArr2[0], nameArr2[1]))
             {
                 // Get highest task id for project in database.
-                highestTaskID = db.getHighestProjectTaskID(nameArr2[0], Convert.ToInt32(nameArr2[1]));
+                highestTaskID = db.GetHighestProjectTaskID(nameArr2[0], Convert.ToInt32(nameArr2[1]));
 
                 if(highestTaskID != count)
                 {
@@ -86,22 +86,22 @@ namespace Toolroom_Scheduler
 
 			do
 			{
-				if (ProjApp.GetCellInfo(2, r).Text != "" && ProjApp.GetCellInfo(10, r).Text == "No")
+				if (projApp.GetCellInfo(2, r).Text != "" && projApp.GetCellInfo(10, r).Text == "No")
 				{
-					taskname = ProjApp.GetCellInfo(2, r).Text;
-					duration = ProjApp.GetCellInfo(3, r).Text;
-                    predecessor = ProjApp.GetCellInfo(6, r).Text;
-                    summary = ProjApp.GetCellInfo(10, r).Text;
+					taskname = projApp.GetCellInfo(2, r).Text;
+					duration = projApp.GetCellInfo(3, r).Text;
+                    predecessor = projApp.GetCellInfo(6, r).Text;
+                    summary = projApp.GetCellInfo(10, r).Text;
 
 					//                                 Project Number           Tool Number             Component                      Task ID                                      Task Name                            Duration                       Predecessors                 Resource Name                        Machine                      Hours                                 Tool Maker                Priority                               Date Added             Notes
-					taskInfoList.Add(new TaskInfo(Convert.ToInt32(nameArr2[1]), nameArr2[0].ToString(), component, Convert.ToInt16(ProjApp.GetCellInfo(1, r).Task.ID), ProjApp.GetCellInfo(2, r).Text.Trim(), ProjApp.GetCellInfo(3, r).Text, ProjApp.GetCellInfo(6, r).Text, ProjApp.GetCellInfo(7, r).Text, ProjApp.GetCellInfo(8,r).Text, Convert.ToInt16(ProjApp.GetCellInfo(9, r).Text), nameArr2[2], Convert.ToInt16(ProjApp.GetCellInfo(11, r).Text),  DateTime.Now, ProjApp.GetCellInfo(12, r).Text));
+					taskInfoList.Add(new TaskInfo(Convert.ToInt32(nameArr2[1]), nameArr2[0].ToString(), component, Convert.ToInt16(projApp.GetCellInfo(1, r).Task.ID), projApp.GetCellInfo(2, r).Text.Trim(), projApp.GetCellInfo(3, r).Text, projApp.GetCellInfo(6, r).Text, projApp.GetCellInfo(7, r).Text, projApp.GetCellInfo(8,r).Text, Convert.ToInt16(projApp.GetCellInfo(9, r).Text), nameArr2[2], Convert.ToInt16(projApp.GetCellInfo(11, r).Text),  DateTime.Now, projApp.GetCellInfo(12, r).Text));
 					//                  Project Number Tool Number   Component                     Task ID                                 Task Name                               Duration                             Predecessors                Resource Name                        Machine                          Hours                  Tool Maker            Priority                   Date Added             Notes
-					Console.WriteLine($"{nameArr2[1]} {nameArr2[0]} {component} {ProjApp.GetCellInfo(1, r).Task.ID.ToString()} {ProjApp.GetCellInfo(2, r).Text.Trim()} {ProjApp.GetCellInfo(3, r).Text} {ProjApp.GetCellInfo(6, r).Text} {ProjApp.GetCellInfo(7, r).Text} { ProjApp.GetCellInfo(8, r).Text } {ProjApp.GetCellInfo(9, r).Text}  {nameArr2[2]} {ProjApp.GetCellInfo(11, r).Text} {DateTime.Now} {ProjApp.GetCellInfo(12, r).Text}");
+					Console.WriteLine($"{nameArr2[1]} {nameArr2[0]} {component} {projApp.GetCellInfo(1, r).Task.ID.ToString()} {projApp.GetCellInfo(2, r).Text.Trim()} {projApp.GetCellInfo(3, r).Text} {projApp.GetCellInfo(6, r).Text} {projApp.GetCellInfo(7, r).Text} { projApp.GetCellInfo(8, r).Text } {projApp.GetCellInfo(9, r).Text}  {nameArr2[2]} {projApp.GetCellInfo(11, r).Text} {DateTime.Now} {projApp.GetCellInfo(12, r).Text}");
 
 				}
-				else if (ProjApp.GetCellInfo(10, r).Text == "Yes")
+				else if (projApp.GetCellInfo(10, r).Text == "Yes")
 				{
-					component = ProjApp.GetCellInfo(2, r).Text;
+					component = projApp.GetCellInfo(2, r).Text;
 				}
 
 				//Console.WriteLine(taskname + " " + duration + " " + summary + " " + predecessor);
@@ -116,7 +116,7 @@ namespace Toolroom_Scheduler
 
 		public void CloseProject()
 		{
-            ProjApp?.Quit();
+            projApp?.Quit();
 
             if (proj != null)
 			{
@@ -124,9 +124,9 @@ namespace Toolroom_Scheduler
                 Marshal.ReleaseComObject(proj); // Elvis sign does not work here for some reason.
 			}
 
-			if (ProjApp != null)
+			if (projApp != null)
 			{
-				Marshal.ReleaseComObject(ProjApp);
+				Marshal.ReleaseComObject(projApp);
 			}
 		}
 
@@ -134,8 +134,8 @@ namespace Toolroom_Scheduler
         {
             try
             {
-                ProjApp = new Project.Application();
-                proj = this.ProjApp.Projects.Add();
+                projApp = new Project.Application();
+                proj = this.projApp.Projects.Add();
 
                 proj.Application.TableEditEx(Name: proj.CurrentTable, TaskTable: true, FieldName: "Name", Width: 25, WrapText: false);
                 proj.Application.TableEditEx(Name: proj.CurrentTable, TaskTable: true, FieldName: "Duration", Width: 10, WrapText: false);
@@ -165,7 +165,7 @@ namespace Toolroom_Scheduler
                     i++;
                 }
 
-                ProjApp.Visible = true;
+                projApp.Visible = true;
             }
             catch(Exception e)
             {
@@ -213,17 +213,17 @@ namespace Toolroom_Scheduler
 
         public void ShowProject()
         {
-            this.ProjApp.Visible = true;
+            this.projApp.Visible = true;
         }
 
         public void SaveAndCloseProject()
         {
             //this.ProjApp.ScreenUpdating = false;
-            this.ProjApp.FileSave();
+            this.projApp.FileSave();
             //this.ProjApp.FileExit();
-            this.ProjApp.Quit();
+            this.projApp.Quit();
             Marshal.ReleaseComObject(proj);
-            Marshal.ReleaseComObject(ProjApp);
+            Marshal.ReleaseComObject(projApp);
         }
 
         private void setTaskInfo(ProjectInfo pi, TaskInfo ti, Task t)
@@ -311,32 +311,32 @@ namespace Toolroom_Scheduler
 
             do
             {
-                if (ProjApp.GetCellInfo(2, r).Text != "" && ProjApp.GetCellInfo(10, r).Text == "No")
+                if (projApp.GetCellInfo(2, r).Text != "" && projApp.GetCellInfo(10, r).Text == "No")
                 {
-                    if (ProjApp.GetCellInfo(2, r).Text == "CNC Rough")
+                    if (projApp.GetCellInfo(2, r).Text == "CNC Rough")
                     {
-                        currentCNCTaskID = ProjApp.GetCellInfo(2, r).Task.ID;
+                        currentCNCTaskID = projApp.GetCellInfo(2, r).Task.ID;
                         do
                         {
                             rTemp = componentStartRow;
 
-                            if(ProjApp.GetCellInfo(2, rTemp).Text == "Order Steel / Steel Arrival")
+                            if(projApp.GetCellInfo(2, rTemp).Text == "Order Steel / Steel Arrival")
                             {
-                                predecessorList = ProjApp.GetCellInfo(2, rTemp).Task.ID.ToString();
+                                predecessorList = projApp.GetCellInfo(2, rTemp).Task.ID.ToString();
                             }
-                            else if (ProjApp.GetCellInfo(2, rTemp).Text == "Program Rough")
+                            else if (projApp.GetCellInfo(2, rTemp).Text == "Program Rough")
                             {
-                                predecessorList = predecessorList + ProjApp.GetCellInfo(2, rTemp).Task.ID.ToString();
+                                predecessorList = predecessorList + projApp.GetCellInfo(2, rTemp).Task.ID.ToString();
                             }
                             rTemp++;
 
                         } while (rTemp < currentCNCTaskID);
                     }
-                    else if (ProjApp.GetCellInfo(2,r).Text == "CNC Finish" )
+                    else if (projApp.GetCellInfo(2,r).Text == "CNC Finish" )
                     {
 
                     }
-                    else if (ProjApp.GetCellInfo(2, r).Text == "CNC Electrodes")
+                    else if (projApp.GetCellInfo(2, r).Text == "CNC Electrodes")
                     {
 
                     }
@@ -351,7 +351,7 @@ namespace Toolroom_Scheduler
 
                     i++;
                 }
-                else if (ProjApp.GetCellInfo(10, r).Text == "Yes")
+                else if (projApp.GetCellInfo(10, r).Text == "Yes")
                 {
                     componentStartRow = r + 1;
                 }

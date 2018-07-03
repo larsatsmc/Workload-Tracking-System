@@ -51,7 +51,7 @@ namespace Toolroom_Scheduler
             this.Notes = "";
             this.Material = "";
             TaskList = new List<TaskInfo>();
-            this.Name = convertObjectToString(name);
+            this.Name = ConvertObjectToString(name);
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
@@ -59,13 +59,13 @@ namespace Toolroom_Scheduler
         public Component(object name, object notes, object priority, object position, object material, object taskIDCount)
         {
             TaskList = new List<TaskInfo>();
-            this.Name = convertObjectToString(name);
+            this.Name = ConvertObjectToString(name);
             this.OldName = this.Name;
-            this.Notes = convertObjectToString(notes);
-            this.Priority = nullIntegerCheck(priority);
-            this.Position = nullIntegerCheck(position);
-            this.Material = convertObjectToString(material);
-            this.TaskIDCount = nullIntegerCheck(taskIDCount);
+            this.Notes = ConvertObjectToString(notes);
+            this.Priority = NullIntegerCheck(priority);
+            this.Position = NullIntegerCheck(position);
+            this.Material = ConvertObjectToString(material);
+            this.TaskIDCount = NullIntegerCheck(taskIDCount);
         }
         /// <summary>
         /// Sets the name of a component.
@@ -202,7 +202,7 @@ namespace Toolroom_Scheduler
             return task;
         }
 
-        private string convertObjectToString(object obj)
+        private string ConvertObjectToString(object obj)
         {
             if (obj != null)
             {
@@ -214,7 +214,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private int nullIntegerCheck(object checkValue)
+        private int NullIntegerCheck(object checkValue)
         {
             if (!DBNull.Value.Equals(checkValue))
             {

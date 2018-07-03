@@ -44,7 +44,7 @@ namespace Toolroom_Scheduler
 
             if(RoleComboBox.Text != "")
             {
-                roleListBox.DataSource = db.GetRoleList(getRoleFromRoleComboBox());
+                roleListBox.DataSource = db.GetRoleList(GetRoleFromRoleComboBox());
             }
         }
 
@@ -101,7 +101,7 @@ namespace Toolroom_Scheduler
         {
             if(RoleComboBox.Text != "" || resourceListBox.SelectedItems.Count > 0)
             {
-                db.InsertResourceRole(resourceListBox.SelectedItem.ToString(), getRoleFromRoleComboBox());
+                db.InsertResourceRole(resourceListBox.SelectedItem.ToString(), GetRoleFromRoleComboBox());
 
                 LoadRoleListBox();
             }
@@ -111,7 +111,7 @@ namespace Toolroom_Scheduler
         {
             if(roleListBox.SelectedItems.Count > 0)
             {
-                db.RemoveResourceRole(roleListBox.SelectedItem.ToString(), getRoleFromRoleComboBox());
+                db.RemoveResourceRole(roleListBox.SelectedItem.ToString(), GetRoleFromRoleComboBox());
 
                 LoadRoleListBox();
             }
@@ -121,7 +121,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private string getRoleFromRoleComboBox()
+        private string GetRoleFromRoleComboBox()
         {
             StringBuilder sb = new StringBuilder(RoleComboBox.Text);
 

@@ -117,16 +117,16 @@ namespace Toolroom_Scheduler
                 //    return;
                 //}
 
-            if (projectExists(project.ProjectNumber))
+            if (ProjectExists(project.ProjectNumber))
             {
                 MessageBox.Show("There is another project with that same project number. Enter a different project number");
                 return false;
             }
             else
             {
-                if(addProjectDataToDatabase(project) && 
-                addComponentDataTableToDatabase(CreateDataTableFromComponentList(project)) &&
-                addTaskDataTableToDatabase(createDataTableFromTaskList(project)))
+                if(AddProjectDataToDatabase(project) && 
+                AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project)) &&
+                AddTaskDataTableToDatabase(CreateDataTableFromTaskList(project)))
                 {
                     MessageBox.Show("Project Loaded!");
                     return true;
@@ -151,13 +151,13 @@ namespace Toolroom_Scheduler
                 List<TaskInfo> newTaskList = new List<TaskInfo>();
                 List<Component> deletedComponentList = new List<Component>();
 
-                if (project.ProjectNumberChanged && projectExists(project.ProjectNumber))
+                if (project.ProjectNumberChanged && ProjectExists(project.ProjectNumber))
                 {
                     MessageBox.Show("There is another project with that same project number. Enter a different project number.");
                     return false;
                 }
 
-                updateProjectData(project);
+                UpdateProjectData(project);
 
                 if (ProjectHasComponents(project.ProjectNumber))
                 {
@@ -170,7 +170,7 @@ namespace Toolroom_Scheduler
 
                         if (componentExists)
                         {
-                            updateComponentData(project, component);
+                            UpdateComponentData(project, component);
 
                             if (component.ReloadTaskList)
                             {
@@ -179,7 +179,7 @@ namespace Toolroom_Scheduler
                             }
                             else
                             {
-                                updateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
+                                UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
                             }
                         }
                         else
@@ -204,25 +204,25 @@ namespace Toolroom_Scheduler
 
                     if (newComponentList.Count > 0)
                     {
-                        addComponentDataTableToDatabase(createDataTableFromComponentList(project, newComponentList));
+                        AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project, newComponentList));
                     }
 
                     if (newTaskList.Count > 0)
                     {
-                        addTaskDataTableToDatabase(createDataTableFromTaskList(project, newTaskList));
+                        AddTaskDataTableToDatabase(CreateDataTableFromTaskList(project, newTaskList));
                     }
 
                     if (deletedComponentList.Count > 0)
                     {
                         foreach (Component component in deletedComponentList)
                         {
-                            removeComponent(project, component);
+                            RemoveComponent(project, component);
                         }
                     }
                 }
                 else
                 {
-                    addComponentDataTableToDatabase(CreateDataTableFromComponentList(project));
+                    AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project));
                 }
 
                 return true;
@@ -236,447 +236,21 @@ namespace Toolroom_Scheduler
 
         public void LoadProjectToDatabase(ProjectInfo project)
         {
-            if (projectExists(project.ProjectNumber))
+            if (ProjectExists(project.ProjectNumber))
             {
-                updateProjectData(project);
+                UpdateProjectData(project);
             }
             else
             {
-                addProjectDataToDatabase(project);
+                AddProjectDataToDatabase(project);
             }
         }
 
-        public void GenerateThreeWeekSummary()
-		{
-			var adapter = new OleDbDataAdapter();
-			DataTable datatable = new DataTable();
-			string queryString;
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook wb;
-            queryString = "SELECT * FROM Tasks ORDER BY TaskID ASC";
-			adapter.SelectCommand = new OleDbCommand(queryString, Connection);
-			adapter.Fill(datatable);
-
-			
-			//wb = excelApp.Workbooks.Open();
-			//ws = wb.Worksheets.Add();
-
-			foreach (DataRow nrow in datatable.Rows)
-			{
-				if(nrow["TaskName"].ToString() == "Design / Make Drawings")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Order Steel / Steel Arrival")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Order Block / Block Arrival")
-				{
-
-				}
-				else if(nrow["TaskName"].ToString() == "Program Rough")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Program Electrodes")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Program Finish")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "CNC Rough")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "CNC Electrodes")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Inspection Post CNC Electrodes")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Heat Treat")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Grinding")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "CNC Finish")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Inspection Post CNC Finish")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "EDM Wire")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Polish")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Inspection Post Polish")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "EDM Sinker")
-				{
-
-				}
-				else if (nrow["TaskName"].ToString() == "Inspection Post EDM Sinker")
-				{
-
-				}
-			}
-		}
-
-        private string getPrinterPort()
-        {
-            var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
-            string printerName = "Microsoft XPS Document Writer";
-
-            try
-            {
-
-                foreach (string name in devices.GetValueNames())
-                {
-                    if (Regex.IsMatch(name, printerName, RegexOptions.IgnoreCase))
-                    {
-                        var value = (String)devices.GetValue(name);
-                        var port = Regex.Match(value, @"(Ne\d+:)", RegexOptions.IgnoreCase).Value;
-                        //MessageBox.Show(printerName + " on " + port);
-                        return port;
-                    }
-                }
-                return "";
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        // TODO: Find an alternative to this method that does not use COM interop.
-        // FreeSpire is limited to 200 rows and 5 sheets.
-        // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
 
         //public bool KanBanExists(string jobNumber, int projectNumber)
         //{
         //    getKanBanWorkbookPath(jobNumber, projectNumber);
         //}
-
-        // May also want create a class that is dedicated to Excel operations.
-        public void GenerateKanBanWorkbook(ProjectInfo pi)
-        {
-            var adapter = new OleDbDataAdapter();
-
-            Excel.Application excelApp = new Excel.Application();
-            // TODO: Need to add workbooks variable.
-            Excel.Borders border;
-            DataTable taskDataTable = new DataTable();
-			DataTable componentDataTable = new DataTable();
-            string activePrinterString;
-            int r;
-
-            try
-            {   
-				excelApp.ScreenUpdating = false;
-                excelApp.EnableEvents = false;
-                excelApp.DisplayAlerts = false;
-                excelApp.Visible = true;
-                //wb = excelApp.Workbooks.Add();
-                wb = excelApp.Workbooks.Open(@"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm", ReadOnly:true);
-                
-                // Remember active printer.
-                activePrinterString = excelApp.ActivePrinter;
-
-                // Change active printer to XPS Document Writer.
-                excelApp.ActivePrinter = "Microsoft XPS Document Writer on " + getPrinterPort(); // This speeds up page setup operations.
-
-                taskDataTable = getProjectTasksTable(pi.JobNumber, pi.ProjectNumber);
-
-				//ws = wb.Sheets[1];
-                ws = wb.Sheets.Add(After: wb.Sheets[1]);
-                ws.Name = pi.JobNumber;
-
-                r = 1;
-
-                ws.Cells[r, 1].value = "Job Number";
-                ws.Cells[r, 2].value = "   Component";
-                ws.Cells[r, 3].value = "Task ID";
-                ws.Cells[r, 4].value = "   Task Name";
-                ws.Cells[r, 5].value = "Duration";
-                ws.Cells[r, 6].value = "Start Date";
-                ws.Cells[r, 7].value = "Finish Date";
-                ws.Cells[r, 8].value = "   Predecessors";
-                ws.Cells[r, 9].value = "Status";
-				ws.Cells[r, 10].value = "Initials";
-				ws.Cells[r, 11].value = "Date";
-
-				r = 2;
-
-                ws.Range["H1"].EntireColumn.NumberFormat = "@";
-
-				toolMaker = "";
-				component = "";
-
-                foreach (DataRow nrow in taskDataTable.Rows)
-                {
-					border = ws.Range[ws.Cells[r-1,1], ws.Cells[r-1, 11]].Borders;
-
-					if(toolMaker == "")
-						toolMaker = nrow["ToolMaker"].ToString();
-
-					if (component != nrow["Component"].ToString())
-						border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-
-					ws.Cells[r, 1].value = nrow["JobNumber"];
-                    ws.Cells[r, 2].value = $"   {nrow["Component"]}";
-                    ws.Cells[r, 3].value = nrow["TaskID"];
-                    ws.Cells[r, 4].value = $"   {nrow["TaskName"]}";
-                    ws.Cells[r, 5].value = $"   {nrow["Duration"]}";
-                    //ws.Cells[r, 6].value = nrow["StartDate"];
-                    //ws.Cells[r, 7].value = nrow["FinishDate"];
-                    ws.Cells[r, 8].value = $"  {nrow["Predecessors"]}";
-                    ws.Cells[r, 9].value = nrow["Status"];
-                    ws.Cells[r, 10].value = nrow["Initials"];
-                    ws.Cells[r, 11].value = nrow["DateCompleted"];
-
-					component = nrow["Component"].ToString();
-
-					if (r % 2 == 0)
-						ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
-
-                    r++;
-                }
-
-				border = ws.Range[ws.Cells[2, 1], ws.Cells[r-1, 11]].Borders;
-
-				border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-
-				for(int c = 2;c <= 11; c++)
-				{
-					border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
-					border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-				}
-
-				ws.Columns["B:B"].Autofit();
-                ws.Columns["D:D"].Autofit();
-
-                ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
-                ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
-                ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
-                ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
-                ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
-                ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
-                ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
-                ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
-                ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
-
-                //ws.Range[ws.Cells[1, 1], ws.Cells[1, 9]].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
-
-                ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
-				ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: "+ pi.ToolMaker;
-				dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-                ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
-                ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
-                ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-				ws.PageSetup.Zoom = 67;
-				ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
-				ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
-				ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
-				ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
-
-                componentDataTable = getComponentsTable(pi.JobNumber, pi.ProjectNumber);
-
-                createKanBanComponentSheets(pi, componentDataTable, taskDataTable, excelApp, wb);
-
-				SaveFileDialog saveFileDialog = new SaveFileDialog();
-				saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
-				saveFileDialog.FilterIndex = 0;
-				saveFileDialog.RestoreDirectory = true;
-				saveFileDialog.CreatePrompt = false;
-				saveFileDialog.FileName = pi.JobNumber + "- Proj #" + pi.ProjectNumber + " Checkoff Sheet";
-				saveFileDialog.Title = "Save Path of Kan Ban";
-
-				excelApp.Visible = true;
-				excelApp.ScreenUpdating = true;
-                excelApp.EnableEvents = true;
-				excelApp.ActivePrinter = activePrinterString;
-
-				if (saveFileDialog.ShowDialog() == DialogResult.OK)
-				{
-					//Save. The selected path can be got with saveFileDialog.FileName.ToString()
-					wb.SaveAs(saveFileDialog.FileName.ToString());
-                    setKanBanWorkbookPath(saveFileDialog.FileName.ToString(), pi.JobNumber, pi.ProjectNumber);
-				}
-
-                excelApp.DisplayAlerts = true;  // So I get prompted to save after adding pictures to the Kan Bans.
-
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message + " ");
-
-                // TODO: Need to close and release workbooks variable.
-                // TODO: Need to remove garbage collection and have excel shutdown without it.
-				//wb.Close();
-				excelApp.Quit();
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-				Marshal.ReleaseComObject(wb);
-
-				Marshal.ReleaseComObject(ws);
-				Marshal.ReleaseComObject(excelApp);
-			}
-
-        }
-
-		private void createKanBanComponentSheets(ProjectInfo pi, DataTable dtc, DataTable dtt, Excel.Application excelApp, Excel.Workbook wb)
-		{
-            Excel.Borders border;
-			int r, n;
-
-            n = 2;
-            ws = wb.Sheets[1]; // Blank Sheet that contains VBA Code.
-
-            ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
-			ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
-			dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-			ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
-            ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
-            ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-			ws.PageSetup.Zoom = 67;
-			ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
-			ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
-			ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
-			ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
-			ws.Select();
-
-			foreach (DataRow nrow in dtc.Rows) // Iterates through each component
-			{
-		        wb.Sheets[1].Copy(After: wb.Sheets[n]);
-                n++;
-                ws = wb.Sheets[n];
-
-				Console.WriteLine(nrow["Component"]);
-
-				if (nrow["Component"].ToString() != "" && nrow["Component"].ToString().Length <= 31)
-					ws.Name = nrow["Component"].ToString();
-				else if(nrow["Component"].ToString().Length > 31)
-				{
-				}
-				else
-					ws.Name = "Mold";
-
-				r = 1;
-
-				ws.Cells[r, 1].value = "Job Number";
-				ws.Cells[r, 2].value = "   Component";
-				ws.Cells[r, 3].value = "Task ID";
-				ws.Cells[r, 4].value = "   Task Name";
-				ws.Cells[r, 5].value = "Duration";
-				ws.Cells[r, 6].value = "Start Date";
-				ws.Cells[r, 7].value = "Finish Date";
-				ws.Cells[r, 8].value = "   Predecessors";
-				ws.Cells[r, 9].value = "Status";
-				ws.Cells[r, 10].value = "Initials";
-				ws.Cells[r, 11].value = "Date";
-
-				r = 2;
-
-				ws.Range["H1"].EntireColumn.NumberFormat = "@";
-
-				foreach (DataRow nrow2 in dtt.Rows)
-				{
-					border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
-
-					if (nrow["Component"].ToString() == nrow2["Component"].ToString())
-					{
-                        ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
-						ws.Cells[r, 1].value = nrow2["JobNumber"];
-						ws.Cells[r, 2].value = "   " + nrow2["Component"];
-						ws.Cells[r, 3].value = nrow2["TaskID"];
-						ws.Cells[r, 4].value = "   " + nrow2["TaskName"];
-						ws.Cells[r, 5].value = "   " + nrow2["Duration"];
-						ws.Cells[r, 6].value = nrow2["StartDate"];
-						ws.Cells[r, 7].value = nrow2["FinishDate"];
-						ws.Cells[r, 8].value = "  " + nrow2["Predecessors"];
-						ws.Cells[r, 9].value = nrow2["Status"];
-                        ws.Cells[r, 10].value = nrow2["Initials"];
-                        ws.Cells[r, 11].value = nrow2["DateCompleted"];
-
-						if (r % 2 == 0)
-							ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
-
-						r++;
-					}
-
-				}
-
-				border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
-
-				border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-				border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-
-				for (int c = 2; c <= 11; c++)
-				{
-					border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
-					border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-				}
-
-				ws.Columns["B:B"].Autofit();
-				ws.Columns["D:D"].Autofit();
-
-                ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
-                ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
-                ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
-                ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
-                ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
-                ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
-                ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
-                ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
-                ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
-
-                ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
-			}
-
-            if (sheetNExists("Sheet1"))
-            {
-                wb.Sheets["Sheet1"].delete();
-            }
-
-            if (sheetNExists("Mold"))
-				wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
-		}
 
 		public List<string> GetResourceList(string role)
 		{
@@ -861,7 +435,7 @@ namespace Toolroom_Scheduler
 			return ti;
 		}
 
-		public void setTaskInfo(int id, TaskInfo ti)
+		public void SetTaskInfo(int id, TaskInfo ti)
 		{
 			OleDbCommand cmd = new OleDbCommand();
 			cmd.CommandType = CommandType.Text;
@@ -1013,7 +587,7 @@ namespace Toolroom_Scheduler
                     {
                         Connection.Close();
 
-                        project.AddComponentList(getComponentListFromTasksTable(project.JobNumber, project.ProjectNumber));
+                        project.AddComponentList(GetComponentListFromTasksTable(project.JobNumber, project.ProjectNumber));
                     }
                 }
 
@@ -1073,7 +647,7 @@ namespace Toolroom_Scheduler
             return componentList;
         }
 
-        public List<Component> getComponentListFromTasksTable(string jobNumber, int projectNumber)
+        public List<Component> GetComponentListFromTasksTable(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
             List<Component> componentList = new List<Component>();
@@ -1121,7 +695,7 @@ namespace Toolroom_Scheduler
 
         private void AddTasks(ProjectInfo project)
         {
-            List<TaskInfo> projectTaskList = getProjectTaskList(project.JobNumber, project.ProjectNumber);
+            List<TaskInfo> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
 
             foreach (Component component in project.ComponentList)
             {
@@ -1146,7 +720,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public List<TaskInfo> getProjectTaskList(string jobNumber, int projectNumber)
+        public List<TaskInfo> GetProjectTaskList(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
             List<TaskInfo> taskList = new List<TaskInfo>();
@@ -1199,7 +773,7 @@ namespace Toolroom_Scheduler
             return taskList;
         }
 
-        public bool projectHasDates(DataTable dt)
+        public bool ProjectHasDates(DataTable dt)
         {
             foreach (DataRow nrow in dt.Rows)
             {
@@ -1212,7 +786,7 @@ namespace Toolroom_Scheduler
             return false;
         }
 
-        public void forwardDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime forwardDate)
+        public void ForwardDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime forwardDate)
         {
             OleDbDataAdapter adapter;
             DataTable dt = new DataTable();
@@ -1255,7 +829,7 @@ namespace Toolroom_Scheduler
 
                         //Skip:;
 
-                        forwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
+                        ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
                     }
                     else if (componentList.Exists(x => x == nrow["Component"].ToString()))
                     {
@@ -1264,7 +838,7 @@ namespace Toolroom_Scheduler
 
                         //Skip:;
 
-                        forwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
+                        ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
                     }
                 }
 
@@ -1282,7 +856,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void forwardDateTask(int predecessorID, string component, bool skipDatedTasks, DateTime predecessorFinishDate, DataTable projectTaskTable)
+        private void ForwardDateTask(int predecessorID, string component, bool skipDatedTasks, DateTime predecessorFinishDate, DataTable projectTaskTable)
         {
             var result = from DataRow myRow in projectTaskTable.Rows
                          where myRow["Predecessors"].ToString().Contains(predecessorID.ToString()) && myRow["Component"].ToString() == component
@@ -1305,7 +879,7 @@ namespace Toolroom_Scheduler
 
                     Skip:;
 
-                    forwardDateTask(Convert.ToInt16(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), projectTaskTable);
+                    ForwardDateTask(Convert.ToInt16(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), projectTaskTable);
                 }
             }
 
@@ -1315,7 +889,7 @@ namespace Toolroom_Scheduler
             //}
         }
 
-        public void backDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime backDate)
+        public void BackDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime backDate)
         {
             OleDbDataAdapter adapter;
             DataTable dt = new DataTable();
@@ -1349,12 +923,12 @@ namespace Toolroom_Scheduler
                     if(componentList == null)
                     {
                         Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
-                        backDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
+                        BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
                     }
                     else if (componentList.Exists(x => x == lastTask.component))
                     {
                         Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
-                        backDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
+                        BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
                     }
 
                 }
@@ -1374,7 +948,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void backDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
+        private void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
         {
             string[] predecessors;
 
@@ -1405,14 +979,14 @@ namespace Toolroom_Scheduler
 
                     foreach(string id in predecessors)
                     {
-                        backDateTask(Convert.ToInt32(id), component, skipDatedTasks, Convert.ToDateTime(nrow["StartDate"]), projectTaskTable);
+                        BackDateTask(Convert.ToInt32(id), component, skipDatedTasks, Convert.ToDateTime(nrow["StartDate"]), projectTaskTable);
                     }
                 }
                 // If a task has one predecessor.
                 // Backdate the one predecessor.
                 else if(nrow["Predecessors"].ToString() != "")
                 {
-                    backDateTask(Convert.ToInt32(nrow["Predecessors"]), component, skipDatedTasks, Convert.ToDateTime(nrow["StartDate"]), projectTaskTable);
+                    BackDateTask(Convert.ToInt32(nrow["Predecessors"]), component, skipDatedTasks, Convert.ToDateTime(nrow["StartDate"]), projectTaskTable);
                 }
                 // If a task has no predecessors.
                 // Exit method.
@@ -1428,7 +1002,7 @@ namespace Toolroom_Scheduler
             //}
         }
 
-		private Boolean sheetNExists(int sheetn)
+		private Boolean SheetNExists(int sheetn)
 		{
 			foreach (Excel.Worksheet sheet in wb.Sheets)
 			{
@@ -1441,7 +1015,7 @@ namespace Toolroom_Scheduler
 			return false;
 		}
 
-		private Boolean sheetNExists(string sheetname)
+		private Boolean SheetNExists(string sheetname)
 		{
 			foreach (Excel.Worksheet sheet in wb.Sheets)
 			{
@@ -1454,7 +1028,7 @@ namespace Toolroom_Scheduler
 			return false;
 		}
 
-        public void updateDatabase(object s, DataGridViewCellEventArgs ev)
+        public void UpdateDatabase(object s, DataGridViewCellEventArgs ev)
         {
             try
             {
@@ -1629,8 +1203,8 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void calculateEarliestStartDates(string jn, int pn) // One time deal.  This is only to get everything caught up.  Will come up with another method to update earliest start dates on the fly.
-        {
+        public void CalculateEarliestStartDates(string jn, int pn) // One time deal.  This is only to get everything caught up.  Will come up with another method to update earliest start dates on the fly.
+        { 
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
             DateTime tempDate;
@@ -1667,7 +1241,7 @@ namespace Toolroom_Scheduler
                     Console.WriteLine(nrow["TaskID"] + " " + nrow["Component"] + " " + predecessorArr[i].ToString());
 
                     tempPredecessor = Convert.ToInt16(predecessorArr[i]);
-                    tempDate = getTaskFinishDate(datatable, tempPredecessor);
+                    tempDate = GetTaskFinishDate(datatable, tempPredecessor);
 
                     if (tempDate == new DateTime(2000, 1, 1))
                     {
@@ -1696,7 +1270,7 @@ namespace Toolroom_Scheduler
             MessageBox.Show("Done!");
         }
 
-        private DateTime getTaskFinishDate(DataTable dt, int id)
+        private DateTime GetTaskFinishDate(DataTable dt, int id)
         {
             DateTime fd = new DateTime(2000, 1, 1);
 
@@ -1756,7 +1330,7 @@ namespace Toolroom_Scheduler
             MessageBox.Show("Done!");
         }
 
-        public void changeTaskStartDate(string jobNumber, int projectNumber, string component, DateTime currentTaskStartDate, string duration, int taskID)
+        public void ChangeTaskStartDate(string jobNumber, int projectNumber, string component, DateTime currentTaskStartDate, string duration, int taskID)
         {
             try
             {
@@ -1785,7 +1359,7 @@ namespace Toolroom_Scheduler
                 Connection.Close();
 
                 
-                moveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
+                MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
             }
             catch (OleDbException ex)
             {
@@ -1797,7 +1371,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void changeTaskFinishDate(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int taskID)
+        public void ChangeTaskFinishDate(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int taskID)
         {
             try
             {
@@ -1821,7 +1395,7 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.ExecuteNonQuery();
                 Connection.Close();
 
-                moveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
+                MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
 
             }
             catch (OleDbException ex)
@@ -1834,7 +1408,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void moveDescendents(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
+        public void MoveDescendents(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -1852,7 +1426,7 @@ namespace Toolroom_Scheduler
 
             adapter.Fill(datatable);
 
-            updateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
+            UpdateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
 
             adapter.UpdateCommand = builder.GetUpdateCommand();
             adapter.Update(datatable);
@@ -1876,14 +1450,14 @@ namespace Toolroom_Scheduler
 
             adapter.Fill(datatable);
 
-            updateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
+            UpdateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
 
             adapter.UpdateCommand = builder.GetUpdateCommand();
             adapter.Update(datatable);
         }
 
         // This needs to be a separate method so that recursion can take place.
-        private void updateStartAndFinishDates(int id, DataTable dt, DateTime fd)
+        private void UpdateStartAndFinishDates(int id, DataTable dt, DateTime fd)
         {
             string[] predecessorArr;
 
@@ -1918,7 +1492,7 @@ namespace Toolroom_Scheduler
                         }
 
                         if (nrow["FinishDate"] != DBNull.Value)
-                            updateStartAndFinishDates(Convert.ToInt16(nrow["TaskID"]), dt, Convert.ToDateTime(nrow["FinishDate"]));
+                            UpdateStartAndFinishDates(Convert.ToInt16(nrow["TaskID"]), dt, Convert.ToDateTime(nrow["FinishDate"]));
 
                         goto NextStep;
                     }
@@ -1932,13 +1506,13 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void clearAllProjectData(string jobNumber, int projectNumber)
+        public void ClearAllProjectData(string jobNumber, int projectNumber)
         {
             // Only need to delete the project from projects since the Database is set to cascade delete related records.
-            removeProject(jobNumber, projectNumber);
+            RemoveProject(jobNumber, projectNumber);
         }
 
-        public void removeProject(string jobNumber, int projectNumber)
+        public void RemoveProject(string jobNumber, int projectNumber)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -1951,7 +1525,7 @@ namespace Toolroom_Scheduler
             Connection.Close();
         }
 
-        public void removeComponents(string jobNumber, int projectNumber)
+        public void RemoveComponents(string jobNumber, int projectNumber)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -1964,7 +1538,7 @@ namespace Toolroom_Scheduler
             Connection.Close();
         }
 
-        private void removeComponent(ProjectInfo project, Component component)
+        private void RemoveComponent(ProjectInfo project, Component component)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -1979,7 +1553,7 @@ namespace Toolroom_Scheduler
             Connection.Close();
         }
 
-        public void removeTasks(string jobNumber, int projectNumber)
+        public void RemoveTasks(string jobNumber, int projectNumber)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -2008,7 +1582,7 @@ namespace Toolroom_Scheduler
             Connection.Close();
         }
 
-        public void cycleThroughProjects()
+        public void CycleThroughProjects()
         {
             //try
             //{
@@ -2028,11 +1602,11 @@ namespace Toolroom_Scheduler
 
                     if(nrow["KanBanWorkbookPath"].ToString() == "")
                     {
-                        findKanBanSheet(nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"]));
+                        FindKanBanSheet(nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"]));
                     }
                     else
                     {
-                        loadProjectStatusesToDB(nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"]), openAndReadKanBanSheet(nrow["KanBanWorkbookPath"].ToString(), nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"])));
+                        LoadProjectStatusesToDB(nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"]), OpenAndReadKanBanSheet(nrow["KanBanWorkbookPath"].ToString(), nrow["JobNumber"].ToString(), Convert.ToInt32(nrow["ProjectNumber"])));
                     }
                     
                 }
@@ -2048,7 +1622,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        public void findKanBanSheet(string jn, int pn)
+        public void FindKanBanSheet(string jn, int pn)
         {
             string toolYearFolderDirectory = "";
             string[] rootFolderEntries = Directory.GetDirectories(@"X:\TOOLROOM");
@@ -2108,7 +1682,7 @@ namespace Toolroom_Scheduler
                         if (fileEntry.Contains(".xlsx") && !fileEntry.Contains("~") && fileEntry.Contains("#" + pn))
                         {
                             Console.WriteLine(fileEntry);
-                            loadProjectStatusesToDB(jnFull,pn,openAndReadKanBanSheet(fileEntry,jn,pn));
+                            LoadProjectStatusesToDB(jnFull,pn,OpenAndReadKanBanSheet(fileEntry,jn,pn));
                             goto MyEnd;
                         }
                     }
@@ -2125,7 +1699,7 @@ namespace Toolroom_Scheduler
                             if (fileEntry.Contains(".xlsx") && !fileEntry.Contains("~") && fileEntry.Contains("#" + pn))
                             {
                                 Console.WriteLine(fileEntry);
-                                loadProjectStatusesToDB(jnFull, pn, openAndReadKanBanSheet(fileEntry, jn, pn));
+                                LoadProjectStatusesToDB(jnFull, pn, OpenAndReadKanBanSheet(fileEntry, jn, pn));
                                 goto MyEnd;
                             }
                         }
@@ -2136,7 +1710,7 @@ namespace Toolroom_Scheduler
             MyEnd:;
         }
 
-        public void iterateThroughKanBanSheets(ProjectInfo pi)
+        public void IterateThroughKanBanSheets(ProjectInfo pi)
         {
             FileInfo file;
             string[] fileNameArr;
@@ -2176,7 +1750,7 @@ namespace Toolroom_Scheduler
             stopWatch2.Stop();
         }
 
-        public List<TaskInfo> openAndReadKanBanSheet(string filepath, string jn, int pn)
+        public List<TaskInfo> OpenAndReadKanBanSheet(string filepath, string jn, int pn)
         {
             int r;
             List<TaskInfo> taskInfoList = new List<TaskInfo>();
@@ -2222,7 +1796,7 @@ namespace Toolroom_Scheduler
             return taskInfoList;
         }
 
-        public void openKanBanWorkbook(string filepath)
+        public void OpenKanBanWorkbook(string filepath)
         {
             if(filepath != null && filepath != "")
             {
@@ -2246,7 +1820,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        private void loadProjectStatusesToDB(string jn, int pn, List<TaskInfo> tia)
+        private void LoadProjectStatusesToDB(string jn, int pn, List<TaskInfo> tia)
         {
             var adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -2355,7 +1929,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        private DataTable createDataTableFromComponentList(ProjectInfo project, List<Component> componentList)
+        private DataTable CreateDataTableFromComponentList(ProjectInfo project, List<Component> componentList)
         {
             DataTable dt = new DataTable();
             int position = 0;
@@ -2400,7 +1974,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        private void insertComponent(ProjectInfo project, Component component)
+        private void InsertComponent(ProjectInfo project, Component component)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -2435,7 +2009,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private DataTable createDataTableFromTaskList(ProjectInfo project)
+        private DataTable CreateDataTableFromTaskList(ProjectInfo project)
         {
             DataTable dt = new DataTable();
             int i;
@@ -2501,7 +2075,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        private DataTable createDataTableFromTaskList(ProjectInfo project, List<TaskInfo> taskList)
+        private DataTable CreateDataTableFromTaskList(ProjectInfo project, List<TaskInfo> taskList)
         {
             DataTable dt = new DataTable();
             string component = "";
@@ -2569,7 +2143,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        public void setKanBanWorkbookPath(string path, string jn, int pn)
+        public void SetKanBanWorkbookPath(string path, string jn, int pn)
         {
             try
             {
@@ -2601,7 +2175,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private bool addProjectDataToDatabase(ProjectInfo project)
+        private bool AddProjectDataToDatabase(ProjectInfo project)
         {
             var adapter = new OleDbDataAdapter();
             string queryString;
@@ -2643,7 +2217,7 @@ namespace Toolroom_Scheduler
             return true;
         }
 
-        private bool addComponentDataTableToDatabase(DataTable dt)
+        private bool AddComponentDataTableToDatabase(DataTable dt)
         {
             var adapter = new OleDbDataAdapter();
             adapter.SelectCommand = new OleDbCommand("SELECT * FROM Components", Connection);
@@ -2680,7 +2254,7 @@ namespace Toolroom_Scheduler
             return true;
         }
 
-        private bool addTaskDataTableToDatabase(DataTable dt)
+        private bool AddTaskDataTableToDatabase(DataTable dt)
         {
             var adapter = new OleDbDataAdapter();
             adapter.SelectCommand = new OleDbCommand("SELECT * FROM Tasks", Connection);
@@ -2713,7 +2287,7 @@ namespace Toolroom_Scheduler
             return true;
         }
 
-        private bool projectExists(int projectNumber)
+        private bool ProjectExists(int projectNumber)
         {
             OleDbCommand sqlCommand = new OleDbCommand("SELECT COUNT(*) from Projects WHERE ProjectNumber = @projectNumber", Connection);
 
@@ -2734,7 +2308,7 @@ namespace Toolroom_Scheduler
             
         }
 
-        public bool projectExists(string jobNumber, int projectNumber)
+        public bool ProjectExists(string jobNumber, int projectNumber)
         {
             OleDbCommand sqlCommand = new OleDbCommand("SELECT COUNT(*) from Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", Connection);
 
@@ -2756,7 +2330,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        public bool componentExists(string jobNumber, int projectNumber, string component)
+        public bool ComponentExists(string jobNumber, int projectNumber, string component)
         {
             OleDbCommand sqlCommand = new OleDbCommand("SELECT COUNT(*) from Components WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component", Connection);
 
@@ -2778,7 +2352,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public bool projectTasksExist(string jn, string pn)
+        public bool ProjectTasksExist(string jn, string pn)
         {
             OleDbCommand sqlCommand = new OleDbCommand("SELECT COUNT(*) from Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", Connection);
 
@@ -2799,7 +2373,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        public int getHighestProjectTaskID(string jn, int pn)
+        public int GetHighestProjectTaskID(string jn, int pn)
         {
             OleDbCommand sqlCommand = new OleDbCommand("SELECT MAX(TaskID) from Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", Connection);
 
@@ -2812,7 +2386,7 @@ namespace Toolroom_Scheduler
             return highestTaskID;
         }
 
-        public DateTime getFinishDate(string jn, int pn, string component, int tID)
+        public DateTime GetFinishDate(string jn, int pn, string component, int tID)
         {
             DateTime FinishDate = DateTime.Today;
 
@@ -2839,7 +2413,7 @@ namespace Toolroom_Scheduler
             return FinishDate;
         }
 
-        public List<string> getJobNumberComboList()
+        public List<string> GetJobNumberComboList()
         {
             string queryString = "SELECT DISTINCT JobNumber, ProjectNumber FROM Tasks";
             DataTable dt = new DataTable();
@@ -2861,7 +2435,7 @@ namespace Toolroom_Scheduler
             return jobNumberList;
         }
 
-        public DataTable getProjectTasksTable(string jobNumber, int projectNumber)
+        public DataTable GetProjectTasksTable(string jobNumber, int projectNumber)
         {
             string queryString;
             OleDbDataAdapter adapter = new OleDbDataAdapter();
@@ -2879,7 +2453,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        public DataTable getComponentsTable(string jobNumber, int projectNumber)
+        public DataTable GetComponentsTable(string jobNumber, int projectNumber)
         {
             string queryString;
             OleDbDataAdapter adapter = new OleDbDataAdapter();
@@ -2896,7 +2470,7 @@ namespace Toolroom_Scheduler
             return dt;
         }
 
-        public string getKanBanWorkbookPath(string jobNumber, int projectNumber)
+        public string GetKanBanWorkbookPath(string jobNumber, int projectNumber)
         {
             string kanBanWorkbookPath = "";
 
@@ -2909,7 +2483,7 @@ namespace Toolroom_Scheduler
             {
                 Connection.Open();
                 
-                kanBanWorkbookPath = convertObjectToString(sqlCommand.ExecuteScalar());
+                kanBanWorkbookPath = ConvertObjectToString(sqlCommand.ExecuteScalar());
             }
             catch(Exception ex)
             {
@@ -2922,7 +2496,7 @@ namespace Toolroom_Scheduler
             return kanBanWorkbookPath;
         }
 
-        private void updateProjectData(ProjectInfo project)
+        private void UpdateProjectData(ProjectInfo project)
         {
             try
             {
@@ -2963,7 +2537,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void updateTasks(string jobNumber, int projectNumber, string component, List<TaskInfo> taskList)
+        private void UpdateTasks(string jobNumber, int projectNumber, string component, List<TaskInfo> taskList)
         {
             try
             {
@@ -2996,7 +2570,7 @@ namespace Toolroom_Scheduler
 
                 adapter.Fill(dt);
 
-                updateTaskDataTable(taskList, dt);
+                UpdateTaskDataTable(taskList, dt);
 
                 Connection.Open();
                 adapter.Update(dt);
@@ -3014,7 +2588,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private DataTable updateTaskDataTable(List<TaskInfo> taskList, DataTable taskDataTable)
+        private DataTable UpdateTaskDataTable(List<TaskInfo> taskList, DataTable taskDataTable)
         {
             int i = 0;
 
@@ -3034,7 +2608,7 @@ namespace Toolroom_Scheduler
             return taskDataTable;
         }
 
-        private void updateComponentData(ProjectInfo project, Component component)
+        private void UpdateComponentData(ProjectInfo project, Component component)
         {
             try
             {
@@ -3080,7 +2654,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void updateTaskData(ProjectInfo project, Component component)
+        private void UpdateTaskData(ProjectInfo project, Component component)
         {
             try
             {
@@ -3122,7 +2696,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private string convertObjectToString(object obj)
+        private string ConvertObjectToString(object obj)
         {
             if (obj != null)
             {

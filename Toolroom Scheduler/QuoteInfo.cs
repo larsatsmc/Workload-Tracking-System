@@ -35,7 +35,7 @@ namespace Toolroom_Scheduler
             CreateTaskList();
         }
 
-        private int getTaskHours(string taskName)
+        private int GetTaskHours(string taskName)
         {
             if(taskName == "Program Rough")
             {
@@ -81,7 +81,7 @@ namespace Toolroom_Scheduler
             foreach (string taskName in taskNameList)
             {
                 TaskInfo task = new TaskInfo();
-                int hours = getTaskHours(taskName);
+                int hours = GetTaskHours(taskName);
 
                 task.SetName(taskName);
                 task.SetHours(hours);

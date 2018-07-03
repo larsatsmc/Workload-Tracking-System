@@ -17,7 +17,7 @@ namespace Toolroom_Scheduler
             InitializeComponent();
         }
 
-        public void setPrefilledText(string prefilledText)
+        public void SetPrefilledText(string prefilledText)
         {
             this.PrefilledText = prefilledText; 
         }

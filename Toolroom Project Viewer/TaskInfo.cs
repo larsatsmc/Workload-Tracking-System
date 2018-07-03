@@ -214,31 +214,31 @@ namespace Toolroom_Scheduler
 
         public TaskInfo(object taskName, object id, object component, object hours, object duration, object machine, object personnel, object predecessors, object notes)
         {
-            this.TaskName = convertObjectToString(taskName);
+            this.TaskName = ConvertObjectToString(taskName);
             this.ID = Convert.ToInt32(id);
-            this.Component = convertObjectToString(component);
+            this.Component = ConvertObjectToString(component);
             this.Hours = Convert.ToInt32(hours);
-            this.Duration = convertObjectToString(duration);
-            this.Machine = convertObjectToString(machine);
-            this.Personnel = convertObjectToString(personnel);
-            this.Predecessors = convertObjectToString(predecessors);
-            this.Notes = convertObjectToString(notes);
+            this.Duration = ConvertObjectToString(duration);
+            this.Machine = ConvertObjectToString(machine);
+            this.Personnel = ConvertObjectToString(personnel);
+            this.Predecessors = ConvertObjectToString(predecessors);
+            this.Notes = ConvertObjectToString(notes);
         }
 
         public TaskInfo(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object status, object machine, object personnel, object predecessors, object notes)
         {
-            this.TaskName = convertObjectToString(taskName);
+            this.TaskName = ConvertObjectToString(taskName);
             this.ID = Convert.ToInt32(id);
-            this.Component = convertObjectToString(component);
+            this.Component = ConvertObjectToString(component);
             this.Hours = Convert.ToInt32(hours);
-            this.Duration = convertObjectToString(duration);
+            this.Duration = ConvertObjectToString(duration);
             this.StartDate = Convert.ToDateTime(startDate);
             this.FinishDate = Convert.ToDateTime(finishDate);
-            this.Status = convertObjectToString(status);
-            this.Machine = convertObjectToString(machine);
-            this.Personnel = convertObjectToString(personnel);
-            this.Predecessors = convertObjectToString(predecessors);
-            this.Notes = convertObjectToString(notes);
+            this.Status = ConvertObjectToString(status);
+            this.Machine = ConvertObjectToString(machine);
+            this.Personnel = ConvertObjectToString(personnel);
+            this.Predecessors = ConvertObjectToString(predecessors);
+            this.Notes = ConvertObjectToString(notes);
         }
 
         // This constructor is for getting presets for the task info tab.
@@ -362,8 +362,8 @@ namespace Toolroom_Scheduler
         {
             this.Hours = Convert.ToInt32(hours);
             this.Duration = duration;
-            this.Machine = convertObjectToString(machine);
-            this.Personnel = convertObjectToString(personnel);
+            this.Machine = ConvertObjectToString(machine);
+            this.Personnel = ConvertObjectToString(personnel);
             this.Predecessors = predecessors;
             this.Notes = notes;
         }
@@ -403,7 +403,7 @@ namespace Toolroom_Scheduler
             this.Notes = notesLine.Trim();
         }
 
-        private string convertObjectToString(object obj)
+        private string ConvertObjectToString(object obj)
         {
             if(obj != null)
             {
@@ -415,7 +415,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private string nullStringCheck(DataRow checkValue)
+        private string NullStringCheck(DataRow checkValue)
 		{
 			if(! DBNull.Value.Equals(checkValue))
 			{
@@ -427,7 +427,7 @@ namespace Toolroom_Scheduler
 			}
 		}
 
-		private int nullIntegerCheck(DataRow checkValue)
+		private int NullIntegerCheck(DataRow checkValue)
 		{
 			if (! DBNull.Value.Equals(checkValue))
 			{

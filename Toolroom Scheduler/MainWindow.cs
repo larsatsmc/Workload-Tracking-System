@@ -40,9 +40,9 @@ namespace Toolroom_Scheduler
 
             ProcessTabs.SelectTab("All");
 
-            setToolTips();
-            populateSelectedTab();
-            populateJobNumberComboBox();
+            SetToolTips();
+            PopulateSelectedTab();
+            PopulateJobNumberComboBox();
             //populateDesignerView();
             //populateProgrammerView();
             //populateRoughMachineView();
@@ -58,18 +58,18 @@ namespace Toolroom_Scheduler
         {
             // TODO: This line of code loads data into the 'workload_Tracking_SystemDataSet.Tasks' table. You can move, or remove it, as needed.
             this.tasksTableAdapter.Fill(this.workload_Tracking_SystemDataSet.Tasks);
-            setQueryString();
+            SetQueryString();
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             adapter.SelectCommand = new OleDbCommand(QueryString, Connection);
             //dt = FinishingDateTimePicker.Value;
             //adapter.SelectCommand.Parameters.AddWithValue("@taskName", "CNC Finish");
             adapter.Fill(DataTable);
             DataGridView1.DataSource = DataTable;
-            populateDataGridViewComboboxes();
+            PopulateDataGridViewComboboxes();
             Console.WriteLine("Form_Load Complete");
         }
 
-        public void setToolTips()
+        public void SetToolTips()
         {
             InfoTip.SetToolTip(CreateKanBanButton, "Click this button to create Kan Ban sheet from selected project. NOTE: All project info must be first be entered.");
             InfoTip.SetToolTip(BulkAssignButton, "Click this button to bulk assign resources for a selected project.");
@@ -81,7 +81,7 @@ namespace Toolroom_Scheduler
             InfoTip.SetToolTip(CreateProjectButton, "Click this button to begin entering data to setup a MS Project file.");
         }
 
-        public string getJobNumberComboBoxValue()
+        public string GetJobNumberComboBoxValue()
         {
             return JobNumberComboBox.Text;
         }
@@ -96,7 +96,7 @@ namespace Toolroom_Scheduler
             return (jobNumberComboBoxText[0], Convert.ToInt32(jobNumberComboBoxText2[1]));
         }
 
-        private void setQueryString()
+        private void SetQueryString()
         {
             if(ProcessTabs.SelectedTab.Text == "Design")
             {
@@ -132,7 +132,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void refreshDataGridView([CallerMemberName]string CallerName = "")
+        public void RefreshDataGridView([CallerMemberName]string CallerName = "")
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter(QueryString, Connection);
 
@@ -237,120 +237,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        private void moveTaskUp()  // TODO: Need to delete this method.  It is no longer needed.
-		{
-			TaskInfo currentRowti, destinationRowti;
-			Database db = new Database();
-			int currentRow, currentRowID, destinationRowID;
-
-			if(DataGridView1.CurrentCell == null)
-			{
-				MessageBox.Show("Please select a task to move.");
-				return;
-			}
-
-			// get selected row
-			currentRow = DataGridView1.CurrentRow.Index;
-
-			//MessageBox.Show(DataGridView1.Rows[currentRow - 1].Cells[2].Value.ToString() + " " + DataGridView1.Rows[currentRow].Cells[2].Value.ToString());
-			// check if task in row above belongs to the same component. If so...
-			if (DataGridView1.Rows[currentRow - 1].Cells[2].Value.ToString() == DataGridView1.Rows[currentRow].Cells[2].Value.ToString())
-			{
-				// get row ids
-				currentRowID = Convert.ToInt16(DataGridView1.Rows[DataGridView1.CurrentRow.Index].Cells[0].Value);
-				destinationRowID = Convert.ToInt16(DataGridView1.Rows[DataGridView1.CurrentRow.Index - 1].Cells[0].Value);
-				// get task info
-				currentRowti = db.getTaskInfo(currentRowID);
-				destinationRowti = db.getTaskInfo(destinationRowID);
-
-				Console.WriteLine("Current: " + currentRowti.TaskName + " Destination: " + destinationRowti.TaskName);
-
-				// swap info and clear obsolete data (maybe?).
-				db.setTaskInfo(destinationRowID, currentRowti);
-				db.setTaskInfo(currentRowID, destinationRowti);
-				refreshDataGridView();
-				DataGridView1.CurrentCell = DataGridView1.Rows[currentRow - 1].Cells[3];
-				// move TaskName (3), Duration (4), Predecessors (8) (if task was moved above a predecessor remove predecessor from list), Machines (10), Machine (aka Resource) (11), Hours, ToolMaker, Operator, Priority, Status, Notes
-				// set a taskInfo object and pass it to a method in the database class that will update the database.
-				// clear StartDate, FinishDate, EarliestStartDate in both rows.
-			}
-			else
-			{
-				MessageBox.Show("The task above the selected row does not belong to the same component.");
-			}
-			// clear data that is obsolete.
-			// trade remaining data with row above.
-			// if task in row above does not belong to the same component then throw an error message and do not complete action.
-		}
-
-		private void moveTaskDown() // TODO: Need to remove this method.
-		{
-			TaskInfo currentRowti, destinationRowti;
-			Database db = new Database();
-			int currentRow, currentRowID, destinationRowID;
-
-			// check if a cell is selected.
-			if (DataGridView1.CurrentCell == null)
-			{
-				MessageBox.Show("Please select a task to move.");
-				return;
-			}
-
-			// get selected row
-			currentRow = DataGridView1.CurrentRow.Index;
-			
-			// check if task in row above belongs to the same component. If so...
-			if (DataGridView1.Rows[currentRow + 1].Cells[2].Value.ToString() == DataGridView1.Rows[currentRow].Cells[2].Value.ToString())
-			{
-				// get row ids
-				currentRowID = Convert.ToInt16(DataGridView1.Rows[DataGridView1.CurrentRow.Index].Cells[0].Value);
-				destinationRowID = Convert.ToInt16(DataGridView1.Rows[DataGridView1.CurrentRow.Index + 1].Cells[0].Value);
-				// get task info
-				currentRowti = db.getTaskInfo(currentRowID);
-				destinationRowti = db.getTaskInfo(destinationRowID);
-
-				Console.WriteLine("Current: " + currentRowti.TaskName + " Destination: " + destinationRowti.TaskName);
-
-				// swap info and clear obsolete data (maybe?).
-				db.setTaskInfo(destinationRowID, currentRowti);
-				db.setTaskInfo(currentRowID, destinationRowti);
-				refreshDataGridView();
-				DataGridView1.CurrentCell = DataGridView1.Rows[currentRow + 1].Cells[3];
-				// move TaskName (3), Duration (4), Predecessors (8) (if task was moved above a predecessor remove predecessor from list), Machines (10), Machine (aka Resource) (11), Hours, ToolMaker, Operator, Priority, Status, Notes
-				// set a taskInfo object and pass it to a method in the database class that will update the database.
-				// clear StartDate, FinishDate, EarliestStartDate in both rows.
-			}
-			else
-			{
-				MessageBox.Show("The task below the selected row does not belong to the same component.");
-			}
-			// clear data that is obsolete.
-			// trade remaining data with row above.
-			// if task in row above does not belong to the same component then throw an error message and do not complete action.
-		}
-
-		private void insertTask()
-		{
-			// get selected row
-			// create an additional blank task with an id number that is one higher than the current highest id number and has the same tool number and component as the last task
-			// starting from the last task on the list shift each task down until the task that immediately follow the one to be added is moved.
-			// add the new task info into empty row
-
-			//  PROBLEMS: 1) This shouldn't be a problem when the datagridview is showing tasks for one job.  However, if multiple jobs are shown sorting by the database primary key will
-			//  cause the last task of a job to appear on the last row of the database instead of after all the preceding tasks of the same job.  SOLUTION: May need to create a non-primary key field 
-			//  that tracks order of creation or just shift every entry in the database down to the newly created row.  Shouldn't be too bad since the population of rows in the database
-			//  kept relatively low.  If the database were large this would be a problem.
-		}
-
-		private void removeTask()
-		{
-			// get selected row
-			// remove ALL data from selected row
-			// shift ALL data in the database up to fill in empty row.
-			// delete last row in the database.
-		}
-
-        private void removeProject()
+        private void RemoveProject()
         {
             Database db = new Database();
             int selectedIndex;
@@ -365,7 +252,7 @@ namespace Toolroom_Scheduler
 
                 if (openProjectsReport.ShowDialog() == DialogResult.OK)
                 {
-                    readClosedProjectsReport(openProjectsReport?.FileName);
+                    ReadClosedProjectsReport(openProjectsReport?.FileName);
                 }
                 
                 return;
@@ -392,14 +279,14 @@ namespace Toolroom_Scheduler
                 selectedIndex = JobNumberComboBox.SelectedIndex - 1;               
             }
 
-            db.clearAllProjectData(number.jobNumber, number.projectNumber);
-            refreshDataGridView();
-            populateJobNumberComboBox();
+            db.ClearAllProjectData(number.jobNumber, number.projectNumber);
+            RefreshDataGridView();
+            PopulateJobNumberComboBox();
 
             JobNumberComboBox.SelectedIndex = selectedIndex;  // Test out to make sure error is not thrown when last item in combobox is selected for deletion.
         }
 
-        private List<int> readClosedProjectsReport(string filePath)
+        private List<int> ReadClosedProjectsReport(string filePath)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Open(filePath);
@@ -441,7 +328,7 @@ namespace Toolroom_Scheduler
             return projectNums;
         }
 
-        private void flagCompletedProjects(List<int> completedProjects)
+        private void FlagCompletedProjects(List<int> completedProjects)
         {
             foreach (string item in JobNumberComboBox.Items)
             {
@@ -490,10 +377,10 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private bool kanBanExists(string jobNumber, int projectNumber)
+        private bool KanBanExists(string jobNumber, int projectNumber)
         {
             Database db = new Database();
-            string kanBanWorkbookPath = db.getKanBanWorkbookPath(jobNumber, projectNumber);
+            string kanBanWorkbookPath = db.GetKanBanWorkbookPath(jobNumber, projectNumber);
 
             if(kanBanWorkbookPath != "")
             {
@@ -514,7 +401,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateDataGridViewComboboxes()
+        private void PopulateDataGridViewComboboxes()
         {
             Database db = new Database();
             List<ResourceInfo> ResourceList = new List<ResourceInfo>();
@@ -622,14 +509,14 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateJobNumberComboBox()
+        private void PopulateJobNumberComboBox()
         {
             Database db = new Database();
 
-            JobNumberComboBox.DataSource = db.getJobNumberComboList();
+            JobNumberComboBox.DataSource = db.GetJobNumberComboList();
         }
 
-        private void populateProgrammerView()
+        private void PopulateProgrammerView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -759,7 +646,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateDesignerView()
+        private void PopulateDesignerView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -847,7 +734,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateRoughMachineView()
+        private void PopulateRoughMachineView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -944,7 +831,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateFinishMachineView()
+        private void PopulateFinishMachineView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -1038,7 +925,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateElectrodeMachineView()
+        private void PopulateElectrodeMachineView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -1103,7 +990,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateEDMMachineView()
+        private void PopulateEDMMachineView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -1168,7 +1055,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateInspectionMachineView()
+        private void PopulateInspectionMachineView()
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -1219,39 +1106,39 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void populateSelectedTab()
+        private void PopulateSelectedTab()
         {
             if(ProcessTabs.SelectedTab.Text == "Design")
             {
-                populateDesignerView();
+                PopulateDesignerView();
             }
             else if (ProcessTabs.SelectedTab.Text == "Programming")
             {
-                populateProgrammerView();
+                PopulateProgrammerView();
             }
             else if (ProcessTabs.SelectedTab.Text == "Roughing")
             {
-                populateRoughMachineView();
+                PopulateRoughMachineView();
             }
             else if (ProcessTabs.SelectedTab.Text == "Finishing")
             {
-                populateFinishMachineView();
+                PopulateFinishMachineView();
             }
             else if (ProcessTabs.SelectedTab.Text == "Electrodes")
             {
-                populateElectrodeMachineView();
+                PopulateElectrodeMachineView();
             }
             else if (ProcessTabs.SelectedTab.Text == "EDM")
             {
-                populateEDMMachineView();
+                PopulateEDMMachineView();
             }
             else if (ProcessTabs.SelectedTab.Text == "Inspection")
             {
-                populateInspectionMachineView();
+                PopulateInspectionMachineView();
             }
         }
 
-        private int percentTextBoxValidation(TextBox textbox)
+        private int PercentTextBoxValidation(TextBox textbox)
         {
             int someValue = 0;
 
@@ -1278,7 +1165,7 @@ namespace Toolroom_Scheduler
             return someValue;
         }
 
-        private DateTime getForwardDateFromUser()
+        private DateTime GetForwardDateFromUser()
         {
             try
             {
@@ -1307,7 +1194,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private DateTime getBackDateFromUser()
+        private DateTime GetBackDateFromUser()
         {
             Database db = new Database();
             var number = getComboBoxInfo();
@@ -1340,7 +1227,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private List<string> getComponentListFromUser()
+        private List<string> GetComponentListFromUser()
         {
             Database db = new Database();
             var number = getComboBoxInfo();
@@ -1385,8 +1272,8 @@ namespace Toolroom_Scheduler
                     {
                         if(form.DataValidated)
                         {
-                            populateJobNumberComboBox();
-                            refreshDataGridView();
+                            PopulateJobNumberComboBox();
+                            RefreshDataGridView();
                             JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
                             return;
                         }
@@ -1418,8 +1305,8 @@ namespace Toolroom_Scheduler
                     {
                         if (form.DataValidated)
                         {
-                            populateJobNumberComboBox();
-                            refreshDataGridView();
+                            PopulateJobNumberComboBox();
+                            RefreshDataGridView();
                             JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
                             return;
                         }
@@ -1442,73 +1329,73 @@ namespace Toolroom_Scheduler
         private void FinishPercentTextBox1_TextChanged(object sender, EventArgs e)
         {
          
-            FinishProgressBar1.Value = percentTextBoxValidation((TextBox)sender);
+            FinishProgressBar1.Value = PercentTextBoxValidation((TextBox)sender);
         }
 
         private void FinishPercentTextBox2_TextChanged(object sender, EventArgs e)
         {
-            FinishProgressBar2.Value = percentTextBoxValidation((TextBox)sender);
+            FinishProgressBar2.Value = PercentTextBoxValidation((TextBox)sender);
         }
 
         private void FinishPercentTextBox3_TextChanged(object sender, EventArgs e)
         {
-            FinishProgressBar3.Value = percentTextBoxValidation((TextBox)sender);
+            FinishProgressBar3.Value = PercentTextBoxValidation((TextBox)sender);
         }
 
         private void FinishPercentTextBox4_TextChanged(object sender, EventArgs e)
         {
-            FinishProgressBar4.Value = percentTextBoxValidation((TextBox)sender);
+            FinishProgressBar4.Value = PercentTextBoxValidation((TextBox)sender);
         }
 
         private void FinishingDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateFinishMachineView();
+            PopulateFinishMachineView();
         }
 
         private void ProcessTabs_Selected(object sender, TabControlEventArgs e)
         {
-            setQueryString();
-            populateDataGridViewComboboxes();
-            refreshDataGridView();
-            populateSelectedTab();
+            SetQueryString();
+            PopulateDataGridViewComboboxes();
+            RefreshDataGridView();
+            PopulateSelectedTab();
         }
 
         private void DesignerDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateDesignerView();
+            PopulateDesignerView();
         }
 
         private void ProgrammerDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateProgrammerView();
+            PopulateProgrammerView();
         }
 
         private void RoughingDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateRoughMachineView();
+            PopulateRoughMachineView();
         }
 
         private void ElectrodesDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateElectrodeMachineView();
+            PopulateElectrodeMachineView();
         }
 
         private void EDMDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateEDMMachineView();
+            PopulateEDMMachineView();
         }
 
         private void InspectionDateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            populateInspectionMachineView();
+            PopulateInspectionMachineView();
         }
 
         private void LoadProjectButton_Click(object sender, EventArgs e)
         {
             Database db = new Database();
             //db.LoadMSProjectToDatabase();
-            populateJobNumberComboBox();
-            refreshDataGridView();
+            PopulateJobNumberComboBox();
+            RefreshDataGridView();
         }
 
         private void JobNumberComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1538,8 +1425,8 @@ namespace Toolroom_Scheduler
 
             Database db = new Database();
             var number = getComboBoxInfo();
-            db.calculateEarliestStartDates(number.jobNumber, number.projectNumber);
-            refreshDataGridView();
+            db.CalculateEarliestStartDates(number.jobNumber, number.projectNumber);
+            RefreshDataGridView();
         }
 
         private void CreateProjectButton_Click(object sender, EventArgs e)
@@ -1554,7 +1441,7 @@ namespace Toolroom_Scheduler
             Database db = new Database();
             string[] jobNumberComboTextArr;
             
-            using (var barf = new Bulk_Assign_Resources_Form())
+            using (var barf = new BulkAssignResourcesForm())
             {
                 var result = barf.ShowDialog();
                 if (result == DialogResult.Cancel)
@@ -1565,7 +1452,7 @@ namespace Toolroom_Scheduler
                 {
                     jobNumberComboTextArr = JobNumberComboBox.Text.Split(' ');
                     db.BulkAssignRoles(jobNumberComboTextArr[0], barf.RoughProgrammer, barf.FinishProgrammer, barf.ElectrodeProgrammer);
-                    refreshDataGridView();
+                    RefreshDataGridView();
                     barf.Close();
                 }
             }    
@@ -1584,7 +1471,7 @@ namespace Toolroom_Scheduler
             foreach(string currPredecessor in predecessorArr)
             {
                 predecessor = currPredecessor.Trim();
-                currentDate = db.getFinishDate(jn, pn, component, Convert.ToInt16(predecessor));
+                currentDate = db.GetFinishDate(jn, pn, component, Convert.ToInt16(predecessor));
 
                 if(latestFinishDate == null || latestFinishDate < currentDate)
                 {
@@ -1622,15 +1509,15 @@ namespace Toolroom_Scheduler
                     return;
                 }
 
-                db.changeTaskStartDate(jobNumber, projectNumber, component, oDateTimePicker.Value, duration, taskID);
+                db.ChangeTaskStartDate(jobNumber, projectNumber, component, oDateTimePicker.Value, duration, taskID);
 
             }
             else if(DataGridView1.CurrentCell.OwningColumn.Name == "FinishDate")
             {
-                db.changeTaskFinishDate(jobNumber, projectNumber, component, oDateTimePicker.Value, taskID);
+                db.ChangeTaskFinishDate(jobNumber, projectNumber, component, oDateTimePicker.Value, taskID);
             }
 
-            refreshDataGridView();
+            RefreshDataGridView();
         }
 
         private void dateTimePicker_OnTextChange(object sender, EventArgs e)
@@ -1698,7 +1585,7 @@ namespace Toolroom_Scheduler
             if(columnName == "ProjectNumber")
             {
                 Database db = new Database();
-                db.openKanBanWorkbook(db.getKanBanWorkbookPath(DataGridView1.Rows[e.RowIndex].Cells["JobNumber"].Value.ToString(), Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells["ProjectNumber"].Value)));
+                db.OpenKanBanWorkbook(db.GetKanBanWorkbookPath(DataGridView1.Rows[e.RowIndex].Cells["JobNumber"].Value.ToString(), Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells["ProjectNumber"].Value)));
                 //MessageBox.Show(db.getKanBanWorkbookPath(DataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells[16].Value)));
             }
         }
@@ -1722,12 +1609,12 @@ namespace Toolroom_Scheduler
                     currentTaskFinishDate = Convert.ToDateTime(DataGridView1.CurrentRow.Cells["FinishDate"].Value);
                     currentTaskID = Convert.ToInt16(DataGridView1.CurrentRow.Cells["TaskID"].Value);
 
-                    db.moveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, currentTaskID);
+                    db.MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, currentTaskID);
                 }
                 
-                db.updateDatabase(sender, e);
-                refreshDataGridView();
-                populateSelectedTab();
+                db.UpdateDatabase(sender, e);
+                RefreshDataGridView();
+                PopulateSelectedTab();
                 //populateDesignerView();
                 //populateProgrammerView();
                 //populateRoughMachineView();
@@ -1807,7 +1694,7 @@ namespace Toolroom_Scheduler
 
         private void removeProjectButton_Click(object sender, EventArgs e)
         {
-            removeProject();
+            RemoveProject();
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -1846,15 +1733,15 @@ namespace Toolroom_Scheduler
             }
             else if (dialogResult == DialogResult.No)
             {
-                componentList = getComponentListFromUser();
+                componentList = GetComponentListFromUser();
             }
             else if (dialogResult == DialogResult.Cancel)
             {
                 return;
             }
             
-            db.forwardDateProjectTasks(number.jobNumber, number.projectNumber, componentList, getForwardDateFromUser());
-            refreshDataGridView();
+            db.ForwardDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetForwardDateFromUser());
+            RefreshDataGridView();
         }
 
         private void BackDateButton_Click(object sender, EventArgs e)
@@ -1878,15 +1765,15 @@ namespace Toolroom_Scheduler
             }
             else if (dialogResult == DialogResult.No)
             {
-                componentList = getComponentListFromUser();
+                componentList = GetComponentListFromUser();
             }
             else if (dialogResult == DialogResult.Cancel)
             {
                 return;
             }
 
-            db.backDateProjectTasks(number.jobNumber, number.projectNumber, componentList, getBackDateFromUser());
-            refreshDataGridView();
+            db.BackDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetBackDateFromUser());
+            RefreshDataGridView();
         }
 
         private void EditProjectButton_Click(object sender, EventArgs e)
@@ -1941,7 +1828,5 @@ namespace Toolroom_Scheduler
             if(DataGridView1.Controls.Contains(oDateTimePicker))
                 DataGridView1.Controls.Remove(oDateTimePicker);
         }
-
-
     }
 }

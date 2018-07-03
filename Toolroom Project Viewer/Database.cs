@@ -18,11 +18,11 @@ namespace Toolroom_Project_Viewer
 {
     class Database
     {
-        static string ConnString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=X:\TOOLROOM\Workload Tracking System\Database\Workload Tracking System DB.accdb";
+        static readonly string ConnString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=X:\TOOLROOM\Workload Tracking System\Database\Workload Tracking System DB.accdb";
 
         DataTable taskIDKey = new DataTable();
 
-        public DataTable getAppointmentData()
+        public DataTable GetAppointmentData()
         {
             DataTable dt = new DataTable();
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -48,12 +48,12 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable getAppointmentData(string department)
+        public DataTable GetAppointmentData(string department)
         {
             DataTable dt = new DataTable();
             OleDbConnection Connection = new OleDbConnection(ConnString);
             //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
-            string queryString = setQueryString(department);
+            string queryString = SetQueryString(department);
             OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
 
             //adapter.SelectCommand.Parameters.AddWithValue("@department", setQueryString(department);
@@ -76,7 +76,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable getAppointmentData(string jobNumber, int projectNumber)
+        public DataTable GetAppointmentData(string jobNumber, int projectNumber)
         {
             DataTable dt = new DataTable();
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -95,7 +95,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public bool updateTask(string jobNumber, int projectNumber, string component, int taskID, DateTime startDate, DateTime finishDate)
+        public bool UpdateTask(string jobNumber, int projectNumber, string component, int taskID, DateTime startDate, DateTime finishDate)
         {
             try
             {
@@ -106,9 +106,9 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                string predecessors = getTaskPredecessors(jobNumber, projectNumber, taskID);
+                string predecessors = GetTaskPredecessors(jobNumber, projectNumber, taskID);
 
-                if (predecessors != "" && getLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors) > startDate)
+                if (predecessors != "" && GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors) > startDate)
                 {
                     MessageBox.Show("You cannot put a task start date before its predecessor's finish date.");
                     return false;
@@ -127,7 +127,7 @@ namespace Toolroom_Project_Viewer
 
                 Connection.Dispose();
 
-                moveDescendents(jobNumber, projectNumber, component, finishDate, taskID);
+                MoveDescendents(jobNumber, projectNumber, component, finishDate, taskID);
                 return true;
             }
             catch (Exception er)
@@ -137,7 +137,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public (string jobNumber, int projectNumber, int taskID, string predecessors) getTaskInfo(int id)
+        public (string jobNumber, int projectNumber, int taskID, string predecessors) GetTaskInfo(int id)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable dt = new DataTable();
@@ -187,7 +187,7 @@ namespace Toolroom_Project_Viewer
             return (jobNumber, projectNumber, taskID, predecessors);
         }
 
-        public string getTaskPredecessors(string jobNumber, int projectNumber, int taskID)
+        public string GetTaskPredecessors(string jobNumber, int projectNumber, int taskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable dt = new DataTable();
@@ -228,7 +228,7 @@ namespace Toolroom_Project_Viewer
             return predecessors;
         }
 
-        public DateTime getFinishDate(string jobNumber, int projectNumber, string component, int taskID)
+        public DateTime GetFinishDate(string jobNumber, int projectNumber, string component, int taskID)
         {
             DateTime FinishDate = DateTime.Today;
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -258,7 +258,7 @@ namespace Toolroom_Project_Viewer
             return FinishDate;
         }
 
-        private DateTime getTaskFinishDate(DataTable dt, int id)
+        private DateTime GetTaskFinishDate(DataTable dt, int id)
         {
             DateTime fd = new DateTime(2000, 1, 1);
 
@@ -277,7 +277,7 @@ namespace Toolroom_Project_Viewer
             return fd;
         }
 
-        private DateTime getLatestPredecessorFinishDate(string jobNumber, int projectNumber, string component, string predecessors)
+        private DateTime GetLatestPredecessorFinishDate(string jobNumber, int projectNumber, string component, string predecessors)
         {
             Database db = new Database();
             DateTime? latestFinishDate = null;
@@ -290,7 +290,7 @@ namespace Toolroom_Project_Viewer
             foreach (string currPredecessor in predecessorArr)
             {
                 predecessor = currPredecessor.Trim();
-                currentDate = db.getFinishDate(jobNumber, projectNumber, component, Convert.ToInt16(predecessor));
+                currentDate = db.GetFinishDate(jobNumber, projectNumber, component, Convert.ToInt16(predecessor));
 
                 if (latestFinishDate == null || latestFinishDate < currentDate)
                 {
@@ -337,7 +337,7 @@ namespace Toolroom_Project_Viewer
 
         }
 
-        public void moveDescendents(string jn, int pn, string component, DateTime currentTaskFinishDate, int currentTaskID)
+        public void MoveDescendents(string jn, int pn, string component, DateTime currentTaskFinishDate, int currentTaskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
@@ -355,13 +355,13 @@ namespace Toolroom_Project_Viewer
 
             adapter.Fill(datatable);
 
-            updateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
+            UpdateStartAndFinishDates(currentTaskID, datatable, currentTaskFinishDate);
 
             adapter.Update(datatable);
         }
 
         // This needs to be a separate method so that recursion can take place.
-        private void updateStartAndFinishDates(int id, DataTable dt, DateTime fd)
+        private void UpdateStartAndFinishDates(int id, DataTable dt, DateTime fd)
         {
             string[] predecessorArr;
 
@@ -398,7 +398,7 @@ namespace Toolroom_Project_Viewer
                         }
 
                         if (nrow["FinishDate"] != DBNull.Value)
-                            updateStartAndFinishDates(Convert.ToInt16(nrow["TaskID"]), dt, Convert.ToDateTime(nrow["FinishDate"]));
+                            UpdateStartAndFinishDates(Convert.ToInt16(nrow["TaskID"]), dt, Convert.ToDateTime(nrow["FinishDate"]));
 
                         goto NextStep;
                     }
@@ -412,7 +412,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public void getTask(int id)
+        public void GetTask(int id)
         {
             string taskName;
             try
@@ -440,7 +440,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private DateTime getProjectStartDate(string jobNumber, int projectNumber)
+        private DateTime GetProjectStartDate(string jobNumber, int projectNumber)
         {
             DateTime projectStartDate = new DateTime(2000, 1, 1);
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -469,7 +469,7 @@ namespace Toolroom_Project_Viewer
             return projectStartDate;
         }
 
-        public List<string> getJobNumberComboList()
+        public List<string> GetJobNumberComboList()
         {
             string queryString = "SELECT DISTINCT JobNumber, ProjectNumber FROM Tasks";
             DataTable dt = new DataTable();
@@ -489,7 +489,7 @@ namespace Toolroom_Project_Viewer
             return jobNumberList;
         }
 
-        private string setQueryString(string department)
+        private string SetQueryString(string department)
         {
             string queryString = null;
             string selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component & '-' & TaskID As Subject, TaskName & ' (' & Hours & ' Hours)' As Location, StartDate, FinishDate, Machine, Resource, ToolMaker, Notes";
@@ -546,7 +546,7 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        private string setMonthlyHoursQueryString(string department)
+        private string SetMonthlyHoursQueryString(string department)
         {
             string queryString = null;
             string selectStatment = "TOP 3, MONTH(StartDate) as mo, YEAR(StartDate) AS yr, SUM(Hours) AS total";
@@ -606,7 +606,7 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        private string setWeeklyHoursQueryString(string weekStart, string weekEnd)
+        private string SetWeeklyHoursQueryString(string weekStart, string weekEnd)
         {
             string department = "All";
             string queryString = null;
@@ -668,7 +668,7 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        public DataTable getAppointmentDataList()
+        public DataTable GetAppointmentDataList()
         {
             DataTable dt = new DataTable();
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -688,14 +688,14 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable getNextThreeMonthsHours(string department, string timeUnits)
+        public DataTable GetNextThreeMonthsHours(string department, string timeUnits)
         {
             DataTable dt = new DataTable();
             string queryString = "";
 
             if(timeUnits == "Months")
             {
-                queryString = setMonthlyHoursQueryString(department);
+                queryString = SetMonthlyHoursQueryString(department);
             }
             else if(timeUnits == "Weeks")
             {
@@ -715,11 +715,11 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public List<Week> getDayHours(string weekStart, string weekEnd)
+        public List<Week> GetDayHours(string weekStart, string weekEnd)
         {
             List<Week> weeks = new List<Week>();
 
-            string queryString = setWeeklyHoursQueryString(weekStart, weekEnd);
+            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
             OleDbConnection Connection = new OleDbConnection(ConnString);
             OleDbCommand cmd = new OleDbCommand(queryString, Connection);
 
@@ -811,7 +811,7 @@ namespace Toolroom_Project_Viewer
             return weeks;
         }
 
-        public DataTable getRoleCounts()
+        public DataTable GetRoleCounts()
         {
             string queryString = "SELECT COUNT(*) AS RoleCount, Role FROM Roles GROUP BY Role";
 
@@ -826,7 +826,7 @@ namespace Toolroom_Project_Viewer
 
         public void SetDailyDepartmentCapacities(string department)
         {
-            DataTable dt = getRoleCounts();
+            DataTable dt = GetRoleCounts();
 
 
         }
@@ -843,7 +843,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public List<Week> getWeekHours(string weekStart, string weekEnd)
+        public List<Week> GetWeekHours(string weekStart, string weekEnd)
         {
             List<Week> weeks = new List<Week>();
             Week weekTemp;
@@ -851,7 +851,7 @@ namespace Toolroom_Project_Viewer
             DateTime wsDate = Convert.ToDateTime(weekStart);
             string whereStatement;
 
-            string queryString = setWeeklyHoursQueryString(weekStart, weekEnd);
+            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
             OleDbConnection Connection = new OleDbConnection(ConnString);
             OleDbCommand cmd = new OleDbCommand(queryString, Connection);
 
@@ -912,7 +912,7 @@ namespace Toolroom_Project_Viewer
             return weeks;
         }
 
-        public DataTable getResourceData()
+        public DataTable GetResourceData()
         {
             DataTable dt = new DataTable();
             OleDbConnection Connection = new OleDbConnection(ConnString);
@@ -1040,7 +1040,7 @@ namespace Toolroom_Project_Viewer
                         Connection.Close();
                         Connection.Dispose();
 
-                        project.AddComponentList(getComponentListFromTasksTable(project.JobNumber, project.ProjectNumber));
+                        project.AddComponentList(GetComponentListFromTasksTable(project.JobNumber, project.ProjectNumber));
                     }
                 }
 
@@ -1053,7 +1053,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public List<Component> getComponentListFromTasksTable(string jobNumber, int projectNumber)
+        public List<Component> GetComponentListFromTasksTable(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
             List<Component> componentList = new List<Component>();
@@ -1101,7 +1101,7 @@ namespace Toolroom_Project_Viewer
 
         private void AddTasks(ProjectInfo project)
         {
-            List<TaskInfo> projectTaskList = getProjectTaskList(project.JobNumber, project.ProjectNumber);
+            List<TaskInfo> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
 
             foreach (Component component in project.ComponentList)
             {
@@ -1124,7 +1124,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public List<TaskInfo> getProjectTaskList(string jobNumber, int projectNumber)
+        public List<TaskInfo> GetProjectTaskList(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
             List<TaskInfo> taskList = new List<TaskInfo>();
@@ -1212,7 +1212,7 @@ namespace Toolroom_Project_Viewer
                     row["Subject"] = project.JobNumber + " #" + project.ProjectNumber + "-" + task.ID;
                     row["StartDate"] = task.StartDate;
                     row["FinishDate"] = task.FinishDate;
-                    row["PercentComplete"] = getPercentComplete(task.Status);
+                    row["PercentComplete"] = GetPercentComplete(task.Status);
                     row["Predecessors"] = task.GetNewPredecessors(baseCount);
                     row["Notes"] = task.Notes;
                     row["NewTaskID"] = count;
@@ -1224,7 +1224,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private int getPercentComplete(string status)
+        private int GetPercentComplete(string status)
         {
             if(status == "Completed")
             {
@@ -1236,7 +1236,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public DataTable getProjectData(string jobNumber, int projectNumber)
+        public DataTable GetProjectData(string jobNumber, int projectNumber)
         {
             DataTable dt = new DataTable();
             DataTable dt2 = new DataTable();
@@ -1284,7 +1284,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable getProjectResourceData(string jobNumber, int projectNumber)
+        public DataTable GetProjectResourceData(string jobNumber, int projectNumber)
         {
             DataTable dt1 = new DataTable();
             DataTable dt2 = new DataTable();
@@ -1338,7 +1338,7 @@ namespace Toolroom_Project_Viewer
             return dt2;
         }
 
-        public DataTable getProjectResourceData(ProjectInfo project)
+        public DataTable GetProjectResourceData(ProjectInfo project)
         {
             DataTable dt = new DataTable();
             int i = 1;
@@ -1377,7 +1377,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable getProjectResourceData(DataTable taskTable)
+        public DataTable GetProjectResourceData(DataTable taskTable)
         {
             DataTable dt = new DataTable();
 
@@ -1390,14 +1390,14 @@ namespace Toolroom_Project_Viewer
             {
                 DataRow row = dt.NewRow();
 
-                row["TaskID"] = getNewTaskID(Convert.ToInt32(nrow["TaskID"]));
+                row["TaskID"] = GetNewTaskID(Convert.ToInt32(nrow["TaskID"]));
                 row["TaskName"] = nrow["TaskName"];
             }
 
             return dt;
         }
 
-        public DataTable getDependencyData(string jobNumber, int projectNumber)
+        public DataTable GetDependencyData(string jobNumber, int projectNumber)
         {
             DataTable dt1 = new DataTable();
             DataTable dt2 = new DataTable();
@@ -1452,7 +1452,7 @@ namespace Toolroom_Project_Viewer
             return dt2;
         }
 
-        public DataTable getDependencyData(DataTable taskTable)
+        public DataTable GetDependencyData(DataTable taskTable)
         {
             DataTable dt = new DataTable();
 
@@ -1501,7 +1501,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private DataTable createTaskIDKey(DataTable taskTable)
+        private DataTable CreateTaskIDKey(DataTable taskTable)
         {
             DataTable dt = new DataTable();
             int i = 1;
@@ -1527,7 +1527,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private int getNewTaskID(int id)
+        private int GetNewTaskID(int id)
         {
             DataRow selectedRow;
 
@@ -1539,10 +1539,10 @@ namespace Toolroom_Project_Viewer
             return (int)selectedRow["NewTaskID"];
         }
 
-        private DataTable getTranslatedTaskIDTable(DataTable projectResourceDataTable)
+        private DataTable GetTranslatedTaskIDTable(DataTable projectResourceDataTable)
         {
             DataTable dt = new DataTable();
-            DataTable keyTable = createTaskIDKey(projectResourceDataTable);
+            DataTable keyTable = CreateTaskIDKey(projectResourceDataTable);
 
             dt.Columns.Add("TaskID", typeof(int));
             dt.Columns.Add("TaskName", typeof(string));
@@ -1567,7 +1567,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public void openKanBanWorkbook(string filepath, string component)
+        public void OpenKanBanWorkbook(string filepath, string component)
         {
             //Excel.Worksheet ws;
 
@@ -1632,7 +1632,7 @@ namespace Toolroom_Project_Viewer
 
         }
 
-        public string getKanBanWorkbookPath(string jn, int pn)
+        public string GetKanBanWorkbookPath(string jn, int pn)
         {
             string kanBanWorkbookPath = "";
             OleDbConnection Connection = new OleDbConnection(ConnString);

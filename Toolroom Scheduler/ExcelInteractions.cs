@@ -59,7 +59,7 @@ namespace Toolroom_Scheduler
 
         }
 
-        private string getPrinterPort()
+        private string GetPrinterPort()
         {
             var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
             string printerName = "Microsoft XPS Document Writer";
@@ -110,7 +110,7 @@ namespace Toolroom_Scheduler
                 activePrinterString = excelApp.ActivePrinter;
 
                 // Change active printer to XPS Document Writer.
-                excelApp.ActivePrinter = "Microsoft XPS Document Writer on " + getPrinterPort(); // This speeds up page setup operations.
+                excelApp.ActivePrinter = "Microsoft XPS Document Writer on " + GetPrinterPort(); // This speeds up page setup operations.
 
                 //ws = wb.Sheets[1];
                 ws = wb.Sheets.Add(After: wb.Sheets[1]);
@@ -146,8 +146,8 @@ namespace Toolroom_Scheduler
                         ws.Cells[r, 3].value = task.ID;
                         ws.Cells[r, 4].value = $"   {task.TaskName}";
                         ws.Cells[r, 5].value = $"   {task.Duration}";
-                        //ws.Cells[r, 6].value = nrow["StartDate"];
-                        //ws.Cells[r, 7].value = nrow["FinishDate"];
+                        ws.Cells[r, 6].value = task.StartDate;
+                        ws.Cells[r, 7].value = task.FinishDate;
                         ws.Cells[r, 8].value = $"  {task.Predecessors}";
                         ws.Cells[r, 9].value = task.Status;
                         ws.Cells[r, 10].value = task.Initials;
@@ -227,7 +227,7 @@ namespace Toolroom_Scheduler
                 {
                     //Save. The selected path can be got with saveFileDialog.FileName.ToString()
                     wb.SaveAs(saveFileDialog.FileName.ToString());
-                    db.setKanBanWorkbookPath(saveFileDialog.FileName.ToString(), pi.JobNumber, pi.ProjectNumber);
+                    db.SetKanBanWorkbookPath(saveFileDialog.FileName.ToString(), pi.JobNumber, pi.ProjectNumber);
                 }
 
                 excelApp.DisplayAlerts = true;  // So I get prompted to save after adding pictures to the Kan Bans.
@@ -255,6 +255,11 @@ namespace Toolroom_Scheduler
             }
 
         }
+
+        // TODO: Find an alternative to this method that does not use COM interop.
+        // FreeSpire is limited to 200 rows and 5 sheets.
+        // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
+
 
         private void CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
         {
@@ -394,16 +399,16 @@ namespace Toolroom_Scheduler
                 }
             }
 
-            if (sheetNExists("Sheet1", wb))
+            if (SheetNExists("Sheet1", wb))
             {
                 wb.Sheets["Sheet1"].delete();
             }
 
-            if (sheetNExists("Mold", wb))
+            if (SheetNExists("Mold", wb))
                 wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
         }
 
-        private Boolean sheetNExists(string sheetname, Excel.Workbook wb)
+        private Boolean SheetNExists(string sheetname, Excel.Workbook wb)
         {
             foreach (Excel.Worksheet sheet in wb.Sheets)
             {

@@ -121,24 +121,24 @@ namespace Toolroom_Scheduler
 
             this.ProjectNumber = projectNumberResult;
             this.DueDate = new DateTime(dueDate.Year, dueDate.Month, dueDate.Day);
-            this.ToolMaker = convertObjectToString(toolMaker);
-            this.Designer = convertObjectToString(designer);
-            this.RoughProgrammer = convertObjectToString(roughProgrammer);
-            this.ElectrodeProgrammer = convertObjectToString(electrodeProgrammer);
-            this.FinishProgrammer = convertObjectToString(finishProgrammer);
+            this.ToolMaker = ConvertObjectToString(toolMaker);
+            this.Designer = ConvertObjectToString(designer);
+            this.RoughProgrammer = ConvertObjectToString(roughProgrammer);
+            this.ElectrodeProgrammer = ConvertObjectToString(electrodeProgrammer);
+            this.FinishProgrammer = ConvertObjectToString(finishProgrammer);
         }
 
         public void SetProjectInfo(object jobNumber, object projectNumber, object dueDate, object toolMaker, object designer, object roughProgrammer, object electrodeProgrammer, object finishProgrammer)
         {
             this.HasProjectInfo = true;
-            this.JobNumber = convertObjectToString(jobNumber);
-            this.ProjectNumber = convertObjectToInt(projectNumber);
-            this.DueDate = convertObjectToDateTime(dueDate);
-            this.ToolMaker = convertObjectToString(toolMaker);
-            this.Designer = convertObjectToString(designer);
-            this.RoughProgrammer = convertObjectToString(roughProgrammer);
-            this.ElectrodeProgrammer = convertObjectToString(electrodeProgrammer);
-            this.FinishProgrammer = convertObjectToString(finishProgrammer);
+            this.JobNumber = ConvertObjectToString(jobNumber);
+            this.ProjectNumber = ConvertObjectToInt(projectNumber);
+            this.DueDate = ConvertObjectToDateTime(dueDate);
+            this.ToolMaker = ConvertObjectToString(toolMaker);
+            this.Designer = ConvertObjectToString(designer);
+            this.RoughProgrammer = ConvertObjectToString(roughProgrammer);
+            this.ElectrodeProgrammer = ConvertObjectToString(electrodeProgrammer);
+            this.FinishProgrammer = ConvertObjectToString(finishProgrammer);
         }
 
         public bool AddComponent(string name)
@@ -247,7 +247,7 @@ namespace Toolroom_Scheduler
             return false;
         }
 
-        private void printComponentList()
+        private void PrintComponentList()
         {
             foreach (Component component in ComponentList)
             {
@@ -257,7 +257,7 @@ namespace Toolroom_Scheduler
             Console.WriteLine("");
         }
 
-        private string convertObjectToString(object obj)
+        private string ConvertObjectToString(object obj)
         {
             if (obj != null)
             {
@@ -269,7 +269,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private int convertObjectToInt(object obj)
+        private int ConvertObjectToInt(object obj)
         {
             if (obj != null && obj.ToString() != "")
             {
@@ -281,7 +281,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private DateTime convertObjectToDateTime(object obj)
+        private DateTime ConvertObjectToDateTime(object obj)
         {
             DateTime dueDate;
 

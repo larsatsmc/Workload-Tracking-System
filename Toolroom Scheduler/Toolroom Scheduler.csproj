@@ -83,11 +83,11 @@
     <Compile Include="BackDateWindow.Designer.cs">
       <DependentUpon>BackDateWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bulk Assign Resources.cs">
+    <Compile Include="BulkAssignResourcesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Bulk Assign Resources.Designer.cs">
-      <DependentUpon>Bulk Assign Resources.cs</DependentUpon>
+    <Compile Include="BulkAssignResourcesWindow.Designer.cs">
+      <DependentUpon>BulkAssignResourcesWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="CalendarColumn.cs" />
     <Compile Include="Component.cs" />
@@ -152,8 +152,8 @@
     <EmbeddedResource Include="BackDateWindow.resx">
       <DependentUpon>BackDateWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Bulk Assign Resources.resx">
-      <DependentUpon>Bulk Assign Resources.cs</DependentUpon>
+    <EmbeddedResource Include="BulkAssignResourcesWindow.resx">
+      <DependentUpon>BulkAssignResourcesWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForwardDateWindow.resx">
       <DependentUpon>ForwardDateWindow.cs</DependentUpon>
