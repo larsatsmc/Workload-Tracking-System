@@ -216,6 +216,21 @@ namespace Toolroom_Scheduler
 
         // This constructor is for reading tasks from the database.
 
+        public TaskInfo(object taskName, object id, object component, object hours, object duration, object machine, object personnel, object predecessors, object notes)
+        {
+            this.TaskName = ConvertObjectToString(taskName);
+            this.ID = Convert.ToInt32(id);
+            this.Component = ConvertObjectToString(component);
+            this.Hours = Convert.ToInt32(hours);
+            this.Duration = ConvertObjectToString(duration);
+            this.Machine = ConvertObjectToString(machine);
+            this.Personnel = ConvertObjectToString(personnel);
+            this.Predecessors = ConvertObjectToString(predecessors);
+            this.Notes = ConvertObjectToString(notes);
+        }
+
+        // This constructor is for reading tasks from the database.
+
         public TaskInfo(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object dateCompleted, object initials, object machine, object personnel, object predecessors, object notes)
         {
             this.TaskName = ConvertObjectToString(taskName);
@@ -310,9 +325,42 @@ namespace Toolroom_Scheduler
             else
             {
                 this.Predecessors = Convert.ToString(Convert.ToInt32(this.Predecessors) + baseNumber);
-            }
+            }     
+        }
+        /// <summary>
+        /// Gets predecessors numbered according to what is needed for dependencies in the scheduler control.
+        /// </summary> 
+        public string GetNewPredecessors(int baseNumber)
+        {
+            StringBuilder newPreds = new StringBuilder();
+            string[] preds = null;
 
-                
+            if (this.Predecessors == "")
+            {
+                return "";
+            }
+            else if (this.Predecessors.Contains(","))
+            {
+                preds = this.Predecessors.Split(',');
+
+                for (int i = 0; i < preds.Count(); i++)
+                {
+                    if (i < preds.Count() - 1)
+                    {
+                        newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber + ",");
+                    }
+                    else
+                    {
+                        newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber);
+                    }
+                }
+
+                return newPreds.ToString();
+            }
+            else
+            {
+                return Convert.ToString(Convert.ToInt32(this.Predecessors.Trim()) + baseNumber);
+            }
         }
         /// <summary>
         /// Sets the task info for a given task from task info tab.
@@ -350,6 +398,12 @@ namespace Toolroom_Scheduler
         public void SetDuration(int duration)
         {
             this.Duration = duration + " Day(s)";
+        }
+
+        public void SetDates(DateTime startDate, DateTime finishDate)
+        {
+            this.StartDate = startDate;
+            this.FinishDate = finishDate;
         }
 
         public void SetMachine(string machineLine)

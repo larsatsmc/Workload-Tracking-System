@@ -367,6 +367,7 @@ namespace Toolroom_Scheduler
             this.Predecessors = predecessors;
             this.Notes = notes;
         }
+
         public void SetHours(string hourLine)
         {
             this.Hours = Convert.ToInt16(hourLine.Trim().Split(' ')[0]);
