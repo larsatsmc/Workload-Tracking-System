@@ -86,7 +86,7 @@ namespace Toolroom_Scheduler
             return JobNumberComboBox.Text;
         }
 
-        private (string jobNumber, int projectNumber) getComboBoxInfo()
+        private (string jobNumber, int projectNumber) GetComboBoxInfo()
         {
             string[] jobNumberComboBoxText, jobNumberComboBoxText2;
 
@@ -268,7 +268,7 @@ namespace Toolroom_Scheduler
             {
                 return;
             }
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
 
             if (JobNumberComboBox.SelectedIndex < JobNumberComboBox.Items.Count - 1)
             {
@@ -348,7 +348,7 @@ namespace Toolroom_Scheduler
             {
                 Database db = new Database();
                 ExcelInteractions ei = new ExcelInteractions();
-                var number = getComboBoxInfo();
+                var number = GetComboBoxInfo();
                 
                 //if(kanBanExists(number.jobNumber, number.projectNumber))
                 //{
@@ -1197,7 +1197,7 @@ namespace Toolroom_Scheduler
         private DateTime GetBackDateFromUser()
         {
             Database db = new Database();
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
             ProjectInfo pi = db.GetProjectInfo(number.jobNumber, number.projectNumber);
 
             try
@@ -1230,7 +1230,7 @@ namespace Toolroom_Scheduler
         private List<string> GetComponentListFromUser()
         {
             Database db = new Database();
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
             ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
 
             try
@@ -1403,7 +1403,7 @@ namespace Toolroom_Scheduler
             if (!FormLoading)
                 if (JobNumberComboBox.Text != "All")
                 {
-                    var number = getComboBoxInfo();
+                    var number = GetComboBoxInfo();
 
                     DataTable.DefaultView.RowFilter = "[JobNumber] = '" + number.jobNumber + "' AND [ProjectNumber] = '" + number.projectNumber + "'";
                     DataGridView1.DataSource = DataTable;
@@ -1424,7 +1424,7 @@ namespace Toolroom_Scheduler
             }
 
             Database db = new Database();
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
             db.CalculateEarliestStartDates(number.jobNumber, number.projectNumber);
             RefreshDataGridView();
         }
@@ -1706,7 +1706,7 @@ namespace Toolroom_Scheduler
             else
             {
                 Database db = new Database();
-                var number = getComboBoxInfo();
+                var number = GetComboBoxInfo();
                 //MessageBox.Show(db.getHighestProjectTaskID(number.jobNumber, number.projectNumber).ToString());
             }
         }
@@ -1720,7 +1720,7 @@ namespace Toolroom_Scheduler
             }
 
             Database db = new Database();
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
             List<string> componentList = null;
 
 
@@ -1753,7 +1753,7 @@ namespace Toolroom_Scheduler
             }
 
             Database db = new Database();
-            var number = getComboBoxInfo();
+            var number = GetComboBoxInfo();
             List<string> componentList = null;
 
             DialogResult dialogResult = MessageBox.Show("Do you want to back schedule all tasks? (Click \"No\" to selectively schedule component tasks.", "Back Schedule All?",
@@ -1785,7 +1785,7 @@ namespace Toolroom_Scheduler
             else
             {
                 Database db = new Database();
-                var number = getComboBoxInfo();
+                var number = GetComboBoxInfo();
                 ProjectInfo project = db.GetProject(number.jobNumber, number.projectNumber);
                 EditProject(project);
             }

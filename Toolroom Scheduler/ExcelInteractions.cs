@@ -314,7 +314,7 @@ namespace Toolroom_Scheduler
                 ws.Cells[r, 8].value = "   Predecessors";
                 ws.Cells[r, 9].value = "Status";
                 ws.Cells[r, 10].value = "Initials";
-                ws.Cells[r, 11].value = "Due Date";
+                ws.Cells[r, 11].value = "Date";
 
                 r++;
 

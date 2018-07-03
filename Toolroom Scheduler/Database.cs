@@ -1911,7 +1911,14 @@ namespace Toolroom_Scheduler
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
-                row["Pictures"] = component.GetPictureByteArray();
+                if(component.GetPictureByteArray() != null)
+                {
+                    row["Pictures"] = component.GetPictureByteArray();
+                }
+                else
+                {
+                    row["Pictures"] = DBNull.Value;
+                }
                 row["Notes"] = component.Notes;
                 row["Position"] = position++;
                 row["TaskIDCount"] = component.TaskIDCount;
@@ -2627,7 +2634,14 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
                 adapter.UpdateCommand.Parameters.AddWithValue("@quantity", component.Quantity);
                 adapter.UpdateCommand.Parameters.AddWithValue("@spares", component.Spares);
-                adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.GetPictureByteArray());
+                if(component.GetPictureByteArray() != null)
+                {
+                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.GetPictureByteArray());
+                }
+                else
+                {
+                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", DBNull.Value);
+                }
                 adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
                 adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
                 //adapter.UpdateCommand.Parameters.AddWithValue("@pictures", component.PictureList);  // Add when database is ready to receive pictures.
