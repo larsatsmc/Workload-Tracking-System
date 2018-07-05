@@ -15,12 +15,13 @@ namespace Toolroom_Scheduler
         public int ProgramElectrodeHours { get; private set; }
         public int CNCRoughHours { get; private set; }
         public int CNCFinishHours { get; private set; }
+        public int GrindFittingHours { get; private set; }
         public int CNCElectrodeHours { get; private set; }
         public int EDMSinkerHours { get; private set; }
         public int EDMWireHours { get; private set; }
         public List<TaskInfo> TaskList { get; private set; }
 
-        public QuoteInfo(string customer, string partName, int programRoughHours, int programFinishHours, int programElectrodeHours, int cncRoughHours, int cncFinishHours, int cncElectrodeHours, int edmSinkerHours)
+        public QuoteInfo(string customer, string partName, int programRoughHours, int programFinishHours, int programElectrodeHours, int cncRoughHours, int cncFinishHours, int grindFittingHours, int cncElectrodeHours, int edmSinkerHours)
         {
             this.Customer = customer;
             this.PartName = partName;
@@ -29,6 +30,7 @@ namespace Toolroom_Scheduler
             this.ProgramElectrodeHours = programElectrodeHours;
             this.CNCRoughHours = cncRoughHours;
             this.CNCFinishHours = cncFinishHours;
+            this.GrindFittingHours = grindFittingHours;
             this.CNCElectrodeHours = cncElectrodeHours;
             this.EDMSinkerHours = edmSinkerHours;
 
@@ -75,7 +77,7 @@ namespace Toolroom_Scheduler
 
         private void CreateTaskList()
         {
-            List<string> taskNameList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker"};
+            List<string> taskNameList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "GrindFitting", "CNC Electrodes", "EDM Sinker"};
             TaskList = new List<TaskInfo>();
 
             foreach (string taskName in taskNameList)

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
+using VBIDE = Microsoft.Vbe.Interop;
 
 namespace Toolroom_Scheduler
 {
@@ -32,9 +33,10 @@ namespace Toolroom_Scheduler
                 partName: quoteLetter.Cells[10, 3].value,
                 programRoughHours: Convert.ToInt16(quoteWorksheet.Cells[22, 8].value),
                 programFinishHours: Convert.ToInt16(quoteWorksheet.Cells[23,8].value),
-                programElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[24,8].value),
+                programElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[24,8].value + quoteWorksheet.Cells[21, 8].value),
                 cncRoughHours: Convert.ToInt16(quoteWorksheet.Cells[25,8].value),
                 cncFinishHours: Convert.ToInt16(quoteWorksheet.Cells[26,8].value),
+                grindFittingHours: Convert.ToInt16(quoteWorksheet.Cells[28, 8].value),
                 cncElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[27,8].value),
                 edmSinkerHours: Convert.ToInt16(quoteWorksheet.Cells[29,8].value)
                 
@@ -92,6 +94,8 @@ namespace Toolroom_Scheduler
             Excel.Workbook wb = null;
             Excel.Worksheet ws = null;
             Excel.Borders border;
+            VBIDE.VBComponents vBComponents;
+            VBIDE.VBComponent wsMod;
 
             string activePrinterString, dateTime;
             int r;
@@ -208,7 +212,7 @@ namespace Toolroom_Scheduler
                 ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
                 ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
 
-                CreateKanBanComponentSheets(pi, excelApp, wb, ws);
+                CreateKanBanComponentSheets(pi, excelApp, wb);
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
@@ -254,6 +258,19 @@ namespace Toolroom_Scheduler
 
             }
 
+            //vBComponents = wb.VBProject.VBComponents;
+            //wsMod = vBComponents.Item(3);
+
+            //for (int i = 1; i <= vBComponents.Count; i++)
+            //{
+            //    MessageBox.Show(vBComponents.Item(i).Name);
+            //}
+
+            //string macroCode = "Sub main()\r\n" +
+            //                   "   MsgBox \"Hello world\"\r\n" +
+            //                   "end Sub";
+
+            //wsMod.CodeModule.AddFromString(macroCode);
         }
 
         // TODO: Find an alternative to this method that does not use COM interop.
@@ -261,8 +278,9 @@ namespace Toolroom_Scheduler
         // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
 
 
-        private void CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
+        private void CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb)
         {
+            Excel.Worksheet ws;
             Excel.Borders border;
             int r, n;
             string dateTime;
@@ -341,7 +359,6 @@ namespace Toolroom_Scheduler
                         ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
 
                     r++;
-
                 }
 
                 border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
@@ -381,9 +398,9 @@ namespace Toolroom_Scheduler
 
                 if(component.Notes.Contains('\n'))
                 {
-                    foreach (string section in component.Notes.Split('\n'))
+                    foreach (string line in component.Notes.Split('\n'))
                     {
-                        ws.Cells[r++ + 1, 2].value = section;
+                        ws.Cells[r++ + 1, 2].value = line;
                     }
                 }
                 else
@@ -398,6 +415,147 @@ namespace Toolroom_Scheduler
                     ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
                 }
             }
+
+            if (SheetNExists("Sheet1", wb))
+            {
+                wb.Sheets["Sheet1"].delete();
+            }
+
+            if (SheetNExists("Mold", wb))
+                wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
+        }
+
+        private void CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
+        {
+            Excel.Borders border;
+            int r, n;
+            string dateTime;
+
+            n = 2;
+
+            ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
+            ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
+            dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
+            ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
+            ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
+            ws.PageSetup.Zoom = 67;
+            ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
+            ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
+            ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
+            ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
+            ws.Select();
+
+
+                Console.WriteLine(component.Name);
+
+                if (component.Name.Length <= 31)
+                {
+                    ws.Name = component.Name;
+                }
+                else if (component.Name.Length > 31)
+                {
+                }
+                else
+                {
+                    ws.Name = "Mold";
+                }
+
+                r = 1;
+
+                ws.Cells[r, 1].value = "Job Number";
+                ws.Cells[r, 2].value = "   Component";
+                ws.Cells[r, 3].value = "Task ID";
+                ws.Cells[r, 4].value = "   Task Name";
+                ws.Cells[r, 5].value = "Duration";
+                ws.Cells[r, 6].value = "Start Date";
+                ws.Cells[r, 7].value = "Finish Date";
+                ws.Cells[r, 8].value = "   Predecessors";
+                ws.Cells[r, 9].value = "Status";
+                ws.Cells[r, 10].value = "Initials";
+                ws.Cells[r, 11].value = "Date";
+
+                r++;
+
+                ws.Range["H1"].EntireColumn.NumberFormat = "@";
+
+                foreach (TaskInfo task in component.TaskList)
+                {
+                    border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
+
+                    ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
+                    ws.Cells[r, 1].value = pi.JobNumber;
+                    ws.Cells[r, 2].value = "   " + component.Name;
+                    ws.Cells[r, 3].value = task.ID;
+                    ws.Cells[r, 4].value = "   " + task.TaskName;
+                    ws.Cells[r, 5].value = "   " + task.Duration;
+                    ws.Cells[r, 6].value = task.StartDate;
+                    ws.Cells[r, 7].value = task.FinishDate;
+                    ws.Cells[r, 8].value = "  " + task.Predecessors;
+                    ws.Cells[r, 9].value = task.Status;
+                    ws.Cells[r, 10].value = task.Initials;
+                    ws.Cells[r, 11].value = task.DateCompleted;
+
+                    if (r % 2 == 0)
+                        ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
+
+                    r++;
+                }
+
+                border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
+
+                border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+
+                for (int c = 2; c <= 11; c++)
+                {
+                    border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
+                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                }
+
+                ws.Columns["B:B"].Autofit();
+                ws.Columns["D:D"].Autofit();
+
+                ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
+                ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
+                ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
+                ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
+                ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
+                ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
+                ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
+                ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
+
+                ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
+
+                if (component.Notes.Contains('\n'))
+                {
+                    foreach (string line in component.Notes.Split('\n'))
+                    {
+                        ws.Cells[r++ + 1, 2].value = line;
+                    }
+                }
+                else
+                {
+                    ws.Cells[r++ + 1, 2].value = component.Notes;
+                }
+
+
+                if (component.Picture != null)
+                {
+                    Clipboard.SetImage(component.Picture);
+                    ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
+                }
+
 
             if (SheetNExists("Sheet1", wb))
             {
@@ -426,6 +584,50 @@ namespace Toolroom_Scheduler
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
             Excel.Workbook workbook = workbooks.Open(filePath);
+            Excel.Worksheet matchingSheet;
+            VBIDE.VBComponents vBComponents;
+            VBIDE.VBComponent wsMod;
+            int matchingSheetIndex;
+
+            foreach (Component component in project.ComponentList)
+            {
+                matchingSheet = MatchingComponentSheet(workbook, component.Name);
+
+                if (matchingSheet != null)
+                {
+                    matchingSheetIndex = matchingSheet.Index;
+                    matchingSheet.Delete();
+                    workbook.Sheets[1].Copy(After: workbook.Sheets[matchingSheetIndex - 1]);
+                    vBComponents = workbook.VBProject.VBComponents;
+                    wsMod = vBComponents.Item(1);
+
+                    string macroCode = "Sub main()\r\n" +
+                                       "   MsgBox \"Hello world\"\r\n" +
+                                       "end Sub";
+
+                    wsMod.CodeModule.AddFromString(macroCode);
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        private string KanBanSheetCode()
+        {
+            return "Function IsMarkedComplete(row As Integer) As String\r\n" +
+                   "" +
+                   "  If IsEmpty(Cells(row, 9)) = False And IsEmpty(Cells(row, 10)) = False And IsEmpty(Cells(row, 11)) = False Then" +
+                   "" +
+                   "   IsMarkedComplete = \"True\"\r\n" +
+                   "" +
+                   "  ElseIf IsEmpty(Cells(row, 9)) = True And IsEmpty(Cells(row, 10)) = True And IsEmpty(Cells(row, 11)) = True Then" +
+                   "" +
+                   "  Else" +
+                   "" +
+                   "    IsMarkedComplete = \"" +
+                   "End Sub";
         }
 
         public bool WorkbookHasMatchingComponent(Excel.Workbook workbook, string component)
@@ -439,6 +641,19 @@ namespace Toolroom_Scheduler
             }
 
             return false;
+        }
+
+        public Excel.Worksheet MatchingComponentSheet(Excel.Workbook workbook, string component)
+        {
+            foreach (Excel.Worksheet sheet in workbook.Worksheets)
+            {
+                if (sheet.Cells[1, 2].value.ToString().Trim() == component)
+                {
+                    return sheet;
+                }
+            }
+
+            return null;
         }
 
         public void InsertNewComponentSheets()

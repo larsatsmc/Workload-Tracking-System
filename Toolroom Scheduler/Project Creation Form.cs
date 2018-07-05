@@ -439,6 +439,10 @@ namespace Toolroom_Scheduler
             }
 
             Component component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
+            if (component == null)
+            {
+                //Project.QuoteInfo.TaskList;
+            }
             TaskInfo task = component.TaskList.ElementAt(selectedNode.Index);
 
             // Check if selected node contains nodes and if task info fields are empty.

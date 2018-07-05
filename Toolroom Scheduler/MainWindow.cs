@@ -56,13 +56,9 @@ namespace Toolroom_Scheduler
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'workload_Tracking_SystemDataSet.Tasks' table. You can move, or remove it, as needed.
-            this.tasksTableAdapter.Fill(this.workload_Tracking_SystemDataSet.Tasks);
             SetQueryString();
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             adapter.SelectCommand = new OleDbCommand(QueryString, Connection);
-            //dt = FinishingDateTimePicker.Value;
-            //adapter.SelectCommand.Parameters.AddWithValue("@taskName", "CNC Finish");
             adapter.Fill(DataTable);
             DataGridView1.DataSource = DataTable;
             PopulateDataGridViewComboboxes();
@@ -1328,7 +1324,6 @@ namespace Toolroom_Scheduler
 
         private void FinishPercentTextBox1_TextChanged(object sender, EventArgs e)
         {
-         
             FinishProgressBar1.Value = PercentTextBoxValidation((TextBox)sender);
         }
 
