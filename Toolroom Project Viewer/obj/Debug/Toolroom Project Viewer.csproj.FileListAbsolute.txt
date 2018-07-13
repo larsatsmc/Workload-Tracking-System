@@ -1,35 +1,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Project Viewer.exe.config
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Project Viewer.exe
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Project Viewer.pdb
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.BonusSkins.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Charts.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.CodeParser.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Data.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.DataAccess.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Office.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Pdf.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Printing.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.RichEdit.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.RichEdit.v17.2.Export.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.SpellChecker.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Spreadsheet.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Utils.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Xpo.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraBars.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraCharts.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraCharts.v17.2.UI.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraCharts.v17.2.Wizard.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraEditors.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraGrid.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraLayout.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraPrinting.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraRichEdit.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraScheduler.v17.2.Core.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraScheduler.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraScheduler.v17.2.Extensions.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraScheduler.v17.2.Reporting.Extensions.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraSpellChecker.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraTreeList.v17.2.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\System.ValueTuple.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Images.v17.2.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.Utils.v17.2.UI.dll

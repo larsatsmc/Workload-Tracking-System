@@ -16,8 +16,8 @@ namespace Toolroom_Scheduler
         public string TaskName { get; private set; }
         public bool IsSummary { get; private set; }
         public string Duration { get; private set; }
-        public DateTime StartDate { get; private set; }
-        public DateTime FinishDate { get; private set; }
+        public DateTime? StartDate { get; private set; }
+        public DateTime? FinishDate { get; private set; }
         public string Predecessors { get; set; }
         public string Machine { get; private set; }
         public string Personnel { get; private set; }
@@ -35,7 +35,7 @@ namespace Toolroom_Scheduler
         public int Position { get; private set; }
         public bool HasInfo { get; set; }
         public string Initials { get; private set; }
-        public DateTime DateCompleted { get; private set; }
+        public DateTime? DateCompleted { get; private set; }
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
         /// </summary>
@@ -255,9 +255,9 @@ namespace Toolroom_Scheduler
             this.Component = ConvertObjectToString(component);
             this.Hours = Convert.ToInt32(hours);
             this.Duration = ConvertObjectToString(duration);
-            this.StartDate = Convert.ToDateTime(startDate);
-            this.FinishDate = Convert.ToDateTime(finishDate);
-            this.DateCompleted = Convert.ToDateTime(finishDate);
+            this.StartDate = ConvertObjectToDate(startDate);
+            this.FinishDate = ConvertObjectToDate(finishDate);
+            this.DateCompleted = ConvertObjectToDate(dateCompleted);
             this.Initials = ConvertObjectToString(initials);
             this.Machine = ConvertObjectToString(machine);
             this.Personnel = ConvertObjectToString(personnel);
@@ -452,6 +452,18 @@ namespace Toolroom_Scheduler
             else
             {
                 return "";
+            }
+        }
+
+        private DateTime? ConvertObjectToDate(object obj)
+        {
+            if (!DBNull.Value.Equals(obj))
+            {
+                return Convert.ToDateTime(obj);
+            }
+            else
+            {
+                return null;
             }
         }
 

@@ -29,6 +29,16 @@ namespace Toolroom_Scheduler
             }
         }
 
+        public SelectComponentsWindow(List<string> componentList)
+        {
+            InitializeComponent();
+
+            foreach (string component in componentList)
+            {
+                ComponentCheckedListBox.Items.Add(component);
+            }
+        }
+
         private void OKButton_Click(object sender, EventArgs e)
         {
             ComponentList = new List<string>();

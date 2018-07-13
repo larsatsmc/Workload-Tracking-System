@@ -2,11 +2,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\Toolroom Scheduler.xml
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\Toolroom Scheduler.exe
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\Toolroom Scheduler.pdb
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Data.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.DataAccess.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Utils.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.XtraBars.v17.2.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.XtraEditors.v17.2.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\System.ValueTuple.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Xpo.v17.2.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.RichEdit.v17.2.Core.dll
@@ -72,7 +67,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\es\DevExpress.Pdf.v17.2.Core.resources.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ja\DevExpress.Pdf.v17.2.Core.resources.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\ru\DevExpress.Pdf.v17.2.Core.resources.dll
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Interop.Microsoft.Office.Interop.MSProject.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.ResolveComReference.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.AddResourceForm.resources
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom_Scheduler.BackDateWindow.resources
@@ -85,7 +79,6 @@
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.csproj.CoreCompileInputs.cache
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.exe
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\obj\Debug\Toolroom Scheduler.pdb
-\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Spreadsheet.v17.2.Core.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Charts.v17.2.Core.dll
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\DevExpress.Spreadsheet.v17.2.Core.xml
 \\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Scheduler\bin\Debug\de\DevExpress.Spreadsheet.v17.2.Core.resources.dll

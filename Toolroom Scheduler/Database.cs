@@ -17,7 +17,6 @@ namespace Toolroom_Scheduler
     {
         static string ConnString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=X:\TOOLROOM\Workload Tracking System\Database\Workload Tracking System DB.accdb";
         OleDbConnection Connection = new OleDbConnection(ConnString);
-		MSProject msp;
 		private string component, toolMaker, dateTime;
         Excel.Workbook wb;
         Excel.Worksheet ws;
@@ -599,9 +598,9 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private List<Component> GetComponentList(string jobNumber, int projectNumber)
+        public List<string> GetComponentList(string jobNumber, int projectNumber)
         {
-            List<Component> componentList = new List<Component>();
+            List<string> componentList = new List<string>();
 
             string queryString = "SELECT * FROM Components WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
 
@@ -620,18 +619,7 @@ namespace Toolroom_Scheduler
                     {
                         while (rdr.Read())
                         {
-                            componentList.Add(new Component
-                            (
-                                           name: rdr["Component"],
-                                          notes: rdr["Notes"],
-                                       priority: rdr["Priority"],
-                                       position: rdr["Position"],
-                                       quantity: rdr["Quantity"],
-                                         spares: rdr["Spares"],
-                                        picture: rdr["Picture"],
-                                       material: rdr["Material"],
-                                    taskIDCount: rdr["TaskIDCount"]
-                            ));
+                            componentList.Add(rdr["Component"].ToString());
                         }
                     }
                 }

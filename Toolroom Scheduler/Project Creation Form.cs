@@ -409,6 +409,8 @@ namespace Toolroom_Scheduler
         private void SetTaskInfoForSelectedTask()
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            Component component;
+            TaskInfo task;
             //string predecessorString = getSelectedPredecessorText(predecessorsListBox); // Uncomment to use project.
 
             // Check if task is selected.
@@ -438,12 +440,8 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            Component component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
-            if (component == null)
-            {
-                //Project.QuoteInfo.TaskList;
-            }
-            TaskInfo task = component.TaskList.ElementAt(selectedNode.Index);
+            component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
+            task = component.TaskList.ElementAt(selectedNode.Index);
 
             // Check if selected node contains nodes and if task info fields are empty.
             // If true remove all task info nodes from selected task.
@@ -586,6 +584,27 @@ namespace Toolroom_Scheduler
                     }
                 }
             }
+        }
+
+        private ProjectInfo ConvertQuoteToProject(ProjectInfo project)
+        {
+            // Need to check if form already contains project data.
+            if(project.ComponentList.Count > 0)
+            {
+                MessageBox.Show("Can't add a quote to a work project tree with data in it.");
+                return project;
+            }
+
+            List<string> taskList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker" };
+            project.JobNumber = project.QuoteInfo.Customer + "_" + project.QuoteInfo.PartName; // What to do when these two pieces of information are missing?
+            project.SetProjectDueDate(DateTime.Today);
+            project.HasProjectInfo = true;
+            project.AddComponent("Quote");
+
+            // Task list is automatically generated inside the QuoteInfo class when quote is read.
+            project.ComponentList.First().AddTaskList(project.QuoteInfo.TaskList);
+
+            return project;
         }
 
         private void LoadQuotedProjectToForm(ProjectInfo project)
@@ -1698,10 +1717,6 @@ namespace Toolroom_Scheduler
                         //}
 
                         taskNotesTextBox.Text = selectedNode.Nodes[5].Text;
-
-                        SelectPredecessors(selectedNode);
-
-                        ActivateTaskHandlers();
                     }
                     else
                     {
@@ -1722,6 +1737,10 @@ namespace Toolroom_Scheduler
 
                         taskNotesTextBox.Text = "";
                     }
+
+                    SelectPredecessors(selectedNode);
+
+                    ActivateTaskHandlers();
                 }
                 catch (Exception er)
                 {
@@ -1767,9 +1786,7 @@ namespace Toolroom_Scheduler
                 {
                     Project.SetProjectNumber(ProjectNumberTextBox.Text);
                 }
-                
             }
-            
         }
 
         private void ToolMakerComboBox_TextChanged(object sender, EventArgs e)
@@ -1865,7 +1882,8 @@ namespace Toolroom_Scheduler
                 }
                 
                 Project.SetQuoteInfo(ei.GetQuoteInfo(filename));
-                LoadQuotedProjectToForm(Project);
+
+                LoadProjectToForm(ConvertQuoteToProject(Project));
                 quoteLoaded = true;
             }
             else
@@ -2026,6 +2044,12 @@ namespace Toolroom_Scheduler
                 ToolMakerComboBox.BackColor = Color.Red;
                 tabControl1.SelectedTab = tabPage1;
                 return;
+            }
+
+            if(Project.ComponentList.Count == 0)
+            {
+               MessageBox.Show("No components entered.");
+               return;
             }
 
             Database db = new Database();

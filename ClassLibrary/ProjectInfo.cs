@@ -12,7 +12,7 @@ namespace Toolroom_Scheduler
         public int ProjectNumber { get; private set; }
         public bool ProjectNumberChanged { get; set; }
         public int OldProjectNumber { get; private set; }
-        public string JobNumber { get; private set; }
+        public string JobNumber { get; set; }
         public DateTime DueDate { get; private set; }
         public int Priority { get; private set; }
         public string Status { get; private set; }
@@ -139,6 +139,11 @@ namespace Toolroom_Scheduler
             this.RoughProgrammer = ConvertObjectToString(roughProgrammer);
             this.ElectrodeProgrammer = ConvertObjectToString(electrodeProgrammer);
             this.FinishProgrammer = ConvertObjectToString(finishProgrammer);
+        }
+
+        public void SetProjectDueDate(DateTime dueDate)
+        {
+            this.DueDate = dueDate;
         }
 
         public bool AddComponent(string name)

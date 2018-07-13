@@ -865,7 +865,7 @@ namespace Toolroom_Project_Viewer
             return cr;
         }
 
-        private CustomAppointment CreateEvent(int appointmentId, string subject, object resourceId, string location, DateTime startDate, DateTime finishDate)
+        private CustomAppointment CreateEvent(int appointmentId, string subject, object resourceId, string location, DateTime? startDate, DateTime? finishDate)
         {
             CustomAppointment apt = new CustomAppointment();
 

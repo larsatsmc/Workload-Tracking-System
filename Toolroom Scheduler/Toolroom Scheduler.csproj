@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Toolroom_Scheduler</RootNamespace>
     <AssemblyName>Toolroom Scheduler</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PublishUrl>publish\</PublishUrl>
@@ -111,7 +111,6 @@
     <Compile Include="ManageResourcesWindow.Designer.cs">
       <DependentUpon>ManageResourcesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MSProject.cs" />
     <Compile Include="Predecessors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Project Creation Form.cs">

@@ -86,8 +86,10 @@ namespace Toolroom_Scheduler
                 int hours = GetTaskHours(taskName);
 
                 task.SetName(taskName);
+                task.SetComponent("Quote");
                 task.SetHours(hours);
                 task.SetDuration((int)(hours * 1.4 / 8));
+                task.HasInfo = true;
 
 
                 TaskList.Add(task);

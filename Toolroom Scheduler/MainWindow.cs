@@ -369,7 +369,15 @@ namespace Toolroom_Scheduler
                 //CreateKanBan:;
                 ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
                 //db.GenerateKanBanWorkbook(pi);
-                ei.GenerateKanBanWorkbook(pi);
+                if(KanBanExists(number.jobNumber, number.projectNumber))
+                {
+                    ei.GenerateKanBanWorkbook(pi);
+                }
+                else
+                {
+                    ei.GenerateKanBanWorkbook(pi);
+                }
+                
             }
         }
 
@@ -1227,11 +1235,11 @@ namespace Toolroom_Scheduler
         {
             Database db = new Database();
             var number = GetComboBoxInfo();
-            ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
+            List<string> componentList = db.GetComponentList(number.jobNumber, number.projectNumber);
 
             try
             {
-                using (var form = new SelectComponentsWindow(pi.ComponentList))
+                using (var form = new SelectComponentsWindow(componentList))
                 {
                     var result = form.ShowDialog();
 

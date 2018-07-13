@@ -124,7 +124,7 @@ namespace Toolroom_Scheduler
             this.TaskList.Add(task);
         }
         /// <summary>
-        /// Adds a task to a component.
+        /// Adds a tasklist to a component.
         /// </summary>
         public void AddTaskList(List<TaskInfo> taskList)
         {
