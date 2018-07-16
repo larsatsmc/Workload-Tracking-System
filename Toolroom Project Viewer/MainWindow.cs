@@ -873,8 +873,8 @@ namespace Toolroom_Project_Viewer
             apt.Subject = subject;
             apt.Location = location;
             apt.OwnerId = resourceId;
-            apt.StartDate = startDate;
-            apt.FinishDate = finishDate;
+            apt.StartDate = Convert.ToDateTime(startDate);
+            apt.FinishDate = Convert.ToDateTime(finishDate);
 
             return apt;
         }

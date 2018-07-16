@@ -595,7 +595,6 @@ namespace Toolroom_Scheduler
                 return project;
             }
 
-            List<string> taskList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker" };
             project.JobNumber = project.QuoteInfo.Customer + "_" + project.QuoteInfo.PartName; // What to do when these two pieces of information are missing?
             project.SetProjectDueDate(DateTime.Today);
             project.HasProjectInfo = true;
@@ -609,7 +608,6 @@ namespace Toolroom_Scheduler
 
         private void LoadQuotedProjectToForm(ProjectInfo project)
         {
-            List<string> taskList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker"};
             TreeNode quoteNode, currentTaskNode;
             MoldBuildTreeView.Nodes[0].Text = project.QuoteInfo.Customer + "_" + project.QuoteInfo.PartName; // What to do when these two pieces of information are missing?
             quoteNode = MoldBuildTreeView.Nodes[0].Nodes.Add("Quote");
@@ -1038,7 +1036,12 @@ namespace Toolroom_Scheduler
             {
                 list.Add(task.PrevNode.Text);
             }
-                return list;
+            else if (task.Text.Contains("Grind-Fitting"))
+            {
+                list.Add(task.PrevNode.Text);
+            }
+
+            return list;
         }
 
         private void RemoveSelectedNodeFromTree()

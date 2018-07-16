@@ -71,13 +71,17 @@ namespace Toolroom_Scheduler
             {
                 return this.EDMSinkerHours;
             }
+            else if (taskName == "Grind-Fitting")
+            {
+                return this.GrindFittingHours;
+            }
 
             return 0;
         }
 
         private void CreateTaskList()
         {
-            List<string> taskNameList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "GrindFitting", "CNC Electrodes", "EDM Sinker"};
+            List<string> taskNameList = new List<string> { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "Grind-Fitting", "CNC Electrodes", "EDM Sinker"};
             TaskList = new List<TaskInfo>();
 
             foreach (string taskName in taskNameList)

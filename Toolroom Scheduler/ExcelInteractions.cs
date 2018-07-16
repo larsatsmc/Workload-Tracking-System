@@ -155,6 +155,7 @@ namespace Toolroom_Scheduler
                         ws.Cells[r, 8].value = $"  {task.Predecessors}";
                         ws.Cells[r, 9].value = task.Status;
                         ws.Cells[r, 10].value = task.Initials;
+                        if(task.DateCompleted != null)
                         ws.Cells[r, 11].value = task.DateCompleted;
 
                         if (r % 2 == 0)
@@ -353,6 +354,7 @@ namespace Toolroom_Scheduler
                     ws.Cells[r, 8].value = "  " + task.Predecessors;
                     ws.Cells[r, 9].value = task.Status;
                     ws.Cells[r, 10].value = task.Initials;
+                    if(task.DateCompleted != null)
                     ws.Cells[r, 11].value = task.DateCompleted;
 
                     if (r % 2 == 0)
