@@ -183,7 +183,7 @@ namespace Toolroom_Project_Viewer
             appointmentMappings.End = "FinishDate";
             appointmentMappings.Subject = "Subject";
             appointmentMappings.Location = "Location";
-            appointmentMappings.Description = "Notes";
+            //appointmentMappings.Description = "Notes";
             appointmentMappings.ResourceId = "Resource";
 
             schedulerStorage1.Appointments.DataSource = db.GetAppointmentData(departmentComboBox.Text);
@@ -218,14 +218,14 @@ namespace Toolroom_Project_Viewer
             var subjectArr1 = apt.Subject.Split(' ');
             var subjectArr2 = apt.Subject.Split('-');
 
-            length = subjectArr1[0].Length + subjectArr1[1].Length + 2; // find total length of job number + project number + delimitors
-            length2 = subjectArr2[1].Length + 1; // find total length of task id + delimitor
-
             n = apt.Subject.ToString().Count(x => x == '-'); // find number of dashes in subject string
+
+            length = subjectArr1[0].Length + subjectArr1[1].Length + 2; // find total length of job number + project number + delimitors
+            length2 = subjectArr2[n].Length + 1; // find total length of task id + delimitor
 
             jobNumber = subjectArr1[0];
             projectNumber = Convert.ToInt16(subjectArr1[1].Substring(1));
-            component = apt.Subject.Substring(length - 1, apt.Subject.Length - length - length2);
+            component = apt.Subject.Substring(length, apt.Subject.Length - length - length2);
             taskID = Convert.ToInt16(subjectArr2[n]);
 
             if (db.UpdateTask(jobNumber, projectNumber, component, taskID, apt.Start, apt.End))
@@ -577,7 +577,7 @@ namespace Toolroom_Project_Viewer
 
                     foreach (Day day in week.DayList)
                     {
-                        tempSeries.Points.Add(new SeriesPoint(day.DayName, day.Hours));
+                        tempSeries.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
                     }
 
                     chartControl1.Series.Add(tempSeries);
@@ -598,7 +598,7 @@ namespace Toolroom_Project_Viewer
                     foreach (Week week in deptWeeks)
                     {
                         // weekTitleArr[i++]
-                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++], week.GetWeekHours()));
+                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , (int)week.GetWeekHours()));
                     }
 
                     chartControl1.Series.Add(tempSeries);
@@ -619,7 +619,7 @@ namespace Toolroom_Project_Viewer
 
             foreach (Day day in week.DayList)
             {
-                series1.Points.Add(new SeriesPoint(day.DayName, day.Hours));
+                series1.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
             }
 
             chartControl2.Series.Add(series1);
@@ -663,7 +663,7 @@ namespace Toolroom_Project_Viewer
         private void GetOverallToolRoomHours()
         {
             Database db = new Database();
-            List<Week> weeks = new List<Week>();
+            List<Week> weeksList = new List<Week>();
 
             if (timeFrameComboBoxEdit.Text != "")
             {
@@ -674,14 +674,14 @@ namespace Toolroom_Project_Viewer
 
                 if (TimeUnits == "Days")
                 {
-                    weeks = db.GetDayHours(weekStart, weekEnd);
+                    weeksList = db.GetDayHours(weekStart, weekEnd);
                 }
                 else if (TimeUnits == "Weeks")
                 {
-                    weeks = db.GetWeekHours(weekStart, weekEnd);
+                    weeksList = db.GetWeekHours(weekStart, weekEnd);
                 }
 
-                LoadGraph(weeks);
+                LoadGraph(weeksList);
             }
         }
 

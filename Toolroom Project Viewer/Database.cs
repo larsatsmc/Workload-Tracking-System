@@ -55,12 +55,19 @@ namespace Toolroom_Project_Viewer
             //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
             string queryString = SetQueryString(department);
             OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
+            int i = 1;
 
             //adapter.SelectCommand.Parameters.AddWithValue("@department", setQueryString(department);
 
             try
             {
                 adapter.Fill(dt);
+
+                foreach (DataRow nrow in dt.Rows)
+                {
+                    nrow["ID"] = i++;
+                    Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
+                }
             }
             catch (OleDbException ex)
             {
@@ -337,6 +344,18 @@ namespace Toolroom_Project_Viewer
 
         }
 
+        public double GetBusinessDays(DateTime startD, DateTime endD)
+        {
+            double calcBusinessDays =
+                1 + ((endD - startD).TotalDays * 5 -
+                (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
+
+            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
+            if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
+
+            return calcBusinessDays;
+        }
+
         public void MoveDescendents(string jn, int pn, string component, DateTime currentTaskFinishDate, int currentTaskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
@@ -610,7 +629,7 @@ namespace Toolroom_Project_Viewer
         {
             string department = "All";
             string queryString = null;
-            string selectStatment = "TaskName, StartDate, Hours";
+            string selectStatment = "JobNumber, ProjectNumber, TaskName, Duration, StartDate, FinishDate, Hours";
             string fromStatement = "Tasks";
             string whereStatement = "(StartDate BETWEEN #" + weekStart + "# AND #" + weekEnd + "#)";
             string orderByStatement = "ORDER BY StartDate ASC";
@@ -804,7 +823,7 @@ namespace Toolroom_Project_Viewer
 
                 foreach (Day day in week.DayList)
                 {
-                    Console.WriteLine($"{day.DayName} {day.Hours}");
+                    Console.WriteLine($"{day.DayName} {(int)day.Hours}");
                 }
             }
 
@@ -843,18 +862,10 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public List<Week> GetWeekHours(string weekStart, string weekEnd)
+        // Creates a weeklist with 20 weeks for each department.
+        public List<Week> InitializeDeptWeeksList(DateTime wsDate)
         {
-            List<Week> weeks = new List<Week>();
-            Week weekTemp;
-            DateTime weDate;
-            DateTime wsDate = Convert.ToDateTime(weekStart);
-            string whereStatement;
-
-            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
-
+            List<Week> weekList = new List<Week>();
             string[] departmentArr = { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
 
             for (int i = 1; i <= 20; i++)
@@ -864,11 +875,28 @@ namespace Toolroom_Project_Viewer
 
                 foreach (string department in departmentArr)
                 {
-                    weeks.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));
+                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));
                 }
             }
 
-            Console.WriteLine("\nLoad");
+            return weekList;
+        }
+
+        public List<Week> GetWeekHours(string weekStart, string weekEnd)
+        {
+            List<Week> weekList = new List<Week>();
+            List<Week> deptWeekList = new List<Week>();
+            Week weekTemp;
+            DateTime wsDate = Convert.ToDateTime(weekStart);
+            int weekNum, count = 0;
+
+            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
+            OleDbConnection Connection = new OleDbConnection(ConnString);
+            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
+
+            weekList = InitializeDeptWeeksList(wsDate);
+
+            //Console.WriteLine("\nLoad");
 
             Connection.Open();
 
@@ -878,18 +906,68 @@ namespace Toolroom_Project_Viewer
                 {
                     while (rdr.Read())
                     {
+                        //Console.WriteLine($"{++count} {rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {rdr["Hours"].ToString()}");
 
-                        var week = from wk in weeks
-                                   where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                        var week = from wk in weekList
+                                   where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                   orderby wk.WeekNum ascending
                                    select wk;
 
                         if (week.Any())
                         {
-                            weekTemp = week.ToList().First();
+                            deptWeekList = week.ToList();
+                            weekTemp = deptWeekList.Find(x => x.WeekStart <= Convert.ToDateTime(rdr["StartDate"]) && x.WeekEnd >= Convert.ToDateTime(rdr["StartDate"]));
+                            weekNum = weekTemp.WeekNum;
+                            //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
 
-                            weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            //Console.WriteLine(rdr["Duration"].ToString());
 
-                            Console.WriteLine($"{rdr["TaskName"]} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {rdr["Hours"]}");
+                            Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
+
+                            double hours = Convert.ToInt32(rdr["Hours"]);
+                            double days = (int)GetBusinessDays(Convert.ToDateTime(rdr["StartDate"]), Convert.ToDateTime(rdr["FinishDate"]));
+                            DateTime date = Convert.ToDateTime(rdr["StartDate"]);
+                            decimal dailyAVG = (decimal)(hours / days);
+
+                            if (days >= 1)
+                            {
+                                while (days > 0)
+                                {
+
+                                    if (date.DayOfWeek == DayOfWeek.Saturday)
+                                    {
+                                        date = date.AddDays(1);
+
+                                        weekNum++;
+
+                                        if(weekNum > 20)
+                                        {
+                                            goto MyEnd;
+                                        }
+
+                                        //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
+                                        weekTemp = deptWeekList[weekNum - 1];
+                                        //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                        //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
+                                    }
+                                    else
+                                    {
+                                        weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                        if(weekTemp.Department == "CNC Rough")
+                                        Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
+                                        days -= 1;
+                                    }
+
+                                    
+                                    date = date.AddDays(1);
+                                }
+                            }
+                            else
+                            {
+                                weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
+                                if (weekTemp.Department == "CNC Rough")
+                                    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                            }
                         }
                     }
                 }
@@ -899,17 +977,19 @@ namespace Toolroom_Project_Viewer
                 }
             }
 
+        MyEnd:;
+
             Connection.Close();
             Connection.Dispose();
 
-            Console.WriteLine("\nReview:");
+            //Console.WriteLine("\nReview:");
 
-            foreach (Week week in weeks)
-            {
-                Console.WriteLine($"{week.Department} {week.GetWeekHours()} {week.WeekStart.ToShortDateString()} - {week.WeekEnd.ToShortDateString()}");
-            }
+            //foreach (Week week in weekList)
+            //{
+            //    Console.WriteLine($"{week.Department} {week.GetWeekHours()} {week.WeekStart.ToShortDateString()} - {week.WeekEnd.ToShortDateString()}");
+            //}
 
-            return weeks;
+            return weekList;
         }
 
         public DataTable GetResourceData()

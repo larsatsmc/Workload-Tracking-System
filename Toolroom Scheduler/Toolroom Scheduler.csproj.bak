@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Toolroom_Scheduler</RootNamespace>
     <AssemblyName>Toolroom Scheduler</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PublishUrl>publish\</PublishUrl>
@@ -26,6 +26,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,11 +49,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.DataAccess.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraBars.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v17.2, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Spreadsheet.v17.2.Core, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v17.2, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,15 +84,21 @@
     <Compile Include="BackDateWindow.Designer.cs">
       <DependentUpon>BackDateWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bulk Assign Resources.cs">
+    <Compile Include="BulkAssignResourcesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Bulk Assign Resources.Designer.cs">
-      <DependentUpon>Bulk Assign Resources.cs</DependentUpon>
+    <Compile Include="BulkAssignResourcesWindow.Designer.cs">
+      <DependentUpon>BulkAssignResourcesWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="CalendarColumn.cs" />
-    <Compile Include="Component.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="ExcelInteractions.cs" />
+    <Compile Include="ForwardDateWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ForwardDateWindow.Designer.cs">
+      <DependentUpon>ForwardDateWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,7 +111,6 @@
     <Compile Include="ManageResourcesWindow.Designer.cs">
       <DependentUpon>ManageResourcesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MSProject.cs" />
     <Compile Include="Predecessors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Project Creation Form.cs">
@@ -112,7 +119,6 @@
     <Compile Include="Project Creation Form.Designer.cs">
       <DependentUpon>Project Creation Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameNodeWindow.cs">
       <SubType>Form</SubType>
@@ -121,8 +127,16 @@
       <DependentUpon>RenameNodeWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="ResourceInfo.cs" />
-    <Compile Include="TaskInfo.cs" />
+    <Compile Include="SelectComponentsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectComponentsWindow.Designer.cs">
+      <DependentUpon>SelectComponentsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Templates.cs" />
+    <Compile Include="Workload_Tracking_SystemDataSet.cs">
+      <DependentUpon>Workload_Tracking_SystemDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Workload_Tracking_SystemDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -134,8 +148,11 @@
     <EmbeddedResource Include="BackDateWindow.resx">
       <DependentUpon>BackDateWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Bulk Assign Resources.resx">
-      <DependentUpon>Bulk Assign Resources.cs</DependentUpon>
+    <EmbeddedResource Include="BulkAssignResourcesWindow.resx">
+      <DependentUpon>BulkAssignResourcesWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForwardDateWindow.resx">
+      <DependentUpon>ForwardDateWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -154,9 +171,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="RenameNodeWindow.resx">
       <DependentUpon>RenameNodeWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectComponentsWindow.resx">
+      <DependentUpon>SelectComponentsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -241,6 +262,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+      <Project>{ea263ff2-afef-4570-8909-65446ffcd783}</Project>
+      <Name>ClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

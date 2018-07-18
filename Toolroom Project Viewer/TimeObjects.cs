@@ -88,11 +88,54 @@ namespace Toolroom_Project_Viewer
 
         }
         /// <summary>
+        /// Adds day hours to the corresponding day or days of the weeks.
+        /// </summary>
+        public int AddDayHours(int hours, int days, DateTime date)
+        {
+            int dailyAVG = hours / (days + 1);
+            int dayCount = days;
+
+            // We only need to be concerned with the select week not sebsequent weeks.
+            //DateTime finishDate = AddBusinessDays(date, days);
+            //days = (finishDate - date).Days;
+
+            if (days >= 1)
+            {
+                for (int i = 0; i < days; i++)
+                {
+                    if (date.AddDays(i).DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        return dayCount;
+                    }
+                    else
+                    {
+                        DayList[(int)date.AddDays(i).DayOfWeek].AddHours(dailyAVG);
+                        Console.WriteLine($"{(int)date.AddDays(i).DayOfWeek} {dailyAVG}");
+                        dayCount--;
+                    }
+                }
+            }
+            else
+            {
+                DayList[(int)date.AddDays(days).DayOfWeek].AddHours(dailyAVG);
+                Console.WriteLine($"{(int)date.AddDays(days).DayOfWeek} {dailyAVG}");
+            }
+
+            return dayCount;
+        }
+        /// <summary>
+        /// Adds hours to a specific day of the week.
+        /// </summary>
+        public void AddHoursToDay(int dayOfWeek, decimal hours)
+        {
+            DayList[dayOfWeek].AddHours(hours);
+        }
+        /// <summary>
         /// Adds all the day hours together to get total week hours.
         /// </summary>
-        public int GetWeekHours()
+        public decimal GetWeekHours()
         {
-            int hours = 0;
+            decimal hours = 0;
 
             foreach (Day day in DayList)
             {
@@ -144,14 +187,14 @@ namespace Toolroom_Project_Viewer
     public class Day
     {
         public string DayName { get; private set; }
-        public int Hours { get; private set; }
+        public decimal Hours { get; private set; }
 
         public Day (string dayName)
         {
             this.DayName = dayName;
         }
 
-        public void AddHours(int hours)
+        public void AddHours(decimal hours)
         {
             this.Hours += hours;
         }
