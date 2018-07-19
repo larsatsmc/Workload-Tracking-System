@@ -368,10 +368,11 @@ namespace Toolroom_Scheduler
 
                 //CreateKanBan:;
                 ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
-                //db.GenerateKanBanWorkbook(pi);
+
                 if(KanBanExists(number.jobNumber, number.projectNumber))
                 {
-                    ei.GenerateKanBanWorkbook(pi);
+                    //ei.GenerateKanBanWorkbook(pi);
+                    ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(number.jobNumber, number.projectNumber), GetComponentListFromUser());
                 }
                 else
                 {

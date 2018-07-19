@@ -435,186 +435,227 @@ namespace Toolroom_Scheduler
             Excel.Worksheet ws = null;
             int index = 0;
             VBIDE.VBComponents vBComponents;
-            VBIDE.VBComponent wsMod;
+            //VBIDE.VBComponent wsMod;
             Component component;
 
-            wb = workbooks.Open(kanBanWorkbookPath);
-
-            foreach (string componentName in componentsList)
+            try
             {
-                if (WorkbookHasMatchingComponent(wb, componentName))
+                wb = workbooks.Open(kanBanWorkbookPath);
+
+                vBComponents = wb.VBProject.VBComponents;
+
+                Console.WriteLine(wb.Name);
+
+                foreach (string componentName in componentsList)
                 {
-                    ws = MatchingComponentSheet(wb, componentName);
-                    index = ws.Index;
-                    ws.Delete();
-                }
-                else
-                {
-                    foreach (Excel.Worksheet sheet in wb.Sheets)
+                    if (WorkbookHasMatchingComponent(wb, componentName))
                     {
-                        if(sheet.Name.CompareTo(componentName) < 0)
+                        ws = MatchingComponentSheet(wb, componentName);
+                        index = ws.Index - 1;
+                        ws.Delete();
+                    }
+                    else
+                    {
+                        foreach (Excel.Worksheet sheet in wb.Sheets)
                         {
-                            index = sheet.Index;
+                            if (sheet.Name.CompareTo(componentName) < 0)
+                            {
+                                index = sheet.Index;
+                            }
+                        }
+                    }
+
+                    wb.Sheets.Add(After: wb.Sheets[index]);
+
+                    component = pi.ComponentList.Find(x => x.Name == componentName);
+
+                    ws = CreateKanBanComponentSheet(pi, component, wb.Sheets[index + 1]);
+
+                    vBComponents = wb.VBProject.VBComponents;
+
+                    foreach (VBIDE.VBComponent wsMod in vBComponents)
+                    {
+                        if (wsMod.Name == ws.CodeName)
+                        {
+                            Console.WriteLine($"{wsMod.Name} is {ws.Name}");
+                            wsMod.CodeModule.AddFromString(KanBanSheetCode());
                         }
                     }
                 }
 
-                wb.Sheets.Add(After: wb.Sheets[index]);
+                excelApp.Visible = true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
 
-                component = pi.ComponentList.Find(x => x.Name == componentName);
+                if (ws != null)
+                Marshal.ReleaseComObject(ws);
+                ws = null;
 
-                CreateKanBanComponentSheet(pi, component, excelApp, wb, wb.Sheets[index + 1]);
+                wb.Close(false);
+                Marshal.ReleaseComObject(wb);
+                wb = null;
 
-                vBComponents = wb.VBProject.VBComponents;
+                workbooks.Close();
+                Marshal.ReleaseComObject(workbooks);
+                workbooks = null;
 
-                wsMod = vBComponents.Item(1);
-
-                string macroCode = "Sub main()\r\n" +
-                                   "   MsgBox \"Hello world\"\r\n" +
-                                   "end Sub";
-
-                wsMod.CodeModule.AddFromString(macroCode);
+                excelApp.Quit();
+                Marshal.ReleaseComObject(excelApp);
+                excelApp = null;
             }
         }
 
-        private void CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
+        private Excel.Worksheet CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Worksheet ws)
         {
+            Excel.Application excelApp = new Excel.Application();
             Excel.Borders border;
             int r, n;
             string dateTime;
 
             n = 2;
-
-            ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
-            ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
-            dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-            ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
-            ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
-            ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-            ws.PageSetup.Zoom = 67;
-            ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
-            ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
-            ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
-            ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
-            ws.Select();
             
-            Console.WriteLine(component.Name);
-
-            if (component.Name.Length <= 31)
+            try
             {
-                ws.Name = component.Name;
-            }
-            else if (component.Name.Length > 31)
-            {
-            }
-            else
-            {
-                ws.Name = "Mold";
-            }
+                ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
+                ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
+                dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+                ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
+                ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
+                ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
+                ws.PageSetup.Zoom = 67;
+                ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
+                ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
+                ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
+                ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
+                ws.Select();
 
-            r = 1;
+                Console.WriteLine(component.Name);
 
-            ws.Cells[r, 1].value = "Job Number";
-            ws.Cells[r, 2].value = "   Component";
-            ws.Cells[r, 3].value = "Task ID";
-            ws.Cells[r, 4].value = "   Task Name";
-            ws.Cells[r, 5].value = "Duration";
-            ws.Cells[r, 6].value = "Start Date";
-            ws.Cells[r, 7].value = "Finish Date";
-            ws.Cells[r, 8].value = "   Predecessors";
-            ws.Cells[r, 9].value = "Status";
-            ws.Cells[r, 10].value = "Initials";
-            ws.Cells[r, 11].value = "Date";
+                if (component.Name.Length <= 31)
+                {
+                    ws.Name = component.Name;
+                }
+                else if (component.Name.Length > 31)
+                {
+                }
+                else
+                {
+                    ws.Name = "Mold";
+                }
 
-            r++;
+                r = 1;
 
-            ws.Range["H1"].EntireColumn.NumberFormat = "@";
-
-            foreach (TaskInfo task in component.TaskList)
-            {
-                border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
-
-                ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
-                ws.Cells[r, 1].value = pi.JobNumber;
-                ws.Cells[r, 2].value = "   " + component.Name;
-                ws.Cells[r, 3].value = task.ID;
-                ws.Cells[r, 4].value = "   " + task.TaskName;
-                ws.Cells[r, 5].value = "   " + task.Duration;
-                ws.Cells[r, 6].value = task.StartDate;
-                ws.Cells[r, 7].value = task.FinishDate;
-                ws.Cells[r, 8].value = "  " + task.Predecessors;
-                ws.Cells[r, 9].value = task.Status;
-                ws.Cells[r, 10].value = task.Initials;
-                ws.Cells[r, 11].value = task.DateCompleted;
-
-                if (r % 2 == 0)
-                    ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
+                ws.Cells[r, 1].value = "Job Number";
+                ws.Cells[r, 2].value = "   Component";
+                ws.Cells[r, 3].value = "Task ID";
+                ws.Cells[r, 4].value = "   Task Name";
+                ws.Cells[r, 5].value = "Duration";
+                ws.Cells[r, 6].value = "Start Date";
+                ws.Cells[r, 7].value = "Finish Date";
+                ws.Cells[r, 8].value = "   Predecessors";
+                ws.Cells[r, 9].value = "Status";
+                ws.Cells[r, 10].value = "Initials";
+                ws.Cells[r, 11].value = "Date";
 
                 r++;
-            }
 
-            border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
+                ws.Range["H1"].EntireColumn.NumberFormat = "@";
 
-            border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-            border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-            border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-            border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-
-            for (int c = 2; c <= 11; c++)
-            {
-                border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
-                border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-            }
-
-            ws.Columns["B:B"].Autofit();
-            ws.Columns["D:D"].Autofit();
-
-            ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
-            ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
-            ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
-            ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
-            ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
-            ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
-            ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
-            ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
-            ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
-
-            ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
-
-            if (component.Notes.Contains('\n'))
-            {
-                foreach (string line in component.Notes.Split('\n'))
+                foreach (TaskInfo task in component.TaskList)
                 {
-                    ws.Cells[r++ + 1, 2].value = line;
+                    border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
+
+                    ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
+                    ws.Cells[r, 1].value = pi.JobNumber;
+                    ws.Cells[r, 2].value = "   " + component.Name;
+                    ws.Cells[r, 3].value = task.ID;
+                    ws.Cells[r, 4].value = "   " + task.TaskName;
+                    ws.Cells[r, 5].value = "   " + task.Duration;
+                    ws.Cells[r, 6].value = task.StartDate;
+                    ws.Cells[r, 7].value = task.FinishDate;
+                    ws.Cells[r, 8].value = "  " + task.Predecessors;
+                    ws.Cells[r, 9].value = task.Status;
+                    ws.Cells[r, 10].value = task.Initials;
+                    if (task.DateCompleted != null)
+                        ws.Cells[r, 11].value = task.DateCompleted;
+
+                    if (r % 2 == 0)
+                        ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
+
+                    r++;
                 }
+
+                border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
+
+                border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+
+                for (int c = 2; c <= 11; c++)
+                {
+                    border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
+                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                }
+
+                ws.Columns["B:B"].Autofit();
+                ws.Columns["D:D"].Autofit();
+
+                ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
+                ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
+                ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
+                ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
+                ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
+                ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
+                ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
+                ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
+
+                ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
+
+                if (component.Notes.Contains('\n'))
+                {
+                    foreach (string line in component.Notes.Split('\n'))
+                    {
+                        ws.Cells[r++ + 1, 2].value = line;
+                    }
+                }
+                else
+                {
+                    ws.Cells[r++ + 1, 2].value = component.Notes;
+                }
+
+
+                if (component.Picture != null)
+                {
+                    Clipboard.SetImage(component.Picture);
+                    ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
+                }
+
+                return ws;
             }
-            else
+            catch (Exception)
             {
-                ws.Cells[r++ + 1, 2].value = component.Notes;
+                Marshal.ReleaseComObject(ws);
+                ws = null;
+
+                excelApp.Quit();
+                Marshal.ReleaseComObject(excelApp);
+                excelApp = null;
+
+                return null;
             }
 
 
-            if (component.Picture != null)
-            {
-                Clipboard.SetImage(component.Picture);
-                ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
-            }
-
-
-            if (SheetNExists("Sheet1", wb))
-            {
-                wb.Sheets["Sheet1"].delete();
-            }
-
-            if (SheetNExists("Mold", wb))
-                wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
         }
 
         private Boolean SheetNExists(string sheetname, Excel.Workbook wb)
@@ -652,11 +693,7 @@ namespace Toolroom_Scheduler
                     vBComponents = workbook.VBProject.VBComponents;
                     wsMod = vBComponents.Item(1);
 
-                    string macroCode = "Sub main()\r\n" +
-                                       "   MsgBox \"Hello world\"\r\n" +
-                                       "end Sub";
-
-                    wsMod.CodeModule.AddFromString(macroCode);
+                    wsMod.CodeModule.AddFromString(KanBanSheetCode());
                 }
                 else
                 {
@@ -667,26 +704,72 @@ namespace Toolroom_Scheduler
 
         private string KanBanSheetCode()
         {
+            // \r moves cursor to beginning of line.
+            // \n moves cursor down one line.
             return "Function IsMarkedComplete(row As Integer) As String\r\n" +
-                   "" +
-                   "  If IsEmpty(Cells(row, 9)) = False And IsEmpty(Cells(row, 10)) = False And IsEmpty(Cells(row, 11)) = False Then" +
-                   "" +
+                   "\r\n" +
+                   "  If IsEmpty(Cells(row, 9)) = False And IsEmpty(Cells(row, 10)) = False And IsEmpty(Cells(row, 11)) = False Then\r\n" +
+                   "\r\n" +
                    "    IsMarkedComplete = \"True\"\r\n" +
-                   "" +
-                   "  ElseIf IsEmpty(Cells(row, 9)) = True And IsEmpty(Cells(row, 10)) = True And IsEmpty(Cells(row, 11)) = True Then" +
-                   "" +
-                   "  Else" +
-                   "" +
-                   "    IsMarkedComplete = \"" +
-                   "" +
-                   "End Sub";
+                   "\r\n" +
+                   "  ElseIf IsEmpty(Cells(row, 9)) = True And IsEmpty(Cells(row, 10)) = True And IsEmpty(Cells(row, 11)) = True Then\r\n" +
+                   "\r\n" +
+                   "    IsMarkedComplete = \"False\"\r\n" +
+                   "\r\n" +
+                   "  Else\r\n" +
+                   "\r\n" +
+                   "    IsMarkedComplete = \"\r\n" +
+                   "\r\n" +
+                   "  End If\r\n" +
+                   "\r\n" +
+                   "End Function\r\n" +
+                   "\r\n" +
+                   "Private Sub Worksheet_Change(ByVal Target As Range)\r\n" +
+                   "\r\n" +
+                   "  If Target.column >= 9 And Target.column <= 11 Then\r\n" +
+                   "\r\n" +
+                   "    Dim leftHeaderArr As Variant\r\n" +
+                   "    Dim Completed As String\r\n" +
+                   "\r\n" +
+                   "    Completed = IsMarkedComplete(Target.row)\r\n" +
+                   "\r\n" +
+                   "    leftHeaderArr = Split(Me.PageSetup.LeftHeader, \" \")\r\n" +
+                   "\r\n" +
+                   "    If Completed = \"True\" Then\r\n" +
+                   "\r\n" +
+                   "      ThisWorkbook.Save\r\n" +
+                   "\r\n" +
+                   "      Database.SetTaskAsCompleted _\r\n" +
+                   "      jobNumber:=Cells(Target.row, 1).Value, _\r\n" +
+                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "      component:=Cells(Target.row, 2).Value, _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 3).Value), _\r\n" +
+                   "      initials:=Cells(Target.row, 10).Value, _\r\n" +
+                   "      dateCompleted:=Cells(Target.row, 11).Value\r\n" +
+                   "\r\n" +
+                   "    ElseIf Completed = \"False\" Then\r\n" +
+                   "\r\n" +
+                   "      ThisWorkbook.Save\r\n" +
+                   "\r\n" +
+                   "      Database.SetTaskAsIncomplete _\r\n" +
+                   "      jobNumber:=Cells(Target.row, 1).Value, _\r\n" +
+                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "      component:=Cells(Target.row, 2).Value, _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 3).Value)\r\n" +
+                   "\r\n" +
+                   "    End If\r\n" +
+                   "\r\n" +
+                   "  End If\r\n" +
+                   "\r\n" +
+                   "End Sub\r\n"
+                   ;
         }
 
         public bool WorkbookHasMatchingComponent(Excel.Workbook workbook, string component)
         {
             foreach (Excel.Worksheet sheet in workbook.Worksheets)
             {
-                if(sheet.Cells[1, 2].value.ToString().Trim() == component)
+                if(sheet.Cells[2, 2].value.ToString().Trim() == component)
                 {
                     return true;
                 }
@@ -699,7 +782,7 @@ namespace Toolroom_Scheduler
         {
             foreach (Excel.Worksheet sheet in workbook.Worksheets)
             {
-                if (sheet.Cells[1, 2].value.ToString().Trim() == component)
+                if (sheet.Cells[2, 2].value.ToString().Trim() == component)
                 {
                     return sheet;
                 }

@@ -1109,7 +1109,6 @@ namespace Toolroom_Project_Viewer
 
         private void chartControl1_CustomDrawCrosshair(object sender, CustomDrawCrosshairEventArgs e)
         {
-
             foreach (CrosshairElementGroup group in e.CrosshairElementGroups)
             {
                 foreach (CrosshairElement element in group.CrosshairElements)
