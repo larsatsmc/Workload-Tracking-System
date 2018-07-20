@@ -66,6 +66,10 @@ namespace Toolroom_Project_Viewer
                 foreach (DataRow nrow in dt.Rows)
                 {
                     nrow["ID"] = i++;
+                    if(nrow["Resource"].ToString() == "")
+                    {
+                        nrow["Resource"] = "None";
+                    }
                     Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
                 }
             }
@@ -512,54 +516,55 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = null;
             string selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component & '-' & TaskID As Subject, TaskName & ' (' & Hours & ' Hours)' As Location, StartDate, FinishDate, Machine, Resource, ToolMaker, Notes";
+            string orderByStatement = " ORDER BY StartDate ASC";
 
             if (department == "Design")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Design%'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Design%'" + orderByStatement;
             }
             else if (department == "Program Rough")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Rough'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Rough'" + orderByStatement;
             }
             else if (department == "Program Finish")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Finish'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Finish'" + orderByStatement;
             }
             else if (department == "Program Electrodes")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Electrodes'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Electrodes'" + orderByStatement;
             }
             else if (department == "CNC Rough")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Rough'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Rough'" + orderByStatement;
             }
             else if (department == "CNC Finish")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Finish'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Finish'" + orderByStatement;
             }
             else if (department == "CNC Electrodes")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Electrodes'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Electrodes'" + orderByStatement;
             }
             else if (department == "EDM Sinker")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'EDM Sinker'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'EDM Sinker'" + orderByStatement;
             }
             else if (department == "Inspection")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE 'Inspection%'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE 'Inspection%'" + orderByStatement;
             }
             else if (department == "Grind")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Grind%'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Grind%'" + orderByStatement;
             }
             else if (department == "Polish")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Polish%'";
+                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Polish%'" + orderByStatement;
             }
             else if (department == "All")
             {
-                queryString = "SELECT " + selectStatment + " FROM Tasks";
+                queryString = "SELECT " + selectStatment + " FROM Tasks" + orderByStatement;
             }
 
             return queryString;

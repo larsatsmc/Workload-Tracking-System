@@ -333,55 +333,6 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void CreateKanBanWorkbook()
-        {
-            if (JobNumberComboBox.Text == "All")
-            {
-                MessageBox.Show("Just select a single project.");
-                return;
-            }
-            else
-            {
-                Database db = new Database();
-                ExcelInteractions ei = new ExcelInteractions();
-                var number = GetComboBoxInfo();
-                
-                //if(kanBanExists(number.jobNumber, number.projectNumber))
-                //{
-                //    DialogResult result = MessageBox.Show("A Kan Ban for this project already exists. Do you want to create a new one? " +
-                //        "(Click Yes to create new one.  Click No to add to the existing one.)", "Warning",
-                //    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-
-                //    if (result == DialogResult.Yes)
-                //    {
-                //        goto CreateKanBan;
-                //    }
-                //    else if (result == DialogResult.No)
-                //    {
-                //        //code for No
-                //    }
-                //    else if (result == DialogResult.Cancel)
-                //    {
-                //        return;
-                //    }
-                //}
-
-                //CreateKanBan:;
-                ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
-
-                if(KanBanExists(number.jobNumber, number.projectNumber))
-                {
-                    //ei.GenerateKanBanWorkbook(pi);
-                    ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(number.jobNumber, number.projectNumber), GetComponentListFromUser());
-                }
-                else
-                {
-                    ei.GenerateKanBanWorkbook(pi);
-                }
-                
-            }
-        }
-
         private bool KanBanExists(string jobNumber, int projectNumber)
         {
             Database db = new Database();
@@ -1687,7 +1638,59 @@ namespace Toolroom_Scheduler
 
         private void CreateKanBanButton_Click(object sender, EventArgs e)
         {
-            CreateKanBanWorkbook();
+            if (JobNumberComboBox.Text == "All")
+            {
+                MessageBox.Show("Just select a single project.");
+                return;
+            }
+            else
+            {
+                Database db = new Database();
+                ExcelInteractions ei = new ExcelInteractions();
+                var number = GetComboBoxInfo();
+                List<string> componentList = new List<string>();
+
+                //if(kanBanExists(number.jobNumber, number.projectNumber))
+                //{
+                //    DialogResult result = MessageBox.Show("A Kan Ban for this project already exists. Do you want to create a new one? " +
+                //        "(Click Yes to create new one.  Click No to add to the existing one.)", "Warning",
+                //    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                //    if (result == DialogResult.Yes)
+                //    {
+                //        goto CreateKanBan;
+                //    }
+                //    else if (result == DialogResult.No)
+                //    {
+                //        //code for No
+                //    }
+                //    else if (result == DialogResult.Cancel)
+                //    {
+                //        return;
+                //    }
+                //}
+
+                //CreateKanBan:;
+                ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
+
+                if (KanBanExists(number.jobNumber, number.projectNumber))
+                {
+                    //ei.GenerateKanBanWorkbook(pi);
+                    componentList = GetComponentListFromUser();
+
+                    if (componentList == null)
+                    {
+                        return;
+                    }
+
+                    ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(number.jobNumber, number.projectNumber), componentList);
+                }
+                else
+                {
+                    ei.GenerateKanBanWorkbook(pi);
+                }
+
+            }
         }
 
 		private void ManageResourcesButton_Click(object sender, EventArgs e)
@@ -1738,6 +1741,11 @@ namespace Toolroom_Scheduler
             else if (dialogResult == DialogResult.No)
             {
                 componentList = GetComponentListFromUser();
+
+                if(componentList == null)
+                {
+                    return;
+                }
             }
             else if (dialogResult == DialogResult.Cancel)
             {
@@ -1770,6 +1778,11 @@ namespace Toolroom_Scheduler
             else if (dialogResult == DialogResult.No)
             {
                 componentList = GetComponentListFromUser();
+
+                if (componentList == null)
+                {
+                    return;
+                }
             }
             else if (dialogResult == DialogResult.Cancel)
             {
