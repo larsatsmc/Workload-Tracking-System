@@ -29,9 +29,13 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public SelectComponentsWindow(List<string> componentList)
+        public SelectComponentsWindow(List<string> componentList, string textString)
         {
             InitializeComponent();
+
+            Text = textString + " Components";
+
+            DescriptionLabel.Text = "Select Components to " + textString;
 
             foreach (string component in componentList)
             {

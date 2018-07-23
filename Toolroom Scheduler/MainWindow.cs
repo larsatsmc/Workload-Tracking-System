@@ -1183,7 +1183,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private List<string> GetComponentListFromUser()
+        private List<string> GetComponentListFromUser(string textString = "")
         {
             Database db = new Database();
             var number = GetComboBoxInfo();
@@ -1191,7 +1191,7 @@ namespace Toolroom_Scheduler
 
             try
             {
-                using (var form = new SelectComponentsWindow(componentList))
+                using (var form = new SelectComponentsWindow(componentList, textString))
                 {
                     var result = form.ShowDialog();
 
@@ -1676,7 +1676,7 @@ namespace Toolroom_Scheduler
                 if (KanBanExists(number.jobNumber, number.projectNumber))
                 {
                     //ei.GenerateKanBanWorkbook(pi);
-                    componentList = GetComponentListFromUser();
+                    componentList = GetComponentListFromUser("Kan Ban");
 
                     if (componentList == null)
                     {
@@ -1740,7 +1740,7 @@ namespace Toolroom_Scheduler
             }
             else if (dialogResult == DialogResult.No)
             {
-                componentList = GetComponentListFromUser();
+                componentList = GetComponentListFromUser("Forward Date");
 
                 if(componentList == null)
                 {
@@ -1777,7 +1777,7 @@ namespace Toolroom_Scheduler
             }
             else if (dialogResult == DialogResult.No)
             {
-                componentList = GetComponentListFromUser();
+                componentList = GetComponentListFromUser("Back Date");
 
                 if (componentList == null)
                 {
