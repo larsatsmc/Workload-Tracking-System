@@ -435,7 +435,6 @@ namespace Toolroom_Scheduler
             Excel.Worksheet ws = null;
             int index = 0;
             VBIDE.VBComponents vBComponents;
-            //VBIDE.VBComponent wsMod;
             Component component;
 
             try
@@ -444,15 +443,19 @@ namespace Toolroom_Scheduler
 
                 vBComponents = wb.VBProject.VBComponents;
 
-                Console.WriteLine(wb.Name);
-
                 foreach (string componentName in componentsList)
                 {
                     if (WorkbookHasMatchingComponent(wb, componentName))
                     {
                         ws = MatchingComponentSheet(wb, componentName);
+
                         index = ws.Index - 1;
+
+                        excelApp.DisplayAlerts = false;
+
                         ws.Delete();
+
+                        excelApp.DisplayAlerts = true;
                     }
                     else
                     {
@@ -465,11 +468,11 @@ namespace Toolroom_Scheduler
                         }
                     }
 
-                    wb.Sheets.Add(After: wb.Sheets[index]);
+                    ws = wb.Sheets.Add(After: wb.Sheets[index]);
 
                     component = pi.ComponentList.Find(x => x.Name == componentName);
 
-                    ws = CreateKanBanComponentSheet(pi, component, wb.Sheets[index + 1]);
+                    CreateKanBanComponentSheet(pi, component, wb, ws.Index);
 
                     vBComponents = wb.VBProject.VBComponents;
 
@@ -507,12 +510,15 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private Excel.Worksheet CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Worksheet ws)
+        private Excel.Worksheet CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Workbook wb, int sheetIndex)
         {
             Excel.Application excelApp = new Excel.Application();
+            Excel.Worksheet ws = wb.Sheets[sheetIndex];
             Excel.Borders border;
             int r, n;
             string dateTime;
+
+            Console.WriteLine($"{ws.Name} {wb.Name}");
 
             n = 2;
             
@@ -643,8 +649,10 @@ namespace Toolroom_Scheduler
 
                 return ws;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
+
                 Marshal.ReleaseComObject(ws);
                 ws = null;
 

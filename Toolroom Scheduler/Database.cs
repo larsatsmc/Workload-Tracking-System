@@ -144,7 +144,7 @@ namespace Toolroom_Scheduler
         {
             try
             {
-                ProjectInfo databaseProject = GetProject(project.JobNumber, project.ProjectNumber);
+                ProjectInfo databaseProject = GetProject(project.ProjectNumber);
                 List<Component> newComponentList = new List<Component>();
                 //List<Component> updatedComponentList = new List<Component>();
                 List<TaskInfo> newTaskList = new List<TaskInfo>();
@@ -473,6 +473,17 @@ namespace Toolroom_Scheduler
             return project;
         }
 
+        public ProjectInfo GetProject(int projectNumber)
+        {
+            ProjectInfo project = GetProjectInfo(projectNumber);
+
+            AddComponents(project);
+
+            AddTasks(project);
+
+            return project;
+        }
+
         public ProjectInfo GetProjectInfo(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
@@ -483,6 +494,53 @@ namespace Toolroom_Scheduler
 
             cmd = new OleDbCommand(queryString, Connection);
             cmd.Parameters.AddWithValue("@jobNumber", jobNumber);
+            cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
+
+            try
+            {
+                Connection.Open();
+
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.HasRows)
+                    {
+                        while (rdr.Read())
+                        {
+                            pi = new ProjectInfo
+                            (
+                                    jn: Convert.ToString(rdr["JobNumber"]),
+                                    pn: Convert.ToInt32(rdr["ProjectNumber"]),
+                                    dd: Convert.ToDateTime(rdr["DueDate"]),
+                                    tm: Convert.ToString(rdr["ToolMaker"]),
+                                     d: Convert.ToString(rdr["Designer"]),
+                                    rp: Convert.ToString(rdr["RoughProgrammer"]),
+                                    ep: Convert.ToString(rdr["ElectrodeProgrammer"]),
+                                    fp: Convert.ToString(rdr["FinishProgrammer"])
+                            );
+                        }
+                    }
+                }
+
+                Connection.Close();
+            }
+            catch (Exception e)
+            {
+                Connection.Close();
+                MessageBox.Show(e.Message, "GetProjectInfo");
+            }
+
+            return pi;
+        }
+
+        public ProjectInfo GetProjectInfo(int projectNumber)
+        {
+            OleDbCommand cmd;
+            ProjectInfo pi = null;
+            string queryString;
+
+            queryString = "SELECT * FROM Projects WHERE ProjectNumber = @projectNumber";
+
+            cmd = new OleDbCommand(queryString, Connection);
             cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
 
             try
