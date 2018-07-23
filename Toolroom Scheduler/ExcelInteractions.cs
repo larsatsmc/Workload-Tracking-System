@@ -215,11 +215,19 @@ namespace Toolroom_Scheduler
 
                 CreateKanBanComponentSheets(pi, excelApp, wb);
 
+                string initialDirectory = "";
+
+                if(pi.KanBanWorkbookPath != "")
+                {
+                    initialDirectory = pi.KanBanWorkbookPath.Substring(0, pi.KanBanWorkbookPath.LastIndexOf('\\'));
+                }
+
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
                 saveFileDialog.FilterIndex = 0;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.CreatePrompt = false;
+                saveFileDialog.InitialDirectory = initialDirectory;
                 saveFileDialog.FileName = pi.JobNumber + "- Proj #" + pi.ProjectNumber + " Checkoff Sheet";
                 saveFileDialog.Title = "Save Path of Kan Ban";
 

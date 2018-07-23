@@ -49,7 +49,7 @@ namespace Toolroom_Scheduler
             this.Engineer = e;
         }
 
-        public ProjectInfo(string jn, int pn, DateTime dd, string tm, string d, string rp, string fp, string ep) // Project Creation Constructor. Leaving out status for now.  May add later.
+        public ProjectInfo(string jn, int pn, DateTime dd, string tm, string d, string rp, string fp, string ep, string kwp) // Project Creation Constructor. Leaving out status for now.  May add later.
         {
             this.HasProjectInfo = true;
             this.JobNumber = jn;
@@ -62,6 +62,7 @@ namespace Toolroom_Scheduler
             this.ElectrodeProgrammer = ep;
             this.FinishProgrammer = fp;
             this.ComponentList = new List<Component>();
+            this.KanBanWorkbookPath = kwp;
         }
 
         public ProjectInfo(DateTime dueDate, string toolMaker, string designer, string roughProgrammer, string finishProgrammer, string electrodeProgrammer, string kanBanWorkbookPath) // Project Data Retrieval Constructor.

@@ -515,7 +515,8 @@ namespace Toolroom_Scheduler
                                      d: Convert.ToString(rdr["Designer"]),
                                     rp: Convert.ToString(rdr["RoughProgrammer"]),
                                     ep: Convert.ToString(rdr["ElectrodeProgrammer"]),
-                                    fp: Convert.ToString(rdr["FinishProgrammer"])
+                                    fp: Convert.ToString(rdr["FinishProgrammer"]),
+                                   kwp: Convert.ToString(rdr["KanBanWorkbookPath"])
                             );
                         }
                     }
@@ -562,7 +563,8 @@ namespace Toolroom_Scheduler
                                      d: Convert.ToString(rdr["Designer"]),
                                     rp: Convert.ToString(rdr["RoughProgrammer"]),
                                     ep: Convert.ToString(rdr["ElectrodeProgrammer"]),
-                                    fp: Convert.ToString(rdr["FinishProgrammer"])
+                                    fp: Convert.ToString(rdr["FinishProgrammer"]),
+                                   kwp: Convert.ToString(rdr["KanBanWorkbookPath"])
                             );
                         }
                     }

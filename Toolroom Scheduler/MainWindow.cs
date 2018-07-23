@@ -1650,40 +1650,34 @@ namespace Toolroom_Scheduler
                 var number = GetComboBoxInfo();
                 List<string> componentList = new List<string>();
 
-                //if(kanBanExists(number.jobNumber, number.projectNumber))
-                //{
-                //    DialogResult result = MessageBox.Show("A Kan Ban for this project already exists. Do you want to create a new one? " +
-                //        "(Click Yes to create new one.  Click No to add to the existing one.)", "Warning",
-                //    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-
-                //    if (result == DialogResult.Yes)
-                //    {
-                //        goto CreateKanBan;
-                //    }
-                //    else if (result == DialogResult.No)
-                //    {
-                //        //code for No
-                //    }
-                //    else if (result == DialogResult.Cancel)
-                //    {
-                //        return;
-                //    }
-                //}
-
-                //CreateKanBan:;
                 ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
 
                 if (KanBanExists(number.jobNumber, number.projectNumber))
                 {
-                    //ei.GenerateKanBanWorkbook(pi);
-                    componentList = GetComponentListFromUser("Kan Ban");
+                    DialogResult result = MessageBox.Show("A Kan Ban for this project already exists.\n\nDo you want to create a new one?\n\n" +
+                        "(Click 'Yes' to create new one.  Click 'No' to add to or edit the existing one.)", "Warning",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
-                    if (componentList == null)
+                    if (result == DialogResult.Yes)
+                    {
+                        ei.GenerateKanBanWorkbook(pi);
+                    }
+                    else if (result == DialogResult.No)
+                    {
+                        componentList = GetComponentListFromUser("Kan Ban");
+
+                        if (componentList == null)
+                        {
+                            return;
+                        }
+
+                        ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(number.jobNumber, number.projectNumber), componentList);
+                    }
+                    else if (result == DialogResult.Cancel)
                     {
                         return;
                     }
 
-                    ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(number.jobNumber, number.projectNumber), componentList);
                 }
                 else
                 {
