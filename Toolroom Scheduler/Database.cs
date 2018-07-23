@@ -608,7 +608,7 @@ namespace Toolroom_Scheduler
 
             string queryString;
 
-            queryString = "SELECT * FROM Components WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
+            queryString = "SELECT * FROM Components WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber ORDER BY Component";
 
             cmd = new OleDbCommand(queryString, Connection);
             cmd.Parameters.AddWithValue("@jobNumber", project.JobNumber);
@@ -799,6 +799,7 @@ namespace Toolroom_Scheduler
                                     duration: rdr["Duration"],
                                    startDate: rdr["StartDate"],
                                   finishDate: rdr["FinishDate"],
+                                      status: rdr["Status"],
                                dateCompleted: rdr["DateCompleted"],
                                     initials: rdr["Initials"],
                                      machine: rdr["Machine"],

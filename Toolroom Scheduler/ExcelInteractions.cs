@@ -106,7 +106,6 @@ namespace Toolroom_Scheduler
                 excelApp.ScreenUpdating = false;
                 excelApp.EnableEvents = false;
                 excelApp.DisplayAlerts = false;
-                excelApp.Visible = true;
 
                 wb = workbooks.Open(@"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm", ReadOnly: true);
 
