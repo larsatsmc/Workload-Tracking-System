@@ -1437,6 +1437,22 @@ namespace Toolroom_Scheduler
             return (DateTime)latestFinishDate;
         }
 
+        private bool BlankStartFinishDateExists(ProjectInfo pi)
+        {
+            foreach (Component component in pi.ComponentList)
+            {
+                foreach (TaskInfo task in component.TaskList)
+                {
+                    if (task.StartDate == null || task.FinishDate == null)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         private void oDateTimePicker_CloseUp(object sender, EventArgs e)
         {
             Database db = new Database();
@@ -1540,6 +1556,8 @@ namespace Toolroom_Scheduler
             if(columnName == "ProjectNumber")
             {
                 Database db = new Database();
+
+                // This line failed when I changed a project and had the Kan Ban for 180079 open.
                 db.OpenKanBanWorkbook(db.GetKanBanWorkbookPath(DataGridView1.Rows[e.RowIndex].Cells["JobNumber"].Value.ToString(), Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells["ProjectNumber"].Value)));
                 //MessageBox.Show(db.getKanBanWorkbookPath(DataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), Convert.ToInt32(DataGridView1.Rows[e.RowIndex].Cells[16].Value)));
             }
@@ -1651,6 +1669,12 @@ namespace Toolroom_Scheduler
                 List<string> componentList = new List<string>();
 
                 ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
+
+                if (BlankStartFinishDateExists(pi))
+                {
+                    MessageBox.Show("A blank start or finish date exists. Please fill in all dates.");
+                    return;
+                }
 
                 if (KanBanExists(number.jobNumber, number.projectNumber))
                 {

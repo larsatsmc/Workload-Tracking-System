@@ -58,7 +58,6 @@ namespace Toolroom_Scheduler
             excelApp = null;
 
             return quote;
-
         }
 
         private string GetPrinterPort()
@@ -149,7 +148,16 @@ namespace Toolroom_Scheduler
                         ws.Cells[r, 3].value = task.ID;
                         ws.Cells[r, 4].value = $"   {task.TaskName}";
                         ws.Cells[r, 5].value = $"   {task.Duration}";
-                        ws.Cells[r, 6].value = task.StartDate;
+
+                        if(task.StartDate == null)
+                        {
+
+                        }
+                        else
+                        {
+                            ws.Cells[r, 6].value = task.StartDate;
+                        }
+                        
                         ws.Cells[r, 7].value = task.FinishDate;
                         ws.Cells[r, 8].value = $"  {task.Predecessors}";
                         ws.Cells[r, 9].value = task.Status;
@@ -263,6 +271,10 @@ namespace Toolroom_Scheduler
 
 
                 Marshal.ReleaseComObject(ws);
+
+            }
+            finally
+            {
 
             }
 
