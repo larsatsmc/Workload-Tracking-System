@@ -12,7 +12,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using DevExpress.Spreadsheet;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using Toolroom_Scheduler;
+using ClassLibrary;
 
 namespace Toolroom_Project_Viewer
 {
@@ -360,18 +360,18 @@ namespace Toolroom_Project_Viewer
             return calcBusinessDays;
         }
 
-        public void MoveDescendents(string jn, int pn, string component, DateTime currentTaskFinishDate, int currentTaskID)
+        public void MoveDescendents(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable datatable = new DataTable();
             string queryString;
 
-            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jn AND ProjectNumber = @pn AND Component = @component ORDER BY TaskID ASC";
+            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component ORDER BY TaskID ASC";
             OleDbConnection Connection = new OleDbConnection(ConnString);
             adapter.SelectCommand = new OleDbCommand(queryString, Connection);
-            adapter.SelectCommand.Parameters.Add("@jn", OleDbType.VarChar, 20).Value = jn;
-            adapter.SelectCommand.Parameters.Add("@pn", OleDbType.Integer, 12).Value = pn;
-            adapter.SelectCommand.Parameters.Add("@jn", OleDbType.VarChar, 30).Value = component;
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 20).Value = jobNumber;
+            adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
+            adapter.SelectCommand.Parameters.Add("@component", OleDbType.VarChar, 30).Value = component;
             OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
 
             Console.WriteLine("Move Descendents");
@@ -463,6 +463,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        // This method is not used and is not properly set up.
         private DateTime GetProjectStartDate(string jobNumber, int projectNumber)
         {
             DateTime projectStartDate = new DateTime(2000, 1, 1);
@@ -570,66 +571,6 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        private string SetMonthlyHoursQueryString(string department)
-        {
-            string queryString = null;
-            string selectStatment = "TOP 3, MONTH(StartDate) as mo, YEAR(StartDate) AS yr, SUM(Hours) AS total";
-            string fromStatement = "Tasks";
-            string whereStatement = "AND MONTH(StartDate) >= MONTH(DATE()) AND YEAR(StartDate) >= YEAR(DATE())";
-            string orderByStatement = "GROUP BY YEAR(StartDate), MONTH(StartDate) ORDER BY YEAR(StartDate), MONTH(StartDate)";
-
-            if (department == "Design")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Design%' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Rough")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Rough' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Finish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Finish' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Electrodes")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Electrodes' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Rough")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Rough' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Finish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Finish' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Electrodes")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Electrodes' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "EDM Sinker")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'EDM Sinker' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Inspection")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE 'Inspection%' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Grind")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Grind%' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Polish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Polish%' " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "All")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE  " + whereStatement + " " + orderByStatement;
-            }
-
-            return queryString;
-        }
-
         private string SetWeeklyHoursQueryString(string weekStart, string weekEnd)
         {
             string department = "All";
@@ -690,53 +631,6 @@ namespace Toolroom_Project_Viewer
             }
 
             return queryString;
-        }
-
-        public DataTable GetAppointmentDataList()
-        {
-            DataTable dt = new DataTable();
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
-            string queryString = "SELECT JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName As Location, StartDate, FinishDate, Machine, Resource, Resources, ToolMaker, Notes FROM Tasks";
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.Fill(dt);
-
-            //TODO: #1 Create a list of objects containing appointment data.
-
-            foreach(DataRow nrow in dt.Rows)
-            {
-
-            }
-
-            return dt;
-        }
-
-        public DataTable GetNextThreeMonthsHours(string department, string timeUnits)
-        {
-            DataTable dt = new DataTable();
-            string queryString = "";
-
-            if(timeUnits == "Months")
-            {
-                queryString = SetMonthlyHoursQueryString(department);
-            }
-            else if(timeUnits == "Weeks")
-            {
-                
-            }
-
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.Fill(dt);
-
-            foreach (DataRow nrow in dt.Rows)
-            {
-                Console.WriteLine($"{nrow["yr"].ToString()} {nrow["mo"].ToString()} {nrow["total"].ToString()} ");
-            }
-
-            return dt;
         }
 
         public List<Week> GetDayHours(string weekStart, string weekEnd)
@@ -851,8 +745,6 @@ namespace Toolroom_Project_Viewer
         public void SetDailyDepartmentCapacities(string department)
         {
             DataTable dt = GetRoleCounts();
-
-
         }
 
         public DataTable GetDailyDepartmentCapacities()
@@ -1013,13 +905,6 @@ namespace Toolroom_Project_Viewer
 
             return dt;
         }
-
-        //public bool ProjectHasDates()
-        //{
-        //    string queryString;
-
-        //    queryString = "";
-        //}
 
         public ProjectInfo GetProject(string jobNumber, int projectNumber)
         {
@@ -1322,108 +1207,6 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public DataTable GetProjectData(string jobNumber, int projectNumber)
-        {
-            DataTable dt = new DataTable();
-            DataTable dt2 = new DataTable();
-            int i = 1;
-            string component = null;
-
-            string queryString = "SELECT Component, TaskID, TaskName, JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName As Location, StartDate, FinishDate, Predecessors " +
-                                 "FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber " +
-                                 "ORDER BY TaskID";
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.SelectCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-            adapter.SelectCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-            adapter.Fill(dt);
-
-            dt.Columns.Add("NewTaskID", typeof(int));
-
-            foreach (DataRow nrow in dt.Rows)
-            {
-                if(component != nrow["Component"].ToString())
-                {
-                    component = nrow["Component"].ToString();
-
-                    if(nrow["Component"].ToString() != "")
-                    {
-                        i++;
-                    }
-                        
-                }
-
-                nrow["TaskID"] = i;
-                nrow["NewTaskID"] = i;
-                i++;
-            }
-
-            Console.WriteLine("Get Project Data");
-
-            foreach (DataRow nrow in dt.Rows)
-            {
-                Console.WriteLine($"{nrow["NewTaskID"]} {nrow["TaskName"]}");
-            }
-
-            return dt;
-        }
-
-        public DataTable GetProjectResourceData(string jobNumber, int projectNumber)
-        {
-            DataTable dt1 = new DataTable();
-            DataTable dt2 = new DataTable();
-            int i = 1;
-            int parentID = 0;
-            string component = null;
-
-            string queryString = "SELECT Component, TaskID, TaskName From Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber ORDER BY TaskID";
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.SelectCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-            adapter.SelectCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-            adapter.Fill(dt1);
-
-            dt2.Columns.Add("TaskName", typeof(string));
-            dt2.Columns.Add("NewTaskID", typeof(Int32));
-            dt2.Columns.Add("ParentID", typeof(Int32));
-
-            foreach (DataRow nrow in dt1.Rows)
-            {
-                if (component != nrow["Component"].ToString())
-                {
-                    component = nrow["Component"].ToString();
-
-                    if(nrow["Component"].ToString() != "")
-                    {
-                        DataRow newRow1 = dt2.NewRow();
-                        parentID = i;
-                        newRow1["NewTaskID"] = i;
-                        newRow1["TaskName"] = component;
-
-                        dt2.Rows.Add(newRow1);
-
-                        i++;
-                    }
-                }
-
-                DataRow newRow2 = dt2.NewRow();
-                //Console.WriteLine(nrow["TaskName"].ToString());
-                newRow2["NewTaskID"] = i;
-                newRow2["ParentID"] = parentID;
-                newRow2["TaskName"] = nrow["TaskName"];
-
-                dt2.Rows.Add(newRow2);
-
-                i++;
-            }
-
-            return dt2;
-        }
-
         public DataTable GetProjectResourceData(ProjectInfo project)
         {
             DataTable dt = new DataTable();
@@ -1461,81 +1244,6 @@ namespace Toolroom_Project_Viewer
             }
 
             return dt;
-        }
-
-        public DataTable GetProjectResourceData(DataTable taskTable)
-        {
-            DataTable dt = new DataTable();
-
-            dt.Columns.Add("TaskID");
-            dt.Columns.Add("TaskName");
-
-            Console.WriteLine("Get Project Resource Data");
-
-            foreach (DataRow nrow in taskTable.Rows)
-            {
-                DataRow row = dt.NewRow();
-
-                row["TaskID"] = GetNewTaskID(Convert.ToInt32(nrow["TaskID"]));
-                row["TaskName"] = nrow["TaskName"];
-            }
-
-            return dt;
-        }
-
-        public DataTable GetDependencyData(string jobNumber, int projectNumber)
-        {
-            DataTable dt1 = new DataTable();
-            DataTable dt2 = new DataTable();
-
-            //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
-            string queryString = "SELECT TaskID, Predecessors " +
-                                 "FROM Tasks " +
-                                 "WHERE JobNumber LIKE @jobNumber AND ProjectNumber LIKE @projectNumber";
-
-            OleDbConnection Connection = new OleDbConnection(ConnString);
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.SelectCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-            adapter.SelectCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-            adapter.Fill(dt1);
-
-            dt2.Columns.Add("ParentId", typeof(int));
-            dt2.Columns.Add("DependentId", typeof(int));
-
-            foreach (DataRow nrow in dt1.Rows)
-            {
-                if (nrow["Predecessors"].ToString().Contains(","))
-                {
-                    foreach (string predecessor in nrow["Predecessors"].ToString().Split(','))
-                    {
-                        DataRow row = dt2.NewRow();
-
-                        row["DependentId"] = Convert.ToInt32(nrow["TaskId"]);
-                        row["ParentId"] = Convert.ToInt32(predecessor);
-
-                        dt2.Rows.Add(row);
-                    }
-                }
-                else if (nrow["Predecessors"].ToString() != "")
-                {
-                    DataRow row = dt2.NewRow();
-
-                    row["DependentId"] = nrow["TaskId"];
-                    row["ParentId"] = nrow["Predecessors"];
-
-                    dt2.Rows.Add(row);
-                }
-
-            }
-
-            foreach (DataRow nrow in dt2.Rows)
-            {
-                Console.WriteLine(nrow["ParentId"].ToString() + " " + nrow["DependentId"]);
-            }
-
-            return dt2;
         }
 
         public DataTable GetDependencyData(DataTable taskTable)
@@ -1587,137 +1295,6 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private DataTable CreateTaskIDKey(DataTable taskTable)
-        {
-            DataTable dt = new DataTable();
-            int i = 1;
-
-            dt.Columns.Add("NewTaskID", typeof(int));
-            dt.Columns.Add("OldTaskID", typeof(int));
-
-            //Console.WriteLine("Create Task Key");
-
-            foreach (DataRow nrow in taskTable.Rows)
-            {
-                DataRow row = dt.NewRow();
-
-                row["NewTaskID"] = i;
-                row["OldTaskID"] = nrow["TaskID"];
-
-                //Console.WriteLine($"{row["NewTaskID"]} {row["OldTaskID"]}");
-
-                dt.Rows.Add(row);
-                i++;
-            }
-            
-            return dt;
-        }
-
-        private int GetNewTaskID(int id)
-        {
-            DataRow selectedRow;
-
-            selectedRow = (DataRow)taskIDKey.Rows.Cast<DataRow>().Where(r => r.Field<int>("OldTaskID") == id).First();
-
-            //Console.WriteLine("Get New Task ID");
-            //Console.WriteLine($"{id} {selectedRow["NewTaskID"]} ");
-
-            return (int)selectedRow["NewTaskID"];
-        }
-
-        private DataTable GetTranslatedTaskIDTable(DataTable projectResourceDataTable)
-        {
-            DataTable dt = new DataTable();
-            DataTable keyTable = CreateTaskIDKey(projectResourceDataTable);
-
-            dt.Columns.Add("TaskID", typeof(int));
-            dt.Columns.Add("TaskName", typeof(string));
-
-            foreach (DataRow nrow in projectResourceDataTable.Rows)
-            {
-                DataRow row = dt.NewRow();
-
-                //var results = from DataRow myRow in keyTable.Rows
-                //              where (int)myRow["OldTaskID"] == (int)nrow["TaskID"]
-                //              select myRow;
-
-                DataRow selectedRow = (DataRow)keyTable.Rows.Cast<DataRow>().Where(r => (int)r["OldTaskID"] == (int)nrow["TaskID"]);
-
-
-                row["TaskID"] = selectedRow["NewTaskID"];
-                row["TaskName"] = nrow["TaskName"];
-
-                dt.Rows.Add(row);
-            }
-
-            return dt;
-        }
-
-        public void OpenKanBanWorkbook(string filepath, string component)
-        {
-            //Excel.Worksheet ws;
-
-            if (filepath != null)
-            {
-                FileInfo fi = new FileInfo(filepath);
-
-                if (fi.Exists)
-                {
-                    Excel.Application excelApp = new Excel.Application();
-                    Excel.Workbook workbook = excelApp.Workbooks.Open(fi.FullName);
-
-                    try
-                    {
-                        //var attributes = File.GetAttributes(fi.FullName);    
-
-                        foreach (Excel.Worksheet ws in workbook.Worksheets)
-                        {
-                            if (ws.Name.Trim() == component)
-                            {
-                                workbook.Sheets[ws.Index].Select();
-                                workbook.Save();
-                            }
-                        }
-
-                        workbook.Close();
-                        excelApp.Quit();
-
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        Marshal.ReleaseComObject(workbook);
-
-                        //Marshal.ReleaseComObject(ws);
-                        Marshal.ReleaseComObject(excelApp);
-
-                        var res = Process.Start("EXCEL.EXE", "\"" + fi.FullName + "\"");
-
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-
-                        //workbook.Close();
-                        excelApp.Quit();
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        Marshal.ReleaseComObject(workbook);
-
-                        //Marshal.ReleaseComObject(ws);
-                        Marshal.ReleaseComObject(excelApp);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Can't find a Kan Ban Workbook with path " + filepath + ".");
-                }
-            }
-            else
-            {
-                MessageBox.Show("There is no Kan Ban Workbook for this project.");
-            }
-
-        }
-
         public string GetKanBanWorkbookPath(string jn, int pn)
         {
             string kanBanWorkbookPath = "";
@@ -1742,10 +1319,5 @@ namespace Toolroom_Project_Viewer
 
             return kanBanWorkbookPath;
         }
-
-        //public DataTable getTaskData()
-        //{
-
-        //}
     }
 }

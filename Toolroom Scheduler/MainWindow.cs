@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using ClassLibrary;
 
 namespace Toolroom_Scheduler
 {
@@ -1439,7 +1440,7 @@ namespace Toolroom_Scheduler
 
         private bool BlankStartFinishDateExists(ProjectInfo pi)
         {
-            foreach (Component component in pi.ComponentList)
+            foreach (ClassLibrary.Component component in pi.ComponentList)
             {
                 foreach (TaskInfo task in component.TaskList)
                 {
@@ -1450,7 +1451,7 @@ namespace Toolroom_Scheduler
                 }
             }
 
-            return true;
+            return false;
         }
 
         private void oDateTimePicker_CloseUp(object sender, EventArgs e)
@@ -1666,6 +1667,7 @@ namespace Toolroom_Scheduler
                 Database db = new Database();
                 ExcelInteractions ei = new ExcelInteractions();
                 var number = GetComboBoxInfo();
+                string path;
                 List<string> componentList = new List<string>();
 
                 ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
@@ -1684,7 +1686,12 @@ namespace Toolroom_Scheduler
 
                     if (result == DialogResult.Yes)
                     {
-                        ei.GenerateKanBanWorkbook(pi);
+                        path = ei.GenerateKanBanWorkbook(pi);
+
+                        if (path != "")
+                        {
+                            db.SetKanBanWorkbookPath(path, pi.JobNumber, pi.ProjectNumber);
+                        }
                     }
                     else if (result == DialogResult.No)
                     {
@@ -1705,7 +1712,12 @@ namespace Toolroom_Scheduler
                 }
                 else
                 {
-                    ei.GenerateKanBanWorkbook(pi);
+                    path = ei.GenerateKanBanWorkbook(pi);
+
+                    if(path != "")
+                    {
+                        db.SetKanBanWorkbookPath(path, pi.JobNumber, pi.ProjectNumber);
+                    }
                 }
 
             }

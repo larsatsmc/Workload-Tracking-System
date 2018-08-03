@@ -11,6 +11,7 @@ using Microsoft.VisualBasic;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Runtime.InteropServices;
+using ClassLibrary;
 
 namespace Toolroom_Scheduler
 {
@@ -95,13 +96,13 @@ namespace Toolroom_Scheduler
             {
                 if (!Project.ComponentNameExists(newName))
                 {
-                    Component component = Project.ComponentList.ElementAt(selectedNode.Index);
+                    ClassLibrary.Component component = Project.ComponentList.ElementAt(selectedNode.Index);
                     component.SetName(newName);
                 }
             }
             else if(selectedNode.Level == 2)
             {
-                Component component = Project.ComponentList.ElementAt(selectedNode.Parent.Index);
+                ClassLibrary.Component component = Project.ComponentList.ElementAt(selectedNode.Parent.Index);
                 TaskInfo task = component.TaskList.ElementAt(selectedNode.Index);
                 task.SetName(newName);
             }
@@ -409,7 +410,7 @@ namespace Toolroom_Scheduler
         private void SetTaskInfoForSelectedTask()
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component component;
+            ClassLibrary.Component component;
             TaskInfo task;
             //string predecessorString = getSelectedPredecessorText(predecessorsListBox); // Uncomment to use project.
 
@@ -565,7 +566,7 @@ namespace Toolroom_Scheduler
                 FinishProgrammerComboBox.Text = project.FinishProgrammer;
             }
 
-            foreach (Component component in project.ComponentList)
+            foreach (ClassLibrary.Component component in project.ComponentList)
             {
                 currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
 
@@ -1175,7 +1176,7 @@ namespace Toolroom_Scheduler
         {
             Console.WriteLine($"{Project.JobNumber} {Project.ProjectNumber} {Project.DueDate} {Project.ToolMaker} {Project.Designer} {Project.RoughProgrammer} {Project.FinishProgrammer} {Project.ElectrodeProgrammer}");
 
-            foreach(Component component in Project.ComponentList)
+            foreach(ClassLibrary.Component component in Project.ComponentList)
             {
                 Console.WriteLine($"{component.Name}");
 
@@ -1286,7 +1287,7 @@ namespace Toolroom_Scheduler
         {
             string[] preds = null;
 
-            foreach (Component component in Project.ComponentList)
+            foreach (ClassLibrary.Component component in Project.ComponentList)
             {
                 List<int> predList = new List<int>();
                 int n = 1;
@@ -1345,7 +1346,7 @@ namespace Toolroom_Scheduler
         {
             string[] preds = null;
 
-            foreach (Component component in Project.ComponentList)
+            foreach (ClassLibrary.Component component in Project.ComponentList)
             {
                 List<int> predList = new List<int>();
                 int n = 1;
@@ -1633,7 +1634,7 @@ namespace Toolroom_Scheduler
         private void MoldBuildTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component component;
+            ClassLibrary.Component component;
             string[] str1Arr, str2Arr;
             List<string> predecessorList = new List<string>();
             TaskInfo ti;
@@ -1900,7 +1901,7 @@ namespace Toolroom_Scheduler
         private void quantityNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {
@@ -1912,7 +1913,7 @@ namespace Toolroom_Scheduler
         private void sparesNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {
@@ -1924,7 +1925,7 @@ namespace Toolroom_Scheduler
         private void materialComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {
@@ -1936,7 +1937,7 @@ namespace Toolroom_Scheduler
         private void componentNotesTextBox_TextChanged(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {
@@ -1948,7 +1949,7 @@ namespace Toolroom_Scheduler
         private void clipboardButton_Click(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {
@@ -1958,14 +1959,14 @@ namespace Toolroom_Scheduler
             }
             else
             {
-                MessageBox.Show("Please select a component to add a picture to.");
+                MessageBox.Show("Please select a ClassLibrary.Component to add a picture to.");
             }
         }
 
         private void browseButton_Click(object sender, EventArgs e)
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-            Component selectedComponent;
+            ClassLibrary.Component selectedComponent;
 
             if (selectedNode.Level == 1)
             {

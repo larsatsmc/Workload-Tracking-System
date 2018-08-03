@@ -121,7 +121,7 @@
             Initializes a new Project Form.
             </summary> 
         </member>
-        <member name="M:Toolroom_Scheduler.Project_Creation_Form.#ctor(Toolroom_Scheduler.ProjectInfo)">
+        <member name="M:Toolroom_Scheduler.Project_Creation_Form.#ctor(ClassLibrary.ProjectInfo)">
             <summary>
             Initializes a new Project Form and sets the project property of the form to an instance of a property.
             </summary> 

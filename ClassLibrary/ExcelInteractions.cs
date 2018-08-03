@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,9 +12,9 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using VBIDE = Microsoft.Vbe.Interop;
 
-namespace Toolroom_Scheduler
+namespace ClassLibrary
 {
-    class ExcelInteractions
+    public class ExcelInteractions
     {
         public QuoteInfo GetQuoteInfo(string filePath = @"X:\TOOLROOM\Josh Meservey\Workload Tracking System\Simple Quote  Template - 2018-05-25.xlsx")
         {
@@ -60,6 +62,8 @@ namespace Toolroom_Scheduler
             return quote;
         }
 
+
+
         private string GetPrinterPort()
         {
             var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
@@ -86,7 +90,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void GenerateKanBanWorkbook(ProjectInfo pi)
+        public string GenerateKanBanWorkbook(ProjectInfo pi)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
@@ -98,7 +102,6 @@ namespace Toolroom_Scheduler
 
             string activePrinterString, dateTime;
             int r;
-            Database db = new Database();
 
             try
             {
@@ -247,11 +250,12 @@ namespace Toolroom_Scheduler
                 {
                     //Save. The selected path can be got with saveFileDialog.FileName.ToString()
                     wb.SaveAs(saveFileDialog.FileName.ToString());
-                    db.SetKanBanWorkbookPath(saveFileDialog.FileName.ToString(), pi.JobNumber, pi.ProjectNumber);
+                    return saveFileDialog.FileName.ToString();
                 }
 
                 excelApp.DisplayAlerts = true;  // So I get prompted to save after adding pictures to the Kan Bans.
 
+                return "";
             }
             catch (Exception e)
             {
@@ -272,10 +276,7 @@ namespace Toolroom_Scheduler
 
                 Marshal.ReleaseComObject(ws);
 
-            }
-            finally
-            {
-
+                return "";
             }
 
             //vBComponents = wb.VBProject.VBComponents;
@@ -444,6 +445,71 @@ namespace Toolroom_Scheduler
 
             if (SheetNExists("Mold", wb))
                 wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
+        }
+
+        public void OpenKanBanWorkbook(string filepath, string component)
+        {
+            //Excel.Worksheet ws;
+
+            if (filepath != null)
+            {
+                FileInfo fi = new FileInfo(filepath);
+
+                if (fi.Exists)
+                {
+                    Excel.Application excelApp = new Excel.Application();
+                    Excel.Workbook workbook = excelApp.Workbooks.Open(fi.FullName);
+
+                    try
+                    {
+                        //var attributes = File.GetAttributes(fi.FullName);    
+
+                        foreach (Excel.Worksheet ws in workbook.Worksheets)
+                        {
+                            if (ws.Name.Trim() == component)
+                            {
+                                workbook.Sheets[ws.Index].Select();
+                                workbook.Save();
+                            }
+                        }
+
+                        workbook.Close();
+                        excelApp.Quit();
+
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        Marshal.ReleaseComObject(workbook);
+
+                        //Marshal.ReleaseComObject(ws);
+                        Marshal.ReleaseComObject(excelApp);
+
+                        var res = Process.Start("EXCEL.EXE", "\"" + fi.FullName + "\"");
+
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+
+                        //workbook.Close();
+                        excelApp.Quit();
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        Marshal.ReleaseComObject(workbook);
+
+                        //Marshal.ReleaseComObject(ws);
+                        Marshal.ReleaseComObject(excelApp);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Can't find a Kan Ban Workbook with path " + filepath + ".");
+                }
+            }
+            else
+            {
+                MessageBox.Show("There is no Kan Ban Workbook for this project.");
+            }
+
         }
 
         public void EditKanBanWorkbook(ProjectInfo pi, string kanBanWorkbookPath, List<string> componentsList)

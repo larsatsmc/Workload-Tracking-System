@@ -93,7 +93,6 @@
     </Compile>
     <Compile Include="CalendarColumn.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="ExcelInteractions.cs" />
     <Compile Include="ForwardDateWindow.cs">
       <SubType>Form</SubType>
     </Compile>

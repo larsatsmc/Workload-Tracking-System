@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Toolroom_Scheduler
+namespace ClassLibrary
 {
     public class Component
     {

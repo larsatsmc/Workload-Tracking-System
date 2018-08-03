@@ -13,10 +13,10 @@ using DevExpress.XtraCharts;
 using DevExpress.Charts.Model;
 using System.Text;
 using DevExpress.XtraRichEdit.API.Native;
-using Toolroom_Scheduler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using ClassLibrary;
 
 namespace Toolroom_Project_Viewer
 {
@@ -449,6 +449,7 @@ namespace Toolroom_Project_Viewer
             //string column = gridView1.FocusedColumn.FieldName;
             //int rowIndex = gridView1.FocusedRowHandle;
             Database db = new Database();
+            ExcelInteractions ei = new ExcelInteractions();
 
             if (rowIndex >= 0)
             {
@@ -456,7 +457,7 @@ namespace Toolroom_Project_Viewer
                 jobNumber = gridView1.GetRowCellValue(rowIndex, gridView1.Columns["JobNumber"]).ToString();
                 projectNumber = Convert.ToInt32(gridView1.GetRowCellValue(rowIndex, gridView1.Columns["ProjectNumber"]));
                 //MessageBox.Show("Component");
-                db.OpenKanBanWorkbook(db.GetKanBanWorkbookPath(jobNumber, projectNumber), component);
+                ei.OpenKanBanWorkbook(db.GetKanBanWorkbookPath(jobNumber, projectNumber), component);
             }
         }
 
@@ -799,7 +800,7 @@ namespace Toolroom_Project_Viewer
             //CustomResourceCollection.Clear();
             CustomResourceCollection = new BindingList<CustomResource>();
 
-            foreach (Toolroom_Scheduler.Component component in project.ComponentList)
+            foreach (ClassLibrary.Component component in project.ComponentList)
             {
                 ParentID = i;
                 CustomResourceCollection.Add(CreateCustomResource(i++, -1, component.Name));
@@ -836,7 +837,7 @@ namespace Toolroom_Project_Viewer
             int i = 0;
             int baseCount;
 
-            foreach (Toolroom_Scheduler.Component component in project.ComponentList)
+            foreach (ClassLibrary.Component component in project.ComponentList)
             {
                 baseCount = i++;
 
@@ -893,7 +894,7 @@ namespace Toolroom_Project_Viewer
             int aID = 1;
             int baseCount;
 
-            foreach (Toolroom_Scheduler.Component component in project.ComponentList)
+            foreach (ClassLibrary.Component component in project.ComponentList)
             {
                 baseCount = aID - 1;
 
@@ -945,7 +946,7 @@ namespace Toolroom_Project_Viewer
 
             //dt = db.getProjectData(jobNumber, projectNumber);
 
-            foreach (Toolroom_Scheduler.Component compi in Project.ComponentList)
+            foreach (ClassLibrary.Component compi in Project.ComponentList)
             {
                 foreach (TaskInfo taski in compi.TaskList)
                 {
@@ -1080,7 +1081,7 @@ namespace Toolroom_Project_Viewer
         private bool UpdateTaskStorage2(Appointment apt)
         {
             Database db = new Database();
-            Toolroom_Scheduler.Component component;
+            ClassLibrary.Component component;
             TaskInfo task;
             int n = 0;
 
