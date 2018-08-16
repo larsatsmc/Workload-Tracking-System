@@ -344,7 +344,7 @@ namespace Toolroom_Scheduler
             {
                 OleDbCommand cmd = new OleDbCommand("INSERT INTO Roles (ResourceID, Role) VALUES (@resourceID, @role)", Connection);
 
-                cmd.Parameters.AddWithValue("resourceID", GetResourceID(resourceName));
+                cmd.Parameters.AddWithValue("@resourceID", GetResourceID(resourceName));
                 cmd.Parameters.AddWithValue("@role", role);
 
                 Connection.Open();

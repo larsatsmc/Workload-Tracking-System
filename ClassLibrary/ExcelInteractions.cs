@@ -374,7 +374,6 @@ namespace ClassLibrary
                     ws.Cells[r, 8].value = "  " + task.Predecessors;
                     ws.Cells[r, 9].value = task.Status;
                     ws.Cells[r, 10].value = task.Initials;
-                    if(task.DateCompleted != null)
                     ws.Cells[r, 11].value = task.DateCompleted;
 
                     if (r % 2 == 0)
@@ -669,8 +668,7 @@ namespace ClassLibrary
                     ws.Cells[r, 8].value = "  " + task.Predecessors;
                     ws.Cells[r, 9].value = task.Status;
                     ws.Cells[r, 10].value = task.Initials;
-                    if (task.DateCompleted != null)
-                        ws.Cells[r, 11].value = task.DateCompleted;
+                    ws.Cells[r, 11].value = task.DateCompleted;
 
                     if (r % 2 == 0)
                         ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
@@ -747,8 +745,6 @@ namespace ClassLibrary
 
                 return null;
             }
-
-
         }
 
         private Boolean SheetNExists(string sheetname, Excel.Workbook wb)

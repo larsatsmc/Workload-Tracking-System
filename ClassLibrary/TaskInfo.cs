@@ -35,7 +35,7 @@ namespace ClassLibrary
         public int Position { get; private set; }
         public bool HasInfo { get; set; }
         public string Initials { get; private set; }
-        public DateTime? DateCompleted { get; private set; }
+        public string DateCompleted { get; private set; }
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
         /// </summary>
@@ -258,7 +258,7 @@ namespace ClassLibrary
             this.StartDate = ConvertObjectToDate(startDate);
             this.FinishDate = ConvertObjectToDate(finishDate);
             this.Status = ConvertObjectToString(status);
-            this.DateCompleted = ConvertObjectToDate(dateCompleted);
+            this.DateCompleted = ConvertObjectToString(dateCompleted);
             this.Initials = ConvertObjectToString(initials);
             this.Machine = ConvertObjectToString(machine);
             this.Personnel = ConvertObjectToString(personnel);

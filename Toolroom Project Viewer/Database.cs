@@ -13,12 +13,14 @@ using DevExpress.Spreadsheet;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using ClassLibrary;
+using DevExpress.XtraGrid.Views.Base;
 
 namespace Toolroom_Project_Viewer
 {
     class Database
     {
         static readonly string ConnString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=X:\TOOLROOM\Workload Tracking System\Database\Workload Tracking System DB.accdb";
+        OleDbConnection Connection = new OleDbConnection(ConnString);
 
         DataTable taskIDKey = new DataTable();
 
@@ -1293,6 +1295,507 @@ namespace Toolroom_Project_Viewer
             }
 
             return dt;
+        }
+
+        public void UpdateDatabase(object s, CellValueChangedEventArgs ev)
+        {
+            try
+            {
+                var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
+
+                //queryString = "UPDATE Tasks SET JobNumber = @jobNumber, Component = @component, TaskID = @taskID, TaskName = @taskName, " +
+                //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
+                //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
+
+                using (Connection)
+                {
+                    OleDbCommand cmd = new OleDbCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = Connection;
+
+                    if (ev.Column.FieldName == "ToolNumber")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET ToolNumber = @toolNumber WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@toolNumber", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@toolNumber", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "MWONumber")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET MWONumber = @mwoNumber WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@mwoNumber", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@mwoNumber", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "ProjectNumber")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@projectNumber", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@projectNumber", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Stage")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Stage = @stage WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@stage", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@stage", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Customer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Customer = @customer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@customer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@customer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "PartName")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET PartName = @partName WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@partName", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@partName", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Engineer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Engineer = @engineer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@engineer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@engineer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "DeliveryInWeeks")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET DeliveryInWeeks = @deliveryInWeeks WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@deliveryInWeeks", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@deliveryInWeeks", "0");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "StartDate")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET StartDate = @startDate WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@startDate", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@startDate", DBNull.Value);
+                        }
+                    }
+                    else if (ev.Column.FieldName == "FinishDate")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET FinishDate = @finishDate WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@finishDate", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@finishDate", DBNull.Value);
+                        }
+                    }
+                    else if (ev.Column.FieldName == "AdjustedDeliveryDate")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET AdjustedDeliveryDate = @adjustedDeliveryDate WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@adjustedDeliveryDate", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@adjustedDeliveryDate", DBNull.Value);
+                        }
+                    }
+                    else if (ev.Column.FieldName == "MoldCost")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET MoldCost = @moldCost WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@moldCost", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@moldCost", "0");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Designer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Designer = @designer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@designer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@designer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Designer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Designer = @designer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@designer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@designer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "ToolMaker")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET ToolMaker = @toolMaker WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@toolMaker", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@toolMaker", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "RoughProgrammer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET RoughProgrammer = @roughProgrammer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@roughProgrammer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@roughProgrammer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "FinishProgrammer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET FinishProgrammer = @finishProgrammer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@finishProgrammer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@finishProgrammer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "ElectrodeProgrammer")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET ElectrodeProgrammer = @electrodeProgrammer WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@electrodeProgrammer", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@electrodeProgrammer", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "Manifold")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET Manifold = @manifold WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@manifold", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@manifold", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "MoldBase")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET MoldBase = @moldBase WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@moldBase", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@moldBase", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "GeneralNotes")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET GeneralNotes = @generalNotes WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@generalNotes", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@generalNotes", "");
+                        }
+                    }
+                    else if (ev.Column.FieldName == "GeneralNotesRTF")
+                    {
+                        cmd.CommandText = "UPDATE WorkLoad SET GeneralNotesRTF = @generalNotesRTF WHERE (ID = @tID)";
+
+                        if (ev.Value.ToString() != "")
+                        {
+                            cmd.Parameters.AddWithValue("@generalNotesRTF", ev.Value.ToString());
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@generalNotesRTF", "");
+                        }
+                    }
+
+                    cmd.Parameters.AddWithValue("@tID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
+
+                    //Console.WriteLine(connectionString);
+                    //Console.WriteLine(queryString);
+                    //Console.WriteLine((grid.Rows[ev.RowIndex]).Cells[0].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[1].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[2].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[3].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[4].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[5].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[6].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[7].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[8].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[9].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[10].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[11].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[12].Value.ToString() + " ");
+                    Connection.Open();
+                    cmd.ExecuteNonQuery();
+
+                    {
+                        //if(ev.ColumnIndex != 5)
+                        //    MessageBox.Show("Update Success!");
+                        Connection.Close();
+                    }
+
+                }
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show(er.Message);
+            }
+        }
+
+        public void AddWorkLoadEntry(WorkLoadInfo wli)
+        {
+            try
+            {
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes) VALUES " + 
+                                                                       "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @manifold, @moldBase, @generalNotes)", Connection);
+
+                cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
+                cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
+                cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
+                cmd.Parameters.AddWithValue("@stage", wli.Stage);
+                cmd.Parameters.AddWithValue("@customer", wli.Customer);
+                cmd.Parameters.AddWithValue("@partName", wli.PartName);
+                cmd.Parameters.AddWithValue("@deliveryInWeeks", wli.DeliveryInWeeks);
+
+                if(wli.StartDate != null)
+                {
+                    cmd.Parameters.AddWithValue("@startDate", wli.StartDate);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@startDate", DBNull.Value);
+                }
+
+                if (wli.FinishDate != null)
+                {
+                    cmd.Parameters.AddWithValue("@finishDate", wli.FinishDate);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@finishDate", DBNull.Value);
+                }
+
+                if (wli.AdjustedDeliveryDate != null)
+                {
+                    cmd.Parameters.AddWithValue("@adjustedDeliveryDate", wli.AdjustedDeliveryDate);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@adjustedDeliveryDate", DBNull.Value);
+                }
+
+                cmd.Parameters.AddWithValue("@moldCost", wli.MoldCost);
+                cmd.Parameters.AddWithValue("@engineer", wli.Engineer);
+                cmd.Parameters.AddWithValue("@designer", wli.Designer);
+                cmd.Parameters.AddWithValue("@toolMaker", wli.ToolMaker);
+                cmd.Parameters.AddWithValue("@roughProgrammer", wli.RoughProgrammer);
+                cmd.Parameters.AddWithValue("@finishProgrammer", wli.FinisherProgrammer);
+                cmd.Parameters.AddWithValue("@electrodeProgrammer", wli.ElectrodeProgrammer);
+                cmd.Parameters.AddWithValue("@manifold", wli.Manifold);
+                cmd.Parameters.AddWithValue("@moldBase", wli.MoldBase);
+                cmd.Parameters.AddWithValue("@generalNotes", wli.GeneralNotes);
+
+                Connection.Open();
+                cmd.ExecuteNonQuery();
+                Connection.Close();
+            }
+            catch (Exception er)
+            {
+                Connection.Close();
+                MessageBox.Show(er.Message);
+            }
+        }
+
+        public bool DeleteWorkLoadEntry(int id)
+        {
+            OleDbCommand cmd = new OleDbCommand("DELETE FROM WorkLoad WHERE ID = @id", Connection);
+
+            cmd.Parameters.AddWithValue("@id", id);
+
+            Connection.Open();
+            cmd.ExecuteNonQuery();
+            Connection.Close();
+
+            return true;
+        }
+
+        public void AddColorEntry(int projectID, string column, int aRGBColor)
+        {
+            try
+            {
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)", Connection);
+
+                cmd.Parameters.AddWithValue("@projectID", projectID);
+                cmd.Parameters.AddWithValue("@columnFieldName", column);
+                cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
+
+
+                Connection.Open();
+                cmd.ExecuteNonQuery();
+                Connection.Close();
+
+            }
+            catch (Exception e)
+            {
+                Connection.Close();
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        public void UpdateColorEntry(int projectID, string column, int aRGBColor)
+        {
+            using (Connection)
+            {
+                try
+                {
+                    OleDbCommand cmd = new OleDbCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = Connection;
+
+                    cmd.CommandText = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectID = @projectID AND ColumnFieldName = @column)";
+
+                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
+                    cmd.Parameters.AddWithValue("@projectID", projectID);
+                    cmd.Parameters.AddWithValue("@column", column);
+
+                    Connection.Open();
+                    cmd.ExecuteNonQuery();
+                    Connection.Close();
+                }
+                catch (Exception e)
+                {
+                    Connection.Close();
+                    MessageBox.Show(e.Message);
+                }
+            }
+        }
+
+        public void DeleteColorEntries(int projectID)
+        {
+            OleDbCommand cmd = new OleDbCommand("DELETE FROM WorkLoadColors WHERE ProjectID = @projectID", Connection);
+
+            cmd.Parameters.AddWithValue("@projectID", projectID);
+
+            Connection.Open();
+            cmd.ExecuteNonQuery();
+            Connection.Close();
+        }
+
+        public List<ColorStruct> GetColorEntries()
+        {
+            OleDbCommand cmd = new OleDbCommand("SELECT * FROM WorkLoadColors", Connection);
+            List<ColorStruct> colorList = new List<ColorStruct>();
+
+            try
+            {
+                Connection.Open();
+
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.HasRows)
+                    {
+                        while (rdr.Read())
+                        {
+                            colorList.Add(new ColorStruct
+                            (
+                                   projectID: rdr["ProjectID"],
+                                      column: rdr["ColumnFieldName"],
+                                   aRGBColor: rdr["ARGBColor"]
+                            ));
+                        }
+                    }
+                }
+
+                Connection.Close();
+
+                return colorList;
+            }
+            catch (Exception e)
+            {
+                Connection.Close();
+                MessageBox.Show(e.Message);
+                return null;
+            }
         }
 
         public string GetKanBanWorkbookPath(string jn, int pn)

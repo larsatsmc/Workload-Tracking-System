@@ -17,6 +17,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using ClassLibrary;
+using DevExpress.XtraGrid.Views.BandedGrid;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Columns;
+using System.Drawing;
+using DevExpress.XtraEditors.Repository;
+using DevExpress.XtraEditors;
+using DevExpress.XtraRichEdit;
+using DevExpress.XtraRichEdit.UI;
+using DevExpress.XtraEditors.Controls;
 
 namespace Toolroom_Project_Viewer
 {
@@ -26,6 +35,7 @@ namespace Toolroom_Project_Viewer
         private BindingList<CustomResource> CustomResourceCollection = new BindingList<CustomResource>();
         private BindingList<CustomAppointment> CustomEventList = new BindingList<CustomAppointment>();
         private BindingList<CustomDependency> CustomDependencyList = new BindingList<CustomDependency>();
+        private List<ColorStruct> ColorList = new List<ColorStruct>();
 
         private string TimeUnits { get; set; } 
         private ProjectInfo Project { get; set; }
@@ -52,10 +62,13 @@ namespace Toolroom_Project_Viewer
             // Fill a SqlDataSource
             sqlDataSource1.Fill();
             FilterTaskView();
+            AddRepositoryItemToGrid();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet2.WorkLoad' table. You can move, or remove it, as needed.
+            this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet2.WorkLoad);
             //this.resourcesTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Resources);
             ////This line of code loads data into the 'workload_Tracking_System_DBDataSet.Projects' table. You can move, or remove it, as needed.
             //this.projectsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Projects);
@@ -1064,6 +1077,561 @@ namespace Toolroom_Project_Viewer
         private void RefreshGanttButton_Click(object sender, EventArgs e)
         {
             populateProjectComboBox();
+        }
+
+        #endregion
+
+        #region WorkLoad
+
+        private string[] validEditorArr = { "michell.willey", "mikeh", "Mikeh", "marks", "Marks", "joshua.meservey" };
+
+        private void gridControl2_Load(object sender, EventArgs e)
+        {
+            Database db = new Database();
+            footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            ColorList = db.GetColorEntries();
+        }
+
+        private void bandedGridView1_CellValueChanged(object sender, CellValueChangedEventArgs e)
+        {
+            Console.WriteLine("bandedGridView1 Cell Value Changed Event");
+            //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
+            if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                MessageBox.Show("This login is not authorized to make changes to work load tab.");
+                gridControl2.DataSource = workLoadTableAdapter.GetData();
+                return;
+            }
+
+            Database db = new Database();
+
+            db.UpdateDatabase(sender, e);
+
+            if(e.Column.FieldName == "DeliveryInWeeks" && bandedGridView1.GetFocusedRowCellValue("StartDate").ToString() != "")
+            {
+                bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(bandedGridView1.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7)); 
+            }
+            else if (e.Column.FieldName == "StartDate" && bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
+            {
+                bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(e.Value).AddDays(Convert.ToDouble(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks")) * 7));
+            }
+
+            //bandedGridView1.RefreshData();
+
+            //MessageBox.Show("Change");
+        }
+
+        private void gridView2_CellValueChanged(object sender, CellValueChangedEventArgs e)
+        {
+            MessageBox.Show("Change");
+        }
+
+        private void gridView2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Click");
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                MessageBox.Show("This login is not authorized to make changes to work load tab.");
+                gridControl2.DataSource = workLoadTableAdapter.GetData();
+                return;
+            }
+
+            Database db = new Database();
+
+            Console.WriteLine(bandedGridView1.FocusedRowHandle);
+
+            if(bandedGridView1.FocusedRowHandle >= 0)
+            {
+                if(db.DeleteWorkLoadEntry(Convert.ToInt32(bandedGridView1.GetFocusedRowCellValue("ID"))))
+                {
+                    db.DeleteColorEntries(Convert.ToInt32(bandedGridView1.GetFocusedRowCellValue("ID")));
+                    //bandedGridView1.DeleteRow(bandedGridView1.FocusedRowHandle);
+                    gridControl2.DataSource = workLoadTableAdapter.GetData();
+                }
+                else
+                {
+                    MessageBox.Show("Unable to delete row.");
+                }
+            }
+        }
+
+        private void bandedGridView1_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
+        {
+            Console.WriteLine(bandedGridView1.FocusedRowHandle);
+        }
+
+        private void bandedGridView1_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
+        {
+            //if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            //{
+            //    MessageBox.Show("This login is not authorized to make changes to work load tab.");
+            //    bandedGridView1.CancelUpdateCurrentRow();
+            //    return;
+            //}
+        }
+
+        private void gridView2_RowUpdated(object sender, RowObjectEventArgs e)
+        {
+            MessageBox.Show("Row Updated.");
+        }
+
+        private void gridControl2_ImageChanged(object sender, System.EventArgs e)
+        {
+            //repositoryItemImageEdit1
+            MessageBox.Show("Image changed.");
+        }
+
+        private void bandedGridView1_RowUpdated(object sender, RowObjectEventArgs e)
+        {
+            GridView view = sender as GridView;
+
+            //MessageBox.Show(bandedGridView1.FocusedRowHandle.ToString());
+
+            if (view.IsNewItemRow(e.RowHandle))
+            {
+                if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                {
+                    return;
+                }
+
+                Database db = new Database();
+                WorkLoadInfo wli = new WorkLoadInfo();
+                string checkDate;
+
+                wli.ToolNumber = bandedGridView1.GetFocusedRowCellValue("ToolNumber").ToString();
+                wli.MWONumber = bandedGridView1.GetFocusedRowCellValue("MWONumber").ToString();
+                wli.ProjectNumber = bandedGridView1.GetFocusedRowCellValue("ProjectNumber").ToString();
+                wli.Stage = bandedGridView1.GetFocusedRowCellValue("Stage").ToString();
+                wli.Customer = bandedGridView1.GetFocusedRowCellValue("Customer").ToString();
+                wli.PartName = bandedGridView1.GetFocusedRowCellValue("PartName").ToString();
+
+                int.TryParse(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out int numberOfWeeks);
+
+                wli.DeliveryInWeeks = numberOfWeeks;
+
+                checkDate = bandedGridView1.GetFocusedRowCellValue("StartDate").ToString();
+
+                if (checkDate != "")
+                {
+                    wli.StartDate = Convert.ToDateTime(checkDate);
+                }
+
+                checkDate = bandedGridView1.GetFocusedRowCellValue("FinishDate").ToString();
+
+                if (checkDate != "")
+                {
+                    wli.FinishDate = Convert.ToDateTime(checkDate);
+                }
+
+                checkDate = bandedGridView1.GetFocusedRowCellValue("AdjustedDeliveryDate").ToString();
+
+                if (checkDate != "")
+                {
+                    wli.FinishDate = Convert.ToDateTime(checkDate);
+                }
+
+                int.TryParse(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out int moldCost);
+
+                wli.MoldCost = moldCost;
+                wli.Engineer = bandedGridView1.GetFocusedRowCellValue("Engineer").ToString();
+                wli.Designer = bandedGridView1.GetFocusedRowCellValue("Designer").ToString();
+                wli.ToolMaker = bandedGridView1.GetFocusedRowCellValue("ToolMaker").ToString();
+                wli.RoughProgrammer = bandedGridView1.GetFocusedRowCellValue("RoughProgrammer").ToString();
+                wli.FinisherProgrammer = bandedGridView1.GetFocusedRowCellValue("FinishProgrammer").ToString();
+                wli.ElectrodeProgrammer = bandedGridView1.GetFocusedRowCellValue("ElectrodeProgrammer").ToString();
+                wli.Manifold = bandedGridView1.GetFocusedRowCellValue("Manifold").ToString();
+                wli.MoldBase = bandedGridView1.GetFocusedRowCellValue("MoldBase").ToString();
+                wli.GeneralNotes = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
+
+                db.AddWorkLoadEntry(wli);
+
+                gridControl2.DataSource = workLoadTableAdapter.GetData();
+            }
+
+            //MessageBox.Show("Row Updated.");
+        }
+
+        private void bandedGridView1_PrintInitialize(object sender, PrintInitializeEventArgs e)
+        {
+            PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
+            pb.PageSettings.Landscape = true;
+            pb.PageSettings.TopMargin = 50;
+            pb.PageSettings.RightMargin = 50;
+            pb.PageSettings.BottomMargin = 50;
+            pb.PageSettings.LeftMargin = 50;
+            pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Letter;
+
+            bandedGridView1.OptionsPrint.RtfPageFooter = @"{\rtf1\ansi {\fonttbl\f0\ Microsoft Sans Serif;} \f0\pard \fs18 \qr \b Report Date: " + footerDateTime + @"\b0 \par}";
+        }
+
+        //private void gridView2_PrintInitialize(object sender, PrintInitializeEventArgs e)
+        //{
+        //    PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
+        //    pb.PageSettings.Landscape = true;
+        //    pb.PageMargins.Top = 50;
+        //    pb.PageMargins.Right = 50;
+        //    pb.PageMargins.Bottom = 50;
+        //    pb.PageMargins.Left = 50;
+        //}
+
+        private void workLoadTabPrintButton_Click(object sender, EventArgs e)
+        {
+            // Check whether the GridControl can be previewed.
+            if (!gridControl2.IsPrintingAvailable)
+            {
+                MessageBox.Show("The 'DevExpress.XtraPrinting' library is not found", "Error");
+                return;
+            }
+
+            bandedGridView1.ShowPrintPreview();
+            //bandedGridView1.Print();
+            //gridView2.PrintDialog(); // Page Orientation cannot be changed.
+
+            //gridControl2.ShowPrintPreview();
+            //gridControl2.PrintDialog(); // Cannot print in landscape orientation.
+            //gridControl2.Print(); // Columns are all scrunched up.
+        }
+
+        private void workLoadRefreshButton_Click(object sender, EventArgs e)
+        {
+            gridControl2.DataSource = workLoadTableAdapter.GetData();
+            footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+        }
+
+        private void bandedGridView1_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            //MessageBox.Show(e.Column + " " + e.RowHandle);
+
+            if (e.Column.FieldName == "Customer" && e.RowHandle == 0)
+            e.Appearance.ForeColor = System.Drawing.Color.Red;
+        }
+
+        private void setStatusButton_Click(object sender, EventArgs e)
+        {
+            //SelectStatusWindow ssw = new SelectStatusWindow();
+        }
+
+        private void bandedGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine("bandedGridView1 Mouse down event.");
+            List<string> PersonnelColumns = new List<string> { "Engineer", "Designer", "ToolMaker", "RoughProgrammer", "FinishProgrammer", "ElectrodeProgrammer" };
+            List<string> OtherColumns = new List<string> { "AdjustDeliveryDate", "StartDate", "FinishDate", "GeneralNotes"};
+            var hitInfo = bandedGridView1.CalcHitInfo(e.Location);
+            Color? color;
+            Color rowColor;
+
+            if (hitInfo.InRowCell)
+            {
+                int rowHandle = hitInfo.RowHandle;
+                GridColumn column = hitInfo.Column;
+
+                if (e.Button == MouseButtons.Right)
+                {
+                    var cells = bandedGridView1.GetSelectedCells();
+
+                    foreach (var cell in cells)
+                    {
+                        bandedGridView1.UnselectCell(cell);
+                    }
+
+                    bandedGridView1.SelectCell(rowHandle, column);
+
+                    if (rowHandle % 2 == 0)
+                    {
+                        rowColor = bandedGridView1.Appearance.OddRow.BackColor;
+                    }
+                    else
+                    {
+                        rowColor = bandedGridView1.Appearance.EvenRow.BackColor;
+                    }
+
+                    //MessageBox.Show("Row Handle: " + rowHandle + " Column: " + column);
+                    //MessageBox.Show("Left: " + e.Location.X + MainWindow.ActiveForm.Location.X + " Top: " + e.Location.Y + MainWindow.ActiveForm.Location.Y);
+
+                    if (PersonnelColumns.Exists(x => x == column.FieldName))
+                    {
+                        color = GetColorFromUser("Personnel", e.Location, rowColor);
+
+                        SetSelectedCellColor(color);
+                    }
+                    else if (OtherColumns.Exists(x => x == column.FieldName))
+                    {
+                        color = GetColorFromUser("Other", e.Location, rowColor);
+
+                        SetSelectedCellColor(color);
+                    }
+                }
+                else if (e.Button == MouseButtons.Left)
+                {
+                    //    if (column.FieldName == "GeneralNotes")
+                    //    {
+                    //        using (var gne = new GeneralNotesEditor(bandedGridView1.GetRowCellValue(rowHandle, "GeneralNotes").ToString()))
+                    //        {
+                    //            var result = gne.ShowDialog();
+
+                    //            if (result == DialogResult.OK)
+                    //            {
+                    //                bandedGridView1.SetRowCellValue(rowHandle, "GeneralNotes", gne.RTFText);
+                    //            }
+                    //        }
+
+                    //    }
+
+                }
+
+            }
+        }
+
+        private Color? GetColorFromUser(string columnType, Point clickLocation, Color rowColor)
+        {
+            using (var ssw = new SelectStatusWindow(columnType, rowColor))
+            {
+                Point windowLocation = new Point(clickLocation.X + ssw.Width, clickLocation.Y + (int)(ssw.Height * .5));
+
+                ssw.Location = windowLocation;
+
+                var result = ssw.ShowDialog();
+
+                if (result == DialogResult.Cancel)
+                {
+                    ssw.Close();
+                }
+                else if (result == DialogResult.OK)
+                {
+                    return ssw.SelectedColor;
+                }
+
+                return null;
+            }
+        }
+
+        private void SetSelectedCellColor(Color? color)
+        {
+            if (color == null)
+            {
+                return;
+            }
+
+            var cells = bandedGridView1.GetSelectedCells();
+            int projectID;
+            Database db = new Database();
+
+            //ColorList.Clear();
+
+            foreach (var cell in cells)
+            {
+                projectID = Convert.ToInt32(bandedGridView1.GetRowCellValue(cell.RowHandle, "ID"));
+
+                ColorStruct colorItem = ColorList.Find(r => r.Column == cell.Column.FieldName && r.ProjectID == projectID);
+
+                if (colorItem == null)
+                {
+                    ColorList.Add(new ColorStruct {ProjectID = projectID, Column = cell.Column.FieldName, Color = (Color)color, ColorARGB = ((Color)color).ToArgb() });
+                    db.AddColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
+
+                }
+                else
+                {
+                    colorItem.Color = (Color)color;
+                    colorItem.ColorARGB = colorItem.Color.ToArgb();
+
+                    db.UpdateColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
+                }
+            }
+
+            bandedGridView1.LayoutChanged();
+        }
+
+
+        private void bandedGridView1_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+            if(e.RowHandle >= 0 && int.TryParse(bandedGridView1.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID))
+            {
+                var data = ColorList.SingleOrDefault(p => p.Column == e.Column.FieldName && p.ProjectID == projectID);
+
+                if (data != null)
+                {
+                    //Console.WriteLine(e.Column + " " + e.RowHandle + " " + data.Color);
+                    
+                    e.Appearance.BackColor = data.Color;
+                }
+            }
+
+        }
+
+        private void AddRepositoryItemToGrid()
+        {
+            RichTextBox richTextBox = new RichTextBox();
+            richTextBox.Dock = DockStyle.Top;
+
+            ColorEdit textColorPicker = new ColorEdit();
+            textColorPicker.Left = 50;
+            textColorPicker.Top = 40;
+            textColorPicker.Width = 50;
+            textColorPicker.Height = 25;
+            textColorPicker.Dock = DockStyle.None;
+            textColorPicker.Color = Color.Black;
+            textColorPicker.ColorChanged += new EventHandler(editorColorPickerControl_ColorChanged);
+
+            SimpleButton boldButton = new SimpleButton();
+            boldButton.Appearance.Font = new Font (boldButton.Font.FontFamily, boldButton.Font.Size, FontStyle.Bold);
+            boldButton.Text = "B";
+            boldButton.Left = 105;
+            boldButton.Top = 40;
+            boldButton.Width = 20;
+            boldButton.Height = 20;
+            boldButton.Click += new EventHandler(boldButton_Clicked);
+
+            SimpleButton underlineButton = new SimpleButton();
+            underlineButton.Appearance.Font = new Font(underlineButton.Font.FontFamily, underlineButton.Font.Size, FontStyle.Underline);
+            underlineButton.Text = "U";
+            underlineButton.Left = 130;
+            underlineButton.Top = 40;
+            underlineButton.Width = 20;
+            underlineButton.Height = 20;
+            underlineButton.Click += new EventHandler(underlineButton_Clicked);
+
+            SimpleButton editorOKButton = new SimpleButton();
+            editorOKButton.Text = "OK";
+            editorOKButton.Left = 40;
+            editorOKButton.Top = 70;
+            editorOKButton.Width = 50;
+            editorOKButton.Height = 30;
+            editorOKButton.Dock = DockStyle.None;
+            editorOKButton.Click += new EventHandler(editorOKButton_Clicked);
+
+            SimpleButton editorCancelButton = new SimpleButton();
+            editorCancelButton.Text = "Cancel";
+            editorCancelButton.Left = 110;
+            editorCancelButton.Top = 70;
+            editorCancelButton.Width = 50;
+            editorCancelButton.Height = 30;
+            editorCancelButton.Dock = DockStyle.None;
+            editorCancelButton.Click += new EventHandler(editorCancelButton_Clicked);
+
+            Panel panel = new Panel();
+            panel.Dock = DockStyle.Bottom;
+            panel.Controls.Add(editorOKButton);
+            panel.Controls.Add(editorCancelButton);
+            panel.Controls.Add(textColorPicker);
+            panel.Controls.Add(boldButton);
+            panel.Controls.Add(underlineButton);
+
+            PopupContainerControl popupContainerControl = new PopupContainerControl();
+            popupContainerControl.Controls.Add(richTextBox);
+            popupContainerControl.Controls.Add(panel);
+            popupContainerControl.Height = 170;
+
+            PopupContainerEdit popupContainerEdit = new PopupContainerEdit();
+            popupContainerEdit.Properties.PopupControl = popupContainerControl;
+
+            RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
+            repositoryItemPopupContainerEdit.PopupControl = popupContainerControl;
+
+            gridControl2.RepositoryItems.Add(repositoryItemPopupContainerEdit);
+            bandedGridView1.Columns["GeneralNotes"].ColumnEdit = repositoryItemPopupContainerEdit;
+        }
+
+        private void editorOKButton_Clicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("okButton_Clicked");
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            popupContainerEdit.EditValue = popupContainerEdit.Properties.PopupControl.Controls[0].Text;
+
+            popupContainerEdit.ClosePopup();
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+            bandedGridView1.SetFocusedRowCellValue("GeneralNotesRTF", richTextBox.Rtf);
+        }
+
+        private void editorCancelButton_Clicked(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            popupContainerEdit.ClosePopup();
+        }
+
+        private void editorColorPickerControl_ColorChanged(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+            ColorEdit colorEditControl = (ColorEdit)sender;
+
+            richTextBox.SelectionColor = colorEditControl.Color;
+        }
+
+        private void boldButton_Clicked(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Bold);
+        }
+
+        private void underlineButton_Clicked(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Underline);
+        }
+
+        private void bandedGridView1_ShownEditor(object sender, EventArgs e)
+        {
+            Console.WriteLine("bandedGridView1 ShownEditor entered.");
+            BandedGridView bandedGridView = sender as BandedGridView;
+            ColumnView columnView = sender as ColumnView;
+            PopupContainerEdit activeEditor = null;
+
+            if (bandedGridView != null)
+            {
+
+                if (bandedGridView.ActiveEditor.EditorTypeName == "PopupContainerEdit")
+                {
+                    activeEditor = bandedGridView.ActiveEditor as PopupContainerEdit;
+                }
+
+
+                if (activeEditor != null)
+                {
+
+                    //RichEditControl richEditControl = (RichEditControl)activeEditor.Properties.PopupControl.Controls[0];
+
+                    ////// TODO: Use any RichEditControl API
+                    //richEditControl.ActiveViewType = RichEditViewType.PrintLayout;
+                    //richEditControl.ActiveView.ZoomFactor = 2f;
+                    //richEditControl.Document.Sections[0].Margins.Left = 50;
+                    //richEditControl.Document.Sections[0].Margins.Top = 50;
+
+                    RichTextBox richTextBox = (RichTextBox)activeEditor.Properties.PopupControl.Controls[0];
+                    //richTextBox.Text = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
+                    richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotesRTF").ToString();
+
+                    //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popopContainerEdit_QueryResultValue);
+                }
+            }
+        }
+
+        private void popopContainerEdit_QueryResultValue(object sender, QueryResultValueEventArgs e)
+        {
+            //Console.WriteLine("Query Result Value event entered");
+            //Console.WriteLine("GeneralNotes Value: " + bandedGridView1.GetFocusedRowCellValue("GeneralNotes"));
+            //PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            //popupContainerEdit.Text = popupContainerEdit.Properties.PopupControl.Controls[0].Text;
+            //popupContainerEdit.QueryResultValue -= new QueryResultValueEventHandler(this.popopContainerEdit_QueryResultValue);
+            //bandedGridView1.SetFocusedRowCellValue("GeneralNotes", popupContainerEdit.Properties.PopupControl.Controls[0].Text);
+            //MessageBox.Show("Popup Container Edit: " + popupContainerEdit.Text);
+            //MessageBox.Show("Query Result: " + e.Value.ToString());
+            //MessageBox.Show("Rich Text Edit: " + popupContainerEdit.Properties.PopupControl.Controls[0].Text);
         }
 
         #endregion
