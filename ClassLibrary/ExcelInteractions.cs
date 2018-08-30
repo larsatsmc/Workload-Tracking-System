@@ -34,14 +34,14 @@ namespace ClassLibrary
                 customer: quoteLetter.Cells[8, 3].value,
                 partName: quoteLetter.Cells[10, 3].value,
                 programRoughHours: Convert.ToInt16(quoteWorksheet.Cells[22, 8].value),
-                programFinishHours: Convert.ToInt16(quoteWorksheet.Cells[23,8].value),
-                programElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[24,8].value + quoteWorksheet.Cells[21, 8].value),
-                cncRoughHours: Convert.ToInt16(quoteWorksheet.Cells[25,8].value),
-                cncFinishHours: Convert.ToInt16(quoteWorksheet.Cells[26,8].value),
+                programFinishHours: Convert.ToInt16(quoteWorksheet.Cells[23, 8].value),
+                programElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[24, 8].value + quoteWorksheet.Cells[21, 8].value),
+                cncRoughHours: Convert.ToInt16(quoteWorksheet.Cells[25, 8].value),
+                cncFinishHours: Convert.ToInt16(quoteWorksheet.Cells[26, 8].value),
                 grindFittingHours: Convert.ToInt16(quoteWorksheet.Cells[28, 8].value),
-                cncElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[27,8].value),
-                edmSinkerHours: Convert.ToInt16(quoteWorksheet.Cells[29,8].value)
-                
+                cncElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[27, 8].value),
+                edmSinkerHours: Convert.ToInt16(quoteWorksheet.Cells[29, 8].value)
+
                 );
 
             Marshal.FinalReleaseComObject(quoteWorksheet);
@@ -101,7 +101,7 @@ namespace ClassLibrary
             VBIDE.VBComponent wsMod;
 
             string activePrinterString, dateTime;
-            int r;
+            int r, index;
 
             try
             {
@@ -152,7 +152,7 @@ namespace ClassLibrary
                         ws.Cells[r, 4].value = $"   {task.TaskName}";
                         ws.Cells[r, 5].value = $"   {task.Duration}";
 
-                        if(task.StartDate == null)
+                        if (task.StartDate == null)
                         {
 
                         }
@@ -160,13 +160,13 @@ namespace ClassLibrary
                         {
                             ws.Cells[r, 6].value = task.StartDate;
                         }
-                        
+
                         ws.Cells[r, 7].value = task.FinishDate;
                         ws.Cells[r, 8].value = $"  {task.Predecessors}";
                         ws.Cells[r, 9].value = task.Status;
                         ws.Cells[r, 10].value = task.Initials;
-                        if(task.DateCompleted != null)
-                        ws.Cells[r, 11].value = task.DateCompleted;
+                        if (task.DateCompleted != null)
+                            ws.Cells[r, 11].value = task.DateCompleted;
 
                         if (r % 2 == 0)
                             ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
@@ -223,11 +223,15 @@ namespace ClassLibrary
                 ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
                 ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
 
-                CreateKanBanComponentSheets(pi, excelApp, wb);
+                index = CreateKanBanComponentSheets(pi, excelApp, wb);
+
+                ws = wb.Sheets.Add(After: wb.Sheets[--index]);
+
+                CreateHoursSheet(pi, wb, ws.Index);
 
                 string initialDirectory = "";
 
-                if(pi.KanBanWorkbookPath != "")
+                if (pi.KanBanWorkbookPath != "")
                 {
                     initialDirectory = pi.KanBanWorkbookPath.Substring(0, pi.KanBanWorkbookPath.LastIndexOf('\\'));
                 }
@@ -257,9 +261,9 @@ namespace ClassLibrary
 
                 return "";
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message + " CreateKanBanWorkbook");
+                //MessageBox.Show(e.Message + " GenerateKanBanWorkbook");
 
                 // TODO: Need to close and release workbooks variable.
                 // TODO: Need to remove garbage collection and have excel shutdown without it.
@@ -276,7 +280,9 @@ namespace ClassLibrary
 
                 Marshal.ReleaseComObject(ws);
 
-                return "";
+                throw;
+
+                //return "";
             }
 
             //vBComponents = wb.VBProject.VBComponents;
@@ -299,7 +305,7 @@ namespace ClassLibrary
         // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
 
 
-        private void CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb)
+        private int CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb)
         {
             Excel.Worksheet ws;
             Excel.Borders border;
@@ -417,7 +423,7 @@ namespace ClassLibrary
 
                 ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
 
-                if(component.Notes.Contains('\n'))
+                if (component.Notes.Contains('\n'))
                 {
                     foreach (string line in component.Notes.Split('\n'))
                     {
@@ -428,7 +434,7 @@ namespace ClassLibrary
                 {
                     ws.Cells[r++ + 1, 2].value = component.Notes;
                 }
-                
+
 
                 if (component.Picture != null)
                 {
@@ -444,6 +450,8 @@ namespace ClassLibrary
 
             if (SheetNExists("Mold", wb))
                 wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
+
+            return n;
         }
 
         public void OpenKanBanWorkbook(string filepath, string component)
@@ -531,6 +539,8 @@ namespace ClassLibrary
                 {
                     if (WorkbookHasMatchingComponent(wb, componentName))
                     {
+                        //ShowSheetIndexes(wb);
+
                         ws = MatchingComponentSheet(wb, componentName);
 
                         index = ws.Index - 1;
@@ -552,6 +562,8 @@ namespace ClassLibrary
                         }
                     }
 
+                    //ShowSheetIndexes(wb);
+
                     ws = wb.Sheets.Add(After: wb.Sheets[index]);
 
                     component = pi.ComponentList.Find(x => x.Name == componentName);
@@ -570,14 +582,23 @@ namespace ClassLibrary
                     }
                 }
 
+                if (!WorkbookHasSummarySheet(wb))
+                {
+                    ws = wb.Sheets.Add(After: wb.Sheets[index + 1]);
+                }
+                else
+                {
+                    ws = wb.Sheets[SheetNIndex("Summary", wb)];
+                }
+
+                CreateHoursSheet(pi, wb, ws.Index);
+
                 excelApp.Visible = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.Message);
-
                 if (ws != null)
-                Marshal.ReleaseComObject(ws);
+                    Marshal.ReleaseComObject(ws);
                 ws = null;
 
                 wb.Close(false);
@@ -591,10 +612,12 @@ namespace ClassLibrary
                 excelApp.Quit();
                 Marshal.ReleaseComObject(excelApp);
                 excelApp = null;
+
+                throw ex;
             }
         }
 
-        private Excel.Worksheet CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Workbook wb, int sheetIndex)
+        private void CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Workbook wb, int sheetIndex)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Worksheet ws = wb.Sheets[sheetIndex];
@@ -605,7 +628,7 @@ namespace ClassLibrary
             Console.WriteLine($"{ws.Name} {wb.Name}");
 
             n = 2;
-            
+
             try
             {
                 ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
@@ -723,18 +746,15 @@ namespace ClassLibrary
                     ws.Cells[r++ + 1, 2].value = component.Notes;
                 }
 
-
                 if (component.Picture != null)
                 {
                     Clipboard.SetImage(component.Picture);
                     ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
                 }
-
-                return ws;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
 
                 Marshal.ReleaseComObject(ws);
                 ws = null;
@@ -743,21 +763,131 @@ namespace ClassLibrary
                 Marshal.ReleaseComObject(excelApp);
                 excelApp = null;
 
-                return null;
+                throw;
             }
         }
 
-        private Boolean SheetNExists(string sheetname, Excel.Workbook wb)
+        private void CreateHoursSheet(ProjectInfo pi, Excel.Workbook wb, int sheetIndex)
+        {
+            //Excel.Application excelApp = new Excel.Application();
+            Excel.Worksheet ws = wb.Sheets[sheetIndex];
+            ProjectSummary ps = GetProjectSummary(pi);
+            int r = 1, c = 1;
+
+            ws.Name = "Summary";
+            ws.Range["A1"].ColumnWidth = 20;
+            ws.Range["A1"].EntireColumn.Font.Bold = true;
+            ws.Range["A1"].EntireRow.Font.Bold = true;
+            ws.Cells[r, c].Value = "Work Type";
+            ws.Cells[r++, c + 1].Value = "Total Hours";
+
+            foreach (Hours hour in ps.HoursList)
+            {
+                ws.Cells[r, c].Value = hour.WorkType;
+                ws.Cells[r++, c + 1].Value = hour.Qty;
+            }
+
+            ws.Cells[r, c].Value = "Total";
+            ws.Cells[r, c + 1].Formula = "=Sum(" + ws.Cells[r - 1, c + 1].Address + ":" + ws.Cells[r - ps.HoursList.Count , c + 1].Address + ")";
+            ws.Cells[r, c + 1].Font.Bold = true;
+        }
+
+        private ProjectSummary GetProjectSummary(ProjectInfo pi)
+        {
+            List<TaskInfo> taskList = new List<TaskInfo>();
+            List<TaskInfo> summaryTaskList = new List<TaskInfo>();
+            ProjectSummary ps = new ProjectSummary();
+
+            foreach (Component component in pi.ComponentList)
+            {
+                taskList.AddRange(component.TaskList);
+            }
+
+            foreach (Hours hours in ps.HoursList)
+            {
+                if (hours.WorkType == "Ordering")
+                {
+                    summaryTaskList = taskList.FindAll(x => x.TaskName.Contains("Order"));
+                }
+                else if (hours.WorkType == "Design")
+                {
+                    summaryTaskList = taskList.FindAll(x => x.TaskName.Contains("Design"));
+                }
+                else if (hours.WorkType == "Grind")
+                {
+                    summaryTaskList = taskList.FindAll(x => x.TaskName.Contains("Grind"));
+                }
+                else if (hours.WorkType == "Inspection")
+                {
+                    summaryTaskList = taskList.FindAll(x => x.TaskName.Contains("Inspection"));
+                }
+                else
+                {
+                    summaryTaskList = taskList.FindAll(x => x.TaskName == hours.WorkType);
+                }
+
+                ps.HoursList.Find(x => x.WorkType == hours.WorkType).Qty += summaryTaskList.Sum(p => p.Hours);
+            }
+
+            return ps;
+        }
+
+        private class ProjectSummary
+        {
+            public List<Hours> HoursList { get; set; }
+
+            public ProjectSummary()
+            {
+                HoursList = new List<Hours>();
+
+                string[] workTypeArr = {"Design", "Ordering", "Program Rough", "Program Finish", "Program Electrodes",
+                                   "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "EDM Sinker", "EDM Wire (In-House)", "Inspection"};
+
+                foreach (string workType in workTypeArr)
+                {
+                    HoursList.Add(new Hours { WorkType = workType });
+                }
+            }
+        }
+
+        private class Hours
+        {
+            public int Qty { get; set; }
+            public string WorkType { get; set; }
+        }
+
+        private Boolean SheetNExists(string sheetName, Excel.Workbook wb)
         {
             foreach (Excel.Worksheet sheet in wb.Sheets)
             {
-                if (sheet.Name == sheetname)
+                if (sheet.Name == sheetName)
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private int SheetNIndex(string sheetName, Excel.Workbook wb)
+        {
+            foreach (Excel.Worksheet sheet in wb.Sheets)
+            {
+                if (sheet.Name == sheetName)
+                {
+                    return sheet.Index;
+                }
+            }
+
+            return 0;
+        }
+
+        private void ShowSheetIndexes(Excel.Workbook wb)
+        {
+            foreach (Excel.Worksheet sheet in wb.Sheets)
+            {
+                Console.WriteLine(sheet.Name + " " + sheet.Index);
+            }
         }
 
         public void UpdateKanBanWorkbook(string filePath, ProjectInfo project)
@@ -867,11 +997,24 @@ namespace ClassLibrary
             return false;
         }
 
+        public bool WorkbookHasSummarySheet(Excel.Workbook workbook)
+        {
+            foreach (Excel.Worksheet sheet in workbook.Worksheets)
+            {
+                if (sheet.Name == "Summary")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public Excel.Worksheet MatchingComponentSheet(Excel.Workbook workbook, string component)
         {
             foreach (Excel.Worksheet sheet in workbook.Worksheets)
             {
-                if (sheet.Cells[2, 2].value.ToString().Trim() == component)
+                if (sheet.Cells[2, 2].value.ToString().Trim() == component && sheet.Index != 1)
                 {
                     return sheet;
                 }

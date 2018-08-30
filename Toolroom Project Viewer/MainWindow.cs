@@ -26,6 +26,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraRichEdit;
 using DevExpress.XtraRichEdit.UI;
 using DevExpress.XtraEditors.Controls;
+using System.Reflection;
 
 namespace Toolroom_Project_Viewer
 {
@@ -36,6 +37,8 @@ namespace Toolroom_Project_Viewer
         private BindingList<CustomAppointment> CustomEventList = new BindingList<CustomAppointment>();
         private BindingList<CustomDependency> CustomDependencyList = new BindingList<CustomDependency>();
         private List<ColorStruct> ColorList = new List<ColorStruct>();
+        private RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
+        private string printOrientation, paperSize;
 
         private string TimeUnits { get; set; } 
         private ProjectInfo Project { get; set; }
@@ -1113,7 +1116,10 @@ namespace Toolroom_Project_Viewer
             }
             else if (e.Column.FieldName == "StartDate" && bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
             {
-                bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(e.Value).AddDays(Convert.ToDouble(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks")) * 7));
+                if (int.TryParse(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out int result))
+                {
+                    bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(e.Value).AddDays(Convert.ToDouble(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks")) * 7));
+                }
             }
 
             //bandedGridView1.RefreshData();
@@ -1258,12 +1264,30 @@ namespace Toolroom_Project_Viewer
         private void bandedGridView1_PrintInitialize(object sender, PrintInitializeEventArgs e)
         {
             PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
-            pb.PageSettings.Landscape = true;
-            pb.PageSettings.TopMargin = 50;
-            pb.PageSettings.RightMargin = 50;
-            pb.PageSettings.BottomMargin = 50;
-            pb.PageSettings.LeftMargin = 50;
-            pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Letter;
+            
+            pb.PageSettings.TopMargin = 25;
+            pb.PageSettings.RightMargin = 25;
+            pb.PageSettings.BottomMargin = 25;
+            pb.PageSettings.LeftMargin = 25;
+            pb.Document.AutoFitToPagesWidth = 1;
+
+            if (paperSize == "Tabloid")
+            {
+                pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Tabloid; 
+            }
+            else if (paperSize == "Letter")
+            {
+                pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Letter;
+            }
+
+            if (printOrientation == "Landscape")
+            {
+                pb.PageSettings.Landscape = true;
+            }
+            else if (printOrientation == "Portrait")
+            {
+                pb.PageSettings.Landscape = false;
+            }
 
             bandedGridView1.OptionsPrint.RtfPageFooter = @"{\rtf1\ansi {\fonttbl\f0\ Microsoft Sans Serif;} \f0\pard \fs18 \qr \b Report Date: " + footerDateTime + @"\b0 \par}";
         }
@@ -1278,6 +1302,12 @@ namespace Toolroom_Project_Viewer
         //    pb.PageMargins.Left = 50;
         //}
 
+        private void workLoadRefreshButton_Click(object sender, EventArgs e)
+        {
+            gridControl2.DataSource = workLoadTableAdapter.GetData();
+            footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+        }
+
         private void workLoadTabPrintButton_Click(object sender, EventArgs e)
         {
             // Check whether the GridControl can be previewed.
@@ -1287,8 +1317,14 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            bandedGridView1.ShowPrintPreview();
-            //bandedGridView1.Print();
+            printOrientation = "Landscape";
+            paperSize = "Tabloid";
+            FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
+            fi.SetValue(bandedGridView1.Columns.ColumnByFieldName("Stage"), 0);
+            //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 0;
+            //bandedGridView1.ShowPrintPreview();
+            //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 70;
+            bandedGridView1.Print();
             //gridView2.PrintDialog(); // Page Orientation cannot be changed.
 
             //gridControl2.ShowPrintPreview();
@@ -1296,18 +1332,31 @@ namespace Toolroom_Project_Viewer
             //gridControl2.Print(); // Columns are all scrunched up.
         }
 
-        private void workLoadRefreshButton_Click(object sender, EventArgs e)
+        private void workLoadTabPrint2Button_Click(object sender, EventArgs e)
         {
-            gridControl2.DataSource = workLoadTableAdapter.GetData();
-            footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            // Check whether the GridControl can be previewed.
+            if (!gridControl2.IsPrintingAvailable)
+            {
+                MessageBox.Show("The 'DevExpress.XtraPrinting' library is not found", "Error");
+                return;
+            }
+
+            printOrientation = "Portrait";
+            paperSize = "Letter";
+            FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
+            fi.SetValue(bandedGridView1.Columns.ColumnByFieldName("Stage"), 0);
+            //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 0;
+            //bandedGridView1.ShowPrintPreview();
+            //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 70;
+            bandedGridView1.Print();
         }
 
         private void bandedGridView1_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
         {
             //MessageBox.Show(e.Column + " " + e.RowHandle);
 
-            if (e.Column.FieldName == "Customer" && e.RowHandle == 0)
-            e.Appearance.ForeColor = System.Drawing.Color.Red;
+            //if (e.Column.FieldName == "Customer" && e.RowHandle == 0)
+            //e.Appearance.ForeColor = System.Drawing.Color.Red;
         }
 
         private void setStatusButton_Click(object sender, EventArgs e)
@@ -1367,19 +1416,7 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (e.Button == MouseButtons.Left)
                 {
-                    //    if (column.FieldName == "GeneralNotes")
-                    //    {
-                    //        using (var gne = new GeneralNotesEditor(bandedGridView1.GetRowCellValue(rowHandle, "GeneralNotes").ToString()))
-                    //        {
-                    //            var result = gne.ShowDialog();
 
-                    //            if (result == DialogResult.OK)
-                    //            {
-                    //                bandedGridView1.SetRowCellValue(rowHandle, "GeneralNotes", gne.RTFText);
-                    //            }
-                    //        }
-
-                    //    }
 
                 }
 
@@ -1446,7 +1483,6 @@ namespace Toolroom_Project_Viewer
             bandedGridView1.LayoutChanged();
         }
 
-
         private void bandedGridView1_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
             if(e.RowHandle >= 0 && int.TryParse(bandedGridView1.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID))
@@ -1468,32 +1504,50 @@ namespace Toolroom_Project_Viewer
             RichTextBox richTextBox = new RichTextBox();
             richTextBox.Dock = DockStyle.Top;
 
-            ColorEdit textColorPicker = new ColorEdit();
-            textColorPicker.Left = 50;
-            textColorPicker.Top = 40;
-            textColorPicker.Width = 50;
-            textColorPicker.Height = 25;
-            textColorPicker.Dock = DockStyle.None;
-            textColorPicker.Color = Color.Black;
-            textColorPicker.ColorChanged += new EventHandler(editorColorPickerControl_ColorChanged);
+            SimpleButton fontButton = new SimpleButton();
+            fontButton.Appearance.Font = new Font(fontButton.Font.FontFamily, fontButton.Font.Size, FontStyle.Regular);
+            fontButton.Text = "Font";
+            fontButton.Left = 40;
+            fontButton.Top = 40;
+            fontButton.Width = 50;
+            fontButton.Height = 20;
+            fontButton.Click += new EventHandler(fontButton_Clicked);
 
-            SimpleButton boldButton = new SimpleButton();
-            boldButton.Appearance.Font = new Font (boldButton.Font.FontFamily, boldButton.Font.Size, FontStyle.Bold);
-            boldButton.Text = "B";
-            boldButton.Left = 105;
-            boldButton.Top = 40;
-            boldButton.Width = 20;
-            boldButton.Height = 20;
-            boldButton.Click += new EventHandler(boldButton_Clicked);
+            //ColorEdit textColorPicker = new ColorEdit();
+            //textColorPicker.Left = 50;
+            //textColorPicker.Top = 40;
+            //textColorPicker.Width = 50;
+            //textColorPicker.Height = 25;
+            //textColorPicker.Dock = DockStyle.None;
+            //textColorPicker.Color = Color.Black;
+            //textColorPicker.ColorChanged += new EventHandler(editorColorPickerControl_ColorChanged);
 
-            SimpleButton underlineButton = new SimpleButton();
-            underlineButton.Appearance.Font = new Font(underlineButton.Font.FontFamily, underlineButton.Font.Size, FontStyle.Underline);
-            underlineButton.Text = "U";
-            underlineButton.Left = 130;
-            underlineButton.Top = 40;
-            underlineButton.Width = 20;
-            underlineButton.Height = 20;
-            underlineButton.Click += new EventHandler(underlineButton_Clicked);
+            //SimpleButton boldButton = new SimpleButton();
+            //boldButton.Appearance.Font = new Font(boldButton.Font.FontFamily, boldButton.Font.Size, FontStyle.Bold);
+            //boldButton.Text = "B";
+            //boldButton.Left = 105;
+            //boldButton.Top = 40;
+            //boldButton.Width = 20;
+            //boldButton.Height = 20;
+            //boldButton.Click += new EventHandler(boldButton_Clicked);
+
+            //SimpleButton underlineButton = new SimpleButton();
+            //underlineButton.Appearance.Font = new Font(underlineButton.Font.FontFamily, underlineButton.Font.Size, FontStyle.Underline);
+            //underlineButton.Text = "U";
+            //underlineButton.Left = 130;
+            //underlineButton.Top = 40;
+            //underlineButton.Width = 20;
+            //underlineButton.Height = 20;
+            //underlineButton.Click += new EventHandler(underlineButton_Clicked);
+
+            //SimpleButton plainButton = new SimpleButton();
+            //plainButton.Appearance.Font = new Font(plainButton.Font.FontFamily, plainButton.Font.Size, FontStyle.Regular);
+            //plainButton.Text = "P";
+            //plainButton.Left = 155;
+            //plainButton.Top = 40;
+            //plainButton.Width = 20;
+            //plainButton.Height = 20;
+            //plainButton.Click += new EventHandler(plainButton_Clicked);
 
             SimpleButton editorOKButton = new SimpleButton();
             editorOKButton.Text = "OK";
@@ -1517,9 +1571,13 @@ namespace Toolroom_Project_Viewer
             panel.Dock = DockStyle.Bottom;
             panel.Controls.Add(editorOKButton);
             panel.Controls.Add(editorCancelButton);
-            panel.Controls.Add(textColorPicker);
-            panel.Controls.Add(boldButton);
-            panel.Controls.Add(underlineButton);
+            panel.Controls.Add(fontButton);
+            //panel.Controls.Add(textColorPicker);
+            //panel.Controls.Add(boldButton);
+            //panel.Controls.Add(underlineButton);
+            //panel.Controls.Add(plainButton);
+
+            RepositoryItemRichTextEdit repositoryItemRichTextEdit = new RepositoryItemRichTextEdit();
 
             PopupContainerControl popupContainerControl = new PopupContainerControl();
             popupContainerControl.Controls.Add(richTextBox);
@@ -1529,31 +1587,34 @@ namespace Toolroom_Project_Viewer
             PopupContainerEdit popupContainerEdit = new PopupContainerEdit();
             popupContainerEdit.Properties.PopupControl = popupContainerControl;
 
-            RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
+            // The initialization of this instance of repositoryItemPopupContainer edit is at the top of this class.
             repositoryItemPopupContainerEdit.PopupControl = popupContainerControl;
 
             gridControl2.RepositoryItems.Add(repositoryItemPopupContainerEdit);
-            bandedGridView1.Columns["GeneralNotes"].ColumnEdit = repositoryItemPopupContainerEdit;
+            bandedGridView1.Columns["GeneralNotes"].ColumnEdit = repositoryItemRichTextEdit;
         }
 
         private void editorOKButton_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("okButton_Clicked");
+
             PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            RichTextBox richTextBox = popupContainerEdit.Properties.PopupControl.Controls[0] as RichTextBox;
 
-            popupContainerEdit.EditValue = popupContainerEdit.Properties.PopupControl.Controls[0].Text;
 
+            popupContainerEdit.EditValue = richTextBox.Rtf;
             popupContainerEdit.ClosePopup();
 
-            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-            bandedGridView1.SetFocusedRowCellValue("GeneralNotesRTF", richTextBox.Rtf);
+            //Control button = sender as Control;
+            ////Close the dropdown accepting the user's choice 
+            //(button.Parent.Parent as PopupContainerControl).OwnerEdit.ClosePopup();
         }
 
         private void editorCancelButton_Clicked(object sender, EventArgs e)
         {
             PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
 
-            popupContainerEdit.ClosePopup();
+            popupContainerEdit.CancelPopup();
         }
 
         private void editorColorPickerControl_ColorChanged(object sender, EventArgs e)
@@ -1585,6 +1646,31 @@ namespace Toolroom_Project_Viewer
             richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Underline);
         }
 
+        private void plainButton_Clicked(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Regular);
+        }
+
+        private void fontButton_Clicked(object sender, EventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+
+            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+            FontDialog fontDialog = new FontDialog();
+            fontDialog.ShowColor = true;
+
+            if (fontDialog.ShowDialog() != DialogResult.Cancel)
+            {
+                richTextBox.SelectionFont = fontDialog.Font;
+                richTextBox.SelectionColor = fontDialog.Color;
+            }
+        }
+
         private void bandedGridView1_ShownEditor(object sender, EventArgs e)
         {
             Console.WriteLine("bandedGridView1 ShownEditor entered.");
@@ -1613,25 +1699,28 @@ namespace Toolroom_Project_Viewer
                     //richEditControl.Document.Sections[0].Margins.Top = 50;
 
                     RichTextBox richTextBox = (RichTextBox)activeEditor.Properties.PopupControl.Controls[0];
-                    //richTextBox.Text = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
-                    richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotesRTF").ToString();
 
-                    //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popopContainerEdit_QueryResultValue);
+                    richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
+
+                    //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popupContainerEdit_QueryResultValue);
                 }
             }
         }
 
-        private void popopContainerEdit_QueryResultValue(object sender, QueryResultValueEventArgs e)
+        private void bandedGridView1_CustomRowCellEditForEditing(object sender, CustomRowCellEditEventArgs e)
         {
-            //Console.WriteLine("Query Result Value event entered");
-            //Console.WriteLine("GeneralNotes Value: " + bandedGridView1.GetFocusedRowCellValue("GeneralNotes"));
-            //PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-            //popupContainerEdit.Text = popupContainerEdit.Properties.PopupControl.Controls[0].Text;
-            //popupContainerEdit.QueryResultValue -= new QueryResultValueEventHandler(this.popopContainerEdit_QueryResultValue);
-            //bandedGridView1.SetFocusedRowCellValue("GeneralNotes", popupContainerEdit.Properties.PopupControl.Controls[0].Text);
-            //MessageBox.Show("Popup Container Edit: " + popupContainerEdit.Text);
-            //MessageBox.Show("Query Result: " + e.Value.ToString());
-            //MessageBox.Show("Rich Text Edit: " + popupContainerEdit.Properties.PopupControl.Controls[0].Text);
+            if (e.Column.FieldName == "GeneralNotes")
+            {
+                e.RepositoryItem = repositoryItemPopupContainerEdit;
+            }
+        }
+
+        private void popupContainerEdit_QueryResultValue(object sender, QueryResultValueEventArgs e)
+        {
+            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            RichTextBox richTextBox = popupContainerEdit.Properties.PopupControl.Controls[0] as RichTextBox;
+            
+            popupContainerEdit.EditValue = richTextBox.Rtf;
         }
 
         #endregion
