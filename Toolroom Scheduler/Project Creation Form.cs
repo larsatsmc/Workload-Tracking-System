@@ -1651,6 +1651,7 @@ namespace Toolroom_Scheduler
                 quantityNumericUpDown.Value = component.Quantity;
                 sparesNumericUpDown.Value = component.Spares;
                 materialComboBox.Text = component.Material;
+                finishTextBox.Text = component.Finish;
 
                 componentPictureBox.Image = component.Picture;
 
@@ -1978,6 +1979,18 @@ namespace Toolroom_Scheduler
             }
         }
 
+        private void finishTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ClassLibrary.Component selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetFinish(finishTextBox.Text);
+            }
+        }
+
         private void loadTemplateButton_Click(object sender, EventArgs e)
         {
             Templates tmpt = new Templates();
@@ -2063,21 +2076,28 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            SetProjectInfo();
-
-            if(CreateProjectButton.Text == "Create")
+            try
             {
-                if(db.LoadProjectToDB(Project))
+                SetProjectInfo();
+
+                if (CreateProjectButton.Text == "Create")
                 {
-                    this.DialogResult = DialogResult.OK;
+                    if (db.LoadProjectToDB(Project))
+                    {
+                        this.DialogResult = DialogResult.OK;
+                    }
+                }
+                else if (CreateProjectButton.Text == "Change")
+                {
+                    if (db.EditProjectInDB(Project))
+                    {
+                        this.DialogResult = DialogResult.OK;
+                    }
                 }
             }
-            else if(CreateProjectButton.Text == "Change")
+            catch (Exception ex)
             {
-                if(db.EditProjectInDB(Project))
-                {
-                    this.DialogResult = DialogResult.OK;
-                }
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
 
             //printObjectTree();

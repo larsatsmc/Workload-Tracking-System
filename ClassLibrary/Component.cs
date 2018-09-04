@@ -27,6 +27,7 @@ namespace ClassLibrary
         public int Quantity { get; private set; }
         public int Spares { get; private set; }
         public string Initials { get; private set; }
+        public string Finish { get; private set; }
 
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
@@ -45,6 +46,7 @@ namespace ClassLibrary
             this.Spares = 0;
             this.Notes = "";
             this.Material = "";
+            this.Finish = "";
             TaskList = new List<TaskInfo>();
             this.Name = name;
         }
@@ -58,6 +60,7 @@ namespace ClassLibrary
             this.Spares = 0;
             this.Notes = "";
             this.Material = "";
+            this.Finish = "";
             TaskList = new List<TaskInfo>();
             this.Name = ConvertObjectToString(name);
         }
@@ -78,7 +81,7 @@ namespace ClassLibrary
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
         /// </summary> 
-        public Component(object name, object notes, object priority, object position, object quantity, object spares, object picture, object material, object taskIDCount)
+        public Component(object name, object notes, object priority, object position, object quantity, object spares, object picture, object material, object finish, object taskIDCount)
         {
             TaskList = new List<TaskInfo>();
             this.Name = ConvertObjectToString(name);
@@ -90,6 +93,7 @@ namespace ClassLibrary
             this.Spares = NullIntegerCheck(spares);
             this.Picture = NullByteArrayCheck(picture);
             this.Material = ConvertObjectToString(material);
+            this.Finish = ConvertObjectToString(finish);
             this.TaskIDCount = NullIntegerCheck(taskIDCount);
         }
         /// <summary>
@@ -281,6 +285,13 @@ namespace ClassLibrary
         public void SetMaterial(string material)
         {
             this.Material = material;
+        }
+        /// <summary>
+        /// Sets the finish property of a component.
+        /// </summary> 
+        public void SetFinish(string finish)
+        {
+            this.Finish = finish;
         }
         /// <summary>
         /// Gets a task with matching ID from list of tasks for component.

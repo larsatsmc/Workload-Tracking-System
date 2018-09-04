@@ -105,6 +105,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.label24 = new System.Windows.Forms.Label();
+            this.finishTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
@@ -314,6 +316,8 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.finishTextBox);
+            this.tabPage5.Controls.Add(this.label24);
             this.tabPage5.Controls.Add(this.label23);
             this.tabPage5.Controls.Add(this.label22);
             this.tabPage5.Controls.Add(this.label21);
@@ -338,7 +342,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(15, 72);
+            this.label23.Location = new System.Drawing.Point(15, 46);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(69, 19);
             this.label23.TabIndex = 61;
@@ -348,7 +352,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(144, 43);
+            this.label22.Location = new System.Drawing.Point(144, 17);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(58, 19);
             this.label22.TabIndex = 60;
@@ -358,7 +362,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(15, 43);
+            this.label21.Location = new System.Drawing.Point(15, 17);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(69, 19);
             this.label21.TabIndex = 59;
@@ -366,7 +370,7 @@
             // 
             // sparesNumericUpDown
             // 
-            this.sparesNumericUpDown.Location = new System.Drawing.Point(208, 43);
+            this.sparesNumericUpDown.Location = new System.Drawing.Point(208, 17);
             this.sparesNumericUpDown.Name = "sparesNumericUpDown";
             this.sparesNumericUpDown.Size = new System.Drawing.Size(47, 22);
             this.sparesNumericUpDown.TabIndex = 58;
@@ -374,7 +378,7 @@
             // 
             // quantityNumericUpDown
             // 
-            this.quantityNumericUpDown.Location = new System.Drawing.Point(90, 43);
+            this.quantityNumericUpDown.Location = new System.Drawing.Point(90, 17);
             this.quantityNumericUpDown.Name = "quantityNumericUpDown";
             this.quantityNumericUpDown.Size = new System.Drawing.Size(47, 22);
             this.quantityNumericUpDown.TabIndex = 57;
@@ -394,7 +398,7 @@
             "S7",
             "SS",
             "W360"});
-            this.materialComboBox.Location = new System.Drawing.Point(90, 71);
+            this.materialComboBox.Location = new System.Drawing.Point(90, 45);
             this.materialComboBox.Name = "materialComboBox";
             this.materialComboBox.Size = new System.Drawing.Size(165, 24);
             this.materialComboBox.TabIndex = 56;
@@ -404,7 +408,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(15, 123);
+            this.label11.Location = new System.Drawing.Point(15, 130);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 17);
             this.label11.TabIndex = 55;
@@ -412,7 +416,7 @@
             // 
             // componentPictureBox
             // 
-            this.componentPictureBox.Location = new System.Drawing.Point(18, 143);
+            this.componentPictureBox.Location = new System.Drawing.Point(18, 150);
             this.componentPictureBox.Name = "componentPictureBox";
             this.componentPictureBox.Size = new System.Drawing.Size(381, 264);
             this.componentPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -421,7 +425,7 @@
             // 
             // clipboardButton
             // 
-            this.clipboardButton.Location = new System.Drawing.Point(319, 106);
+            this.clipboardButton.Location = new System.Drawing.Point(319, 113);
             this.clipboardButton.Name = "clipboardButton";
             this.clipboardButton.Size = new System.Drawing.Size(80, 31);
             this.clipboardButton.TabIndex = 53;
@@ -431,7 +435,7 @@
             // 
             // browseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(233, 106);
+            this.browseButton.Location = new System.Drawing.Point(233, 113);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(80, 31);
             this.browseButton.TabIndex = 52;
@@ -970,6 +974,24 @@
             this.tabControl1.Size = new System.Drawing.Size(425, 760);
             this.tabControl1.TabIndex = 1;
             // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(34, 79);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 17);
+            this.label24.TabIndex = 62;
+            this.label24.Text = "Finish:";
+            // 
+            // finishTextBox
+            // 
+            this.finishTextBox.Location = new System.Drawing.Point(90, 79);
+            this.finishTextBox.Name = "finishTextBox";
+            this.finishTextBox.Size = new System.Drawing.Size(165, 22);
+            this.finishTextBox.TabIndex = 63;
+            this.finishTextBox.TextChanged += new System.EventHandler(this.finishTextBox_TextChanged);
+            // 
             // Project_Creation_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1098,5 +1120,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox finishTextBox;
+        private System.Windows.Forms.Label label24;
     }
 }

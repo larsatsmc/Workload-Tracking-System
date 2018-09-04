@@ -229,7 +229,7 @@ namespace Toolroom_Scheduler
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
                 return false;
             }
         }
@@ -635,18 +635,15 @@ namespace Toolroom_Scheduler
                                          spares: rdr["Spares"],
                                         picture: rdr["Pictures"],
                                        material: rdr["Material"],
+                                         finish: rdr["Finish"],
                                     taskIDCount: rdr["TaskIDCount"]
                             );
 
                             project.AddComponent(component);
                         }
-
-                        Connection.Close();
                     }
                     else
                     {
-                        Connection.Close();
-
                         project.AddComponentList(GetComponentListFromTasksTable(project.JobNumber, project.ProjectNumber));
                     }
                 }
@@ -654,8 +651,11 @@ namespace Toolroom_Scheduler
             }
             catch (Exception e)
             {
+                throw e;
+            }
+            finally
+            {
                 Connection.Close();
-                MessageBox.Show(e.Message, "AddComponents");
             }
         }
 
@@ -691,6 +691,10 @@ namespace Toolroom_Scheduler
             {
                 Connection.Close();
                 MessageBox.Show(e.Message, "GetProjectInfo");
+            }
+            finally
+            {
+                Connection.Close();
             }
 
             return componentList;
@@ -730,13 +734,14 @@ namespace Toolroom_Scheduler
 
                     }
                 }
-
-                Connection.Close();
             }
-            catch (Exception e)
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
             {
                 Connection.Close();
-                MessageBox.Show(e.Message, "getComponentListFromTaskTable");
             }
 
             return componentList;
@@ -853,60 +858,54 @@ namespace Toolroom_Scheduler
 
             queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber ORDER BY ID DESC";
 
-            try
+            adapter = new OleDbDataAdapter(queryString, Connection);
+
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
+            adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
+
+            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+            adapter.Fill(dt);
+
+            var result = from DataRow myRow in dt.Rows
+                            where myRow["Predecessors"].ToString() == ""
+                            select myRow;
+
+            foreach (DataRow nrow in result)
             {
-                adapter = new OleDbDataAdapter(queryString, Connection);
-
-                adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
-                adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
-
-                OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
-
-                adapter.Fill(dt);
-
-                var result = from DataRow myRow in dt.Rows
-                             where myRow["Predecessors"].ToString() == ""
-                             select myRow;
-
-                foreach (DataRow nrow in result)
-                {
-                    //if(skipDatedTasks = true && (nrow["StartDate"] != DBNull.Value || nrow["FinishDate"] != DBNull.Value))
-                    //{
-                    //    goto Skip;
-                    //}
-
-                    if(componentList == null)
-                    {
-                        nrow["StartDate"] = forwardDate;
-                        nrow["FinishDate"] = AddBusinessDays(forwardDate, nrow["Duration"].ToString());
-
-                        //Skip:;
-
-                        ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
-                    }
-                    else if (componentList.Exists(x => x == nrow["Component"].ToString()))
-                    {
-                        nrow["StartDate"] = forwardDate;
-                        nrow["FinishDate"] = AddBusinessDays(forwardDate, nrow["Duration"].ToString());
-
-                        //Skip:;
-
-                        ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
-                    }
-                }
-
-                //foreach (DataRow nrow in dt.Rows)
+                //if(skipDatedTasks = true && (nrow["StartDate"] != DBNull.Value || nrow["FinishDate"] != DBNull.Value))
                 //{
-                //    Console.WriteLine($"{nrow["TaskID"].ToString()} {nrow["Component"].ToString()} {nrow["StartDate"].ToString()} {nrow["FinishDate"].ToString()}");
+                //    goto Skip;
                 //}
 
-                adapter.UpdateCommand = builder.GetUpdateCommand();
-                adapter.Update(dt);
+                if(componentList == null)
+                {
+                    nrow["StartDate"] = forwardDate;
+                    nrow["FinishDate"] = AddBusinessDays(forwardDate, nrow["Duration"].ToString());
+
+                    //Skip:;
+
+                    ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
+                }
+                else if (componentList.Exists(x => x == nrow["Component"].ToString()))
+                {
+                    nrow["StartDate"] = forwardDate;
+                    nrow["FinishDate"] = AddBusinessDays(forwardDate, nrow["Duration"].ToString());
+
+                    //Skip:;
+
+                    ForwardDateTask(Convert.ToInt32(nrow["TaskID"]), nrow["Component"].ToString(), skipDatedTasks, Convert.ToDateTime(nrow["FinishDate"]), dt);
+                }
             }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+
+            //foreach (DataRow nrow in dt.Rows)
+            //{
+            //    Console.WriteLine($"{nrow["TaskID"].ToString()} {nrow["Component"].ToString()} {nrow["StartDate"].ToString()} {nrow["FinishDate"].ToString()}");
+            //}
+
+            adapter.UpdateCommand = builder.GetUpdateCommand();
+            adapter.Update(dt);
+
         }
 
         private void ForwardDateTask(int predecessorID, string component, bool skipDatedTasks, DateTime predecessorFinishDate, DataTable projectTaskTable)
@@ -956,49 +955,42 @@ namespace Toolroom_Scheduler
 
             queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber ORDER BY TaskID DESC";
 
-            try
+            adapter = new OleDbDataAdapter(queryString, Connection);
+
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
+            adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
+
+            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+            adapter.Fill(dt);
+
+            var result = from myRow in dt.AsEnumerable()
+                            group myRow by new { component = myRow.Field<string>("Component") } into components
+                            select new { highestID = components.Max(c => c.Field<int>("TaskID")), component = components.Key.component };
+
+            foreach (var lastTask in result)
             {
-                adapter = new OleDbDataAdapter(queryString, Connection);
-
-                adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
-                adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
-
-                OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
-
-                adapter.Fill(dt);
-
-                var result = from myRow in dt.AsEnumerable()
-                             group myRow by new { component = myRow.Field<string>("Component") } into components
-                             select new { highestID = components.Max(c => c.Field<int>("TaskID")), component = components.Key.component };
-
-                foreach (var lastTask in result)
+                if(componentList == null)
                 {
-                    if(componentList == null)
-                    {
-                        Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
-                        BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
-                    }
-                    else if (componentList.Exists(x => x == lastTask.component))
-                    {
-                        Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
-                        BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
-                    }
-
+                    Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
+                    BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
+                }
+                else if (componentList.Exists(x => x == lastTask.component))
+                {
+                    Console.WriteLine($"{lastTask.highestID} {lastTask.component}");
+                    BackDateTask(lastTask.highestID, lastTask.component, skipDatedTasks, backDate, dt);
                 }
 
-                //foreach (DataRow nrow in dt.Rows)
-                //{
-                //    Console.WriteLine($"{nrow["TaskID"].ToString()} {nrow["Component"].ToString()} {nrow["StartDate"].ToString()} {nrow["FinishDate"].ToString()}");
-                //}
-
-                adapter.UpdateCommand = builder.GetUpdateCommand();
-
-                adapter.Update(dt);
             }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+
+            //foreach (DataRow nrow in dt.Rows)
+            //{
+            //    Console.WriteLine($"{nrow["TaskID"].ToString()} {nrow["Component"].ToString()} {nrow["StartDate"].ToString()} {nrow["FinishDate"].ToString()}");
+            //}
+
+            adapter.UpdateCommand = builder.GetUpdateCommand();
+
+            adapter.Update(dt);
         }
 
         private void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
@@ -1240,87 +1232,18 @@ namespace Toolroom_Scheduler
                     //Console.WriteLine(queryString);
                     //Console.WriteLine((grid.Rows[ev.RowIndex]).Cells[0].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[1].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[2].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[3].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[4].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[5].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[6].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[7].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[8].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[9].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[10].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[11].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[12].Value.ToString() + " ");
                     Connection.Open();
+
                     cmd.ExecuteNonQuery();
-
-                    {
-                        //if(ev.ColumnIndex != 5)
-                        //    MessageBox.Show("Update Success!");
-                        Connection.Close();
-                    }
-
                 }
             }
-            catch (Exception er)
+            catch (Exception ex)
             {
-                MessageBox.Show(er.Message);
+                throw ex;
             }
-        }
-
-        public void CalculateEarliestStartDates(string jn, int pn) // One time deal.  This is only to get everything caught up.  Will come up with another method to update earliest start dates on the fly.
-        { 
-            OleDbDataAdapter adapter = new OleDbDataAdapter();
-            DataTable datatable = new DataTable();
-            DateTime tempDate;
-            DateTime earliestStartDate = new DateTime(2000, 1, 1);
-            string queryString;
-            int tempPredecessor;
-            string[] predecessorArr;
-
-            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber ORDER BY TaskID ASC";
-
-            adapter.SelectCommand = new OleDbCommand(queryString, Connection);
-
-            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 12).Value = jn;
-            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter);
-            adapter.Fill(datatable);
-
-            //currentTaskID = Convert.ToInt16(FinishingDataGridView.CurrentRow.Cells[7].Value);
-            //currentTaskStartDate = Convert.ToDateTime(FinishingDataGridView.CurrentRow.Cells[5].Value);
-
-            foreach (DataRow nrow in datatable.Rows)
+            finally
             {
-                //Console.WriteLine(nrow["TaskID"].ToString());
-                tempDate = new DateTime(2000, 1, 1);
-                earliestStartDate = new DateTime(2000, 1, 1);
-
-                if (nrow["Predecessors"].ToString() != "")
-                    predecessorArr = nrow["Predecessors"].ToString().Split(',');
-                else
-                    goto NextStep;
-
-                for (int i = 0; i < predecessorArr.Length; i++)
-                {
-                    //Console.WriteLine("  " + predecessorArr[i].ToString());
-                    Console.WriteLine(nrow["TaskID"] + " " + nrow["Component"] + " " + predecessorArr[i].ToString());
-
-                    tempPredecessor = Convert.ToInt16(predecessorArr[i]);
-                    tempDate = GetTaskFinishDate(datatable, tempPredecessor);
-
-                    if (tempDate == new DateTime(2000, 1, 1))
-                    {
-                        earliestStartDate = new DateTime(2000, 1, 1);
-                        goto NextStep;
-                    }
-                    else if (tempDate > earliestStartDate)
-                    {
-                        earliestStartDate = tempDate;
-                    }
-                }
-
-                NextStep:
-
-                if (earliestStartDate != new DateTime(2000, 1, 1))
-                    nrow["EarliestStartDate"] = earliestStartDate;
-                else
-                    nrow["EarliestStartDate"] = DBNull.Value;
-
-                //Console.WriteLine(nrow["Component"] + " " + nrow["Predecessors"]);
+                Connection.Close();
             }
-
-            adapter.UpdateCommand = builder.GetUpdateCommand();
-            adapter.Update(datatable);
-
-            MessageBox.Show("Done!");
         }
 
         private DateTime GetTaskFinishDate(DataTable dt, int id)
@@ -1408,19 +1331,22 @@ namespace Toolroom_Scheduler
 
 
                 Connection.Open();
-                adapter.UpdateCommand.ExecuteNonQuery();
-                Connection.Close();
 
-                
+                adapter.UpdateCommand.ExecuteNonQuery();
+
                 MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
             }
-            catch (OleDbException ex)
+            catch (OleDbException oleEx)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                throw oleEx;
             }
-            catch (Exception x)
+            catch (Exception ex)
             {
-                MessageBox.Show(x.Message, "Exception Error");
+                throw ex;
+            }
+            finally
+            {
+                Connection.Close();
             }
         }
 
@@ -1445,19 +1371,23 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.Parameters.AddWithValue("@taskID", taskID);
 
                 Connection.Open();
+
                 adapter.UpdateCommand.ExecuteNonQuery();
-                Connection.Close();
 
                 MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
 
             }
-            catch (OleDbException ex)
+            catch (OleDbException oleException)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                throw oleException;
             }
-            catch (Exception x)
+            catch (Exception ex)
             {
-                MessageBox.Show(x.Message, "Exception Error");
+                throw ex;
+            }
+            finally
+            {
+                Connection.Close();
             }
         }
 
@@ -1950,6 +1880,7 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Priority", typeof(int));
             dt.Columns.Add("Pictures", typeof(byte[]));
             dt.Columns.Add("Material", typeof(string));
+            dt.Columns.Add("Finish", typeof(string));
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
             dt.Columns.Add("Spares", typeof(int));
@@ -1964,6 +1895,7 @@ namespace Toolroom_Scheduler
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
+                row["Finish"] = component.Finish;
                 if(component.GetPictureByteArray() != null)
                 {
                     row["Pictures"] = component.GetPictureByteArray();
@@ -2000,8 +1932,9 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Notes", typeof(string));
             dt.Columns.Add("Position", typeof(int));
             dt.Columns.Add("Priority", typeof(int));
-            dt.Columns.Add("Pictures", typeof(byte[])); // ADD LATER.
+            dt.Columns.Add("Pictures", typeof(byte[]));
             dt.Columns.Add("Material", typeof(string));
+            dt.Columns.Add("Finish", typeof(string));
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
             dt.Columns.Add("Spares", typeof(int));
@@ -2019,6 +1952,7 @@ namespace Toolroom_Scheduler
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
+                row["Finish"] = component.Finish;
                 row["TaskIDCount"] = component.TaskIDCount;
 
                 dt.Rows.Add(row);
@@ -2032,41 +1966,6 @@ namespace Toolroom_Scheduler
             Console.WriteLine("Component DataTable Created.");
 
             return dt;
-        }
-
-        private void InsertComponent(ProjectInfo project, Component component)
-        {
-            var adapter = new OleDbDataAdapter();
-
-            string queryString = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material) " +
-                                 "VALUES (@jobNumber, @projectNumber, @component, @notes, @priority, @position, @material)";
-
-            adapter.InsertCommand = new OleDbCommand(queryString, Connection);
-
-            adapter.InsertCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 20).Value = project.JobNumber;
-            adapter.InsertCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-            adapter.InsertCommand.Parameters.AddWithValue("@component", component.Name);
-            adapter.InsertCommand.Parameters.AddWithValue("@notes", component.Notes);
-            adapter.InsertCommand.Parameters.AddWithValue("@priority", component.Priority);
-            adapter.InsertCommand.Parameters.AddWithValue("@position", component.Position);
-            adapter.InsertCommand.Parameters.AddWithValue("@material", component.Material);
-
-            try
-            {
-                Connection.Open();
-                adapter.InsertCommand.ExecuteNonQuery();
-                Connection.Close();
-                Console.WriteLine($"{component.Name} loaded.");
-                //MessageBox.Show("component Loaded!");
-            }
-            catch (OleDbException ex)
-            {
-                MessageBox.Show(ex.Message, "OledbException Error");
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show(x.Message, "Exception Error");
-            }
         }
 
         private DataTable CreateDataTableFromTaskList(ProjectInfo project)
@@ -2212,26 +2111,23 @@ namespace Toolroom_Scheduler
 
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
 
-                using (Connection)
-                {
-                    adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
+                adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                    adapter.UpdateCommand.Parameters.AddWithValue("@path", path);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jn);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", pn);
+                adapter.UpdateCommand.Parameters.AddWithValue("@path", path);
+                adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jn);
+                adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", pn);
 
-                    Connection.Open();
-                    adapter.UpdateCommand.ExecuteNonQuery();
-                    {
-                        //MessageBox.Show("Update Success!");
-                        Connection.Close();
-                    }
+                Connection.Open();
+                adapter.UpdateCommand.ExecuteNonQuery();
 
-                }
             }
-            catch (Exception er)
+            catch (Exception ex)
             {
-                MessageBox.Show(er.Message);
+                throw ex;
+            }
+            finally
+            {
+                Connection.Close();
             }
         }
 
@@ -2589,11 +2485,15 @@ namespace Toolroom_Scheduler
             }
             catch (OleDbException ex)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                throw ex;
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Message, "Exception Error");
+                throw x;
+            }
+            finally
+            {
+                Connection.Close();
             }
         }
 
@@ -2640,11 +2540,15 @@ namespace Toolroom_Scheduler
             }
             catch (OleDbException ex)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                throw ex;
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Message, "Exception Error");
+                throw x;
+            }
+            finally
+            {
+                //Connection.Close();
             }
         }
 
@@ -2676,7 +2580,7 @@ namespace Toolroom_Scheduler
                 string queryString;
 
                 queryString = "UPDATE Components " +
-                              "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Quantity = @quantity, Spares = @spares, Pictures = @picture, Material = @material, TaskIDCount = @taskIDCount " +
+                              "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Quantity = @quantity, Spares = @spares, Pictures = @picture, Material = @material, Finish = @finish, TaskIDCount = @taskIDCount " +
                               "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName";
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -2687,6 +2591,7 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
                 adapter.UpdateCommand.Parameters.AddWithValue("@quantity", component.Quantity);
                 adapter.UpdateCommand.Parameters.AddWithValue("@spares", component.Spares);
+
                 if(component.GetPictureByteArray() != null)
                 {
                     adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.GetPictureByteArray());
@@ -2695,71 +2600,35 @@ namespace Toolroom_Scheduler
                 {
                     adapter.UpdateCommand.Parameters.AddWithValue("@picture", DBNull.Value);
                 }
-                adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
-                adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
+
                 //adapter.UpdateCommand.Parameters.AddWithValue("@pictures", component.PictureList);  // Add when database is ready to receive pictures.
+
+                adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
+                adapter.UpdateCommand.Parameters.AddWithValue("@finish", component.Finish);
+                adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
+
                 adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
                 adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
                 adapter.UpdateCommand.Parameters.AddWithValue("@oldName", component.OldName);
 
                 Connection.Open();
+
                 adapter.UpdateCommand.ExecuteNonQuery();
-                Connection.Close();
 
                 Console.WriteLine($"{component.Name} Updated.");
                 //MessageBox.Show("Project Updated!");
             }
             catch (OleDbException ex)
             {
-                Connection.Close();
-                MessageBox.Show(ex.Message, "OledbException Error");
+                throw ex;
             }
             catch (Exception x)
-            {
-                Connection.Close();
-                MessageBox.Show(x.Message, "Exception Error");
+            {   
+                throw x;
             }
-        }
-
-        private void UpdateTaskData(ProjectInfo project, Component component)
-        {
-            try
-            {
-                OleDbDataAdapter adapter = new OleDbDataAdapter();
-                string queryString;
-
-                queryString = "UPDATE Tasks " +
-                              "SET Component = @name, TaskName = @taskName, Duration = @duration, Machine = @machine, Material = @material, Resource = @resource, Hours = @hours " +
-                              "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName";
-
-                adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
-
-                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Name);
-                adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
-                adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
-                adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
-                adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
-                //adapter.UpdateCommand.Parameters.AddWithValue("@pictures", component.PictureList);  // Add when database is ready to receive pictures.
-                adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@oldName", component.OldName);
-
-                Connection.Open();
-                adapter.UpdateCommand.ExecuteNonQuery();
-                Connection.Close();
-
-                Console.WriteLine($"{component.Name} Tasks Updated.");
-                //MessageBox.Show("Project Updated!");
-            }
-            catch (OleDbException ex)
+            finally
             {
                 Connection.Close();
-                MessageBox.Show(ex.Message, "OledbException Error");
-            }
-            catch (Exception x)
-            {
-                Connection.Close();
-                MessageBox.Show(x.Message, "Exception Error");
             }
         }
 

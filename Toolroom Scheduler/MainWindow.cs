@@ -1124,29 +1124,19 @@ namespace Toolroom_Scheduler
 
         private DateTime GetForwardDateFromUser()
         {
-            try
+            using (var form = new ForwardDateWindow())
             {
-                using (var form = new ForwardDateWindow())
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    var result = form.ShowDialog();
+                    return form.ForwardDate;
+                }
+                else if (result == DialogResult.Cancel)
+                {
 
-                    if (result == DialogResult.OK)
-                    {
-                        return form.ForwardDate;
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        form.Close();
-                        return new DateTime(2000, 1, 1);
-                    }
-
-                    return new DateTime(2000, 1, 1);
                 }
 
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message);
                 return new DateTime(2000, 1, 1);
             }
         }
@@ -1157,29 +1147,19 @@ namespace Toolroom_Scheduler
             var number = GetComboBoxInfo();
             ProjectInfo pi = db.GetProjectInfo(number.jobNumber, number.projectNumber);
 
-            try
+            using (var form = new BackDateWindow(pi.DueDate))
             {
-                using (var form = new BackDateWindow(pi.DueDate))
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    var result = form.ShowDialog();
+                    return form.BackDate;
+                }
+                else if (result == DialogResult.Cancel)
+                {
 
-                    if (result == DialogResult.OK)
-                    {
-                        return form.BackDate;
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        form.Close();
-                        return new DateTime(2000, 1, 1);
-                    }
-
-                    return new DateTime(2000, 1, 1);
                 }
 
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message);
                 return new DateTime(2000, 1, 1);
             }
         }
@@ -1190,96 +1170,64 @@ namespace Toolroom_Scheduler
             var number = GetComboBoxInfo();
             List<string> componentList = db.GetComponentList(number.jobNumber, number.projectNumber);
 
-            try
+            using (var form = new SelectComponentsWindow(componentList, textString))
             {
-                using (var form = new SelectComponentsWindow(componentList, textString))
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    var result = form.ShowDialog();
+                    return form.ComponentList;
+                }
+                else if (result == DialogResult.Cancel)
+                {
 
-                    if (result == DialogResult.OK)
-                    {
-                        return form.ComponentList;
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        form.Close();
-                        return null;
-                    }
-
-                    return null;
                 }
 
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message);
                 return null;
             }
         }
 
         private void CreateProject()
         {
-            try
+            using (var form = new Project_Creation_Form())
             {
-                using (var form = new Project_Creation_Form())
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    var result = form.ShowDialog();
-
-                    if (result == DialogResult.OK)
+                    if(form.DataValidated)
                     {
-                        if(form.DataValidated)
-                        {
-                            PopulateJobNumberComboBox();
-                            RefreshDataGridView();
-                            JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
-                            return;
-                        }
-
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        return;
+                        PopulateJobNumberComboBox();
+                        RefreshDataGridView();
+                        JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
                     }
                 }
+                else if (result == DialogResult.Cancel)
+                {
 
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message);
-                return;
+                }
             }
         }
 
         private void EditProject(ProjectInfo project)
         {
-            try
+            using (var form = new Project_Creation_Form(project))
             {
-                using (var form = new Project_Creation_Form(project))
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    var result = form.ShowDialog();
-
-                    if (result == DialogResult.OK)
+                    if (form.DataValidated)
                     {
-                        if (form.DataValidated)
-                        {
-                            PopulateJobNumberComboBox();
-                            RefreshDataGridView();
-                            JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
-                            return;
-                        }
-
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        return;
+                        PopulateJobNumberComboBox();
+                        RefreshDataGridView();
+                        JobNumberComboBox.SelectedItem = form.Project.JobNumber + " - #" + form.Project.ProjectNumber;
                     }
                 }
+                else if (result == DialogResult.Cancel)
+                {
 
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message);
-                return;
+                }
             }
         }
 
@@ -1371,25 +1319,18 @@ namespace Toolroom_Scheduler
                 }
         }
 
-        private void GetStartDatesButton_Click(object sender, EventArgs e)
-        {
-            if (JobNumberComboBox.Text == "All")
-            {
-                MessageBox.Show("Just select a single job for now.");
-                return;
-            }
-
-            Database db = new Database();
-            var number = GetComboBoxInfo();
-            db.CalculateEarliestStartDates(number.jobNumber, number.projectNumber);
-            RefreshDataGridView();
-        }
-
         private void CreateProjectButton_Click(object sender, EventArgs e)
         {
 			Console.WriteLine("click");
 
-            CreateProject();
+            try
+            {
+                CreateProject();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
 
         private void BulkAssignButton_Click(object sender, EventArgs e)
@@ -1456,40 +1397,47 @@ namespace Toolroom_Scheduler
 
         private void oDateTimePicker_CloseUp(object sender, EventArgs e)
         {
-            Database db = new Database();
-            // Hiding the control after use  
-            //oDateTimePicker.Visible = false;
-            DataGridView1.Controls.Remove(oDateTimePicker);
-            DateTime startDate;
-            int projectNumber, taskID;
-            string jobNumber, component, predecessors, duration;
-
-            jobNumber = DataGridView1.CurrentRow.Cells["JobNumber"].Value.ToString();
-            component = DataGridView1.CurrentRow.Cells["Component"].Value.ToString();
-            duration = DataGridView1.CurrentRow.Cells["Duration"].Value.ToString();
-            predecessors = DataGridView1.CurrentRow.Cells["Predecessors"].Value.ToString();
-            projectNumber = Convert.ToInt32(DataGridView1.CurrentRow.Cells["ProjectNumber"].Value);
-            taskID = Convert.ToInt32(DataGridView1.CurrentRow.Cells["TaskID"].Value);
-
-            if (DataGridView1.CurrentCell.OwningColumn.Name == "StartDate")
+            try
             {
-                startDate = oDateTimePicker.Value;
+                Database db = new Database();
+                // Hiding the control after use  
+                //oDateTimePicker.Visible = false;
+                DataGridView1.Controls.Remove(oDateTimePicker);
+                DateTime startDate;
+                int projectNumber, taskID;
+                string jobNumber, component, predecessors, duration;
 
-                if (predecessors != "" && startDate < GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors))
+                jobNumber = DataGridView1.CurrentRow.Cells["JobNumber"].Value.ToString();
+                component = DataGridView1.CurrentRow.Cells["Component"].Value.ToString();
+                duration = DataGridView1.CurrentRow.Cells["Duration"].Value.ToString();
+                predecessors = DataGridView1.CurrentRow.Cells["Predecessors"].Value.ToString();
+                projectNumber = Convert.ToInt32(DataGridView1.CurrentRow.Cells["ProjectNumber"].Value);
+                taskID = Convert.ToInt32(DataGridView1.CurrentRow.Cells["TaskID"].Value);
+
+                if (DataGridView1.CurrentCell.OwningColumn.Name == "StartDate")
                 {
-                    MessageBox.Show("You cannot put a task start date before its predecessor's finish date.");
-                    return;
+                    startDate = oDateTimePicker.Value;
+
+                    if (predecessors != "" && startDate < GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors))
+                    {
+                        MessageBox.Show("You cannot put a task start date before its predecessor's finish date.");
+                        return;
+                    }
+
+                    db.ChangeTaskStartDate(jobNumber, projectNumber, component, oDateTimePicker.Value, duration, taskID);
+
+                }
+                else if (DataGridView1.CurrentCell.OwningColumn.Name == "FinishDate")
+                {
+                    db.ChangeTaskFinishDate(jobNumber, projectNumber, component, oDateTimePicker.Value, taskID);
                 }
 
-                db.ChangeTaskStartDate(jobNumber, projectNumber, component, oDateTimePicker.Value, duration, taskID);
-
+                RefreshDataGridView();
             }
-            else if(DataGridView1.CurrentCell.OwningColumn.Name == "FinishDate")
+            catch (Exception ex)
             {
-                db.ChangeTaskFinishDate(jobNumber, projectNumber, component, oDateTimePicker.Value, taskID);
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
-
-            RefreshDataGridView();
         }
 
         private void dateTimePicker_OnTextChange(object sender, EventArgs e)
@@ -1566,36 +1514,43 @@ namespace Toolroom_Scheduler
 
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (FormLoading == false)
+            try
             {
-                Database db = new Database();
-
-                if (DataGridView1.Columns[e.ColumnIndex].Name == "FinishDate")
+                if (FormLoading == false)
                 {
-                    string jobNumber, component;
-                    int projectNumber, currentTaskID;
-                    DateTime currentTaskFinishDate;
+                    Database db = new Database();
 
-                    jobNumber = DataGridView1.CurrentRow.Cells["JobNumber"].Value.ToString();
-                    projectNumber = Convert.ToInt32(DataGridView1.CurrentRow.Cells["ProjectNumber"].Value);
-                    component = DataGridView1.CurrentRow.Cells["Component"].Value.ToString();
+                    if (DataGridView1.Columns[e.ColumnIndex].Name == "FinishDate")
+                    {
+                        string jobNumber, component;
+                        int projectNumber, currentTaskID;
+                        DateTime currentTaskFinishDate;
 
-                    currentTaskFinishDate = Convert.ToDateTime(DataGridView1.CurrentRow.Cells["FinishDate"].Value);
-                    currentTaskID = Convert.ToInt16(DataGridView1.CurrentRow.Cells["TaskID"].Value);
+                        jobNumber = DataGridView1.CurrentRow.Cells["JobNumber"].Value.ToString();
+                        projectNumber = Convert.ToInt32(DataGridView1.CurrentRow.Cells["ProjectNumber"].Value);
+                        component = DataGridView1.CurrentRow.Cells["Component"].Value.ToString();
 
-                    db.MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, currentTaskID);
+                        currentTaskFinishDate = Convert.ToDateTime(DataGridView1.CurrentRow.Cells["FinishDate"].Value);
+                        currentTaskID = Convert.ToInt16(DataGridView1.CurrentRow.Cells["TaskID"].Value);
+
+                        db.MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, currentTaskID);
+                    }
+
+                    db.UpdateDatabase(sender, e);
+                    RefreshDataGridView();
+                    PopulateSelectedTab();
+                    //populateDesignerView();
+                    //populateProgrammerView();
+                    //populateRoughMachineView();
+                    //populateFinishMachineView();
+                    //populateElectrodeMachineView();
+                    //populateEDMMachineView();
+                    //populateInspectionMachineView();
                 }
-                
-                db.UpdateDatabase(sender, e);
-                RefreshDataGridView();
-                PopulateSelectedTab();
-                //populateDesignerView();
-                //populateProgrammerView();
-                //populateRoughMachineView();
-                //populateFinishMachineView();
-                //populateElectrodeMachineView();
-                //populateEDMMachineView();
-                //populateInspectionMachineView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
 
@@ -1726,7 +1681,6 @@ namespace Toolroom_Scheduler
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
@@ -1758,91 +1712,112 @@ namespace Toolroom_Scheduler
 
         private void ForwardDateButton_Click(object sender, EventArgs e)
         {
-            if (JobNumberComboBox.Text == "All")
+            try
             {
-                MessageBox.Show("Please select a project.");
-                return;
-            }
+                if (JobNumberComboBox.Text == "All")
+                {
+                    MessageBox.Show("Please select a project.");
+                    return;
+                }
 
-            Database db = new Database();
-            var number = GetComboBoxInfo();
-            List<string> componentList = null;
+                Database db = new Database();
+                var number = GetComboBoxInfo();
+                List<string> componentList = null;
 
 
-            DialogResult dialogResult = MessageBox.Show("Do you want to forward schedule all tasks? (Click \"No\" to selectively schedule component tasks.", "Forward Schedule All?",
-                                                  MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = MessageBox.Show("Do you want to forward schedule all tasks? (Click \"No\" to selectively schedule component tasks.", "Forward Schedule All?",
+                                                      MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-            if (dialogResult == DialogResult.Yes)
-            {
+                if (dialogResult == DialogResult.Yes)
+                {
 
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                componentList = GetComponentListFromUser("Forward Date");
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    componentList = GetComponentListFromUser("Forward Date");
 
-                if(componentList == null)
+                    if (componentList == null)
+                    {
+                        return;
+                    }
+                }
+                else if (dialogResult == DialogResult.Cancel)
                 {
                     return;
                 }
+
+                db.ForwardDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetForwardDateFromUser());
+                RefreshDataGridView();
             }
-            else if (dialogResult == DialogResult.Cancel)
+            catch (Exception ex)
             {
-                return;
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
-            
-            db.ForwardDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetForwardDateFromUser());
-            RefreshDataGridView();
         }
 
         private void BackDateButton_Click(object sender, EventArgs e)
         {
-            if(JobNumberComboBox.Text == "All")
+            try
             {
-                MessageBox.Show("Please select a project.");
-                return;
-            }
+                if (JobNumberComboBox.Text == "All")
+                {
+                    MessageBox.Show("Please select a project.");
+                    return;
+                }
 
-            Database db = new Database();
-            var number = GetComboBoxInfo();
-            List<string> componentList = null;
+                Database db = new Database();
+                var number = GetComboBoxInfo();
+                List<string> componentList = null;
 
-            DialogResult dialogResult = MessageBox.Show("Do you want to back schedule all tasks? (Click \"No\" to selectively schedule component tasks.", "Back Schedule All?",
-                                      MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = MessageBox.Show("Do you want to back schedule all tasks? (Click \"No\" to selectively schedule component tasks.", "Back Schedule All?",
+                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-            if (dialogResult == DialogResult.Yes)
-            {
+                if (dialogResult == DialogResult.Yes)
+                {
 
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                componentList = GetComponentListFromUser("Back Date");
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    componentList = GetComponentListFromUser("Back Date");
 
-                if (componentList == null)
+                    if (componentList == null)
+                    {
+                        return;
+                    }
+                }
+                else if (dialogResult == DialogResult.Cancel)
                 {
                     return;
                 }
-            }
-            else if (dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
 
-            db.BackDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetBackDateFromUser());
-            RefreshDataGridView();
+                db.BackDateProjectTasks(number.jobNumber, number.projectNumber, componentList, GetBackDateFromUser());
+                RefreshDataGridView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
 
         private void EditProjectButton_Click(object sender, EventArgs e)
         {
-            if(JobNumberComboBox.Text == "All")
+            try
             {
-                MessageBox.Show("Please select a project to edit.");
+                if (JobNumberComboBox.Text == "All")
+                {
+                    MessageBox.Show("Please select a project to edit.");
+                }
+                else
+                {
+                    Database db = new Database();
+                    var number = GetComboBoxInfo();
+                    ProjectInfo project = db.GetProject(number.jobNumber, number.projectNumber);
+                    EditProject(project);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Database db = new Database();
-                var number = GetComboBoxInfo();
-                ProjectInfo project = db.GetProject(number.jobNumber, number.projectNumber);
-                EditProject(project);
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
 

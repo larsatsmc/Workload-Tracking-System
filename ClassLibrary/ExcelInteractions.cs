@@ -98,10 +98,9 @@ namespace ClassLibrary
             Excel.Worksheet ws = null;
             Excel.Borders border;
             VBIDE.VBComponents vBComponents;
-            VBIDE.VBComponent wsMod;
 
             string activePrinterString, dateTime;
-            int r, index;
+            int r, n;
 
             try
             {
@@ -223,9 +222,44 @@ namespace ClassLibrary
                 ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
                 ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
 
-                index = CreateKanBanComponentSheets(pi, excelApp, wb);
+                ws = wb.Sheets[1];
 
-                ws = wb.Sheets.Add(After: wb.Sheets[--index]);
+                //FormatComponentSheet(pi, ws);
+
+                n = 2;
+
+                vBComponents = wb.VBProject.VBComponents;
+
+                foreach (Component component in pi.ComponentList)
+                {
+                    wb.Sheets.Add(After: wb.Sheets[n++]);
+                    //wb.Sheets[1].Copy(After: wb.Sheets[n++]);
+
+                    ws = wb.Sheets[n];
+
+                    PopulateKanBanComponentSheet(pi, component, ws);
+
+                    vBComponents = wb.VBProject.VBComponents;
+
+                    foreach (VBIDE.VBComponent wsMod in vBComponents)
+                    {
+                        if (wsMod.Name == ws.CodeName)
+                        {
+                            Console.WriteLine($"{wsMod.Name} is {ws.Name}");
+                            wsMod.CodeModule.AddFromString(KanBanSheetCode());
+                        }
+                    }
+                }
+
+                if (SheetNExists("Sheet1", wb))
+                {
+                    wb.Sheets["Sheet1"].delete();
+                }
+
+                if (SheetNExists("Mold", wb))
+                    wb.Sheets["Mold"].Visible = Excel.XlSheetVisibility.xlSheetHidden;
+
+                ws = wb.Sheets.Add(After: wb.Sheets[--n]);
 
                 CreateHoursSheet(pi, wb, ws.Index);
 
@@ -298,6 +332,54 @@ namespace ClassLibrary
             //                   "end Sub";
 
             //wsMod.CodeModule.AddFromString(macroCode);
+        }
+
+        private void FormatComponentSheet(ProjectInfo pi, Excel.Worksheet ws)
+        {
+            Excel.Application excelApp = new Excel.Application();
+            //Excel.Worksheet ws;
+            string dateTime;
+
+            //ws = wb.Sheets[1]; // Blank Sheet that contains VBA Code.
+
+            ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
+            ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
+            dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
+            ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
+            ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
+            ws.PageSetup.Zoom = 67;
+            ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
+            ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
+            ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
+            ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
+
+            // Task ID
+            ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+            ws.Range["A1"].EntireColumn.ColumnWidth = 6.29;
+            // Task Name
+            ws.Range["B1"].EntireColumn.ColumnWidth = 31.29;
+            // Duration
+            ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            ws.Range["C1"].EntireColumn.ColumnWidth = 9.86;
+            // Start Date & Finish Date
+            ws.Range["D1:E1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            ws.Range["D1:E1"].EntireColumn.ColumnWidth = 10.86;
+            // Predecessors
+            ws.Range["F1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            ws.Range["F1"].EntireColumn.ColumnWidth = 13.57;
+            // Notes
+            ws.Range["G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            ws.Range["G1"].EntireColumn.ColumnWidth = 40;
+            // Date
+            ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            ws.Range["H1"].EntireColumn.ColumnWidth = 12.71;
+            // Initials
+            ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            ws.Range["I1"].EntireColumn.ColumnWidth = 10.43;
+
+            //ws.Range["A1"].Select();
+            ws.Select();
         }
 
         // TODO: Find an alternative to this method that does not use COM interop.
@@ -454,6 +536,126 @@ namespace ClassLibrary
             return n;
         }
 
+        private void PopulateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Worksheet ws)
+        {
+            Excel.Borders border;
+            int r;
+
+            // Checks if sheet has been formatted.  If it hasn't then format it.
+            if (ws.PageSetup.LeftHeader == "")
+            {
+                FormatComponentSheet(pi, ws);
+            }
+
+            Console.WriteLine(component.Name);
+
+            if (component.Name.Length <= 31)
+            {
+                ws.Name = component.Name;
+            }
+            else if (component.Name.Length > 31)
+            {
+            }
+            else
+            {
+                ws.Name = "Mold";
+            }
+
+            Excel.Shape textBox = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 300, 65);
+            textBox.TextFrame2.TextRange.Characters.Text = "Job Number: " + pi.JobNumber + "\n" + "Component: " + component.Name + "\n" + "Material: " + component.Material;
+            textBox.TextFrame2.TextRange.Font.Size = 14;
+            textBox.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
+            textBox.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
+
+            Excel.Shape textBox2 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 315, 0, 150, 65);
+            textBox2.TextFrame2.TextRange.Characters.Text = "Qty: " + component.Quantity + "\n" + "Spares: " + component.Spares + "\n" + "Finish: " + component.Finish;
+            textBox2.TextFrame2.TextRange.Font.Size = 14;
+            textBox2.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
+            textBox2.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
+
+            //ws.Range["A1:I73"].Font.Size = 12;
+
+            r = 6;
+
+            ws.Range[ws.Cells[r, 1], ws.Cells[r, 9]].Font.Bold = true;
+
+            ws.Cells[r, 1].value = "Task ID";
+            ws.Cells[r, 2].value = "   Task Name";
+            ws.Cells[r, 3].value = "Duration";
+            ws.Cells[r, 4].value = "Start Date";
+            ws.Cells[r, 5].value = "Finish Date";
+            ws.Cells[r, 6].value = " Predecessors";
+            ws.Cells[r, 7].value = "Notes";
+            ws.Cells[r, 8].value = "Initials";
+            ws.Cells[r, 9].value = "Date";
+
+            r++;
+
+            ws.Range["F1"].EntireColumn.NumberFormat = "@";
+
+            foreach (TaskInfo task in component.TaskList)
+            {
+                border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 9]].Borders;
+
+                ws.Cells[r, 1].value = task.ID;
+                ws.Cells[r, 2].value = "   " + task.TaskName;
+                ws.Cells[r, 3].value = "" + task.Duration;
+                ws.Cells[r, 4].value = " " + String.Format("{0:M/d/yyyy}", task.StartDate);
+                ws.Cells[r, 5].value = " " + String.Format("{0:M/d/yyyy}", task.FinishDate);
+                ws.Cells[r, 6].value = "  " + task.Predecessors;
+                ws.Cells[r, 7].value = task.Notes;
+                ws.Cells[r, 8].value = task.Initials;
+                ws.Cells[r, 9].value = task.DateCompleted;
+
+                if (r % 2 == 0)
+                    ws.Range[ws.Cells[r, 1], ws.Cells[r, 9]].Interior.Color = Excel.XlRgbColor.rgbPink;
+
+                r++;
+            }
+
+            border = ws.Range[ws.Cells[7, 1], ws.Cells[r - 1, 9]].Borders;
+
+            border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+            border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+            border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+            border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+
+            for (int c = 2; c <= 9; c++)
+            {
+                border = ws.Range[ws.Cells[7, c], ws.Cells[r - 1, c]].Borders;
+                border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+            }
+
+            ws.Columns["B:B"].Autofit();
+
+            //if (component.Notes.Contains('\n'))
+            //{
+            //    foreach (string line in component.Notes.Split('\n'))
+            //    {
+            //        ws.Cells[r++ + 1, 2].value = line;
+            //    }
+            //}
+            //else
+            //{
+            //    ws.Cells[r++ + 1, 2].value = component.Notes;
+            //}
+
+            //ws.Cells[r++ + 1, 2].Top();
+            //ws.Range[r++, 2].Left();
+
+            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 767, 47);
+            textBox3.TextFrame2.TextRange.Characters.Text = "Notes: " + component.Notes;
+            textBox3.TextFrame2.TextRange.Font.Size = 11;
+            textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
+            textBox3.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
+
+            if (component.Picture != null)
+            {
+                Clipboard.SetImage(component.Picture);
+                ws.Paste((Excel.Range)ws.Cells[r + 5, 2]);
+            }
+        }
+
         public void OpenKanBanWorkbook(string filepath, string component)
         {
             //Excel.Worksheet ws;
@@ -568,7 +770,7 @@ namespace ClassLibrary
 
                     component = pi.ComponentList.Find(x => x.Name == componentName);
 
-                    CreateKanBanComponentSheet(pi, component, wb, ws.Index);
+                    PopulateKanBanComponentSheet(pi, component, ws);
 
                     vBComponents = wb.VBProject.VBComponents;
 
@@ -927,11 +1129,11 @@ namespace ClassLibrary
             // \n moves cursor down one line.
             return "Function IsMarkedComplete(row As Integer) As String\r\n" +
                    "\r\n" +
-                   "  If IsEmpty(Cells(row, 9)) = False And IsEmpty(Cells(row, 10)) = False And IsEmpty(Cells(row, 11)) = False Then\r\n" +
+                   "  If IsEmpty(Cells(row, 8)) = False And IsEmpty(Cells(row, 9)) = False Then\r\n" +
                    "\r\n" +
                    "    IsMarkedComplete = \"True\"\r\n" +
                    "\r\n" +
-                   "  ElseIf IsEmpty(Cells(row, 9)) = True And IsEmpty(Cells(row, 10)) = True And IsEmpty(Cells(row, 11)) = True Then\r\n" +
+                   "  ElseIf IsEmpty(Cells(row, 8)) = True And IsEmpty(Cells(row, 9)) = True Then\r\n" +
                    "\r\n" +
                    "    IsMarkedComplete = \"False\"\r\n" +
                    "\r\n" +
@@ -943,40 +1145,78 @@ namespace ClassLibrary
                    "\r\n" +
                    "End Function\r\n" +
                    "\r\n" +
+                   "Function GetTextBoxInfo() As String()\r\n" +
+                   "\r\n" +
+                   "  Dim shape as Shape\r\n" +
+                   "  Dim infoArr(0 To 1) as String\r\n" +
+                   "\r\n" +
+                   "    For Each shape In Me.Shapes\r\n" +
+                   "\r\n" +
+                   "      If shape.Type = msoTextBox Then\r\n" +
+                   "\r\n" +
+                   "        If shape.TextFrame2.TextRange.Characters.Text Like \"*Component*\" Then\r\n" +
+                   "\r\n" +
+                   "          detailArr = Split(shape.TextFrame2.TextRange.Characters.Text, vbLf)\r\n" +
+                   "          detailArr2 = Split(detailArr(0), \":\")\r\n" +
+                   "          infoArr(0) = Trim(detailArr2(1)) ' Job Number\r\n" +
+                   "          detailArr2 = Split(detailArr(1), \":\")\r\n" +
+                   "          infoArr(1) = Trim(detailArr2(1)) ' Component\r\n" +
+                   "\r\n" +
+                   "          GetTextBoxInfo = infoArr\r\n" +
+                   "\r\n" +
+                   "        End If\r\n" +
+                   "\r\n" +
+                   "      End If\r\n" +
+                   "\r\n" +
+                   "    Next\r\n" +
+                   "\r\n" +
+                   "End Function\r\n" +
+                   "\r\n" +
                    "Private Sub Worksheet_Change(ByVal Target As Range)\r\n" +
                    "\r\n" +
-                   "  If Target.column >= 9 And Target.column <= 11 Then\r\n" +
+                   "  Dim infoArr() As String\r\n" +
+                   "  Dim leftHeaderArr As Variant\r\n" +
+                   "  infoArr = GetTextBoxInfo\r\n" +
+                   "  leftHeaderArr = Split(Me.PageSetup.LeftHeader, \" \")\r\n" +
                    "\r\n" +
-                   "    Dim leftHeaderArr As Variant\r\n" +
+                   "  If Target.column = 8 Or Target.column = 9 Then\r\n" +
+                   "\r\n" +
                    "    Dim Completed As String\r\n" +
                    "\r\n" +
                    "    Completed = IsMarkedComplete(Target.row)\r\n" +
                    "\r\n" +
-                   "    leftHeaderArr = Split(Me.PageSetup.LeftHeader, \" \")\r\n" +
+                   "    ThisWorkbook.Save\r\n" +
                    "\r\n" +
                    "    If Completed = \"True\" Then\r\n" +
                    "\r\n" +
-                   "      ThisWorkbook.Save\r\n" +
-                   "\r\n" +
                    "      Database.SetTaskAsCompleted _\r\n" +
-                   "      jobNumber:=Cells(Target.row, 1).Value, _\r\n" +
+                   "      jobNumber:=infoArr(0), _\r\n" +
                    "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "      component:=Cells(Target.row, 2).Value, _\r\n" +
-                   "      taskID:=CInt(Cells(Target.row, 3).Value), _\r\n" +
-                   "      initials:=Cells(Target.row, 10).Value, _\r\n" +
-                   "      dateCompleted:=Cells(Target.row, 11).Value\r\n" +
+                   "      component:=infoArr(1), _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
+                   "      initials:=Cells(Target.row, 8).Value, _\r\n" +
+                   "      dateCompleted:=Cells(Target.row, 9).Value\r\n" +
                    "\r\n" +
                    "    ElseIf Completed = \"False\" Then\r\n" +
                    "\r\n" +
-                   "      ThisWorkbook.Save\r\n" +
-                   "\r\n" +
                    "      Database.SetTaskAsIncomplete _\r\n" +
-                   "      jobNumber:=Cells(Target.row, 1).Value, _\r\n" +
+                   "      jobNumber:=infoArr(0), _\r\n" +
                    "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "      component:=Cells(Target.row, 2).Value, _\r\n" +
-                   "      taskID:=CInt(Cells(Target.row, 3).Value)\r\n" +
+                   "      component:=infoArr(1), _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 1).Value)\r\n" +
                    "\r\n" +
                    "    End If\r\n" +
+                   "\r\n" +
+                   "  ElseIf Target.column = 7 Then\r\n" +
+                   "\r\n" +
+                   "    ThisWorkbook.Save\r\n" +
+                   "\r\n" +
+                   "    Database.SetNote _\r\n" +
+                   "    jobNumber:=infoArr(0), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "    component:=infoArr(1), _\r\n" +
+                   "    taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
+                   "    notes:=Cells(Target.row, 7).Value\r\n" +
                    "\r\n" +
                    "  End If\r\n" +
                    "\r\n" +
