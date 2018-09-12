@@ -295,7 +295,7 @@ namespace ClassLibrary
 
                 return "";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //MessageBox.Show(e.Message + " GenerateKanBanWorkbook");
 
@@ -314,7 +314,7 @@ namespace ClassLibrary
 
                 Marshal.ReleaseComObject(ws);
 
-                throw;
+                throw ex;
 
                 //return "";
             }
@@ -348,7 +348,7 @@ namespace ClassLibrary
             ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
             ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
             ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-            ws.PageSetup.Zoom = 67;
+            ws.PageSetup.Zoom = 75;
             ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
             ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
             ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
@@ -370,10 +370,10 @@ namespace ClassLibrary
             ws.Range["F1"].EntireColumn.ColumnWidth = 13.57;
             // Notes
             ws.Range["G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["G1"].EntireColumn.ColumnWidth = 40;
+            ws.Range["G1"].EntireColumn.ColumnWidth = 57.86;
             // Date
             ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            ws.Range["H1"].EntireColumn.ColumnWidth = 12.71;
+            ws.Range["H1"].EntireColumn.ColumnWidth = 8.57;
             // Initials
             ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             ws.Range["I1"].EntireColumn.ColumnWidth = 10.43;
@@ -385,7 +385,6 @@ namespace ClassLibrary
         // TODO: Find an alternative to this method that does not use COM interop.
         // FreeSpire is limited to 200 rows and 5 sheets.
         // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
-
 
         private int CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb)
         {
@@ -561,6 +560,9 @@ namespace ClassLibrary
                 ws.Name = "Mold";
             }
 
+            ws.Range["D1"].EntireColumn.Hidden = true;
+            ws.Range["E1"].EntireColumn.Hidden = true;
+
             Excel.Shape textBox = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 300, 65);
             textBox.TextFrame2.TextRange.Characters.Text = "Job Number: " + pi.JobNumber + "\n" + "Component: " + component.Name + "\n" + "Material: " + component.Material;
             textBox.TextFrame2.TextRange.Font.Size = 14;
@@ -643,7 +645,7 @@ namespace ClassLibrary
             //ws.Cells[r++ + 1, 2].Top();
             //ws.Range[r++, 2].Left();
 
-            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 767, 47);
+            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 700, 47);
             textBox3.TextFrame2.TextRange.Characters.Text = "Notes: " + component.Notes;
             textBox3.TextFrame2.TextRange.Font.Size = 11;
             textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
@@ -797,7 +799,7 @@ namespace ClassLibrary
 
                 excelApp.Visible = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (ws != null)
                     Marshal.ReleaseComObject(ws);
@@ -810,156 +812,6 @@ namespace ClassLibrary
                 workbooks.Close();
                 Marshal.ReleaseComObject(workbooks);
                 workbooks = null;
-
-                excelApp.Quit();
-                Marshal.ReleaseComObject(excelApp);
-                excelApp = null;
-
-                throw ex;
-            }
-        }
-
-        private void CreateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Workbook wb, int sheetIndex)
-        {
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Worksheet ws = wb.Sheets[sheetIndex];
-            Excel.Borders border;
-            int r, n;
-            string dateTime;
-
-            Console.WriteLine($"{ws.Name} {wb.Name}");
-
-            n = 2;
-
-            try
-            {
-                ws.PageSetup.LeftHeader = "&\"Arial,Bold\"&18" + "Project #: " + pi.ProjectNumber;
-                ws.PageSetup.CenterHeader = "&\"Arial,Bold\"&18" + "Lead: " + pi.ToolMaker;
-                dateTime = DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-                ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
-                ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
-                ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-                ws.PageSetup.Zoom = 67;
-                ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
-                ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
-                ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
-                ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
-                ws.Select();
-
-                Console.WriteLine(component.Name);
-
-                if (component.Name.Length <= 31)
-                {
-                    ws.Name = component.Name;
-                }
-                else if (component.Name.Length > 31)
-                {
-                }
-                else
-                {
-                    ws.Name = "Mold";
-                }
-
-                r = 1;
-
-                ws.Cells[r, 1].value = "Job Number";
-                ws.Cells[r, 2].value = "   Component";
-                ws.Cells[r, 3].value = "Task ID";
-                ws.Cells[r, 4].value = "   Task Name";
-                ws.Cells[r, 5].value = "Duration";
-                ws.Cells[r, 6].value = "Start Date";
-                ws.Cells[r, 7].value = "Finish Date";
-                ws.Cells[r, 8].value = "   Predecessors";
-                ws.Cells[r, 9].value = "Status";
-                ws.Cells[r, 10].value = "Initials";
-                ws.Cells[r, 11].value = "Date";
-
-                r++;
-
-                ws.Range["H1"].EntireColumn.NumberFormat = "@";
-
-                foreach (TaskInfo task in component.TaskList)
-                {
-                    border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
-
-                    ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
-                    ws.Cells[r, 1].value = pi.JobNumber;
-                    ws.Cells[r, 2].value = "   " + component.Name;
-                    ws.Cells[r, 3].value = task.ID;
-                    ws.Cells[r, 4].value = "   " + task.TaskName;
-                    ws.Cells[r, 5].value = "   " + task.Duration;
-                    ws.Cells[r, 6].value = task.StartDate;
-                    ws.Cells[r, 7].value = task.FinishDate;
-                    ws.Cells[r, 8].value = "  " + task.Predecessors;
-                    ws.Cells[r, 9].value = task.Status;
-                    ws.Cells[r, 10].value = task.Initials;
-                    ws.Cells[r, 11].value = task.DateCompleted;
-
-                    if (r % 2 == 0)
-                        ws.Range[ws.Cells[r, 1], ws.Cells[r, 11]].Interior.Color = Excel.XlRgbColor.rgbPink;
-
-                    r++;
-                }
-
-                border = ws.Range[ws.Cells[2, 1], ws.Cells[r - 1, 11]].Borders;
-
-                border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-                border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-
-                for (int c = 2; c <= 11; c++)
-                {
-                    border = ws.Range[ws.Cells[2, c], ws.Cells[r - 1, c]].Borders;
-                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                }
-
-                ws.Columns["B:B"].Autofit();
-                ws.Columns["D:D"].Autofit();
-
-                ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
-                ws.Range["B1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
-                ws.Range["C1"].EntireColumn.ColumnWidth = 6.25; // - 2.18
-                ws.Range["E1"].EntireColumn.ColumnWidth = 7.71; // - .72
-                ws.Range["F1:G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["F1:G1"].EntireColumn.ColumnWidth = 10.29; // - 2
-                ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ws.Range["H1"].EntireColumn.ColumnWidth = 13.25; // - 1
-                ws.Range["I1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["I1"].EntireColumn.ColumnWidth = 12; // 0
-                ws.Range["J1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["J1"].EntireColumn.ColumnWidth = 12.71; // + 4.28
-                ws.Range["K1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                ws.Range["K1"].EntireColumn.ColumnWidth = 10.43; // + 2
-
-                ws.Range[ws.Cells[1, 1], ws.Cells[1, 11]].Font.Bold = true;
-
-                if (component.Notes.Contains('\n'))
-                {
-                    foreach (string line in component.Notes.Split('\n'))
-                    {
-                        ws.Cells[r++ + 1, 2].value = line;
-                    }
-                }
-                else
-                {
-                    ws.Cells[r++ + 1, 2].value = component.Notes;
-                }
-
-                if (component.Picture != null)
-                {
-                    Clipboard.SetImage(component.Picture);
-                    ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
-                }
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show(e.Message);
-
-                Marshal.ReleaseComObject(ws);
-                ws = null;
 
                 excelApp.Quit();
                 Marshal.ReleaseComObject(excelApp);
@@ -1226,9 +1078,28 @@ namespace ClassLibrary
 
         public bool WorkbookHasMatchingComponent(Excel.Workbook workbook, string component)
         {
+            string componentSheet = "";
             foreach (Excel.Worksheet sheet in workbook.Worksheets)
             {
-                if(sheet.Cells[2, 2].value.ToString().Trim() == component)
+                if (sheet.Cells[2, 2].value != null)
+                {
+                    componentSheet = sheet.Cells[2, 2].value.ToString().Trim();
+                }
+                else
+                {
+                    foreach (Excel.Shape shape in sheet.Shapes)
+                    {
+                        if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoTextBox)
+                        {
+                            if (shape.TextFrame2.TextRange.Characters.Text.Contains("Component"))
+                            {
+                                componentSheet = shape.TextFrame2.TextRange.Characters.Text.Split('\n')[1].Split(':')[1].Trim();
+                            }
+                        }
+                    }
+                }
+
+                if(componentSheet == component)
                 {
                     return true;
                 }
