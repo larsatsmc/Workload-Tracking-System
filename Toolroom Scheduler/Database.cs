@@ -136,8 +136,6 @@ namespace Toolroom_Scheduler
                     MessageBox.Show("Project load failed.");
                     return false;
                 }
-
-
             }
         }
 
@@ -1884,6 +1882,8 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
             dt.Columns.Add("Spares", typeof(int));
+            dt.Columns.Add("Status", typeof(string));
+            dt.Columns.Add("PercentComplete", typeof(int));
 
             foreach (Component component in project.ComponentList)
             {
@@ -1938,6 +1938,8 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("TaskIDCount", typeof(int));
             dt.Columns.Add("Quantity", typeof(int));
             dt.Columns.Add("Spares", typeof(int));
+            dt.Columns.Add("Status", typeof(string));
+            dt.Columns.Add("PercentComplete", typeof(int));
 
             foreach (Component component in componentList)
             {

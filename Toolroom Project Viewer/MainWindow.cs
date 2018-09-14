@@ -1240,7 +1240,7 @@ namespace Toolroom_Project_Viewer
                     wli.FinishDate = Convert.ToDateTime(checkDate);
                 }
 
-                int.TryParse(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out int moldCost);
+                int.TryParse(bandedGridView1.GetFocusedRowCellValue("MoldCost").ToString(), out int moldCost);
 
                 wli.MoldCost = moldCost;
                 wli.Engineer = bandedGridView1.GetFocusedRowCellValue("Engineer").ToString();

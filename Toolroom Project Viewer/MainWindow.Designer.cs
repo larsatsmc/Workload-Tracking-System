@@ -1645,6 +1645,7 @@
             // 
             this.xtraTabPage7.Controls.Add(this.gridControl3);
             this.xtraTabPage7.Name = "xtraTabPage7";
+            this.xtraTabPage7.PageVisible = false;
             this.xtraTabPage7.Size = new System.Drawing.Size(1642, 913);
             this.xtraTabPage7.Text = "Component View";
             // 

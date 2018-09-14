@@ -554,12 +554,12 @@ namespace Toolroom_Scheduler
 
             PrintObjectTree();
 
-            if(project.HasProjectInfo)
+            if (project.HasProjectInfo)
             {
                 MoldBuildTreeView.Nodes[0].Text = project.JobNumber;
                 ProjectNumberTextBox.Text = project.ProjectNumber.ToString();
                 dueDateTimePicker.Value = project.DueDate;
-                ToolMakerComboBox.SelectedText = project.ToolMaker;
+                ToolMakerComboBox.Text = project.ToolMaker;
                 DesignerComboBox.Text = project.Designer;
                 RoughProgrammerComboBox.Text = project.RoughProgrammer;
                 ElectrodeProgrammerComboBox.Text = project.ElectrodeProgrammer;
@@ -567,6 +567,31 @@ namespace Toolroom_Scheduler
             }
 
             foreach (ClassLibrary.Component component in project.ComponentList)
+            {
+                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
+
+                foreach (TaskInfo task in component.TaskList)
+                {
+                    currentTaskNode = currentComponentNode.Nodes.Add(task.TaskName);
+
+                    if (task.HasInfo == true)
+                    {
+                        currentTaskNode.Nodes.Add(task.Hours + " Hour(s)");
+                        currentTaskNode.Nodes.Add(task.Duration);
+                        currentTaskNode.Nodes.Add(task.Machine);
+                        currentTaskNode.Nodes.Add(task.Personnel);
+                        currentTaskNode.Nodes.Add(task.Predecessors);
+                        currentTaskNode.Nodes.Add(task.Notes);
+                    }
+                }
+            }
+        }
+
+        private void LoadComponentListToForm(List<ClassLibrary.Component> components)
+        {
+            TreeNode currentComponentNode, currentTaskNode;
+
+            foreach (ClassLibrary.Component component in components)
             {
                 currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
 
@@ -1180,16 +1205,16 @@ namespace Toolroom_Scheduler
             {
                 Console.WriteLine($"{component.Name}");
 
-                foreach(TaskInfo task in component.TaskList)
-                {
-                    Console.WriteLine($"    {task.TaskName}");
-                    Console.WriteLine($"        {task.Hours}");
-                    Console.WriteLine($"        {task.Duration}");
-                    Console.WriteLine($"        {task.Machine}");
-                    Console.WriteLine($"        {task.Personnel}");
-                    Console.WriteLine($"        {task.Predecessors}");
-                    Console.WriteLine($"        {task.Notes}");
-                }
+                //foreach(TaskInfo task in component.TaskList)
+                //{
+                //    Console.WriteLine($"    {task.TaskName}");
+                //    Console.WriteLine($"        {task.Hours}");
+                //    Console.WriteLine($"        {task.Duration}");
+                //    Console.WriteLine($"        {task.Machine}");
+                //    Console.WriteLine($"        {task.Personnel}");
+                //    Console.WriteLine($"        {task.Predecessors}");
+                //    Console.WriteLine($"        {task.Notes}");
+                //}
             }
         }
 
@@ -1995,12 +2020,26 @@ namespace Toolroom_Scheduler
         {
             Templates tmpt = new Templates();
             string fileName = tmpt.OpenTemplateFile();
+            List<ClassLibrary.Component> components;
             Console.WriteLine("Load Template Button Click.");
 
             if(fileName != "")
             {
-                Project = tmpt.ReadProjectFromTextFile(fileName);
-                LoadProjectToForm(Project);
+                DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
+                                                            "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Project = tmpt.ReadProjectFromTextFile(fileName);
+                    LoadProjectToForm(Project);
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    components = tmpt.ReadProjectFromTextFile(fileName).ComponentList;
+                    Project.ComponentList.AddRange(components);
+                    LoadComponentListToForm(components);
+                }
+                
                 MoldBuildTreeView.Nodes[0].Expand();
                 //printObjectTree();
             }

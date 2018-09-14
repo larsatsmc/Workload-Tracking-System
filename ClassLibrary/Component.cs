@@ -28,6 +28,8 @@ namespace ClassLibrary
         public int Spares { get; private set; }
         public string Initials { get; private set; }
         public string Finish { get; private set; }
+        public string Status { get; private set; }
+        public int PercentComplete { get; private set; }
 
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
@@ -61,6 +63,7 @@ namespace ClassLibrary
             this.Notes = "";
             this.Material = "";
             this.Finish = "";
+            this.Status = "";
             TaskList = new List<TaskInfo>();
             this.Name = ConvertObjectToString(name);
         }
