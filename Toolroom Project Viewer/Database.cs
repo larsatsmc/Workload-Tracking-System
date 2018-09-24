@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
 using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -119,7 +120,7 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                string predecessors = GetTaskPredecessors(jobNumber, projectNumber, taskID);
+                string predecessors = GetTaskPredecessors(jobNumber, projectNumber, component, taskID);
 
                 if (predecessors != "" && GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors) > startDate)
                 {
@@ -200,24 +201,25 @@ namespace Toolroom_Project_Viewer
             return (jobNumber, projectNumber, taskID, predecessors);
         }
 
-        public string GetTaskPredecessors(string jobNumber, int projectNumber, int taskID)
+        public string GetTaskPredecessors(string jobNumber, int projectNumber, string component, int taskID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
             DataTable dt = new DataTable();
             string predecessors = "";
-            string queryString;
+            string queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
 
-            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND TaskID = @taskID";
             OleDbConnection Connection = new OleDbConnection(ConnString);
-            adapter.SelectCommand = new OleDbCommand(queryString, Connection);
 
+            adapter.SelectCommand = new OleDbCommand(queryString, Connection);
             adapter.SelectCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
             adapter.SelectCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
+            adapter.SelectCommand.Parameters.AddWithValue("@component", component);
             adapter.SelectCommand.Parameters.AddWithValue("@taskID", taskID);
 
             try
             {
                 Connection.Open();
+
                 using (var reader = adapter.SelectCommand.ExecuteReader())
                 {
                     if (reader.Read())
@@ -1137,16 +1139,118 @@ namespace Toolroom_Project_Viewer
                         }
                     }
                 }
-
-                Connection.Close();
             }
-            catch (Exception e)
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
             {
                 Connection.Close();
-                throw e;
             }
 
             return taskList;
+        }
+
+        public DataTable GetComponentCompletionPercents()
+        {
+            //  TOP(Components.TaskIDCount) AS TaskIDCount, , Components.Pictures
+            string queryString = "SELECT COUNT(*) As CompletedTaskCount, MAX(Tasks.TaskID) AS LastCompletedTask, Components.TaskIDCount, Projects.JobNumber, Projects.ProjectNumber, Projects.ToolMaker, Components.Component FROM (Tasks INNER JOIN Components ON Components.Component = Tasks.Component) INNER JOIN Projects ON Projects.ProjectNumber = Components.ProjectNumber WHERE Tasks.Status = 'Completed' GROUP BY Projects.JobNumber, Projects.ProjectNumber, Projects.ToolMaker, Components.Component, Components.TaskIDCount";
+            OleDbConnection Connection = new OleDbConnection(ConnString);
+            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
+            List<ProjectInfo> projects = new List<ProjectInfo>();
+            string project = "", jobNumber = "";
+            int lastTaskID = 0, taskIDCount;
+            DataTable dt = new DataTable();
+            DataTable dt2 = new DataTable();
+            ImageConverter ic = new ImageConverter();
+
+            dt.Columns.Add("JobNumber", typeof(string));
+            dt.Columns.Add("ProjectNumber", typeof(int));
+            dt.Columns.Add("ToolMaker", typeof(string));
+            dt.Columns.Add("Component", typeof(string));
+            //dt.Columns.Add("Pictures", typeof(Image));
+            dt.Columns.Add("LastCompletedTask");
+            dt.Columns.Add("TaskIDCount", typeof(int));
+            dt.Columns.Add("Status", typeof(string));
+            dt.Columns.Add("PercentComplete", typeof(double));
+
+            dt2 = GetAllTasks();
+
+            try
+            {
+                Connection.Open();
+
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.HasRows)
+                    {
+                        while (rdr.Read())
+                        {
+                            DataRow row = dt.NewRow();
+
+                            row["JobNumber"] = rdr["JobNumber"].ToString();
+                            row["ProjectNumber"] = Convert.ToInt32(rdr["ProjectNumber"]);
+                            row["ToolMaker"] = rdr["ToolMaker"].ToString();
+                            row["Component"] = rdr["Component"].ToString();
+                            //row["Pictures"] = (Image)ic.ConvertFrom(rdr["Pictures"]);
+                            row["PercentComplete"] = Convert.ToDouble(rdr["CompletedTaskCount"]) / Convert.ToDouble(rdr["TaskIDCount"]);
+
+                            lastTaskID = Convert.ToInt16(rdr["LastCompletedTask"]);
+                            taskIDCount = Convert.ToInt16(rdr["TaskIDCount"]);
+
+                            row["LastCompletedTask"] = rdr["LastCompletedTask"];
+                            row["TaskIDCount"] = taskIDCount;
+
+                            if (lastTaskID < taskIDCount)
+                            {
+                                row["Status"] = FindTask(dt2, rdr["JobNumber"].ToString(), Convert.ToInt32(rdr["ProjectNumber"]), rdr["Component"].ToString(), lastTaskID + 1);
+                            }
+                            else
+                            {
+                                row["Status"] = "Done";
+                            }
+
+                            dt.Rows.Add(row);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Connection.Close();
+            }
+
+            foreach (DataRow nrow in dt.Rows)
+            {
+                Console.WriteLine($"{nrow["JobNumber"]} {nrow["ProjectNumber"]} {nrow["Component"]} {nrow["Status"]} {nrow["PercentComplete"]}");
+            }
+
+            return dt;
+        }
+
+        private DataTable GetAllTasks()
+        {
+            DataTable dt = new DataTable();
+            string queryString = "SELECT * FROM Tasks";
+
+            OleDbConnection Connection = new OleDbConnection(ConnString);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
+
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        private string FindTask(DataTable dataTable, string jobNumber, int projectNumber, string component, int taskID)
+        {
+            DataRow task = dataTable.Rows.Cast<DataRow>().FirstOrDefault(x => (string)x["JobNumber"] == jobNumber && (int)x["ProjectNumber"] == projectNumber && (int)x["TaskID"] == taskID);
+
+            return task["TaskName"].ToString();
         }
 
         public DataTable LoadProjectToDataTable(ProjectInfo project)

@@ -370,7 +370,7 @@ namespace ClassLibrary
             ws.Range["F1"].EntireColumn.ColumnWidth = 13.57;
             // Notes
             ws.Range["G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["G1"].EntireColumn.ColumnWidth = 57.86;
+            ws.Range["G1"].EntireColumn.ColumnWidth = 55.86;
             // Date
             ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             ws.Range["H1"].EntireColumn.ColumnWidth = 8.57;
@@ -1059,6 +1059,11 @@ namespace ClassLibrary
                    "\r\n" +
                    "    End If\r\n" +
                    "\r\n" +
+                   "    Database.UpdateCompletedTasksPercent _\r\n" +
+                   "    jobNumber:=infoArr(0), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "    component:=infoArr(1), _\r\n" +
+                   "\r\n" +
                    "  ElseIf Target.column = 7 Then\r\n" +
                    "\r\n" +
                    "    ThisWorkbook.Save\r\n" +
@@ -1125,10 +1130,30 @@ namespace ClassLibrary
         {
             foreach (Excel.Worksheet sheet in workbook.Worksheets)
             {
-                if (sheet.Cells[2, 2].value.ToString().Trim() == component && sheet.Index != 1)
+                if (sheet.Index != 1)
                 {
-                    return sheet;
+                    if (sheet.Cells[2, 2].value != null && sheet.Cells[2, 2].value.ToString().Trim() == component)
+                    {
+                        return sheet;
+                    }
+                    else
+                    {
+                        foreach (Excel.Shape shape in sheet.Shapes)
+                        {
+                            if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoTextBox)
+                            {
+                                if (shape.TextFrame2.TextRange.Characters.Text.Contains("Component"))
+                                {
+                                    if(shape.TextFrame2.TextRange.Characters.Text.Split('\n')[1].Split(':')[1].Trim()  == component)
+                                    {
+                                        return sheet;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
 
             return null;

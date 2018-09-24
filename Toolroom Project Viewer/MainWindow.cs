@@ -54,6 +54,8 @@ namespace Toolroom_Project_Viewer
             populateProjectComboBox();
             PopulateTimeFrameComboBox();
 
+            InitializeComponentGrid();
+
             schedulerStorage2.Appointments.CommitIdToDataSource = false;
 
             schedulerControl2.Start = DateTime.Today.AddDays(-7);
@@ -70,6 +72,8 @@ namespace Toolroom_Project_Viewer
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet2.Components' table. You can move, or remove it, as needed.
+            this.componentsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet2.Components);
             // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet2.WorkLoad' table. You can move, or remove it, as needed.
             this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet2.WorkLoad);
             //this.resourcesTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Resources);
@@ -555,6 +559,24 @@ namespace Toolroom_Project_Viewer
         private void RefreshTasksButton_Click(object sender, EventArgs e)
         {
             sqlDataSource1.Fill();
+        }
+
+        #endregion
+
+        #region Component View
+
+        private void InitializeComponentGrid()
+        {
+            Database db = new Database();
+
+            try
+            {
+                gridControl3.DataSource = db.GetComponentCompletionPercents();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+            }
         }
 
         #endregion
@@ -1201,6 +1223,7 @@ namespace Toolroom_Project_Viewer
             {
                 if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
                 {
+                    MessageBox.Show("This login is not authorized to make changes to work load tab.");
                     return;
                 }
 
@@ -1380,6 +1403,12 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Button == MouseButtons.Right)
                 {
+                    if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    {
+                        MessageBox.Show("This login is not authorized to make changes to work load tab.");
+                        return;
+                    }
+
                     var cells = bandedGridView1.GetSelectedCells();
 
                     foreach (var cell in cells)

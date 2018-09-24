@@ -815,11 +815,9 @@ namespace Toolroom_Scheduler
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                // TODO: Need to add a try catch at a higher level to catch errors that this try catch throws.
-                // TODO: Does not catch errors causes by invalid characters entered for completion date on kan bans.
-                MessageBox.Show(e.Message);
+                throw;
             }
             finally
             {
