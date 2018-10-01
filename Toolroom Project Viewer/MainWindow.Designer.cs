@@ -29,13 +29,57 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.RangeControlRange rangeControlRange2 = new DevExpress.XtraEditors.RangeControlRange();
-            DevExpress.XtraCharts.XYDiagram xyDiagram3 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.SideBySideBarSeriesLabel sideBySideBarSeriesLabel2 = new DevExpress.XtraCharts.SideBySideBarSeriesLabel();
-            DevExpress.XtraScheduler.TimeRuler timeRuler7 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler8 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler9 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraEditors.RangeControlRange rangeControlRange1 = new DevExpress.XtraEditors.RangeControlRange();
+            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesLabel sideBySideBarSeriesLabel1 = new DevExpress.XtraCharts.SideBySideBarSeriesLabel();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule1 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar1 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule2 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar2 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
+            DevExpress.XtraScheduler.TimeRuler timeRuler1 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler2 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler3 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.DataAccess.Sql.SelectQuery selectQuery1 = new DevExpress.DataAccess.Sql.SelectQuery();
+            DevExpress.DataAccess.Sql.Column column1 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression1 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Table table1 = new DevExpress.DataAccess.Sql.Table();
+            DevExpress.DataAccess.Sql.Column column2 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression2 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column3 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression3 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column4 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression4 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column5 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression5 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Table table2 = new DevExpress.DataAccess.Sql.Table();
+            DevExpress.DataAccess.Sql.Column column6 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression6 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column7 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression7 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column8 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression8 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column9 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression9 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column10 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression10 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column11 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression11 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Join join1 = new DevExpress.DataAccess.Sql.Join();
+            DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo1 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
+            DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo2 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
+            DevExpress.DataAccess.Sql.Sorting sorting1 = new DevExpress.DataAccess.Sql.Sorting();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression12 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler5 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler6 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesView sideBySideBarSeriesView1 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule3 = new DevExpress.XtraGrid.GridFormatRule();
             DevExpress.DataAccess.Sql.SelectQuery selectQuery2 = new DevExpress.DataAccess.Sql.SelectQuery();
             DevExpress.DataAccess.Sql.Column column12 = new DevExpress.DataAccess.Sql.Column();
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression13 = new DevExpress.DataAccess.Sql.ColumnExpression();
@@ -48,7 +92,6 @@
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression16 = new DevExpress.DataAccess.Sql.ColumnExpression();
             DevExpress.DataAccess.Sql.Column column16 = new DevExpress.DataAccess.Sql.Column();
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression17 = new DevExpress.DataAccess.Sql.ColumnExpression();
-            DevExpress.DataAccess.Sql.Table table4 = new DevExpress.DataAccess.Sql.Table();
             DevExpress.DataAccess.Sql.Column column17 = new DevExpress.DataAccess.Sql.Column();
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression18 = new DevExpress.DataAccess.Sql.ColumnExpression();
             DevExpress.DataAccess.Sql.Column column18 = new DevExpress.DataAccess.Sql.Column();
@@ -61,23 +104,131 @@
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression22 = new DevExpress.DataAccess.Sql.ColumnExpression();
             DevExpress.DataAccess.Sql.Column column22 = new DevExpress.DataAccess.Sql.Column();
             DevExpress.DataAccess.Sql.ColumnExpression columnExpression23 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column23 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression24 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column24 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression25 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column25 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression26 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Table table4 = new DevExpress.DataAccess.Sql.Table();
+            DevExpress.DataAccess.Sql.Column column26 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression27 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column27 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression28 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column28 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression29 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column29 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression30 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column30 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression31 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column31 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression32 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column32 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression33 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column33 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression34 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column34 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression35 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column35 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression36 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column36 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression37 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Table table5 = new DevExpress.DataAccess.Sql.Table();
+            DevExpress.DataAccess.Sql.Column column37 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression38 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column38 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression39 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column39 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression40 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column40 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression41 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column41 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression42 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column42 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression43 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column43 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression44 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column44 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression45 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column45 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression46 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column46 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression47 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column47 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression48 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column48 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression49 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column49 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression50 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column50 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression51 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column51 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression52 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column52 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression53 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column53 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression54 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column54 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression55 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column55 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression56 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column56 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression57 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column57 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression58 = new DevExpress.DataAccess.Sql.ColumnExpression();
+            DevExpress.DataAccess.Sql.Column column58 = new DevExpress.DataAccess.Sql.Column();
+            DevExpress.DataAccess.Sql.ColumnExpression columnExpression59 = new DevExpress.DataAccess.Sql.ColumnExpression();
             DevExpress.DataAccess.Sql.Join join2 = new DevExpress.DataAccess.Sql.Join();
             DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo3 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
             DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo4 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
-            DevExpress.DataAccess.Sql.Sorting sorting2 = new DevExpress.DataAccess.Sql.Sorting();
-            DevExpress.DataAccess.Sql.ColumnExpression columnExpression24 = new DevExpress.DataAccess.Sql.ColumnExpression();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            DevExpress.XtraScheduler.TimeRuler timeRuler10 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler11 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler12 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraCharts.XYDiagram xyDiagram4 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series4 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.SideBySideBarSeriesView sideBySideBarSeriesView2 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule2 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.DataAccess.Sql.Join join3 = new DevExpress.DataAccess.Sql.Join();
+            DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo5 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
+            DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo6 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
+            DevExpress.DataAccess.Sql.RelationColumnInfo relationColumnInfo7 = new DevExpress.DataAccess.Sql.RelationColumnInfo();
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
-            this.componentsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter();
-            this.workload_Tracking_System_DBDataSet2 = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
+            this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
+            this.colPercentComplete = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colComponent1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPictures = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colMaterial = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colFinish = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colNotes = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPosition = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPriority1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSpares = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStatus2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridControl3 = new DevExpress.XtraGrid.GridControl();
+            this.projectsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colJobNumber1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colProjectNumber2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDueDate1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPriority = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStatus1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDesigner1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colToolMaker2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colRoughProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colElectrodeProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colFinishProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEngineer1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colKanBanWorkbookPath = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPercentComplete1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridView5 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colTaskName1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colResource1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colMachine = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colHours = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDuration1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStartDate2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colFinishDate2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStatus3 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colInitials = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDateCompleted = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.projectsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ProjectsTableAdapter();
+            this.tasksTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.TasksTableAdapter();
             this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
             this.schedulerStorage1 = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
@@ -109,24 +260,6 @@
             this.colResource = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
             this.xtraTabPage7 = new DevExpress.XtraTab.XtraTabPage();
-            this.gridControl3 = new DevExpress.XtraGrid.GridControl();
-            this.componentsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.colID1 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colJobNumber1 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colProjectNumber2 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colComponent1 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colNotes = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPriority = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPosition = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colMaterial = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colTaskIDCount = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colSpares = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPictures = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colFinish = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colStatus1 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPercentComplete = new DevExpress.XtraGrid.Columns.GridColumn();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.label5 = new System.Windows.Forms.Label();
             this.timeFrameComboBoxEdit = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -195,19 +328,25 @@
             this.repositoryItemRichTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemRichTextEdit();
             this.repositoryItemMemoExEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoExEdit();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
+            this.sqlDataSource3 = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.resourcesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.resourcesTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ResourcesTableAdapter();
-            this.workload_Tracking_System_DBDataSet1 = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.sqlDataSource2 = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
+            this.componentsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.componentsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -220,9 +359,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).BeginInit();
             this.xtraTabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timeFrameComboBoxEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TimeUnitsComboBox.Properties)).BeginInit();
@@ -237,9 +373,9 @@
             this.xtraTabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox3.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView1)).BeginInit();
             this.xtraTabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).BeginInit();
@@ -259,10 +395,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRichTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoExEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resourcesBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // rangeControl1
@@ -270,10 +405,10 @@
             this.rangeControl1.Client = this.chartControl1;
             this.rangeControl1.Location = new System.Drawing.Point(27, 840);
             this.rangeControl1.Name = "rangeControl1";
-            rangeControlRange2.Maximum = 9.6D;
-            rangeControlRange2.Minimum = -0.6D;
-            rangeControlRange2.Owner = this.rangeControl1;
-            this.rangeControl1.SelectedRange = rangeControlRange2;
+            rangeControlRange1.Maximum = 9.6D;
+            rangeControlRange1.Minimum = -0.6D;
+            rangeControlRange1.Owner = this.rangeControl1;
+            this.rangeControl1.SelectedRange = rangeControlRange1;
             this.rangeControl1.Size = new System.Drawing.Size(1306, 52);
             this.rangeControl1.TabIndex = 16;
             this.rangeControl1.Text = "rangeControl1";
@@ -284,38 +419,387 @@
             this.chartControl1.CrosshairOptions.CrosshairLabelMode = DevExpress.XtraCharts.CrosshairLabelMode.ShowForNearestSeries;
             this.chartControl1.CrosshairOptions.GroupHeaderPattern = "{A}";
             this.chartControl1.CrosshairOptions.HighlightPoints = false;
-            this.chartControl1.DataSource = this.workload_Tracking_System_DBDataSet2.Machines;
-            xyDiagram3.AxisX.Tickmarks.MinorVisible = false;
-            xyDiagram3.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram3.AxisY.VisibleInPanesSerializable = "-1";
-            this.chartControl1.Diagram = xyDiagram3;
+            this.chartControl1.DataSource = this.workload_Tracking_System_DBDataSet.Machines;
+            xyDiagram1.AxisX.Tickmarks.MinorVisible = false;
+            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
+            this.chartControl1.Diagram = xyDiagram1;
             this.chartControl1.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.chartControl1.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl1.Location = new System.Drawing.Point(27, 73);
             this.chartControl1.Name = "chartControl1";
-            series3.Name = "Hours";
+            series1.Name = "Hours";
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series3};
+        series1};
             this.chartControl1.SeriesTemplate.CrosshairLabelPattern = "{A}:{V}";
-            sideBySideBarSeriesLabel2.ResolveOverlappingMode = DevExpress.XtraCharts.ResolveOverlappingMode.Default;
-            sideBySideBarSeriesLabel2.TextPattern = "{A}-{V}";
-            this.chartControl1.SeriesTemplate.Label = sideBySideBarSeriesLabel2;
+            sideBySideBarSeriesLabel1.ResolveOverlappingMode = DevExpress.XtraCharts.ResolveOverlappingMode.Default;
+            sideBySideBarSeriesLabel1.TextPattern = "{A}-{V}";
+            this.chartControl1.SeriesTemplate.Label = sideBySideBarSeriesLabel1;
             this.chartControl1.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl1.SeriesTemplate.ToolTipSeriesPattern = "{S}-";
             this.chartControl1.Size = new System.Drawing.Size(1306, 752);
             this.chartControl1.TabIndex = 0;
             this.chartControl1.CustomDrawCrosshair += new DevExpress.XtraCharts.CustomDrawCrosshairEventHandler(this.chartControl1_CustomDrawCrosshair);
             // 
-            // componentsTableAdapter
+            // workload_Tracking_System_DBDataSet
             // 
-            this.componentsTableAdapter.ClearBeforeFill = true;
+            this.workload_Tracking_System_DBDataSet.DataSetName = "Workload_Tracking_System_DBDataSet";
+            this.workload_Tracking_System_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // workload_Tracking_System_DBDataSet2
+            // colPercentComplete
             // 
-            this.workload_Tracking_System_DBDataSet2.DataSetName = "Workload_Tracking_System_DBDataSet";
-            this.workload_Tracking_System_DBDataSet2.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.colPercentComplete.DisplayFormat.FormatString = "P0";
+            this.colPercentComplete.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colPercentComplete.FieldName = "PercentComplete";
+            this.colPercentComplete.Name = "colPercentComplete";
+            this.colPercentComplete.Visible = true;
+            this.colPercentComplete.VisibleIndex = 10;
+            // 
+            // gridView4
+            // 
+            this.gridView4.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colComponent1,
+            this.colPictures,
+            this.colMaterial,
+            this.colFinish,
+            this.colNotes,
+            this.colPosition,
+            this.colPriority1,
+            this.colQuantity,
+            this.colSpares,
+            this.colStatus2,
+            this.colPercentComplete});
+            gridFormatRule1.Column = this.colPercentComplete;
+            gridFormatRule1.Name = "Format0";
+            formatConditionRuleDataBar1.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            formatConditionRuleDataBar1.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar1.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar1.PredefinedName = "Blue";
+            gridFormatRule1.Rule = formatConditionRuleDataBar1;
+            this.gridView4.FormatRules.Add(gridFormatRule1);
+            this.gridView4.GridControl = this.gridControl3;
+            this.gridView4.Name = "gridView4";
+            // 
+            // colComponent1
+            // 
+            this.colComponent1.FieldName = "Component";
+            this.colComponent1.Name = "colComponent1";
+            this.colComponent1.Visible = true;
+            this.colComponent1.VisibleIndex = 0;
+            // 
+            // colPictures
+            // 
+            this.colPictures.FieldName = "Pictures";
+            this.colPictures.Name = "colPictures";
+            this.colPictures.Visible = true;
+            this.colPictures.VisibleIndex = 1;
+            // 
+            // colMaterial
+            // 
+            this.colMaterial.FieldName = "Material";
+            this.colMaterial.Name = "colMaterial";
+            this.colMaterial.Visible = true;
+            this.colMaterial.VisibleIndex = 2;
+            // 
+            // colFinish
+            // 
+            this.colFinish.FieldName = "Finish";
+            this.colFinish.Name = "colFinish";
+            this.colFinish.Visible = true;
+            this.colFinish.VisibleIndex = 3;
+            // 
+            // colNotes
+            // 
+            this.colNotes.FieldName = "Notes";
+            this.colNotes.Name = "colNotes";
+            this.colNotes.Visible = true;
+            this.colNotes.VisibleIndex = 4;
+            // 
+            // colPosition
+            // 
+            this.colPosition.FieldName = "Position";
+            this.colPosition.Name = "colPosition";
+            this.colPosition.Visible = true;
+            this.colPosition.VisibleIndex = 5;
+            // 
+            // colPriority1
+            // 
+            this.colPriority1.FieldName = "Priority";
+            this.colPriority1.Name = "colPriority1";
+            this.colPriority1.Visible = true;
+            this.colPriority1.VisibleIndex = 6;
+            // 
+            // colQuantity
+            // 
+            this.colQuantity.FieldName = "Quantity";
+            this.colQuantity.Name = "colQuantity";
+            this.colQuantity.Visible = true;
+            this.colQuantity.VisibleIndex = 7;
+            // 
+            // colSpares
+            // 
+            this.colSpares.FieldName = "Spares";
+            this.colSpares.Name = "colSpares";
+            this.colSpares.Visible = true;
+            this.colSpares.VisibleIndex = 8;
+            // 
+            // colStatus2
+            // 
+            this.colStatus2.FieldName = "Status";
+            this.colStatus2.Name = "colStatus2";
+            this.colStatus2.Visible = true;
+            this.colStatus2.VisibleIndex = 9;
+            // 
+            // gridControl3
+            // 
+            this.gridControl3.DataSource = this.projectsBindingSource;
+            gridLevelNode1.LevelTemplate = this.gridView4;
+            gridLevelNode2.LevelTemplate = this.gridView5;
+            gridLevelNode2.RelationName = "ComponentsTasks";
+            gridLevelNode1.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode2});
+            gridLevelNode1.RelationName = "ProjectsComponents";
+            this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode1});
+            this.gridControl3.Location = new System.Drawing.Point(17, 45);
+            this.gridControl3.MainView = this.gridView3;
+            this.gridControl3.Name = "gridControl3";
+            this.gridControl3.Size = new System.Drawing.Size(1485, 854);
+            this.gridControl3.TabIndex = 0;
+            this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView3,
+            this.gridView5,
+            this.gridView4});
+            // 
+            // projectsBindingSource
+            // 
+            this.projectsBindingSource.DataMember = "Projects";
+            this.projectsBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
+            // 
+            // gridView3
+            // 
+            this.gridView3.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colJobNumber1,
+            this.colProjectNumber2,
+            this.colDueDate1,
+            this.colPriority,
+            this.colStatus1,
+            this.colDesigner1,
+            this.colToolMaker2,
+            this.colRoughProgrammer1,
+            this.colElectrodeProgrammer1,
+            this.colFinishProgrammer1,
+            this.colEngineer1,
+            this.colKanBanWorkbookPath,
+            this.colPercentComplete1});
+            gridFormatRule2.Column = this.colPercentComplete1;
+            gridFormatRule2.ColumnApplyTo = this.colPercentComplete1;
+            gridFormatRule2.Name = "PercentCompleteFormat";
+            formatConditionRuleDataBar2.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            formatConditionRuleDataBar2.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar2.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar2.PredefinedName = "Blue";
+            gridFormatRule2.Rule = formatConditionRuleDataBar2;
+            this.gridView3.FormatRules.Add(gridFormatRule2);
+            this.gridView3.GridControl = this.gridControl3;
+            this.gridView3.Name = "gridView3";
+            // 
+            // colJobNumber1
+            // 
+            this.colJobNumber1.FieldName = "JobNumber";
+            this.colJobNumber1.Name = "colJobNumber1";
+            this.colJobNumber1.Visible = true;
+            this.colJobNumber1.VisibleIndex = 0;
+            // 
+            // colProjectNumber2
+            // 
+            this.colProjectNumber2.FieldName = "ProjectNumber";
+            this.colProjectNumber2.Name = "colProjectNumber2";
+            this.colProjectNumber2.Visible = true;
+            this.colProjectNumber2.VisibleIndex = 1;
+            // 
+            // colDueDate1
+            // 
+            this.colDueDate1.FieldName = "DueDate";
+            this.colDueDate1.Name = "colDueDate1";
+            this.colDueDate1.Visible = true;
+            this.colDueDate1.VisibleIndex = 2;
+            // 
+            // colPriority
+            // 
+            this.colPriority.FieldName = "Priority";
+            this.colPriority.Name = "colPriority";
+            this.colPriority.Visible = true;
+            this.colPriority.VisibleIndex = 3;
+            // 
+            // colStatus1
+            // 
+            this.colStatus1.FieldName = "Status";
+            this.colStatus1.Name = "colStatus1";
+            this.colStatus1.Visible = true;
+            this.colStatus1.VisibleIndex = 4;
+            // 
+            // colDesigner1
+            // 
+            this.colDesigner1.FieldName = "Designer";
+            this.colDesigner1.Name = "colDesigner1";
+            this.colDesigner1.Visible = true;
+            this.colDesigner1.VisibleIndex = 6;
+            // 
+            // colToolMaker2
+            // 
+            this.colToolMaker2.FieldName = "ToolMaker";
+            this.colToolMaker2.Name = "colToolMaker2";
+            this.colToolMaker2.Visible = true;
+            this.colToolMaker2.VisibleIndex = 7;
+            // 
+            // colRoughProgrammer1
+            // 
+            this.colRoughProgrammer1.FieldName = "RoughProgrammer";
+            this.colRoughProgrammer1.Name = "colRoughProgrammer1";
+            this.colRoughProgrammer1.Visible = true;
+            this.colRoughProgrammer1.VisibleIndex = 8;
+            // 
+            // colElectrodeProgrammer1
+            // 
+            this.colElectrodeProgrammer1.FieldName = "ElectrodeProgrammer";
+            this.colElectrodeProgrammer1.Name = "colElectrodeProgrammer1";
+            this.colElectrodeProgrammer1.Visible = true;
+            this.colElectrodeProgrammer1.VisibleIndex = 9;
+            // 
+            // colFinishProgrammer1
+            // 
+            this.colFinishProgrammer1.FieldName = "FinishProgrammer";
+            this.colFinishProgrammer1.Name = "colFinishProgrammer1";
+            this.colFinishProgrammer1.Visible = true;
+            this.colFinishProgrammer1.VisibleIndex = 10;
+            // 
+            // colEngineer1
+            // 
+            this.colEngineer1.FieldName = "Engineer";
+            this.colEngineer1.Name = "colEngineer1";
+            this.colEngineer1.Visible = true;
+            this.colEngineer1.VisibleIndex = 11;
+            // 
+            // colKanBanWorkbookPath
+            // 
+            this.colKanBanWorkbookPath.FieldName = "KanBanWorkbookPath";
+            this.colKanBanWorkbookPath.Name = "colKanBanWorkbookPath";
+            this.colKanBanWorkbookPath.Visible = true;
+            this.colKanBanWorkbookPath.VisibleIndex = 12;
+            // 
+            // colPercentComplete1
+            // 
+            this.colPercentComplete1.DisplayFormat.FormatString = "P0";
+            this.colPercentComplete1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colPercentComplete1.FieldName = "PercentComplete";
+            this.colPercentComplete1.Name = "colPercentComplete1";
+            this.colPercentComplete1.Visible = true;
+            this.colPercentComplete1.VisibleIndex = 5;
+            // 
+            // gridView5
+            // 
+            this.gridView5.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colTaskName1,
+            this.colResource1,
+            this.colMachine,
+            this.colHours,
+            this.colDuration1,
+            this.colStartDate2,
+            this.colFinishDate2,
+            this.colStatus3,
+            this.colInitials,
+            this.colDateCompleted});
+            this.gridView5.GridControl = this.gridControl3;
+            this.gridView5.Name = "gridView5";
+            // 
+            // colTaskName1
+            // 
+            this.colTaskName1.FieldName = "TaskName";
+            this.colTaskName1.Name = "colTaskName1";
+            this.colTaskName1.Visible = true;
+            this.colTaskName1.VisibleIndex = 0;
+            // 
+            // colResource1
+            // 
+            this.colResource1.FieldName = "Resource";
+            this.colResource1.Name = "colResource1";
+            this.colResource1.Visible = true;
+            this.colResource1.VisibleIndex = 6;
+            // 
+            // colMachine
+            // 
+            this.colMachine.FieldName = "Machine";
+            this.colMachine.Name = "colMachine";
+            this.colMachine.Visible = true;
+            this.colMachine.VisibleIndex = 5;
+            // 
+            // colHours
+            // 
+            this.colHours.FieldName = "Hours";
+            this.colHours.Name = "colHours";
+            this.colHours.Visible = true;
+            this.colHours.VisibleIndex = 1;
+            // 
+            // colDuration1
+            // 
+            this.colDuration1.FieldName = "Duration";
+            this.colDuration1.Name = "colDuration1";
+            this.colDuration1.Visible = true;
+            this.colDuration1.VisibleIndex = 2;
+            // 
+            // colStartDate2
+            // 
+            this.colStartDate2.FieldName = "StartDate";
+            this.colStartDate2.Name = "colStartDate2";
+            this.colStartDate2.Visible = true;
+            this.colStartDate2.VisibleIndex = 3;
+            // 
+            // colFinishDate2
+            // 
+            this.colFinishDate2.FieldName = "FinishDate";
+            this.colFinishDate2.Name = "colFinishDate2";
+            this.colFinishDate2.Visible = true;
+            this.colFinishDate2.VisibleIndex = 4;
+            // 
+            // colStatus3
+            // 
+            this.colStatus3.FieldName = "Status";
+            this.colStatus3.Name = "colStatus3";
+            this.colStatus3.Visible = true;
+            this.colStatus3.VisibleIndex = 7;
+            // 
+            // colInitials
+            // 
+            this.colInitials.FieldName = "Initials";
+            this.colInitials.Name = "colInitials";
+            this.colInitials.Visible = true;
+            this.colInitials.VisibleIndex = 8;
+            // 
+            // colDateCompleted
+            // 
+            this.colDateCompleted.FieldName = "DateCompleted";
+            this.colDateCompleted.Name = "colDateCompleted";
+            this.colDateCompleted.Visible = true;
+            this.colDateCompleted.VisibleIndex = 9;
+            // 
+            // projectsTableAdapter
+            // 
+            this.projectsTableAdapter.ClearBeforeFill = true;
+            // 
+            // tasksTableAdapter
+            // 
+            this.tasksTableAdapter.ClearBeforeFill = true;
             // 
             // workLoadTableAdapter
             // 
@@ -356,7 +840,7 @@
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1642, 913);
-            this.xtraTabPage1.Text = "Schedule View";
+            this.xtraTabPage1.Text = "Department Schedule View";
             // 
             // refreshButton
             // 
@@ -383,12 +867,12 @@
             this.schedulerControl1.Start = new System.DateTime(2017, 12, 5, 0, 0, 0, 0);
             this.schedulerControl1.TabIndex = 2;
             this.schedulerControl1.Text = "schedulerControl1";
-            this.schedulerControl1.Views.DayView.TimeRulers.Add(timeRuler7);
+            this.schedulerControl1.Views.DayView.TimeRulers.Add(timeRuler1);
             this.schedulerControl1.Views.FullWeekView.Enabled = true;
-            this.schedulerControl1.Views.FullWeekView.TimeRulers.Add(timeRuler8);
+            this.schedulerControl1.Views.FullWeekView.TimeRulers.Add(timeRuler2);
             this.schedulerControl1.Views.TimelineView.ResourcesPerPage = 5;
             this.schedulerControl1.Views.WeekView.Enabled = false;
-            this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler9);
+            this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler3);
             this.schedulerControl1.AppointmentResized += new DevExpress.XtraScheduler.AppointmentResizeEventHandler(this.schedulerControl1_AppointmentResized);
             this.schedulerControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragDrop);
             // 
@@ -439,7 +923,7 @@
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.xtraTabPage2.Name = "xtraTabPage2";
             this.xtraTabPage2.Size = new System.Drawing.Size(1642, 913);
-            this.xtraTabPage2.Text = "Task View";
+            this.xtraTabPage2.Text = "Department Task View";
             // 
             // richEditControl1
             // 
@@ -537,72 +1021,74 @@
             // 
             this.sqlDataSource1.ConnectionName = "Workload Tracking System DB 1";
             this.sqlDataSource1.Name = "sqlDataSource1";
-            columnExpression13.ColumnName = "JobNumber";
-            table3.MetaSerializable = "<Meta X=\"30\" Y=\"30\" Width=\"125\" Height=\"305\" />";
-            table3.Name = "Projects";
-            columnExpression13.Table = table3;
-            column12.Expression = columnExpression13;
-            columnExpression14.ColumnName = "ProjectNumber";
-            columnExpression14.Table = table3;
-            column13.Expression = columnExpression14;
-            columnExpression15.ColumnName = "DueDate";
-            columnExpression15.Table = table3;
-            column14.Expression = columnExpression15;
-            columnExpression16.ColumnName = "ToolMaker";
-            columnExpression16.Table = table3;
-            column15.Expression = columnExpression16;
-            columnExpression17.ColumnName = "Component";
-            table4.MetaSerializable = "<Meta X=\"185\" Y=\"30\" Width=\"125\" Height=\"419\" />";
-            table4.Name = "Tasks";
-            columnExpression17.Table = table4;
-            column16.Expression = columnExpression17;
-            columnExpression18.ColumnName = "TaskName";
-            columnExpression18.Table = table4;
-            column17.Expression = columnExpression18;
-            columnExpression19.ColumnName = "Duration";
-            columnExpression19.Table = table4;
-            column18.Expression = columnExpression19;
-            columnExpression20.ColumnName = "StartDate";
-            columnExpression20.Table = table4;
-            column19.Expression = columnExpression20;
-            columnExpression21.ColumnName = "FinishDate";
-            columnExpression21.Table = table4;
-            column20.Expression = columnExpression21;
-            columnExpression22.ColumnName = "Resource";
-            columnExpression22.Table = table4;
-            column21.Expression = columnExpression22;
-            columnExpression23.ColumnName = "Status";
-            columnExpression23.Table = table4;
-            column22.Expression = columnExpression23;
-            selectQuery2.Columns.Add(column12);
-            selectQuery2.Columns.Add(column13);
-            selectQuery2.Columns.Add(column14);
-            selectQuery2.Columns.Add(column15);
-            selectQuery2.Columns.Add(column16);
-            selectQuery2.Columns.Add(column17);
-            selectQuery2.Columns.Add(column18);
-            selectQuery2.Columns.Add(column19);
-            selectQuery2.Columns.Add(column20);
-            selectQuery2.Columns.Add(column21);
-            selectQuery2.Columns.Add(column22);
-            selectQuery2.Name = "Projects";
-            relationColumnInfo3.NestedKeyColumn = "JobNumber";
-            relationColumnInfo3.ParentKeyColumn = "JobNumber";
-            relationColumnInfo4.NestedKeyColumn = "ProjectNumber";
-            relationColumnInfo4.ParentKeyColumn = "ProjectNumber";
-            join2.KeyColumns.Add(relationColumnInfo3);
-            join2.KeyColumns.Add(relationColumnInfo4);
-            join2.Nested = table4;
-            join2.Parent = table3;
-            selectQuery2.Relations.Add(join2);
-            columnExpression24.ColumnName = "FinishDate";
-            columnExpression24.Table = table4;
-            sorting2.Expression = columnExpression24;
-            selectQuery2.Sorting.Add(sorting2);
-            selectQuery2.Tables.Add(table3);
-            selectQuery2.Tables.Add(table4);
+            columnExpression1.ColumnName = "JobNumber";
+            table1.MetaSerializable = "<Meta X=\"30\" Y=\"30\" Width=\"125\" Height=\"457\" />";
+            table1.Name = "Projects";
+            columnExpression1.Table = table1;
+            column1.Expression = columnExpression1;
+            columnExpression2.ColumnName = "ProjectNumber";
+            columnExpression2.Table = table1;
+            column2.Expression = columnExpression2;
+            columnExpression3.ColumnName = "DueDate";
+            columnExpression3.Table = table1;
+            column3.Expression = columnExpression3;
+            columnExpression4.ColumnName = "ToolMaker";
+            columnExpression4.Table = table1;
+            column4.Expression = columnExpression4;
+            columnExpression5.ColumnName = "Component";
+            table2.MetaSerializable = "<Meta X=\"185\" Y=\"30\" Width=\"125\" Height=\"457\" />";
+            table2.Name = "Tasks";
+            columnExpression5.Table = table2;
+            column5.Expression = columnExpression5;
+            columnExpression6.ColumnName = "TaskName";
+            columnExpression6.Table = table2;
+            column6.Expression = columnExpression6;
+            columnExpression7.ColumnName = "Duration";
+            columnExpression7.Table = table2;
+            column7.Expression = columnExpression7;
+            columnExpression8.ColumnName = "StartDate";
+            columnExpression8.Table = table2;
+            column8.Expression = columnExpression8;
+            columnExpression9.ColumnName = "FinishDate";
+            columnExpression9.Table = table2;
+            column9.Expression = columnExpression9;
+            columnExpression10.ColumnName = "Resource";
+            columnExpression10.Table = table2;
+            column10.Expression = columnExpression10;
+            columnExpression11.ColumnName = "Status";
+            columnExpression11.Table = table2;
+            column11.Expression = columnExpression11;
+            selectQuery1.Columns.Add(column1);
+            selectQuery1.Columns.Add(column2);
+            selectQuery1.Columns.Add(column3);
+            selectQuery1.Columns.Add(column4);
+            selectQuery1.Columns.Add(column5);
+            selectQuery1.Columns.Add(column6);
+            selectQuery1.Columns.Add(column7);
+            selectQuery1.Columns.Add(column8);
+            selectQuery1.Columns.Add(column9);
+            selectQuery1.Columns.Add(column10);
+            selectQuery1.Columns.Add(column11);
+            selectQuery1.FilterString = "[Projects.Status] <> \'Unreleased\' Or [Projects.Status] Is Null";
+            selectQuery1.GroupFilterString = "";
+            selectQuery1.Name = "Projects";
+            relationColumnInfo1.NestedKeyColumn = "JobNumber";
+            relationColumnInfo1.ParentKeyColumn = "JobNumber";
+            relationColumnInfo2.NestedKeyColumn = "ProjectNumber";
+            relationColumnInfo2.ParentKeyColumn = "ProjectNumber";
+            join1.KeyColumns.Add(relationColumnInfo1);
+            join1.KeyColumns.Add(relationColumnInfo2);
+            join1.Nested = table2;
+            join1.Parent = table1;
+            selectQuery1.Relations.Add(join1);
+            columnExpression12.ColumnName = "FinishDate";
+            columnExpression12.Table = table2;
+            sorting1.Expression = columnExpression12;
+            selectQuery1.Sorting.Add(sorting1);
+            selectQuery1.Tables.Add(table1);
+            selectQuery1.Tables.Add(table2);
             this.sqlDataSource1.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
-            selectQuery2});
+            selectQuery1});
             this.sqlDataSource1.ResultSchemaSerializable = resources.GetString("sqlDataSource1.ResultSchemaSerializable");
             // 
             // gridView1
@@ -845,147 +1331,7 @@
             this.xtraTabPage7.Controls.Add(this.gridControl3);
             this.xtraTabPage7.Name = "xtraTabPage7";
             this.xtraTabPage7.Size = new System.Drawing.Size(1642, 913);
-            this.xtraTabPage7.Text = "Component View";
-            // 
-            // gridControl3
-            // 
-            this.gridControl3.DataSource = this.componentsBindingSource;
-            this.gridControl3.Location = new System.Drawing.Point(3, 37);
-            this.gridControl3.MainView = this.gridView3;
-            this.gridControl3.Name = "gridControl3";
-            this.gridControl3.Size = new System.Drawing.Size(1423, 863);
-            this.gridControl3.TabIndex = 0;
-            this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView3});
-            // 
-            // componentsBindingSource
-            // 
-            this.componentsBindingSource.DataMember = "Components";
-            this.componentsBindingSource.DataSource = this.workload_Tracking_System_DBDataSet2;
-            // 
-            // gridView3
-            // 
-            this.gridView3.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.colID1,
-            this.colJobNumber1,
-            this.colProjectNumber2,
-            this.colComponent1,
-            this.colNotes,
-            this.colPriority,
-            this.colPosition,
-            this.colMaterial,
-            this.colTaskIDCount,
-            this.colQuantity,
-            this.colSpares,
-            this.colPictures,
-            this.colFinish,
-            this.colStatus1,
-            this.colPercentComplete});
-            this.gridView3.GridControl = this.gridControl3;
-            this.gridView3.Name = "gridView3";
-            // 
-            // colID1
-            // 
-            this.colID1.FieldName = "ID";
-            this.colID1.Name = "colID1";
-            // 
-            // colJobNumber1
-            // 
-            this.colJobNumber1.FieldName = "JobNumber";
-            this.colJobNumber1.Name = "colJobNumber1";
-            this.colJobNumber1.Visible = true;
-            this.colJobNumber1.VisibleIndex = 1;
-            // 
-            // colProjectNumber2
-            // 
-            this.colProjectNumber2.FieldName = "ProjectNumber";
-            this.colProjectNumber2.Name = "colProjectNumber2";
-            this.colProjectNumber2.Visible = true;
-            this.colProjectNumber2.VisibleIndex = 2;
-            // 
-            // colComponent1
-            // 
-            this.colComponent1.FieldName = "Component";
-            this.colComponent1.Name = "colComponent1";
-            this.colComponent1.Visible = true;
-            this.colComponent1.VisibleIndex = 3;
-            // 
-            // colNotes
-            // 
-            this.colNotes.FieldName = "Notes";
-            this.colNotes.Name = "colNotes";
-            this.colNotes.Visible = true;
-            this.colNotes.VisibleIndex = 4;
-            // 
-            // colPriority
-            // 
-            this.colPriority.FieldName = "Priority";
-            this.colPriority.Name = "colPriority";
-            this.colPriority.Visible = true;
-            this.colPriority.VisibleIndex = 5;
-            // 
-            // colPosition
-            // 
-            this.colPosition.FieldName = "Position";
-            this.colPosition.Name = "colPosition";
-            this.colPosition.Visible = true;
-            this.colPosition.VisibleIndex = 6;
-            // 
-            // colMaterial
-            // 
-            this.colMaterial.FieldName = "Material";
-            this.colMaterial.Name = "colMaterial";
-            this.colMaterial.Visible = true;
-            this.colMaterial.VisibleIndex = 7;
-            // 
-            // colTaskIDCount
-            // 
-            this.colTaskIDCount.FieldName = "TaskIDCount";
-            this.colTaskIDCount.Name = "colTaskIDCount";
-            this.colTaskIDCount.Visible = true;
-            this.colTaskIDCount.VisibleIndex = 8;
-            // 
-            // colQuantity
-            // 
-            this.colQuantity.FieldName = "Quantity";
-            this.colQuantity.Name = "colQuantity";
-            this.colQuantity.Visible = true;
-            this.colQuantity.VisibleIndex = 9;
-            // 
-            // colSpares
-            // 
-            this.colSpares.FieldName = "Spares";
-            this.colSpares.Name = "colSpares";
-            this.colSpares.Visible = true;
-            this.colSpares.VisibleIndex = 10;
-            // 
-            // colPictures
-            // 
-            this.colPictures.FieldName = "Pictures";
-            this.colPictures.Name = "colPictures";
-            this.colPictures.Visible = true;
-            this.colPictures.VisibleIndex = 11;
-            // 
-            // colFinish
-            // 
-            this.colFinish.FieldName = "Finish";
-            this.colFinish.Name = "colFinish";
-            this.colFinish.Visible = true;
-            this.colFinish.VisibleIndex = 12;
-            // 
-            // colStatus1
-            // 
-            this.colStatus1.FieldName = "Status";
-            this.colStatus1.Name = "colStatus1";
-            this.colStatus1.Visible = true;
-            this.colStatus1.VisibleIndex = 13;
-            // 
-            // colPercentComplete
-            // 
-            this.colPercentComplete.FieldName = "PercentComplete";
-            this.colPercentComplete.Name = "colPercentComplete";
-            this.colPercentComplete.Visible = true;
-            this.colPercentComplete.VisibleIndex = 14;
+            this.xtraTabPage7.Text = "Project View";
             // 
             // xtraTabPage3
             // 
@@ -1128,13 +1474,13 @@
             this.schedulerControl2.Start = new System.DateTime(2017, 12, 18, 0, 0, 0, 0);
             this.schedulerControl2.TabIndex = 0;
             this.schedulerControl2.Text = "schedulerControl2";
-            this.schedulerControl2.Views.DayView.TimeRulers.Add(timeRuler10);
+            this.schedulerControl2.Views.DayView.TimeRulers.Add(timeRuler4);
             this.schedulerControl2.Views.FullWeekView.Enabled = true;
-            this.schedulerControl2.Views.FullWeekView.TimeRulers.Add(timeRuler11);
+            this.schedulerControl2.Views.FullWeekView.TimeRulers.Add(timeRuler5);
             this.schedulerControl2.Views.GanttView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.TimelineView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.WeekView.Enabled = false;
-            this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler12);
+            this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler6);
             // 
             // schedulerStorage2
             // 
@@ -1212,20 +1558,20 @@
             // 
             // chartControl2
             // 
-            this.chartControl2.DataSource = this.workload_Tracking_System_DBDataSet2.Machines;
-            xyDiagram4.AxisX.Tickmarks.MinorVisible = false;
-            xyDiagram4.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram4.AxisY.VisibleInPanesSerializable = "-1";
-            this.chartControl2.Diagram = xyDiagram4;
+            this.chartControl2.DataSource = this.workload_Tracking_System_DBDataSet.Machines;
+            xyDiagram2.AxisX.Tickmarks.MinorVisible = false;
+            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
+            this.chartControl2.Diagram = xyDiagram2;
             this.chartControl2.Legend.Name = "Default Legend";
             this.chartControl2.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl2.Location = new System.Drawing.Point(60, 201);
             this.chartControl2.Name = "chartControl2";
-            series4.Name = "Hours";
-            sideBySideBarSeriesView2.FillStyle.FillMode = DevExpress.XtraCharts.FillMode.Hatch;
-            series4.View = sideBySideBarSeriesView2;
+            series2.Name = "Hours";
+            sideBySideBarSeriesView1.FillStyle.FillMode = DevExpress.XtraCharts.FillMode.Hatch;
+            series2.View = sideBySideBarSeriesView1;
             this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series4};
+        series2};
             this.chartControl2.Size = new System.Drawing.Size(1255, 605);
             this.chartControl2.TabIndex = 13;
             this.chartControl2.Visible = false;
@@ -1312,7 +1658,6 @@
             // workLoadBindingSource
             // 
             this.workLoadBindingSource.DataMember = "WorkLoad";
-            this.workLoadBindingSource.DataSource = this.workload_Tracking_System_DBDataSet2;
             // 
             // bandedGridView1
             // 
@@ -1390,13 +1735,13 @@
             this.colGeneralNotes,
             this.colGeneralNotesRTF,
             this.bandedGridColumn1});
-            gridFormatRule2.Name = "Format0";
-            gridFormatRule2.Rule = null;
-            this.bandedGridView1.FormatRules.Add(gridFormatRule2);
+            gridFormatRule3.Name = "Format0";
+            gridFormatRule3.Rule = null;
+            this.bandedGridView1.FormatRules.Add(gridFormatRule3);
             this.bandedGridView1.GridControl = this.gridControl2;
             this.bandedGridView1.GroupCount = 1;
             this.bandedGridView1.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "PartName", null, ", Count={0}"),
+            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "PartName", null, ", Count = {0}"),
             new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Sum, "MoldCost", this.colMoldCost, "{0:c0}")});
             this.bandedGridView1.Name = "bandedGridView1";
             this.bandedGridView1.OptionsPrint.AllowMultilineHeaders = true;
@@ -1787,10 +2132,243 @@
             this.gridView2.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.gridView2_RowUpdated);
             this.gridView2.Click += new System.EventHandler(this.gridView2_Click);
             // 
-            // workload_Tracking_System_DBDataSet
+            // sqlDataSource3
             // 
-            this.workload_Tracking_System_DBDataSet.DataSetName = "Workload_Tracking_System_DBDataSet";
-            this.workload_Tracking_System_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.sqlDataSource3.ConnectionName = "Workload Tracking System DB";
+            this.sqlDataSource3.Name = "sqlDataSource3";
+            columnExpression13.ColumnName = "JobNumber";
+            table3.MetaSerializable = "<Meta X=\"30\" Y=\"30\" Width=\"125\" Height=\"438\" />";
+            table3.Name = "Projects";
+            columnExpression13.Table = table3;
+            column12.Expression = columnExpression13;
+            columnExpression14.ColumnName = "ProjectNumber";
+            columnExpression14.Table = table3;
+            column13.Expression = columnExpression14;
+            columnExpression15.ColumnName = "DueDate";
+            columnExpression15.Table = table3;
+            column14.Expression = columnExpression15;
+            columnExpression16.ColumnName = "Priority";
+            columnExpression16.Table = table3;
+            column15.Expression = columnExpression16;
+            columnExpression17.ColumnName = "Status";
+            columnExpression17.Table = table3;
+            column16.Expression = columnExpression17;
+            columnExpression18.ColumnName = "Designer";
+            columnExpression18.Table = table3;
+            column17.Expression = columnExpression18;
+            columnExpression19.ColumnName = "ToolMaker";
+            columnExpression19.Table = table3;
+            column18.Expression = columnExpression19;
+            columnExpression20.ColumnName = "RoughProgrammer";
+            columnExpression20.Table = table3;
+            column19.Expression = columnExpression20;
+            columnExpression21.ColumnName = "ElectrodeProgrammer";
+            columnExpression21.Table = table3;
+            column20.Expression = columnExpression21;
+            columnExpression22.ColumnName = "FinishProgrammer";
+            columnExpression22.Table = table3;
+            column21.Expression = columnExpression22;
+            columnExpression23.ColumnName = "KanBanWorkbookPath";
+            columnExpression23.Table = table3;
+            column22.Expression = columnExpression23;
+            columnExpression24.ColumnName = "CustomerName";
+            columnExpression24.Table = table3;
+            column23.Expression = columnExpression24;
+            columnExpression25.ColumnName = "PartName";
+            columnExpression25.Table = table3;
+            column24.Expression = columnExpression25;
+            columnExpression26.ColumnName = "Notes";
+            table4.MetaSerializable = "<Meta X=\"185\" Y=\"30\" Width=\"125\" Height=\"343\" />";
+            table4.Name = "Components";
+            columnExpression26.Table = table4;
+            column25.Expression = columnExpression26;
+            column26.Alias = "Components_Priority";
+            columnExpression27.ColumnName = "Priority";
+            columnExpression27.Table = table4;
+            column26.Expression = columnExpression27;
+            columnExpression28.ColumnName = "Position";
+            columnExpression28.Table = table4;
+            column27.Expression = columnExpression28;
+            columnExpression29.ColumnName = "Material";
+            columnExpression29.Table = table4;
+            column28.Expression = columnExpression29;
+            columnExpression30.ColumnName = "TaskIDCount";
+            columnExpression30.Table = table4;
+            column29.Expression = columnExpression30;
+            columnExpression31.ColumnName = "Quantity";
+            columnExpression31.Table = table4;
+            column30.Expression = columnExpression31;
+            columnExpression32.ColumnName = "Spares";
+            columnExpression32.Table = table4;
+            column31.Expression = columnExpression32;
+            columnExpression33.ColumnName = "Pictures";
+            columnExpression33.Table = table4;
+            column32.Expression = columnExpression33;
+            columnExpression34.ColumnName = "Finish";
+            columnExpression34.Table = table4;
+            column33.Expression = columnExpression34;
+            column34.Alias = "Components_Status";
+            columnExpression35.ColumnName = "Status";
+            columnExpression35.Table = table4;
+            column34.Expression = columnExpression35;
+            columnExpression36.ColumnName = "PercentComplete";
+            columnExpression36.Table = table4;
+            column35.Expression = columnExpression36;
+            columnExpression37.ColumnName = "TaskID";
+            table5.MetaSerializable = "<Meta X=\"340\" Y=\"30\" Width=\"125\" Height=\"457\" />";
+            table5.Name = "Tasks";
+            columnExpression37.Table = table5;
+            column36.Expression = columnExpression37;
+            columnExpression38.ColumnName = "TaskName";
+            columnExpression38.Table = table5;
+            column37.Expression = columnExpression38;
+            columnExpression39.ColumnName = "Duration";
+            columnExpression39.Table = table5;
+            column38.Expression = columnExpression39;
+            columnExpression40.ColumnName = "StartDate";
+            columnExpression40.Table = table5;
+            column39.Expression = columnExpression40;
+            columnExpression41.ColumnName = "FinishDate";
+            columnExpression41.Table = table5;
+            column40.Expression = columnExpression41;
+            columnExpression42.ColumnName = "EarliestStartDate";
+            columnExpression42.Table = table5;
+            column41.Expression = columnExpression42;
+            columnExpression43.ColumnName = "Predecessors";
+            columnExpression43.Table = table5;
+            column42.Expression = columnExpression43;
+            columnExpression44.ColumnName = "Machine";
+            columnExpression44.Table = table5;
+            column43.Expression = columnExpression44;
+            columnExpression45.ColumnName = "Resource";
+            columnExpression45.Table = table5;
+            column44.Expression = columnExpression45;
+            columnExpression46.ColumnName = "Hours";
+            columnExpression46.Table = table5;
+            column45.Expression = columnExpression46;
+            column46.Alias = "Tasks_ToolMaker";
+            columnExpression47.ColumnName = "ToolMaker";
+            columnExpression47.Table = table5;
+            column46.Expression = columnExpression47;
+            column47.Alias = "Tasks_Priority";
+            columnExpression48.ColumnName = "Priority";
+            columnExpression48.Table = table5;
+            column47.Expression = columnExpression48;
+            column48.Alias = "Tasks_Status";
+            columnExpression49.ColumnName = "Status";
+            columnExpression49.Table = table5;
+            column48.Expression = columnExpression49;
+            columnExpression50.ColumnName = "DateAdded";
+            columnExpression50.Table = table5;
+            column49.Expression = columnExpression50;
+            column50.Alias = "Tasks_Notes";
+            columnExpression51.ColumnName = "Notes";
+            columnExpression51.Table = table5;
+            column50.Expression = columnExpression51;
+            columnExpression52.ColumnName = "DateCompleted";
+            columnExpression52.Table = table5;
+            column51.Expression = columnExpression52;
+            columnExpression53.ColumnName = "Initials";
+            columnExpression53.Table = table5;
+            column52.Expression = columnExpression53;
+            column53.Alias = "Components_JobNumber";
+            columnExpression54.ColumnName = "JobNumber";
+            columnExpression54.Table = table4;
+            column53.Expression = columnExpression54;
+            column54.Alias = "Components_ProjectNumber";
+            columnExpression55.ColumnName = "ProjectNumber";
+            columnExpression55.Table = table4;
+            column54.Expression = columnExpression55;
+            columnExpression56.ColumnName = "Component";
+            columnExpression56.Table = table4;
+            column55.Expression = columnExpression56;
+            column56.Alias = "Tasks_JobNumber";
+            columnExpression57.ColumnName = "JobNumber";
+            columnExpression57.Table = table5;
+            column56.Expression = columnExpression57;
+            column57.Alias = "Tasks_ProjectNumber";
+            columnExpression58.ColumnName = "ProjectNumber";
+            columnExpression58.Table = table5;
+            column57.Expression = columnExpression58;
+            column58.Alias = "Tasks_Component";
+            columnExpression59.ColumnName = "Component";
+            columnExpression59.Table = table5;
+            column58.Expression = columnExpression59;
+            selectQuery2.Columns.Add(column12);
+            selectQuery2.Columns.Add(column13);
+            selectQuery2.Columns.Add(column14);
+            selectQuery2.Columns.Add(column15);
+            selectQuery2.Columns.Add(column16);
+            selectQuery2.Columns.Add(column17);
+            selectQuery2.Columns.Add(column18);
+            selectQuery2.Columns.Add(column19);
+            selectQuery2.Columns.Add(column20);
+            selectQuery2.Columns.Add(column21);
+            selectQuery2.Columns.Add(column22);
+            selectQuery2.Columns.Add(column23);
+            selectQuery2.Columns.Add(column24);
+            selectQuery2.Columns.Add(column25);
+            selectQuery2.Columns.Add(column26);
+            selectQuery2.Columns.Add(column27);
+            selectQuery2.Columns.Add(column28);
+            selectQuery2.Columns.Add(column29);
+            selectQuery2.Columns.Add(column30);
+            selectQuery2.Columns.Add(column31);
+            selectQuery2.Columns.Add(column32);
+            selectQuery2.Columns.Add(column33);
+            selectQuery2.Columns.Add(column34);
+            selectQuery2.Columns.Add(column35);
+            selectQuery2.Columns.Add(column36);
+            selectQuery2.Columns.Add(column37);
+            selectQuery2.Columns.Add(column38);
+            selectQuery2.Columns.Add(column39);
+            selectQuery2.Columns.Add(column40);
+            selectQuery2.Columns.Add(column41);
+            selectQuery2.Columns.Add(column42);
+            selectQuery2.Columns.Add(column43);
+            selectQuery2.Columns.Add(column44);
+            selectQuery2.Columns.Add(column45);
+            selectQuery2.Columns.Add(column46);
+            selectQuery2.Columns.Add(column47);
+            selectQuery2.Columns.Add(column48);
+            selectQuery2.Columns.Add(column49);
+            selectQuery2.Columns.Add(column50);
+            selectQuery2.Columns.Add(column51);
+            selectQuery2.Columns.Add(column52);
+            selectQuery2.Columns.Add(column53);
+            selectQuery2.Columns.Add(column54);
+            selectQuery2.Columns.Add(column55);
+            selectQuery2.Columns.Add(column56);
+            selectQuery2.Columns.Add(column57);
+            selectQuery2.Columns.Add(column58);
+            selectQuery2.Name = "Projects";
+            relationColumnInfo3.NestedKeyColumn = "JobNumber";
+            relationColumnInfo3.ParentKeyColumn = "JobNumber";
+            relationColumnInfo4.NestedKeyColumn = "ProjectNumber";
+            relationColumnInfo4.ParentKeyColumn = "ProjectNumber";
+            join2.KeyColumns.Add(relationColumnInfo3);
+            join2.KeyColumns.Add(relationColumnInfo4);
+            join2.Nested = table4;
+            join2.Parent = table3;
+            relationColumnInfo5.NestedKeyColumn = "JobNumber";
+            relationColumnInfo5.ParentKeyColumn = "JobNumber";
+            relationColumnInfo6.NestedKeyColumn = "ProjectNumber";
+            relationColumnInfo6.ParentKeyColumn = "ProjectNumber";
+            relationColumnInfo7.NestedKeyColumn = "Component";
+            relationColumnInfo7.ParentKeyColumn = "Component";
+            join3.KeyColumns.Add(relationColumnInfo5);
+            join3.KeyColumns.Add(relationColumnInfo6);
+            join3.KeyColumns.Add(relationColumnInfo7);
+            join3.Nested = table5;
+            join3.Parent = table4;
+            selectQuery2.Relations.Add(join2);
+            selectQuery2.Relations.Add(join3);
+            selectQuery2.Tables.Add(table3);
+            selectQuery2.Tables.Add(table4);
+            selectQuery2.Tables.Add(table5);
+            this.sqlDataSource3.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
+            selectQuery2});
+            this.sqlDataSource3.ResultSchemaSerializable = resources.GetString("sqlDataSource3.ResultSchemaSerializable");
             // 
             // resourcesBindingSource
             // 
@@ -1801,14 +2379,18 @@
             // 
             this.resourcesTableAdapter.ClearBeforeFill = true;
             // 
-            // workload_Tracking_System_DBDataSet1
-            // 
-            this.workload_Tracking_System_DBDataSet1.DataSetName = "Workload_Tracking_System_DBDataSet";
-            this.workload_Tracking_System_DBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // sqlDataSource2
             // 
             this.sqlDataSource2.Name = "sqlDataSource2";
+            // 
+            // componentsBindingSource
+            // 
+            this.componentsBindingSource.DataMember = "Components";
+            this.componentsBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
+            // 
+            // componentsTableAdapter
+            // 
+            this.componentsTableAdapter.ClearBeforeFill = true;
             // 
             // MainWindow
             // 
@@ -1825,11 +2407,16 @@
             this.Text = "Toolroom Viewer";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
@@ -1844,9 +2431,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).EndInit();
             this.xtraTabPage7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             this.xtraTabPage3.ResumeLayout(false);
             this.xtraTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timeFrameComboBoxEdit.Properties)).EndInit();
@@ -1863,9 +2447,9 @@
             this.xtraTabPage5.ResumeLayout(false);
             this.xtraTabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox3.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).EndInit();
             this.xtraTabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
@@ -1886,10 +2470,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRichTextEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoExEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.resourcesBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1931,7 +2514,6 @@
         private DevExpress.XtraEditors.SimpleButton RefreshGanttButton;
         private System.Windows.Forms.Label label2;
         private DevExpress.XtraEditors.ComboBoxEdit projectComboBox;
-        private Workload_Tracking_System_DBDataSet workload_Tracking_System_DBDataSet1;
         private DevExpress.XtraScheduler.SchedulerStorage schedulerStorage2;
         private DevExpress.XtraScheduler.UI.ResourcesTree resourcesTree1;
         private System.Windows.Forms.Panel panel1;
@@ -1958,7 +2540,6 @@
         private DevExpress.XtraGrid.GridControl gridControl2;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
         private Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter workLoadTableAdapter;
-        private Workload_Tracking_System_DBDataSet workload_Tracking_System_DBDataSet2;
         private System.Windows.Forms.BindingSource workLoadBindingSource;
         private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit2;
@@ -2004,26 +2585,51 @@
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand Personnel;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand GeneralInfo;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn bandedGridColumn1;
+        private Workload_Tracking_System_DBDataSetTableAdapters.TasksTableAdapter tasksTableAdapter;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage7;
         private DevExpress.XtraGrid.GridControl gridControl3;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView3;
-        private Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter componentsTableAdapter;
-        private System.Windows.Forms.BindingSource componentsBindingSource;
-        private DevExpress.XtraGrid.Columns.GridColumn colID1;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView5;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView4;
+        private DevExpress.DataAccess.Sql.SqlDataSource sqlDataSource3;
+        private Workload_Tracking_System_DBDataSetTableAdapters.ProjectsTableAdapter projectsTableAdapter;
+        private System.Windows.Forms.BindingSource projectsBindingSource;
         private DevExpress.XtraGrid.Columns.GridColumn colJobNumber1;
         private DevExpress.XtraGrid.Columns.GridColumn colProjectNumber2;
-        private DevExpress.XtraGrid.Columns.GridColumn colComponent1;
-        private DevExpress.XtraGrid.Columns.GridColumn colNotes;
+        private DevExpress.XtraGrid.Columns.GridColumn colDueDate1;
         private DevExpress.XtraGrid.Columns.GridColumn colPriority;
-        private DevExpress.XtraGrid.Columns.GridColumn colPosition;
+        private DevExpress.XtraGrid.Columns.GridColumn colStatus1;
+        private DevExpress.XtraGrid.Columns.GridColumn colDesigner1;
+        private DevExpress.XtraGrid.Columns.GridColumn colToolMaker2;
+        private DevExpress.XtraGrid.Columns.GridColumn colRoughProgrammer1;
+        private DevExpress.XtraGrid.Columns.GridColumn colElectrodeProgrammer1;
+        private DevExpress.XtraGrid.Columns.GridColumn colFinishProgrammer1;
+        private DevExpress.XtraGrid.Columns.GridColumn colEngineer1;
+        private DevExpress.XtraGrid.Columns.GridColumn colKanBanWorkbookPath;
+        private DevExpress.XtraGrid.Columns.GridColumn colComponent1;
         private DevExpress.XtraGrid.Columns.GridColumn colMaterial;
-        private DevExpress.XtraGrid.Columns.GridColumn colTaskIDCount;
+        private DevExpress.XtraGrid.Columns.GridColumn colNotes;
+        private DevExpress.XtraGrid.Columns.GridColumn colPercentComplete;
+        private DevExpress.XtraGrid.Columns.GridColumn colPictures;
+        private DevExpress.XtraGrid.Columns.GridColumn colPosition;
+        private DevExpress.XtraGrid.Columns.GridColumn colPriority1;
         private DevExpress.XtraGrid.Columns.GridColumn colQuantity;
         private DevExpress.XtraGrid.Columns.GridColumn colSpares;
-        private DevExpress.XtraGrid.Columns.GridColumn colPictures;
+        private DevExpress.XtraGrid.Columns.GridColumn colStatus2;
+        private DevExpress.XtraGrid.Columns.GridColumn colTaskName1;
+        private DevExpress.XtraGrid.Columns.GridColumn colStartDate2;
+        private DevExpress.XtraGrid.Columns.GridColumn colFinishDate2;
+        private DevExpress.XtraGrid.Columns.GridColumn colResource1;
+        private DevExpress.XtraGrid.Columns.GridColumn colMachine;
+        private DevExpress.XtraGrid.Columns.GridColumn colHours;
+        private DevExpress.XtraGrid.Columns.GridColumn colStatus3;
+        private System.Windows.Forms.BindingSource componentsBindingSource;
+        private Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter componentsTableAdapter;
+        private DevExpress.XtraGrid.Columns.GridColumn colInitials;
+        private DevExpress.XtraGrid.Columns.GridColumn colDateCompleted;
         private DevExpress.XtraGrid.Columns.GridColumn colFinish;
-        private DevExpress.XtraGrid.Columns.GridColumn colStatus1;
-        private DevExpress.XtraGrid.Columns.GridColumn colPercentComplete;
+        private DevExpress.XtraGrid.Columns.GridColumn colDuration1;
+        private DevExpress.XtraGrid.Columns.GridColumn colPercentComplete1;
     }
 }
 

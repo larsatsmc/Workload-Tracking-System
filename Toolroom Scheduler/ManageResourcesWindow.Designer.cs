@@ -53,9 +53,14 @@
             "Rough Mills",
             "Finish Mills",
             "Graphite Mills",
+            "EDM Sinker",
+            "EDM Wire",
             "Rough CNC Operators",
             "Electrode CNC Operators",
-            "Finish CNC Operators"});
+            "Finish CNC Operators",
+            "EDM Sinker Operators",
+            "EDM Wire Operators",
+            "CMM Operators"});
             this.RoleComboBox.Location = new System.Drawing.Point(331, 25);
             this.RoleComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.RoleComboBox.Name = "RoleComboBox";
@@ -153,7 +158,9 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ManageResourcesForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manage Resources";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.automation_Task_ManagerDataSet2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

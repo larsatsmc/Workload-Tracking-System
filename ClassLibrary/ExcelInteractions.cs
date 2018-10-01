@@ -358,7 +358,7 @@ namespace ClassLibrary
             ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
             ws.Range["A1"].EntireColumn.ColumnWidth = 6.29;
             // Task Name
-            ws.Range["B1"].EntireColumn.ColumnWidth = 31.29;
+            ws.Range["B1"].EntireColumn.ColumnWidth = 27.4;
             // Duration
             ws.Range["C1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             ws.Range["C1"].EntireColumn.ColumnWidth = 9.86;
@@ -370,7 +370,7 @@ namespace ClassLibrary
             ws.Range["F1"].EntireColumn.ColumnWidth = 13.57;
             // Notes
             ws.Range["G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["G1"].EntireColumn.ColumnWidth = 55.86;
+            ws.Range["G1"].EntireColumn.ColumnWidth = 55.79;
             // Date
             ws.Range["H1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             ws.Range["H1"].EntireColumn.ColumnWidth = 8.57;
@@ -483,7 +483,7 @@ namespace ClassLibrary
                 }
 
                 ws.Columns["B:B"].Autofit();
-                ws.Columns["D:D"].Autofit();
+                //ws.Columns["D:D"].Autofit();
 
                 ws.Range["A1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 ws.Range["A1"].EntireColumn.ColumnWidth = 11; // - 1
@@ -628,7 +628,7 @@ namespace ClassLibrary
                 border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
             }
 
-            ws.Columns["B:B"].Autofit();
+            //ws.Columns["B:B"].Autofit();
 
             //if (component.Notes.Contains('\n'))
             //{
@@ -645,7 +645,7 @@ namespace ClassLibrary
             //ws.Cells[r++ + 1, 2].Top();
             //ws.Range[r++, 2].Left();
 
-            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 700, 47);
+            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 718, 47);
             textBox3.TextFrame2.TextRange.Characters.Text = "Notes: " + component.Notes;
             textBox3.TextFrame2.TextRange.Font.Size = 11;
             textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
@@ -1062,7 +1062,11 @@ namespace ClassLibrary
                    "    Database.UpdateCompletedTasksPercent _\r\n" +
                    "    jobNumber:=infoArr(0), _\r\n" +
                    "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "    component:=infoArr(1), _\r\n" +
+                   "    component:=infoArr(1)\r\n" +
+                   "\r\n" +
+                   "    Database.UpdateProjectPercentComplete _\r\n" +
+                   "    jobNumber:=infoArr(0), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2))\r\n" +
                    "\r\n" +
                    "  ElseIf Target.column = 7 Then\r\n" +
                    "\r\n" +

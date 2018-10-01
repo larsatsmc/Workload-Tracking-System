@@ -66,15 +66,15 @@ namespace Toolroom_Project_Viewer
             {
                 adapter.Fill(dt);
 
-                foreach (DataRow nrow in dt.Rows)
-                {
-                    nrow["ID"] = i++;
-                    if(nrow["Resource"].ToString() == "")
-                    {
-                        nrow["Resource"] = "None";
-                    }
-                    Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
-                }
+                //foreach (DataRow nrow in dt.Rows)
+                //{
+                //    nrow["ID"] = i++;
+                //    if(nrow["Resource"].ToString() == "")
+                //    {
+                //        nrow["Resource"] = "None";
+                //    }
+                //    Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
+                //}
             }
             catch (OleDbException ex)
             {

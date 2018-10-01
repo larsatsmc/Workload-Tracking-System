@@ -362,8 +362,9 @@ namespace Toolroom_Scheduler
         {
             Database db = new Database();
             List<ResourceInfo> ResourceList = new List<ResourceInfo>();
-            List<string> SelectedList = null;
-            List<string> DesignerList = new List<string> { "Phil Morris", "Brian Yoder", "Lee Meservey", "Jim Schmidt", " " };
+            List<string> PersonnelList = null;
+            List<string> MachineList = null;
+            List<string> DesignerList = new List<string> { "Phil Morris", "Brian Yoder", "Ben Meservey", "Jim Schmidt", " " };
             List<string> ProgrammerList = new List<string> { "Josh Meservey", "Shawn Swiggum", "Alex Anderson", "Rod Shilts", "Derek Timm", "Micah Bruns", "Ed Mendez", "John Gruntner", " " };
             List<string> RoughMachineList = new List<string> { "Mazak 1", "Mazak 2", "Mazak 3", "Haas", " " }; 
             List<string> FinishMachineList = new List<string> { "950 Yasda", "Old 640 Yasda", "New 640 Yasda", "430 Yasda", "Mazak 1", "Mazak 2", "Mazak 3", " " };
@@ -371,15 +372,17 @@ namespace Toolroom_Scheduler
             List<string> EDMMachineList = new List<string> { "Sodick 1", "Sodick 2", " " };
             List<string> InspectionMachineList = new List<string> { "Brown & Sharpe", " "};
             List<string> StatusList = new List<string> { "Waiting", "In Progress", "On Hold", "Completed", " " };
-            List<string> AllList = null;
+            List<string> AllPersonnelList = null;
+            List<string> AllMachineList = null;
 
-            AllList = DesignerList.ToList();
-            AllList.AddRange(ProgrammerList);
-            AllList.AddRange(RoughMachineList);
-            AllList.AddRange(FinishMachineList);
-            AllList.AddRange(GraphiteMachineList);
-            AllList.AddRange(EDMMachineList);
-            AllList.AddRange(InspectionMachineList);
+            AllPersonnelList = DesignerList;
+            AllPersonnelList.AddRange(ProgrammerList);
+
+            AllMachineList = RoughMachineList;
+            AllMachineList.AddRange(FinishMachineList);
+            AllMachineList.AddRange(GraphiteMachineList);
+            AllMachineList.AddRange(EDMMachineList);
+            AllMachineList.AddRange(InspectionMachineList);
 
             try
             {
@@ -387,12 +390,17 @@ namespace Toolroom_Scheduler
                 if (ProcessTabs.SelectedTab.Text == "Design")
                 {
                     //SelectedList = DesignerList.ToList();
-                    SelectedList = db.GetResourceList("Designer");
+                    PersonnelList = db.GetResourceList("Designer");
                 }
                 else if (ProcessTabs.SelectedTab.Text == "Programming")
                 {
                     //SelectedList = ProgrammerList.ToList();
-                    SelectedList = new List<string>();
+                    PersonnelList = new List<string>();
+                    PersonnelList.AddRange(db.GetResourceList("Programmer"));
+                    //SelectedList.Add("");
+                    //SelectedList.AddRange(db.GetResourceList("Electrode Programmer"));
+                    ////SelectedList.Add("");
+                    //SelectedList.AddRange(db.GetResourceList("Finish Programmer"));
 
                     //ResourceList = db.GetResourceList("Programmer");
                     //ResourceList = ResourceList.Where(r => r.Role.Contains("Programmer")).GroupBy(r => new { r.FirstName, r.LastName }).Select(r => r.First()).ToList();
@@ -402,40 +410,45 @@ namespace Toolroom_Scheduler
                     //    Console.WriteLine($" {resource.FirstName} {resource.LastName} {resource.Role} ");
                     //    SelectedList.Add($"{resource.FirstName} {resource.LastName}");
                     //}
-                    
+
                 }
                 else if (ProcessTabs.SelectedTab.Text == "Roughing")
                 {
-                    SelectedList = RoughMachineList.ToList();
+                    PersonnelList = db.GetResourceList("Rough CNC Operator");
+                    MachineList = db.GetResourceList("Rough Mill");
                 }
                 else if (ProcessTabs.SelectedTab.Text == "Finishing")
                 {
-                    SelectedList = FinishMachineList.ToList();
+                    PersonnelList = db.GetResourceList("Finish CNC Operator");
+                    MachineList = db.GetResourceList("Finish Mill");
                 }
                 else if (ProcessTabs.SelectedTab.Text == "Electrodes")
                 {
-                    SelectedList = GraphiteMachineList.ToList();
+                    PersonnelList = db.GetResourceList("Electrode CNC Operator");
+                    MachineList = db.GetResourceList("Graphite Mill");
                 }
                 else if (ProcessTabs.SelectedTab.Text == "EDM")
                 {
-                    SelectedList = EDMMachineList.ToList();
+                    PersonnelList = db.GetResourceList("EDM Sinker Operator");
+                    MachineList = EDMMachineList;
                 }
                 else if (ProcessTabs.SelectedTab.Text == "Inspection")
                 {
-                    SelectedList = InspectionMachineList.ToList();
+                    PersonnelList = db.GetResourceList("CMM Operator");
                 }
                 else if (ProcessTabs.SelectedTab.Text == "All")
                 {
-                    SelectedList = AllList.ToList();
+                    PersonnelList = AllPersonnelList;
+                    MachineList = AllMachineList;
                 }
 
                 //foreach (string name in SelectedList)
                 //{
                 //    Console.WriteLine(name);
                 //}
-                
-                //(FinishingDataGridView.Columns[10] as DataGridViewComboBoxColumn).DataSource = null;
-                (DataGridView1.Columns["Resource"] as DataGridViewComboBoxColumn).DataSource = SelectedList;
+
+                (DataGridView1.Columns["Machine"] as DataGridViewComboBoxColumn).DataSource = MachineList;
+                (DataGridView1.Columns["Resource"] as DataGridViewComboBoxColumn).DataSource = PersonnelList;
                 (DataGridView1.Columns["Status"] as DataGridViewComboBoxColumn).DataSource = StatusList;
 
                 //    for (int i = 0; i < FinishingDataGridView.Rows.Count; i++)
@@ -610,7 +623,7 @@ namespace Toolroom_Scheduler
             string queryString;
             string designer1 = "Phil Morris";
             string designer2 = "Brian Yoder";
-            string designer3 = "Lee Meservey";
+            string designer3 = "Ben Meservey";
             string designer4 = "Jim Schmidt";
 
             //DateTime dt = new DateTime();
@@ -1696,19 +1709,7 @@ namespace Toolroom_Scheduler
             RemoveProject();
         }
 
-        private void DeleteButton_Click(object sender, EventArgs e)
-        {
-            if (JobNumberComboBox.Text == "All")
-            {
-                MessageBox.Show("Just select one job.");
-            }
-            else
-            {
-                Database db = new Database();
-                var number = GetComboBoxInfo();
-                //MessageBox.Show(db.getHighestProjectTaskID(number.jobNumber, number.projectNumber).ToString());
-            }
-        }
+
 
         private void ForwardDateButton_Click(object sender, EventArgs e)
         {
@@ -1857,6 +1858,11 @@ namespace Toolroom_Scheduler
         {
             if(DataGridView1.Controls.Contains(oDateTimePicker))
                 DataGridView1.Controls.Remove(oDateTimePicker);
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
         }
     }
 }

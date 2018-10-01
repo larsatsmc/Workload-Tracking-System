@@ -255,14 +255,14 @@ namespace Toolroom_Scheduler
             List<string> ResourceList = new List<string>();
             DataTable dt = new DataTable();
 
-            string queryString3 = "SELECT Resources.ResourceName From Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID WHERE Role = @role ORDER BY Resources.ResourceName ASC";
+            string queryString3 = "SELECT DISTINCT Resources.ResourceName From Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID WHERE Role = @role OR Role LIKE @role ORDER BY Resources.ResourceName ASC";
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
             OleDbDataAdapter adapter3 = new OleDbDataAdapter(queryString3, Connection);
 			
-			adapter3.SelectCommand.Parameters.AddWithValue("@role", role);
+			adapter3.SelectCommand.Parameters.AddWithValue("@role", "%" + role + "%");
 			
 			adapter3.Fill(dt);
 
@@ -863,6 +863,30 @@ namespace Toolroom_Scheduler
 
             adapter.Fill(dt);
 
+            if(componentList == null)
+            {
+                foreach (DataRow nrow in dt.Rows)
+                {
+                    nrow["StartDate"] = DBNull.Value;
+                    nrow["FinishDate"] = DBNull.Value;
+                }
+            }
+            else
+            {
+                foreach (string component in componentList)
+                {
+                    var result2 = from DataRow myRow in dt.Rows
+                                  where myRow["Component"].ToString() == component
+                                  select myRow;
+
+                    foreach (DataRow nrow in result2)
+                    {
+                        nrow["StartDate"] = DBNull.Value;
+                        nrow["FinishDate"] = DBNull.Value;
+                    }
+                }
+            }
+
             var result = from DataRow myRow in dt.Rows
                             where myRow["Predecessors"].ToString() == ""
                             select myRow;
@@ -935,6 +959,61 @@ namespace Toolroom_Scheduler
             //{
             //    Console.WriteLine(nrow["TaskID"].ToString() + " " + nrow["StartDate"].ToString() + " " + nrow["FinishDate"].ToString());
             //}
+        }
+
+        private void ClearProjectTaskDates(string jobNumber, int projectNumber)
+        {
+            OleDbDataAdapter adapter;
+            DataTable dt = new DataTable();
+            string queryString;
+
+            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber ORDER BY ID DESC";
+
+            adapter = new OleDbDataAdapter(queryString, Connection);
+
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
+            adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
+
+            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+            adapter.Fill(dt);
+
+            foreach (DataRow nrow in dt.Rows)
+            {
+                nrow["StartDate"] = DBNull.Value;
+                nrow["FinishDate"] = DBNull.Value;
+            }
+
+            adapter.UpdateCommand = builder.GetUpdateCommand();
+            adapter.Update(dt);
+        }
+
+        private void ClearComponentTaskDates(string jobNumber, int projectNumber, string component)
+        {
+            OleDbDataAdapter adapter;
+            DataTable dt = new DataTable();
+            string queryString;
+
+            queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component ORDER BY ID DESC";
+
+            adapter = new OleDbDataAdapter(queryString, Connection);
+
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
+            adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = projectNumber;
+            adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = component;
+
+            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+            adapter.Fill(dt);
+
+            foreach (DataRow nrow in dt.Rows)
+            {
+                nrow["StartDate"] = DBNull.Value;
+                nrow["FinishDate"] = DBNull.Value;
+            }
+
+            adapter.UpdateCommand = builder.GetUpdateCommand();
+            adapter.Update(dt);
         }
 
         public void BackDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime backDate)
