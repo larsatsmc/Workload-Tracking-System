@@ -823,12 +823,21 @@ namespace Toolroom_Project_Viewer
 
                             //Console.WriteLine(rdr["Duration"].ToString());
 
-                            Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
+                            //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
 
                             double hours = Convert.ToInt32(rdr["Hours"]);
                             double days = (int)GetBusinessDays(Convert.ToDateTime(rdr["StartDate"]), Convert.ToDateTime(rdr["FinishDate"]));
                             DateTime date = Convert.ToDateTime(rdr["StartDate"]);
-                            decimal dailyAVG = (decimal)(hours / days);
+                            decimal dailyAVG;
+
+                            if (days == 0)
+                            {
+                                dailyAVG = (decimal)hours;
+                            }
+                            else
+                            {
+                                dailyAVG = (decimal)(hours / days);
+                            }
 
                             if (days >= 1)
                             {

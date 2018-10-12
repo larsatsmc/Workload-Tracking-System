@@ -50,6 +50,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.finishTextBox = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -105,8 +107,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.label24 = new System.Windows.Forms.Label();
-            this.finishTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
@@ -338,6 +338,24 @@
             this.tabPage5.Text = "Component Info";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // finishTextBox
+            // 
+            this.finishTextBox.Location = new System.Drawing.Point(90, 79);
+            this.finishTextBox.Name = "finishTextBox";
+            this.finishTextBox.Size = new System.Drawing.Size(165, 22);
+            this.finishTextBox.TabIndex = 63;
+            this.finishTextBox.TextChanged += new System.EventHandler(this.finishTextBox_TextChanged);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(34, 79);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 17);
+            this.label24.TabIndex = 62;
+            this.label24.Text = "Finish:";
+            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -389,6 +407,7 @@
             this.materialComboBox.FormattingEnabled = true;
             this.materialComboBox.Items.AddRange(new object[] {
             "Aluminum",
+            "Caldie",
             "Copper",
             "H13",
             "HRC60",
@@ -396,7 +415,7 @@
             "Moldstar 90",
             "P20",
             "S7",
-            "SS",
+            "420 SS",
             "W360"});
             this.materialComboBox.Location = new System.Drawing.Point(90, 45);
             this.materialComboBox.Name = "materialComboBox";
@@ -973,24 +992,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(425, 760);
             this.tabControl1.TabIndex = 1;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(34, 79);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(49, 17);
-            this.label24.TabIndex = 62;
-            this.label24.Text = "Finish:";
-            // 
-            // finishTextBox
-            // 
-            this.finishTextBox.Location = new System.Drawing.Point(90, 79);
-            this.finishTextBox.Name = "finishTextBox";
-            this.finishTextBox.Size = new System.Drawing.Size(165, 22);
-            this.finishTextBox.TabIndex = 63;
-            this.finishTextBox.TextChanged += new System.EventHandler(this.finishTextBox_TextChanged);
             // 
             // Project_Creation_Form
             // 

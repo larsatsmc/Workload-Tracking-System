@@ -1187,7 +1187,7 @@ namespace Toolroom_Scheduler
                         }
                         else
                         {
-                            cmd.Parameters.AddWithValue("@hours", " ");
+                            cmd.Parameters.AddWithValue("@hours", DBNull.Value);
                         }
                     }
                     else if (grid.Columns[ev.ColumnIndex].Name == "Duration")
@@ -1200,7 +1200,7 @@ namespace Toolroom_Scheduler
                         }
                         else
                         {
-                            cmd.Parameters.AddWithValue("@duration", " ");
+                            cmd.Parameters.AddWithValue("@duration", "");
                         }
                     }
                     else if (grid.Columns[ev.ColumnIndex].Name == "StartDate")
@@ -1213,7 +1213,7 @@ namespace Toolroom_Scheduler
                         }
                         else
                         {
-                            cmd.Parameters.AddWithValue("@startDate", " ");
+                            cmd.Parameters.AddWithValue("@startDate", DBNull.Value);
                         }
                     }
                     else if (grid.Columns[ev.ColumnIndex].Name == "FinishDate")
@@ -1226,7 +1226,7 @@ namespace Toolroom_Scheduler
                         }
                         else
                         {
-                            cmd.Parameters.AddWithValue("@finishDate", "");
+                            cmd.Parameters.AddWithValue("@finishDate", DBNull.Value);
                         }
                     }
                     else if (grid.Columns[ev.ColumnIndex].Name == "Predecessors")
@@ -2557,8 +2557,8 @@ namespace Toolroom_Scheduler
                 adapter.UpdateCommand.Parameters.AddWithValue("@oldProjectNumber", project.OldProjectNumber);  // By default this number is set to whatever is in the database when it was loaded to the Edit project form.
                 
                 Connection.Open();
+
                 adapter.UpdateCommand.ExecuteNonQuery();
-                Connection.Close();
 
                 MessageBox.Show("Project Updated!");
             }
