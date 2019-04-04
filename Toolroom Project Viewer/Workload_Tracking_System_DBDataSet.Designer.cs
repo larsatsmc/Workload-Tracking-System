@@ -823,6 +823,10 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnPercentComplete;
             
+            private global::System.Data.DataColumn columnCustomer;
+            
+            private global::System.Data.DataColumn columnProject;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ProjectsDataTable() {
@@ -970,6 +974,22 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn CustomerColumn {
+                get {
+                    return this.columnCustomer;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ProjectColumn {
+                get {
+                    return this.columnProject;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1005,7 +1025,7 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ProjectsRow AddProjectsRow(string JobNumber, int ProjectNumber, System.DateTime DueDate, int Priority, string Status, string Designer, string ToolMaker, string RoughProgrammer, string ElectrodeProgrammer, string FinishProgrammer, string Engineer, string KanBanWorkbookPath, double PercentComplete) {
+            public ProjectsRow AddProjectsRow(string JobNumber, int ProjectNumber, System.DateTime DueDate, int Priority, string Status, string Designer, string ToolMaker, string RoughProgrammer, string ElectrodeProgrammer, string FinishProgrammer, string Engineer, string KanBanWorkbookPath, double PercentComplete, string Customer, string Project) {
                 ProjectsRow rowProjectsRow = ((ProjectsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1021,7 +1041,9 @@ namespace Toolroom_Project_Viewer {
                         FinishProgrammer,
                         Engineer,
                         KanBanWorkbookPath,
-                        PercentComplete};
+                        PercentComplete,
+                        Customer,
+                        Project};
                 rowProjectsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowProjectsRow);
                 return rowProjectsRow;
@@ -1066,6 +1088,8 @@ namespace Toolroom_Project_Viewer {
                 this.columnEngineer = base.Columns["Engineer"];
                 this.columnKanBanWorkbookPath = base.Columns["KanBanWorkbookPath"];
                 this.columnPercentComplete = base.Columns["PercentComplete"];
+                this.columnCustomer = base.Columns["Customer"];
+                this.columnProject = base.Columns["Project"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1099,6 +1123,10 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnKanBanWorkbookPath);
                 this.columnPercentComplete = new global::System.Data.DataColumn("PercentComplete", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPercentComplete);
+                this.columnCustomer = new global::System.Data.DataColumn("Customer", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustomer);
+                this.columnProject = new global::System.Data.DataColumn("Project", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProject);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnJobNumber,
                                 this.columnProjectNumber}, true));
@@ -1116,6 +1144,8 @@ namespace Toolroom_Project_Viewer {
                 this.columnFinishProgrammer.MaxLength = 255;
                 this.columnEngineer.MaxLength = 255;
                 this.columnKanBanWorkbookPath.MaxLength = 255;
+                this.columnCustomer.MaxLength = 255;
+                this.columnProject.MaxLength = 255;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1598,8 +1628,6 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnHours;
             
-            private global::System.Data.DataColumn columnToolMaker;
-            
             private global::System.Data.DataColumn columnOperator;
             
             private global::System.Data.DataColumn columnPriority;
@@ -1761,14 +1789,6 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn ToolMakerColumn {
-                get {
-                    return this.columnToolMaker;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public global::System.Data.DataColumn OperatorColumn {
                 get {
                     return this.columnOperator;
@@ -1874,7 +1894,6 @@ namespace Toolroom_Project_Viewer {
                         string Machine, 
                         string Resource, 
                         int Hours, 
-                        string ToolMaker, 
                         string Operator, 
                         int Priority, 
                         string Status, 
@@ -1898,7 +1917,6 @@ namespace Toolroom_Project_Viewer {
                         Machine,
                         Resource,
                         Hours,
-                        ToolMaker,
                         Operator,
                         Priority,
                         Status,
@@ -1952,7 +1970,6 @@ namespace Toolroom_Project_Viewer {
                 this.columnMachine = base.Columns["Machine"];
                 this.columnResource = base.Columns["Resource"];
                 this.columnHours = base.Columns["Hours"];
-                this.columnToolMaker = base.Columns["ToolMaker"];
                 this.columnOperator = base.Columns["Operator"];
                 this.columnPriority = base.Columns["Priority"];
                 this.columnStatus = base.Columns["Status"];
@@ -1993,8 +2010,6 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnResource);
                 this.columnHours = new global::System.Data.DataColumn("Hours", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnHours);
-                this.columnToolMaker = new global::System.Data.DataColumn("ToolMaker", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnToolMaker);
                 this.columnOperator = new global::System.Data.DataColumn("Operator", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnOperator);
                 this.columnPriority = new global::System.Data.DataColumn("Priority", typeof(int), null, global::System.Data.MappingType.Element);
@@ -2028,7 +2043,6 @@ namespace Toolroom_Project_Viewer {
                 this.columnPredecessors.MaxLength = 255;
                 this.columnMachine.MaxLength = 255;
                 this.columnResource.MaxLength = 255;
-                this.columnToolMaker.MaxLength = 255;
                 this.columnOperator.MaxLength = 255;
                 this.columnStatus.MaxLength = 255;
                 this.columnNotes.MaxLength = 536870910;
@@ -2210,6 +2224,8 @@ namespace Toolroom_Project_Viewer {
             private global::System.Data.DataColumn columnMoldBase;
             
             private global::System.Data.DataColumn columnGeneralNotes;
+            
+            private global::System.Data.DataColumn columnGeneralNotesRTF;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -2422,6 +2438,14 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn GeneralNotesRTFColumn {
+                get {
+                    return this.columnGeneralNotesRTF;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2478,7 +2502,8 @@ namespace Toolroom_Project_Viewer {
                         string FinishProgrammer, 
                         string Manifold, 
                         string MoldBase, 
-                        string GeneralNotes) {
+                        string GeneralNotes, 
+                        string GeneralNotesRTF) {
                 WorkLoadRow rowWorkLoadRow = ((WorkLoadRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -2502,7 +2527,8 @@ namespace Toolroom_Project_Viewer {
                         FinishProgrammer,
                         Manifold,
                         MoldBase,
-                        GeneralNotes};
+                        GeneralNotes,
+                        GeneralNotesRTF};
                 rowWorkLoadRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowWorkLoadRow);
                 return rowWorkLoadRow;
@@ -2554,6 +2580,7 @@ namespace Toolroom_Project_Viewer {
                 this.columnManifold = base.Columns["Manifold"];
                 this.columnMoldBase = base.Columns["MoldBase"];
                 this.columnGeneralNotes = base.Columns["GeneralNotes"];
+                this.columnGeneralNotesRTF = base.Columns["GeneralNotesRTF"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2603,6 +2630,8 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnMoldBase);
                 this.columnGeneralNotes = new global::System.Data.DataColumn("GeneralNotes", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGeneralNotes);
+                this.columnGeneralNotesRTF = new global::System.Data.DataColumn("GeneralNotesRTF", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGeneralNotesRTF);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -2625,6 +2654,7 @@ namespace Toolroom_Project_Viewer {
                 this.columnManifold.MaxLength = 255;
                 this.columnMoldBase.MaxLength = 255;
                 this.columnGeneralNotes.MaxLength = 536870910;
+                this.columnGeneralNotesRTF.MaxLength = 536870910;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3587,6 +3617,38 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Customer {
+                get {
+                    try {
+                        return ((string)(this[this.tableProjects.CustomerColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Customer\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.CustomerColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Project {
+                get {
+                    try {
+                        return ((string)(this[this.tableProjects.ProjectColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Project\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.ProjectColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableProjects.IDColumn);
             }
@@ -3727,6 +3789,30 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetPercentCompleteNull() {
                 this[this.tableProjects.PercentCompleteColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsCustomerNull() {
+                return this.IsNull(this.tableProjects.CustomerColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetCustomerNull() {
+                this[this.tableProjects.CustomerColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsProjectNull() {
+                return this.IsNull(this.tableProjects.ProjectColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetProjectNull() {
+                this[this.tableProjects.ProjectColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4099,22 +4185,6 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string ToolMaker {
-                get {
-                    try {
-                        return ((string)(this[this.tableTasks.ToolMakerColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ToolMaker\' in table \'Tasks\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasks.ToolMakerColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public string Operator {
                 get {
                     try {
@@ -4354,18 +4424,6 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetHoursNull() {
                 this[this.tableTasks.HoursColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public bool IsToolMakerNull() {
-                return this.IsNull(this.tableTasks.ToolMakerColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public void SetToolMakerNull() {
-                this[this.tableTasks.ToolMakerColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4816,6 +4874,22 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string GeneralNotesRTF {
+                get {
+                    try {
+                        return ((string)(this[this.tableWorkLoad.GeneralNotesRTFColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'GeneralNotesRTF\' in table \'WorkLoad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableWorkLoad.GeneralNotesRTFColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsPartPictureNull() {
                 return this.IsNull(this.tableWorkLoad.PartPictureColumn);
             }
@@ -5064,6 +5138,18 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetGeneralNotesNull() {
                 this[this.tableWorkLoad.GeneralNotesColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsGeneralNotesRTFNull() {
+                return this.IsNull(this.tableWorkLoad.GeneralNotesRTFColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetGeneralNotesRTFNull() {
+                this[this.tableWorkLoad.GeneralNotesRTFColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -6232,15 +6318,21 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             tableMapping.ColumnMappings.Add("Engineer", "Engineer");
             tableMapping.ColumnMappings.Add("KanBanWorkbookPath", "KanBanWorkbookPath");
             tableMapping.ColumnMappings.Add("PercentComplete", "PercentComplete");
+            tableMapping.ColumnMappings.Add("Customer", "Customer");
+            tableMapping.ColumnMappings.Add("Project", "Project");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Projects` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Projects` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` = ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Customer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Project", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Project", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DueDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DueDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, true, null));
@@ -6265,10 +6357,12 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_KanBanWorkbookPath", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "KanBanWorkbookPath", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Projects` (`JobNumber`, `ProjectNumber`, `DueDate`, `Priority`, `PercentComplete`, `Status`, `Designer`, `ToolMaker`, `RoughProgrammer`, `ElectrodeProgrammer`, `FinishProgrammer`, `Engineer`, `KanBanWorkbookPath`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Projects` (`JobNumber`, `ProjectNumber`, `Customer`, `Project`, `DueDate`, `Priority`, `PercentComplete`, `Status`, `Designer`, `ToolMaker`, `RoughProgrammer`, `ElectrodeProgrammer`, `FinishProgrammer`, `Engineer`, `KanBanWorkbookPath`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Project", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DueDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PercentComplete", global::System.Data.OleDb.OleDbType.Double, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PercentComplete", global::System.Data.DataRowVersion.Current, false, null));
@@ -6282,10 +6376,12 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("KanBanWorkbookPath", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "KanBanWorkbookPath", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `Projects` SET `JobNumber` = ?, `ProjectNumber` = ?, `DueDate` = ?, `Priority` = ?, `PercentComplete` = ?, `Status` = ?, `Designer` = ?, `ToolMaker` = ?, `RoughProgrammer` = ?, `ElectrodeProgrammer` = ?, `FinishProgrammer` = ?, `Engineer` = ?, `KanBanWorkbookPath` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE `Projects` SET `JobNumber` = ?, `ProjectNumber` = ?, `Customer` = ?, `Project` = ?, `DueDate` = ?, `Priority` = ?, `PercentComplete` = ?, `Status` = ?, `Designer` = ?, `ToolMaker` = ?, `RoughProgrammer` = ?, `ElectrodeProgrammer` = ?, `FinishProgrammer` = ?, `Engineer` = ?, `KanBanWorkbookPath` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` = ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Project", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DueDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PercentComplete", global::System.Data.OleDb.OleDbType.Double, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PercentComplete", global::System.Data.DataRowVersion.Current, false, null));
@@ -6301,6 +6397,10 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Customer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Project", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Project", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Project", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DueDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DueDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DueDate", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, true, null));
@@ -6338,9 +6438,9 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT ID, JobNumber, ProjectNumber, DueDate, Priority, PercentComplete, Status, " +
-                "Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Eng" +
-                "ineer, KanBanWorkbookPath FROM Projects";
+            this._commandCollection[0].CommandText = "SELECT ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, Percen" +
+                "tComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, Fi" +
+                "nishProgrammer, Engineer, KanBanWorkbookPath FROM Projects";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -6401,7 +6501,23 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_ID, string Original_JobNumber, int Original_ProjectNumber, global::System.Nullable<global::System.DateTime> Original_DueDate, global::System.Nullable<int> Original_Priority, global::System.Nullable<double> Original_PercentComplete, string Original_Status, string Original_Designer, string Original_ToolMaker, string Original_RoughProgrammer, string Original_ElectrodeProgrammer, string Original_FinishProgrammer, string Original_Engineer, string Original_KanBanWorkbookPath) {
+        public virtual int Delete(
+                    int Original_ID, 
+                    string Original_JobNumber, 
+                    int Original_ProjectNumber, 
+                    string Original_Customer, 
+                    string Original_Project, 
+                    global::System.Nullable<global::System.DateTime> Original_DueDate, 
+                    global::System.Nullable<int> Original_Priority, 
+                    global::System.Nullable<double> Original_PercentComplete, 
+                    string Original_Status, 
+                    string Original_Designer, 
+                    string Original_ToolMaker, 
+                    string Original_RoughProgrammer, 
+                    string Original_ElectrodeProgrammer, 
+                    string Original_FinishProgrammer, 
+                    string Original_Engineer, 
+                    string Original_KanBanWorkbookPath) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((object)(0));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((int)(Original_ID));
             if ((Original_JobNumber == null)) {
@@ -6411,93 +6527,109 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                 this.Adapter.DeleteCommand.Parameters[2].Value = ((string)(Original_JobNumber));
             }
             this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_ProjectNumber));
-            if ((Original_DueDate.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((System.DateTime)(Original_DueDate.Value));
-            }
-            else {
+            if ((Original_Customer == null)) {
                 this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
-            if ((Original_Priority.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[7].Value = ((int)(Original_Priority.Value));
-            }
             else {
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((string)(Original_Customer));
+            }
+            if ((Original_Project == null)) {
                 this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[7].Value = global::System.DBNull.Value;
             }
-            if ((Original_PercentComplete.HasValue == true)) {
+            else {
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((string)(Original_Project));
+            }
+            if ((Original_DueDate.HasValue == true)) {
                 this.Adapter.DeleteCommand.Parameters[8].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[9].Value = ((double)(Original_PercentComplete.Value));
+                this.Adapter.DeleteCommand.Parameters[9].Value = ((System.DateTime)(Original_DueDate.Value));
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[8].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[9].Value = global::System.DBNull.Value;
             }
-            if ((Original_Status == null)) {
+            if ((Original_Priority.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[10].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[11].Value = ((int)(Original_Priority.Value));
+            }
+            else {
                 this.Adapter.DeleteCommand.Parameters[10].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.DeleteCommand.Parameters[10].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[11].Value = ((string)(Original_Status));
+            if ((Original_PercentComplete.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[12].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[13].Value = ((double)(Original_PercentComplete.Value));
             }
-            if ((Original_Designer == null)) {
+            else {
                 this.Adapter.DeleteCommand.Parameters[12].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[13].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.DeleteCommand.Parameters[12].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[13].Value = ((string)(Original_Designer));
-            }
-            if ((Original_ToolMaker == null)) {
+            if ((Original_Status == null)) {
                 this.Adapter.DeleteCommand.Parameters[14].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[15].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[14].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[15].Value = ((string)(Original_ToolMaker));
+                this.Adapter.DeleteCommand.Parameters[15].Value = ((string)(Original_Status));
             }
-            if ((Original_RoughProgrammer == null)) {
+            if ((Original_Designer == null)) {
                 this.Adapter.DeleteCommand.Parameters[16].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[16].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[17].Value = ((string)(Original_RoughProgrammer));
+                this.Adapter.DeleteCommand.Parameters[17].Value = ((string)(Original_Designer));
             }
-            if ((Original_ElectrodeProgrammer == null)) {
+            if ((Original_ToolMaker == null)) {
                 this.Adapter.DeleteCommand.Parameters[18].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[19].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[18].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[19].Value = ((string)(Original_ElectrodeProgrammer));
+                this.Adapter.DeleteCommand.Parameters[19].Value = ((string)(Original_ToolMaker));
             }
-            if ((Original_FinishProgrammer == null)) {
+            if ((Original_RoughProgrammer == null)) {
                 this.Adapter.DeleteCommand.Parameters[20].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[21].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[20].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[21].Value = ((string)(Original_FinishProgrammer));
+                this.Adapter.DeleteCommand.Parameters[21].Value = ((string)(Original_RoughProgrammer));
             }
-            if ((Original_Engineer == null)) {
+            if ((Original_ElectrodeProgrammer == null)) {
                 this.Adapter.DeleteCommand.Parameters[22].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[23].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[22].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[23].Value = ((string)(Original_Engineer));
+                this.Adapter.DeleteCommand.Parameters[23].Value = ((string)(Original_ElectrodeProgrammer));
             }
-            if ((Original_KanBanWorkbookPath == null)) {
+            if ((Original_FinishProgrammer == null)) {
                 this.Adapter.DeleteCommand.Parameters[24].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[24].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[25].Value = ((string)(Original_KanBanWorkbookPath));
+                this.Adapter.DeleteCommand.Parameters[25].Value = ((string)(Original_FinishProgrammer));
+            }
+            if ((Original_Engineer == null)) {
+                this.Adapter.DeleteCommand.Parameters[26].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[27].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[26].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[27].Value = ((string)(Original_Engineer));
+            }
+            if ((Original_KanBanWorkbookPath == null)) {
+                this.Adapter.DeleteCommand.Parameters[28].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[29].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[28].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[29].Value = ((string)(Original_KanBanWorkbookPath));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -6519,7 +6651,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string JobNumber, int ProjectNumber, global::System.Nullable<global::System.DateTime> DueDate, global::System.Nullable<int> Priority, global::System.Nullable<double> PercentComplete, string Status, string Designer, string ToolMaker, string RoughProgrammer, string ElectrodeProgrammer, string FinishProgrammer, string Engineer, string KanBanWorkbookPath) {
+        public virtual int Insert(string JobNumber, int ProjectNumber, string Customer, string Project, global::System.Nullable<global::System.DateTime> DueDate, global::System.Nullable<int> Priority, global::System.Nullable<double> PercentComplete, string Status, string Designer, string ToolMaker, string RoughProgrammer, string ElectrodeProgrammer, string FinishProgrammer, string Engineer, string KanBanWorkbookPath) {
             if ((JobNumber == null)) {
                 throw new global::System.ArgumentNullException("JobNumber");
             }
@@ -6527,71 +6659,83 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                 this.Adapter.InsertCommand.Parameters[0].Value = ((string)(JobNumber));
             }
             this.Adapter.InsertCommand.Parameters[1].Value = ((int)(ProjectNumber));
-            if ((DueDate.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((System.DateTime)(DueDate.Value));
-            }
-            else {
+            if ((Customer == null)) {
                 this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
-            if ((Priority.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((int)(Priority.Value));
-            }
             else {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Customer));
+            }
+            if ((Project == null)) {
                 this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            if ((PercentComplete.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((double)(PercentComplete.Value));
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Project));
+            }
+            if ((DueDate.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(DueDate.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
-            if ((Status == null)) {
+            if ((Priority.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((int)(Priority.Value));
+            }
+            else {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Status));
+            if ((PercentComplete.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((double)(PercentComplete.Value));
             }
-            if ((Designer == null)) {
+            else {
                 this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Designer));
-            }
-            if ((ToolMaker == null)) {
+            if ((Status == null)) {
                 this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(ToolMaker));
+                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(Status));
             }
-            if ((RoughProgrammer == null)) {
+            if ((Designer == null)) {
                 this.Adapter.InsertCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(RoughProgrammer));
+                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(Designer));
             }
-            if ((ElectrodeProgrammer == null)) {
+            if ((ToolMaker == null)) {
                 this.Adapter.InsertCommand.Parameters[9].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[9].Value = ((string)(ElectrodeProgrammer));
+                this.Adapter.InsertCommand.Parameters[9].Value = ((string)(ToolMaker));
             }
-            if ((FinishProgrammer == null)) {
+            if ((RoughProgrammer == null)) {
                 this.Adapter.InsertCommand.Parameters[10].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[10].Value = ((string)(FinishProgrammer));
+                this.Adapter.InsertCommand.Parameters[10].Value = ((string)(RoughProgrammer));
             }
-            if ((Engineer == null)) {
+            if ((ElectrodeProgrammer == null)) {
                 this.Adapter.InsertCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[11].Value = ((string)(Engineer));
+                this.Adapter.InsertCommand.Parameters[11].Value = ((string)(ElectrodeProgrammer));
             }
-            if ((KanBanWorkbookPath == null)) {
+            if ((FinishProgrammer == null)) {
                 this.Adapter.InsertCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[12].Value = ((string)(KanBanWorkbookPath));
+                this.Adapter.InsertCommand.Parameters[12].Value = ((string)(FinishProgrammer));
+            }
+            if ((Engineer == null)) {
+                this.Adapter.InsertCommand.Parameters[13].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[13].Value = ((string)(Engineer));
+            }
+            if ((KanBanWorkbookPath == null)) {
+                this.Adapter.InsertCommand.Parameters[14].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[14].Value = ((string)(KanBanWorkbookPath));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -6616,6 +6760,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
         public virtual int Update(
                     string JobNumber, 
                     int ProjectNumber, 
+                    string Customer, 
+                    string Project, 
                     global::System.Nullable<global::System.DateTime> DueDate, 
                     global::System.Nullable<int> Priority, 
                     global::System.Nullable<double> PercentComplete, 
@@ -6630,6 +6776,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     int Original_ID, 
                     string Original_JobNumber, 
                     int Original_ProjectNumber, 
+                    string Original_Customer, 
+                    string Original_Project, 
                     global::System.Nullable<global::System.DateTime> Original_DueDate, 
                     global::System.Nullable<int> Original_Priority, 
                     global::System.Nullable<double> Original_PercentComplete, 
@@ -6648,168 +6796,196 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(JobNumber));
             }
             this.Adapter.UpdateCommand.Parameters[1].Value = ((int)(ProjectNumber));
-            if ((DueDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((System.DateTime)(DueDate.Value));
-            }
-            else {
+            if ((Customer == null)) {
                 this.Adapter.UpdateCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
-            if ((Priority.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(Priority.Value));
-            }
             else {
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Customer));
+            }
+            if ((Project == null)) {
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            if ((PercentComplete.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((double)(PercentComplete.Value));
+            else {
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Project));
+            }
+            if ((DueDate.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(DueDate.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
-            if ((Status == null)) {
+            if ((Priority.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Priority.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Status));
+            if ((PercentComplete.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((double)(PercentComplete.Value));
             }
-            if ((Designer == null)) {
+            else {
                 this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Designer));
-            }
-            if ((ToolMaker == null)) {
+            if ((Status == null)) {
                 this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(ToolMaker));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Status));
             }
-            if ((RoughProgrammer == null)) {
+            if ((Designer == null)) {
                 this.Adapter.UpdateCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(RoughProgrammer));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Designer));
             }
-            if ((ElectrodeProgrammer == null)) {
+            if ((ToolMaker == null)) {
                 this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(ElectrodeProgrammer));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(ToolMaker));
             }
-            if ((FinishProgrammer == null)) {
+            if ((RoughProgrammer == null)) {
                 this.Adapter.UpdateCommand.Parameters[10].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(FinishProgrammer));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(RoughProgrammer));
             }
-            if ((Engineer == null)) {
+            if ((ElectrodeProgrammer == null)) {
                 this.Adapter.UpdateCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Engineer));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(ElectrodeProgrammer));
             }
-            if ((KanBanWorkbookPath == null)) {
+            if ((FinishProgrammer == null)) {
                 this.Adapter.UpdateCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(KanBanWorkbookPath));
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(FinishProgrammer));
             }
-            this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(0));
-            this.Adapter.UpdateCommand.Parameters[14].Value = ((int)(Original_ID));
+            if ((Engineer == null)) {
+                this.Adapter.UpdateCommand.Parameters[13].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[13].Value = ((string)(Engineer));
+            }
+            if ((KanBanWorkbookPath == null)) {
+                this.Adapter.UpdateCommand.Parameters[14].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[14].Value = ((string)(KanBanWorkbookPath));
+            }
+            this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(0));
+            this.Adapter.UpdateCommand.Parameters[16].Value = ((int)(Original_ID));
             if ((Original_JobNumber == null)) {
                 throw new global::System.ArgumentNullException("Original_JobNumber");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[15].Value = ((string)(Original_JobNumber));
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((string)(Original_JobNumber));
             }
-            this.Adapter.UpdateCommand.Parameters[16].Value = ((int)(Original_ProjectNumber));
-            if ((Original_DueDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[18].Value = ((System.DateTime)(Original_DueDate.Value));
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[18].Value = global::System.DBNull.Value;
-            }
-            if ((Original_Priority.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[20].Value = ((int)(Original_Priority.Value));
-            }
-            else {
+            this.Adapter.UpdateCommand.Parameters[18].Value = ((int)(Original_ProjectNumber));
+            if ((Original_Customer == null)) {
                 this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[20].Value = global::System.DBNull.Value;
             }
-            if ((Original_PercentComplete.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((double)(Original_PercentComplete.Value));
-            }
             else {
+                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((string)(Original_Customer));
+            }
+            if ((Original_Project == null)) {
                 this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[22].Value = global::System.DBNull.Value;
             }
-            if ((Original_Status == null)) {
+            else {
+                this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[22].Value = ((string)(Original_Project));
+            }
+            if ((Original_DueDate.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[23].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[24].Value = ((System.DateTime)(Original_DueDate.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[23].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[24].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[23].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((string)(Original_Status));
+            if ((Original_Priority.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((int)(Original_Priority.Value));
             }
-            if ((Original_Designer == null)) {
+            else {
                 this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_Designer));
+            if ((Original_PercentComplete.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((double)(Original_PercentComplete.Value));
             }
-            if ((Original_ToolMaker == null)) {
+            else {
                 this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_ToolMaker));
-            }
-            if ((Original_RoughProgrammer == null)) {
+            if ((Original_Status == null)) {
                 this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((string)(Original_RoughProgrammer));
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((string)(Original_Status));
             }
-            if ((Original_ElectrodeProgrammer == null)) {
+            if ((Original_Designer == null)) {
                 this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((string)(Original_ElectrodeProgrammer));
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((string)(Original_Designer));
             }
-            if ((Original_FinishProgrammer == null)) {
+            if ((Original_ToolMaker == null)) {
                 this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((string)(Original_FinishProgrammer));
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((string)(Original_ToolMaker));
             }
-            if ((Original_Engineer == null)) {
+            if ((Original_RoughProgrammer == null)) {
                 this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((string)(Original_Engineer));
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((string)(Original_RoughProgrammer));
             }
-            if ((Original_KanBanWorkbookPath == null)) {
+            if ((Original_ElectrodeProgrammer == null)) {
                 this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((string)(Original_KanBanWorkbookPath));
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((string)(Original_ElectrodeProgrammer));
+            }
+            if ((Original_FinishProgrammer == null)) {
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((string)(Original_FinishProgrammer));
+            }
+            if ((Original_Engineer == null)) {
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((string)(Original_Engineer));
+            }
+            if ((Original_KanBanWorkbookPath == null)) {
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((string)(Original_KanBanWorkbookPath));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -6832,6 +7008,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
         public virtual int Update(
+                    string Customer, 
+                    string Project, 
                     global::System.Nullable<global::System.DateTime> DueDate, 
                     global::System.Nullable<int> Priority, 
                     global::System.Nullable<double> PercentComplete, 
@@ -6846,6 +7024,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     int Original_ID, 
                     string Original_JobNumber, 
                     int Original_ProjectNumber, 
+                    string Original_Customer, 
+                    string Original_Project, 
                     global::System.Nullable<global::System.DateTime> Original_DueDate, 
                     global::System.Nullable<int> Original_Priority, 
                     global::System.Nullable<double> Original_PercentComplete, 
@@ -6857,7 +7037,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Original_FinishProgrammer, 
                     string Original_Engineer, 
                     string Original_KanBanWorkbookPath) {
-            return this.Update(Original_JobNumber, Original_ProjectNumber, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Engineer, KanBanWorkbookPath, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_DueDate, Original_Priority, Original_PercentComplete, Original_Status, Original_Designer, Original_ToolMaker, Original_RoughProgrammer, Original_ElectrodeProgrammer, Original_FinishProgrammer, Original_Engineer, Original_KanBanWorkbookPath);
+            return this.Update(Original_JobNumber, Original_ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Engineer, KanBanWorkbookPath, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_Customer, Original_Project, Original_DueDate, Original_Priority, Original_PercentComplete, Original_Status, Original_Designer, Original_ToolMaker, Original_RoughProgrammer, Original_ElectrodeProgrammer, Original_FinishProgrammer, Original_Engineer, Original_KanBanWorkbookPath);
         }
     }
     
@@ -7412,7 +7592,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             tableMapping.ColumnMappings.Add("Machine", "Machine");
             tableMapping.ColumnMappings.Add("Resource", "Resource");
             tableMapping.ColumnMappings.Add("Hours", "Hours");
-            tableMapping.ColumnMappings.Add("ToolMaker", "ToolMaker");
             tableMapping.ColumnMappings.Add("Priority", "Priority");
             tableMapping.ColumnMappings.Add("Status", "Status");
             tableMapping.ColumnMappings.Add("DateAdded", "DateAdded");
@@ -7422,7 +7601,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Tasks` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND (`Component` = ?) AND (`TaskID` = ?) AND ((? = 1 AND `TaskName` IS NULL) OR (`TaskName` = ?)) AND ((? = 1 AND `Duration` IS NULL) OR (`Duration` = ?)) AND ((? = 1 AND `StartDate` IS NULL) OR (`StartDate` = ?)) AND ((? = 1 AND `FinishDate` IS NULL) OR (`FinishDate` = ?)) AND ((? = 1 AND `EarliestStartDate` IS NULL) OR (`EarliestStartDate` = ?)) AND ((? = 1 AND `Predecessors` IS NULL) OR (`Predecessors` = ?)) AND ((? = 1 AND `Machine` IS NULL) OR (`Machine` = ?)) AND ((? = 1 AND `Resource` IS NULL) OR (`Resource` = ?)) AND ((? = 1 AND `Hours` IS NULL) OR (`Hours` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `DateAdded` IS NULL) OR (`DateAdded` = ?)) AND ((? = 1 AND `DateCompleted` IS NULL) OR (`DateCompleted` = ?)) AND ((? = 1 AND `Initials` IS NULL) OR (`Initials` = ?)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Tasks` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND (`Component` = ?) AND (`TaskID` = ?) AND ((? = 1 AND `TaskName` IS NULL) OR (`TaskName` = ?)) AND ((? = 1 AND `Duration` IS NULL) OR (`Duration` = ?)) AND ((? = 1 AND `StartDate` IS NULL) OR (`StartDate` = ?)) AND ((? = 1 AND `FinishDate` IS NULL) OR (`FinishDate` = ?)) AND ((? = 1 AND `EarliestStartDate` IS NULL) OR (`EarliestStartDate` = ?)) AND ((? = 1 AND `Predecessors` IS NULL) OR (`Predecessors` = ?)) AND ((? = 1 AND `Machine` IS NULL) OR (`Machine` = ?)) AND ((? = 1 AND `Resource` IS NULL) OR (`Resource` = ?)) AND ((? = 1 AND `Hours` IS NULL) OR (`Hours` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `DateAdded` IS NULL) OR (`DateAdded` = ?)) AND ((? = 1 AND `DateCompleted` IS NULL) OR (`DateCompleted` = ?)) AND ((? = 1 AND `Initials` IS NULL) OR (`Initials` = ?)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
@@ -7448,8 +7627,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Resource", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Resource", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ToolMaker", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Status", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Status", global::System.Data.DataRowVersion.Original, true, null));
@@ -7462,7 +7639,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Initials", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Initials", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Tasks` (`JobNumber`, `ProjectNumber`, `Component`, `TaskID`, `TaskName`, `Duration`, `StartDate`, `FinishDate`, `EarliestStartDate`, `Predecessors`, `Machine`, `Resource`, `Hours`, `ToolMaker`, `Priority`, `Status`, `DateAdded`, `Notes`, `DateCompleted`, `Initials`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Tasks` (`JobNumber`, `ProjectNumber`, `Component`, `TaskID`, `TaskName`, `Duration`, `StartDate`, `FinishDate`, `EarliestStartDate`, `Predecessors`, `Machine`, `Resource`, `Hours`, `Priority`, `Status`, `DateAdded`, `Notes`, `DateCompleted`, `Initials`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
@@ -7477,7 +7654,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Machine", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Machine", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Resource", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Resource", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Status", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Status", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateAdded", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateAdded", global::System.Data.DataRowVersion.Current, false, null));
@@ -7486,7 +7662,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Initials", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Initials", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `Tasks` SET `JobNumber` = ?, `ProjectNumber` = ?, `Component` = ?, `TaskID` = ?, `TaskName` = ?, `Duration` = ?, `StartDate` = ?, `FinishDate` = ?, `EarliestStartDate` = ?, `Predecessors` = ?, `Machine` = ?, `Resource` = ?, `Hours` = ?, `ToolMaker` = ?, `Priority` = ?, `Status` = ?, `DateAdded` = ?, `Notes` = ?, `DateCompleted` = ?, `Initials` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND (`Component` = ?) AND (`TaskID` = ?) AND ((? = 1 AND `TaskName` IS NULL) OR (`TaskName` = ?)) AND ((? = 1 AND `Duration` IS NULL) OR (`Duration` = ?)) AND ((? = 1 AND `StartDate` IS NULL) OR (`StartDate` = ?)) AND ((? = 1 AND `FinishDate` IS NULL) OR (`FinishDate` = ?)) AND ((? = 1 AND `EarliestStartDate` IS NULL) OR (`EarliestStartDate` = ?)) AND ((? = 1 AND `Predecessors` IS NULL) OR (`Predecessors` = ?)) AND ((? = 1 AND `Machine` IS NULL) OR (`Machine` = ?)) AND ((? = 1 AND `Resource` IS NULL) OR (`Resource` = ?)) AND ((? = 1 AND `Hours` IS NULL) OR (`Hours` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `DateAdded` IS NULL) OR (`DateAdded` = ?)) AND ((? = 1 AND `DateCompleted` IS NULL) OR (`DateCompleted` = ?)) AND ((? = 1 AND `Initials` IS NULL) OR (`Initials` = ?)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE `Tasks` SET `JobNumber` = ?, `ProjectNumber` = ?, `Component` = ?, `TaskID` = ?, `TaskName` = ?, `Duration` = ?, `StartDate` = ?, `FinishDate` = ?, `EarliestStartDate` = ?, `Predecessors` = ?, `Machine` = ?, `Resource` = ?, `Hours` = ?, `Priority` = ?, `Status` = ?, `DateAdded` = ?, `Notes` = ?, `DateCompleted` = ?, `Initials` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND (`Component` = ?) AND (`TaskID` = ?) AND ((? = 1 AND `TaskName` IS NULL) OR (`TaskName` = ?)) AND ((? = 1 AND `Duration` IS NULL) OR (`Duration` = ?)) AND ((? = 1 AND `StartDate` IS NULL) OR (`StartDate` = ?)) AND ((? = 1 AND `FinishDate` IS NULL) OR (`FinishDate` = ?)) AND ((? = 1 AND `EarliestStartDate` IS NULL) OR (`EarliestStartDate` = ?)) AND ((? = 1 AND `Predecessors` IS NULL) OR (`Predecessors` = ?)) AND ((? = 1 AND `Machine` IS NULL) OR (`Machine` = ?)) AND ((? = 1 AND `Resource` IS NULL) OR (`Resource` = ?)) AND ((? = 1 AND `Hours` IS NULL) OR (`Hours` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `DateAdded` IS NULL) OR (`DateAdded` = ?)) AND ((? = 1 AND `DateCompleted` IS NULL) OR (`DateCompleted` = ?)) AND ((? = 1 AND `Initials` IS NULL) OR (`Initials` = ?)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
@@ -7501,7 +7677,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Machine", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Machine", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Resource", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Resource", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Status", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Status", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateAdded", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateAdded", global::System.Data.DataRowVersion.Current, false, null));
@@ -7532,8 +7707,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Resource", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Resource", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Hours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Hours", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ToolMaker", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Priority", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Priority", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Status", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Status", global::System.Data.DataRowVersion.Original, true, null));
@@ -7560,8 +7733,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT ID, JobNumber, ProjectNumber, Component, TaskID, TaskName, Duration, Start" +
-                "Date, FinishDate, EarliestStartDate, Predecessors, Machine, Resource, Hours, Too" +
-                "lMaker, Priority, Status, DateAdded, Notes, DateCompleted, Initials FROM Tasks";
+                "Date, FinishDate, EarliestStartDate, Predecessors, Machine, Resource, Hours, Pri" +
+                "ority, Status, DateAdded, Notes, DateCompleted, Initials FROM Tasks";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -7637,7 +7810,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Original_Machine, 
                     string Original_Resource, 
                     global::System.Nullable<int> Original_Hours, 
-                    string Original_ToolMaker, 
                     global::System.Nullable<int> Original_Priority, 
                     string Original_Status, 
                     global::System.Nullable<global::System.DateTime> Original_DateAdded, 
@@ -7731,53 +7903,45 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                 this.Adapter.DeleteCommand.Parameters[22].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[23].Value = global::System.DBNull.Value;
             }
-            if ((Original_ToolMaker == null)) {
+            if ((Original_Priority.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[24].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[25].Value = ((int)(Original_Priority.Value));
+            }
+            else {
                 this.Adapter.DeleteCommand.Parameters[24].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.DeleteCommand.Parameters[24].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[25].Value = ((string)(Original_ToolMaker));
-            }
-            if ((Original_Priority.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[26].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[27].Value = ((int)(Original_Priority.Value));
-            }
-            else {
+            if ((Original_Status == null)) {
                 this.Adapter.DeleteCommand.Parameters[26].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[27].Value = global::System.DBNull.Value;
             }
-            if ((Original_Status == null)) {
+            else {
+                this.Adapter.DeleteCommand.Parameters[26].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[27].Value = ((string)(Original_Status));
+            }
+            if ((Original_DateAdded.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[28].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[29].Value = ((System.DateTime)(Original_DateAdded.Value));
+            }
+            else {
                 this.Adapter.DeleteCommand.Parameters[28].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[29].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.DeleteCommand.Parameters[28].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[29].Value = ((string)(Original_Status));
-            }
-            if ((Original_DateAdded.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[30].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[31].Value = ((System.DateTime)(Original_DateAdded.Value));
-            }
-            else {
+            if ((Original_DateCompleted == null)) {
                 this.Adapter.DeleteCommand.Parameters[30].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[31].Value = global::System.DBNull.Value;
             }
-            if ((Original_DateCompleted == null)) {
+            else {
+                this.Adapter.DeleteCommand.Parameters[30].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[31].Value = ((string)(Original_DateCompleted));
+            }
+            if ((Original_Initials == null)) {
                 this.Adapter.DeleteCommand.Parameters[32].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[33].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[32].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[33].Value = ((string)(Original_DateCompleted));
-            }
-            if ((Original_Initials == null)) {
-                this.Adapter.DeleteCommand.Parameters[34].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[35].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.DeleteCommand.Parameters[34].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[35].Value = ((string)(Original_Initials));
+                this.Adapter.DeleteCommand.Parameters[33].Value = ((string)(Original_Initials));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -7813,7 +7977,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Machine, 
                     string Resource, 
                     global::System.Nullable<int> Hours, 
-                    string ToolMaker, 
                     global::System.Nullable<int> Priority, 
                     string Status, 
                     global::System.Nullable<global::System.DateTime> DateAdded, 
@@ -7888,47 +8051,41 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             else {
                 this.Adapter.InsertCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
-            if ((ToolMaker == null)) {
+            if ((Priority.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[13].Value = ((int)(Priority.Value));
+            }
+            else {
                 this.Adapter.InsertCommand.Parameters[13].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[13].Value = ((string)(ToolMaker));
-            }
-            if ((Priority.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[14].Value = ((int)(Priority.Value));
-            }
-            else {
+            if ((Status == null)) {
                 this.Adapter.InsertCommand.Parameters[14].Value = global::System.DBNull.Value;
             }
-            if ((Status == null)) {
-                this.Adapter.InsertCommand.Parameters[15].Value = global::System.DBNull.Value;
-            }
             else {
-                this.Adapter.InsertCommand.Parameters[15].Value = ((string)(Status));
+                this.Adapter.InsertCommand.Parameters[14].Value = ((string)(Status));
             }
             if ((DateAdded.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[16].Value = ((System.DateTime)(DateAdded.Value));
+                this.Adapter.InsertCommand.Parameters[15].Value = ((System.DateTime)(DateAdded.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[16].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[15].Value = global::System.DBNull.Value;
             }
             if ((Notes == null)) {
+                this.Adapter.InsertCommand.Parameters[16].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[16].Value = ((string)(Notes));
+            }
+            if ((DateCompleted == null)) {
                 this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[17].Value = ((string)(Notes));
+                this.Adapter.InsertCommand.Parameters[17].Value = ((string)(DateCompleted));
             }
-            if ((DateCompleted == null)) {
+            if ((Initials == null)) {
                 this.Adapter.InsertCommand.Parameters[18].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[18].Value = ((string)(DateCompleted));
-            }
-            if ((Initials == null)) {
-                this.Adapter.InsertCommand.Parameters[19].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[19].Value = ((string)(Initials));
+                this.Adapter.InsertCommand.Parameters[18].Value = ((string)(Initials));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -7964,7 +8121,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Machine, 
                     string Resource, 
                     global::System.Nullable<int> Hours, 
-                    string ToolMaker, 
                     global::System.Nullable<int> Priority, 
                     string Status, 
                     global::System.Nullable<global::System.DateTime> DateAdded, 
@@ -7985,7 +8141,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Original_Machine, 
                     string Original_Resource, 
                     global::System.Nullable<int> Original_Hours, 
-                    string Original_ToolMaker, 
                     global::System.Nullable<int> Original_Priority, 
                     string Original_Status, 
                     global::System.Nullable<global::System.DateTime> Original_DateAdded, 
@@ -8059,183 +8214,169 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             else {
                 this.Adapter.UpdateCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
-            if ((ToolMaker == null)) {
+            if ((Priority.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[13].Value = ((int)(Priority.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[13].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[13].Value = ((string)(ToolMaker));
-            }
-            if ((Priority.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[14].Value = ((int)(Priority.Value));
-            }
-            else {
+            if ((Status == null)) {
                 this.Adapter.UpdateCommand.Parameters[14].Value = global::System.DBNull.Value;
             }
-            if ((Status == null)) {
-                this.Adapter.UpdateCommand.Parameters[15].Value = global::System.DBNull.Value;
-            }
             else {
-                this.Adapter.UpdateCommand.Parameters[15].Value = ((string)(Status));
+                this.Adapter.UpdateCommand.Parameters[14].Value = ((string)(Status));
             }
             if ((DateAdded.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[16].Value = ((System.DateTime)(DateAdded.Value));
+                this.Adapter.UpdateCommand.Parameters[15].Value = ((System.DateTime)(DateAdded.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[16].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[15].Value = global::System.DBNull.Value;
             }
             if ((Notes == null)) {
+                this.Adapter.UpdateCommand.Parameters[16].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[16].Value = ((string)(Notes));
+            }
+            if ((DateCompleted == null)) {
                 this.Adapter.UpdateCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[17].Value = ((string)(Notes));
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((string)(DateCompleted));
             }
-            if ((DateCompleted == null)) {
+            if ((Initials == null)) {
                 this.Adapter.UpdateCommand.Parameters[18].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(DateCompleted));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(Initials));
             }
-            if ((Initials == null)) {
-                this.Adapter.UpdateCommand.Parameters[19].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((string)(Initials));
-            }
-            this.Adapter.UpdateCommand.Parameters[20].Value = ((object)(0));
-            this.Adapter.UpdateCommand.Parameters[21].Value = ((int)(Original_ID));
+            this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(0));
+            this.Adapter.UpdateCommand.Parameters[20].Value = ((int)(Original_ID));
             if ((Original_JobNumber == null)) {
                 throw new global::System.ArgumentNullException("Original_JobNumber");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((string)(Original_JobNumber));
+                this.Adapter.UpdateCommand.Parameters[21].Value = ((string)(Original_JobNumber));
             }
-            this.Adapter.UpdateCommand.Parameters[23].Value = ((int)(Original_ProjectNumber));
+            this.Adapter.UpdateCommand.Parameters[22].Value = ((int)(Original_ProjectNumber));
             if ((Original_Component == null)) {
                 throw new global::System.ArgumentNullException("Original_Component");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((string)(Original_Component));
+                this.Adapter.UpdateCommand.Parameters[23].Value = ((string)(Original_Component));
             }
-            this.Adapter.UpdateCommand.Parameters[25].Value = ((int)(Original_TaskID));
+            this.Adapter.UpdateCommand.Parameters[24].Value = ((int)(Original_TaskID));
             if ((Original_TaskName == null)) {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(Original_TaskName));
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_TaskName));
             }
             if ((Original_Duration == null)) {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(Original_Duration));
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_Duration));
             }
             if ((Original_StartDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((System.DateTime)(Original_StartDate.Value));
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((System.DateTime)(Original_StartDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[31].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
             }
             if ((Original_FinishDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((System.DateTime)(Original_FinishDate.Value));
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((System.DateTime)(Original_FinishDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
             }
             if ((Original_EarliestStartDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((System.DateTime)(Original_EarliestStartDate.Value));
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((System.DateTime)(Original_EarliestStartDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
             }
             if ((Original_Predecessors == null)) {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[37].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((string)(Original_Predecessors));
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((string)(Original_Predecessors));
             }
             if ((Original_Machine == null)) {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[39].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((string)(Original_Machine));
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((string)(Original_Machine));
             }
             if ((Original_Resource == null)) {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[41].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((string)(Original_Resource));
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((string)(Original_Resource));
             }
             if ((Original_Hours.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((int)(Original_Hours.Value));
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((int)(Original_Hours.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
-            }
-            if ((Original_ToolMaker == null)) {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((string)(Original_ToolMaker));
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
             if ((Original_Priority.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[47].Value = ((int)(Original_Priority.Value));
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((int)(Original_Priority.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
             if ((Original_Status == null)) {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(Original_Status));
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((string)(Original_Status));
             }
             if ((Original_DateAdded.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[51].Value = ((System.DateTime)(Original_DateAdded.Value));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((System.DateTime)(Original_DateAdded.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[51].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
             }
             if ((Original_DateCompleted == null)) {
-                this.Adapter.UpdateCommand.Parameters[52].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[53].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[52].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[53].Value = ((string)(Original_DateCompleted));
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[50].Value = ((string)(Original_DateCompleted));
             }
             if ((Original_Initials == null)) {
-                this.Adapter.UpdateCommand.Parameters[54].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[55].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[52].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[54].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[55].Value = ((string)(Original_Initials));
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[52].Value = ((string)(Original_Initials));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -8267,7 +8408,6 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Machine, 
                     string Resource, 
                     global::System.Nullable<int> Hours, 
-                    string ToolMaker, 
                     global::System.Nullable<int> Priority, 
                     string Status, 
                     global::System.Nullable<global::System.DateTime> DateAdded, 
@@ -8288,13 +8428,12 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string Original_Machine, 
                     string Original_Resource, 
                     global::System.Nullable<int> Original_Hours, 
-                    string Original_ToolMaker, 
                     global::System.Nullable<int> Original_Priority, 
                     string Original_Status, 
                     global::System.Nullable<global::System.DateTime> Original_DateAdded, 
                     string Original_DateCompleted, 
                     string Original_Initials) {
-            return this.Update(Original_JobNumber, Original_ProjectNumber, Original_Component, Original_TaskID, TaskName, Duration, StartDate, FinishDate, EarliestStartDate, Predecessors, Machine, Resource, Hours, ToolMaker, Priority, Status, DateAdded, Notes, DateCompleted, Initials, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_Component, Original_TaskID, Original_TaskName, Original_Duration, Original_StartDate, Original_FinishDate, Original_EarliestStartDate, Original_Predecessors, Original_Machine, Original_Resource, Original_Hours, Original_ToolMaker, Original_Priority, Original_Status, Original_DateAdded, Original_DateCompleted, Original_Initials);
+            return this.Update(Original_JobNumber, Original_ProjectNumber, Original_Component, Original_TaskID, TaskName, Duration, StartDate, FinishDate, EarliestStartDate, Predecessors, Machine, Resource, Hours, Priority, Status, DateAdded, Notes, DateCompleted, Initials, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_Component, Original_TaskID, Original_TaskName, Original_Duration, Original_StartDate, Original_FinishDate, Original_EarliestStartDate, Original_Predecessors, Original_Machine, Original_Resource, Original_Hours, Original_Priority, Original_Status, Original_DateAdded, Original_DateCompleted, Original_Initials);
         }
     }
     
@@ -8441,6 +8580,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             tableMapping.ColumnMappings.Add("Manifold", "Manifold");
             tableMapping.ColumnMappings.Add("MoldBase", "MoldBase");
             tableMapping.ColumnMappings.Add("GeneralNotes", "GeneralNotes");
+            tableMapping.ColumnMappings.Add("GeneralNotesRTF", "GeneralNotesRTF");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -8512,88 +8652,93 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("GeneralNotes", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "GeneralNotes", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE `WorkLoad` SET `PartPicture` = ?, `ToolNumber` = ?, `MWONumber` = ?, `Proj" +
-                "ectNumber` = ?, `Stage` = ?, `Customer` = ?, `PartName` = ?, `Engineer` = ?, `De" +
-                "liveryInWeeks` = ?, `StartDate` = ?, `FinishDate` = ?, `AdjustedDeliveryDate` = " +
-                "?, `MoldCost` = ?, `Designer` = ?, `ToolMaker` = ?, `RoughProgrammer` = ?, `Elec" +
-                "trodeProgrammer` = ?, `FinishProgrammer` = ?, `Manifold` = ?, `MoldBase` = ?, `G" +
-                "eneralNotes` = ? WHERE ((`ID` = ?) AND ((? = 1 AND `ToolNumber` IS NULL) OR (`To" +
-                "olNumber` = ?)) AND ((? = 1 AND `MWONumber` IS NULL) OR (`MWONumber` = ?)) AND (" +
-                "(? = 1 AND `ProjectNumber` IS NULL) OR (`ProjectNumber` = ?)) AND ((? = 1 AND `S" +
-                "tage` IS NULL) OR (`Stage` = ?)) AND ((? = 1 AND `Customer` IS NULL) OR (`Custom" +
-                "er` = ?)) AND ((? = 1 AND `PartName` IS NULL) OR (`PartName` = ?)) AND ((? = 1 A" +
-                "ND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `DeliveryInWeeks` IS" +
-                " NULL) OR (`DeliveryInWeeks` = ?)) AND ((? = 1 AND `StartDate` IS NULL) OR (`Sta" +
-                "rtDate` = ?)) AND ((? = 1 AND `FinishDate` IS NULL) OR (`FinishDate` = ?)) AND (" +
-                "(? = 1 AND `AdjustedDeliveryDate` IS NULL) OR (`AdjustedDeliveryDate` = ?)) AND " +
-                "((? = 1 AND `MoldCost` IS NULL) OR (`MoldCost` = ?)) AND ((? = 1 AND `Designer` " +
-                "IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMake" +
-                "r` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) " +
-                "AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) A" +
-                "ND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? " +
-                "= 1 AND `Manifold` IS NULL) OR (`Manifold` = ?)) AND ((? = 1 AND `MoldBase` IS N" +
-                "ULL) OR (`MoldBase` = ?)))";
+            this._adapter.UpdateCommand.CommandText = "UPDATE       WorkLoad\r\nSET                PartPicture = ?, ToolNumber = ?, MWONum" +
+                "ber = ?, ProjectNumber = ?, Stage = ?, Customer = ?, PartName = ?, Engineer = ?," +
+                " DeliveryInWeeks = ?, StartDate = ?, \r\n                         FinishDate = ?, " +
+                "AdjustedDeliveryDate = ?, MoldCost = ?, Designer = ?, ToolMaker = ?, RoughProgra" +
+                "mmer = ?, ElectrodeProgrammer = ?, FinishProgrammer = ?, \r\n                     " +
+                "    Manifold = ?, MoldBase = ?, GeneralNotes = ?\r\nWHERE        (ID = ?) AND (? =" +
+                " 1 AND ToolNumber IS NULL OR\r\n                         ToolNumber = ?) AND (? = " +
+                "1 AND MWONumber IS NULL OR\r\n                         MWONumber = ?) AND (? = 1 A" +
+                "ND ProjectNumber IS NULL OR\r\n                         ProjectNumber = ?) AND (? " +
+                "= 1 AND Stage IS NULL OR\r\n                         Stage = ?) AND (? = 1 AND Cus" +
+                "tomer IS NULL OR\r\n                         Customer = ?) AND (? = 1 AND PartName" +
+                " IS NULL OR\r\n                         PartName = ?) AND (? = 1 AND Engineer IS N" +
+                "ULL OR\r\n                         Engineer = ?) AND (? = 1 AND DeliveryInWeeks IS" +
+                " NULL OR\r\n                         DeliveryInWeeks = ?) AND (? = 1 AND StartDate" +
+                " IS NULL OR\r\n                         StartDate = ?) AND (? = 1 AND FinishDate I" +
+                "S NULL OR\r\n                         FinishDate = ?) AND (? = 1 AND AdjustedDeliv" +
+                "eryDate IS NULL OR\r\n                         AdjustedDeliveryDate = ?) AND (? = " +
+                "1 AND MoldCost IS NULL OR\r\n                         MoldCost = ?) AND (? = 1 AND" +
+                " Designer IS NULL OR\r\n                         Designer = ?) AND (? = 1 AND Tool" +
+                "Maker IS NULL OR\r\n                         ToolMaker = ?) AND (? = 1 AND RoughPr" +
+                "ogrammer IS NULL OR\r\n                         RoughProgrammer = ?) AND (? = 1 AN" +
+                "D ElectrodeProgrammer IS NULL OR\r\n                         ElectrodeProgrammer =" +
+                " ?) AND (? = 1 AND FinishProgrammer IS NULL OR\r\n                         FinishP" +
+                "rogrammer = ?) AND (? = 1 AND Manifold IS NULL OR\r\n                         Mani" +
+                "fold = ?) AND (? = 1 AND MoldBase IS NULL OR\r\n                         MoldBase " +
+                "= ?)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PartPicture", global::System.Data.OleDb.OleDbType.LongVarBinary, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartPicture", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MWONumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Stage", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PartName", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Engineer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PartPicture", global::System.Data.OleDb.OleDbType.Binary, 1024, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartPicture", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolNumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MWONumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Stage", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Customer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("PartName", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Engineer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DeliveryInWeeks", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DeliveryInWeeks", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("StartDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "StartDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FinishDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("AdjustedDeliveryDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "AdjustedDeliveryDate", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MoldCost", global::System.Data.OleDb.OleDbType.Currency, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Designer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("RoughProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ElectrodeProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FinishProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Manifold", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MoldBase", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("GeneralNotes", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "GeneralNotes", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MoldCost", global::System.Data.OleDb.OleDbType.Currency, 0, global::System.Data.ParameterDirection.Input, ((byte)(19)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Designer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ToolMaker", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("RoughProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ElectrodeProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FinishProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Manifold", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("MoldBase", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("GeneralNotes", global::System.Data.OleDb.OleDbType.WChar, 1024, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "GeneralNotes", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ToolNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_MWONumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MWONumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ProjectNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Stage", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Stage", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Customer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Customer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_PartName", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_PartName", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Engineer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Engineer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DeliveryInWeeks", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DeliveryInWeeks", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolNumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolNumber1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MWONumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MWONumber1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MWONumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ProjectNumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ProjectNumber1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Stage", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Stage1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Stage", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Customer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Customer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Customer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_PartName", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_PartName1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "PartName", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Engineer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Engineer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Engineer", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DeliveryInWeeks", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DeliveryInWeeks", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_StartDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "StartDate", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DeliveryInWeeks1", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DeliveryInWeeks", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_StartDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "StartDate", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_FinishDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishDate", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_StartDate1", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "StartDate", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FinishDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishDate", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_AdjustedDeliveryDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "AdjustedDeliveryDate", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FinishDate1", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishDate", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_AdjustedDeliveryDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "AdjustedDeliveryDate", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_MoldCost", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldCost", global::System.Data.OleDb.OleDbType.Currency, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Designer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Designer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ToolMaker", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolMaker", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_RoughProgrammer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_RoughProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ElectrodeProgrammer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ElectrodeProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_FinishProgrammer", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FinishProgrammer", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_Manifold", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Manifold", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Original, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_MoldBase", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldBase", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_AdjustedDeliveryDate1", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "AdjustedDeliveryDate", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldCost", global::System.Data.OleDb.OleDbType.Currency, 0, global::System.Data.ParameterDirection.Input, ((byte)(19)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldCost1", global::System.Data.OleDb.OleDbType.Currency, 0, global::System.Data.ParameterDirection.Input, ((byte)(19)), ((byte)(0)), "MoldCost", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Designer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Designer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Designer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolMaker", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ToolMaker1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ToolMaker", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_RoughProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_RoughProgrammer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "RoughProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ElectrodeProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ElectrodeProgrammer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ElectrodeProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FinishProgrammer", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FinishProgrammer1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FinishProgrammer", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Manifold", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_Manifold1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Manifold", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldBase", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_MoldBase1", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "MoldBase", global::System.Data.DataRowVersion.Original, false, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8609,7 +8754,9 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT        WorkLoad.*\r\nFROM            WorkLoad";
+            this._commandCollection[0].CommandText = @"SELECT        ID, PartPicture, ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, Engineer, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, 
+                         MoldCost, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes, GeneralNotesRTF
+FROM            WorkLoad";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -9056,24 +9203,43 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
                     string GeneralNotes, 
                     int Original_ID, 
                     string Original_ToolNumber, 
+                    string Original_ToolNumber1, 
                     string Original_MWONumber, 
+                    string Original_MWONumber1, 
                     string Original_ProjectNumber, 
+                    string Original_ProjectNumber1, 
                     string Original_Stage, 
+                    string Original_Stage1, 
                     string Original_Customer, 
+                    string Original_Customer1, 
                     string Original_PartName, 
+                    string Original_PartName1, 
                     string Original_Engineer, 
+                    string Original_Engineer1, 
                     global::System.Nullable<int> Original_DeliveryInWeeks, 
+                    global::System.Nullable<int> Original_DeliveryInWeeks1, 
                     global::System.Nullable<global::System.DateTime> Original_StartDate, 
+                    global::System.Nullable<global::System.DateTime> Original_StartDate1, 
                     global::System.Nullable<global::System.DateTime> Original_FinishDate, 
+                    global::System.Nullable<global::System.DateTime> Original_FinishDate1, 
                     global::System.Nullable<global::System.DateTime> Original_AdjustedDeliveryDate, 
+                    global::System.Nullable<global::System.DateTime> Original_AdjustedDeliveryDate1, 
                     global::System.Nullable<decimal> Original_MoldCost, 
+                    global::System.Nullable<decimal> Original_MoldCost1, 
                     string Original_Designer, 
+                    string Original_Designer1, 
                     string Original_ToolMaker, 
+                    string Original_ToolMaker1, 
                     string Original_RoughProgrammer, 
+                    string Original_RoughProgrammer1, 
                     string Original_ElectrodeProgrammer, 
+                    string Original_ElectrodeProgrammer1, 
                     string Original_FinishProgrammer, 
+                    string Original_FinishProgrammer1, 
                     string Original_Manifold, 
-                    string Original_MoldBase) {
+                    string Original_Manifold1, 
+                    string Original_MoldBase, 
+                    string Original_MoldBase1) {
             if ((PartPicture == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -9202,156 +9368,232 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             }
             this.Adapter.UpdateCommand.Parameters[21].Value = ((int)(Original_ID));
             if ((Original_ToolNumber == null)) {
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[22].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[22].Value = ((string)(Original_ToolNumber));
+            }
+            if ((Original_ToolNumber1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[23].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[23].Value = ((string)(Original_ToolNumber));
+                this.Adapter.UpdateCommand.Parameters[23].Value = ((string)(Original_ToolNumber1));
             }
             if ((Original_MWONumber == null)) {
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[24].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[24].Value = ((string)(Original_MWONumber));
+            }
+            if ((Original_MWONumber1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(Original_MWONumber));
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(Original_MWONumber1));
             }
             if ((Original_ProjectNumber == null)) {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_ProjectNumber));
+            }
+            if ((Original_ProjectNumber1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(Original_ProjectNumber));
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(Original_ProjectNumber1));
             }
             if ((Original_Stage == null)) {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_Stage));
+            }
+            if ((Original_Stage1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(Original_Stage));
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(Original_Stage1));
             }
             if ((Original_Customer == null)) {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((string)(Original_Customer));
+            }
+            if ((Original_Customer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[31].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((string)(Original_Customer));
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((string)(Original_Customer1));
             }
             if ((Original_PartName == null)) {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((string)(Original_PartName));
+            }
+            if ((Original_PartName1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((string)(Original_PartName));
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((string)(Original_PartName1));
             }
             if ((Original_Engineer == null)) {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((string)(Original_Engineer));
+            }
+            if ((Original_Engineer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((string)(Original_Engineer));
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((string)(Original_Engineer1));
             }
             if ((Original_DeliveryInWeeks.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((int)(Original_DeliveryInWeeks.Value));
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((int)(Original_DeliveryInWeeks.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
+            }
+            if ((Original_DeliveryInWeeks1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((int)(Original_DeliveryInWeeks1.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[37].Value = global::System.DBNull.Value;
             }
             if ((Original_StartDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((System.DateTime)(Original_StartDate.Value));
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((System.DateTime)(Original_StartDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
+            }
+            if ((Original_StartDate1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((System.DateTime)(Original_StartDate1.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[39].Value = global::System.DBNull.Value;
             }
             if ((Original_FinishDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((System.DateTime)(Original_FinishDate.Value));
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((System.DateTime)(Original_FinishDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
+            }
+            if ((Original_FinishDate1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((System.DateTime)(Original_FinishDate1.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[41].Value = global::System.DBNull.Value;
             }
             if ((Original_AdjustedDeliveryDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((System.DateTime)(Original_AdjustedDeliveryDate.Value));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((System.DateTime)(Original_AdjustedDeliveryDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
+            }
+            if ((Original_AdjustedDeliveryDate1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((System.DateTime)(Original_AdjustedDeliveryDate1.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
             if ((Original_MoldCost.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((decimal)(Original_MoldCost.Value));
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((decimal)(Original_MoldCost.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
+            }
+            if ((Original_MoldCost1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((decimal)(Original_MoldCost1.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
             if ((Original_Designer == null)) {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((string)(Original_Designer));
+            }
+            if ((Original_Designer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(Original_Designer));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(Original_Designer1));
             }
             if ((Original_ToolMaker == null)) {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((string)(Original_ToolMaker));
+            }
+            if ((Original_ToolMaker1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(Original_ToolMaker));
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(Original_ToolMaker1));
             }
             if ((Original_RoughProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[50].Value = ((string)(Original_RoughProgrammer));
+            }
+            if ((Original_RoughProgrammer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[51].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[51].Value = ((string)(Original_RoughProgrammer));
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((string)(Original_RoughProgrammer1));
             }
             if ((Original_ElectrodeProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[52].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[52].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[52].Value = ((string)(Original_ElectrodeProgrammer));
+            }
+            if ((Original_ElectrodeProgrammer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[53].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[52].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[53].Value = ((string)(Original_ElectrodeProgrammer));
+                this.Adapter.UpdateCommand.Parameters[53].Value = ((string)(Original_ElectrodeProgrammer1));
             }
             if ((Original_FinishProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[54].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[54].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[54].Value = ((string)(Original_FinishProgrammer));
+            }
+            if ((Original_FinishProgrammer1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[55].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[54].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[55].Value = ((string)(Original_FinishProgrammer));
+                this.Adapter.UpdateCommand.Parameters[55].Value = ((string)(Original_FinishProgrammer1));
             }
             if ((Original_Manifold == null)) {
-                this.Adapter.UpdateCommand.Parameters[56].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[56].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[56].Value = ((string)(Original_Manifold));
+            }
+            if ((Original_Manifold1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[57].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[56].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[57].Value = ((string)(Original_Manifold));
+                this.Adapter.UpdateCommand.Parameters[57].Value = ((string)(Original_Manifold1));
             }
             if ((Original_MoldBase == null)) {
-                this.Adapter.UpdateCommand.Parameters[58].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[58].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[58].Value = ((string)(Original_MoldBase));
+            }
+            if ((Original_MoldBase1 == null)) {
                 this.Adapter.UpdateCommand.Parameters[59].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[58].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[59].Value = ((string)(Original_MoldBase));
+                this.Adapter.UpdateCommand.Parameters[59].Value = ((string)(Original_MoldBase1));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
