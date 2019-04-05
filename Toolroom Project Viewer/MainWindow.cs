@@ -10,7 +10,6 @@ using DevExpress.XtraGrid.Views.Base.ViewInfo;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraCharts;
-using DevExpress.Charts.Model;
 using System.Text;
 using DevExpress.XtraRichEdit.API.Native;
 using System.Collections.Generic;
@@ -23,12 +22,9 @@ using DevExpress.XtraGrid.Columns;
 using System.Drawing;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraEditors;
-using DevExpress.XtraRichEdit;
-using DevExpress.XtraRichEdit.UI;
 using DevExpress.XtraEditors.Controls;
 using System.Reflection;
 using System.IO;
-using System.Collections;
 using System.Threading.Tasks;
 using Squirrel;
 using System.Text.RegularExpressions;
@@ -838,21 +834,29 @@ namespace Toolroom_Project_Viewer
 
         private void schedulerStorage1_FilterResource(object sender, PersistentObjectCancelEventArgs e)
         {
-            SchedulerStorage storage = (SchedulerStorage)sender;
-            Resource res = (Resource)e.Object;
-
-            if (Role != "All")
+            try
             {
-                if (GroupByRadioGroup.SelectedIndex == 0)
+                SchedulerStorage storage = (SchedulerStorage)sender;
+                Resource res = (Resource)e.Object;
+
+                if (Role != "All")
                 {
-                    e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("Role") == "None")).Count() < 1;   
-                }
-                else if(GroupByRadioGroup.SelectedIndex == 1)
-                {
-                    e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (x.Field<string>("Department").Contains(departmentComboBox.Text) || x.Field<string>("Role") == "None")).Count() < 1;
+                    if (GroupByRadioGroup.SelectedIndex == 0)
+                    {
+                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("Role") == "None")).Count() < 1;
+                    }
+                    else if (GroupByRadioGroup.SelectedIndex == 1)
+                    {
+                        Console.WriteLine($"Resource: {res.Id.ToString()}");
+                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (x.Field<string>("Department").Contains(departmentComboBox.Text) || x.Field<string>("Role") == "None")).Count() < 1;
+
+                    }
                 }
             }
-            //MessageBox.Show("Test");
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
 
         #endregion
@@ -2559,9 +2563,41 @@ namespace Toolroom_Project_Viewer
                     return;
                 }
 
+                if (e.Column.FieldName == "MWONumber" || e.Column.FieldName == "ProjectNumber")
+                {
+                    if (int.TryParse(e.Value.ToString(), out int number))
+                    {
+                       
+
+                    }
+                    else if (e.Value.ToString() == "")
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a number.");
+
+                        if (bandedGridView1.GetFocusedRowCellValue("ID").ToString() == "-1")
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            RefreshWorkloadGrid();
+                            return;
+                        }
+                        
+                    }
+                }
+
                 Database db = new Database();
 
-                db.UpdateWorkloadTable(sender, e);
+                if (bandedGridView1.GetFocusedRowCellValue("ID").ToString() != "-1" && !db.UpdateWorkloadTable(sender, e))
+                {
+                    RefreshWorkloadGrid();
+                    return;
+                }
 
                 if (e.Column.FieldName == "DeliveryInWeeks" && bandedGridView1.GetFocusedRowCellValue("StartDate").ToString() != "")
                 {
@@ -2647,8 +2683,37 @@ namespace Toolroom_Project_Viewer
 
                     //MessageBox.Show(((DataRowView)obj)["ProjectNumber"].ToString());
                     wli.ToolNumber = dataRowViewObj["ToolNumber"].ToString();
-                    wli.MWONumber = dataRowViewObj["MWONumber"].ToString();
-                    wli.ProjectNumber = dataRowViewObj["ProjectNumber"].ToString();
+
+                    if(int.TryParse(dataRowViewObj["MWONumber"].ToString(), out int mwoNumber))
+                    {
+                        wli.MWONumber = mwoNumber;
+                    }
+                    else if (dataRowViewObj["MWONumber"].ToString() == "")
+                    {
+                        wli.MWONumber = -1;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a number for Tool Number.");
+                        RefreshWorkloadGrid();
+                        return;
+                    }
+
+                    if(int.TryParse(dataRowViewObj["ProjectNumber"].ToString(), out int projectNumber))
+                    {
+                        wli.ProjectNumber = projectNumber;
+                    }
+                    else if (dataRowViewObj["ProjectNumber"].ToString() == "")
+                    {
+                        wli.ProjectNumber = -1;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a number for the Project Number");
+                        RefreshWorkloadGrid();
+                        return;
+                    }
+
                     wli.Stage = dataRowViewObj["Stage"].ToString();
                     wli.Customer = dataRowViewObj["Customer"].ToString();
                     wli.PartName = dataRowViewObj["PartName"].ToString();
@@ -2809,11 +2874,16 @@ namespace Toolroom_Project_Viewer
         //    pb.PageMargins.Left = 50;
         //}
 
-        private void workLoadRefreshButton_Click(object sender, EventArgs e)
+        private void RefreshWorkloadGrid()
         {
             gridControl2.DataSource = workLoadTableAdapter.GetData();
             CollapseCompletedGroup();
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+        }
+
+        private void workLoadRefreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshWorkloadGrid();
         }
 
         private void workLoadTabPrintButton_Click(object sender, EventArgs e)
@@ -3210,87 +3280,96 @@ namespace Toolroom_Project_Viewer
 
         private void bandedGridView1_ShownEditor(object sender, EventArgs e)
         {
-            Console.WriteLine("bandedGridView1_ShownEditor entered.");
-            BandedGridView bandedGridView = sender as BandedGridView;
-            string column = (string)bandedGridView1.GetSelectedCells()[0].Column.FieldName;
-            Console.WriteLine(bandedGridView.ActiveEditor.EditorTypeName);
-            Database db = new Database();
-            
-            ColumnView columnView = sender as ColumnView;
-            PopupContainerEdit popupContainerEdit = null;
-            ComboBoxEdit comboBoxEdit = null;
+            try
+            {
+                Console.WriteLine("bandedGridView1_ShownEditor entered.");
+                BandedGridView bandedGridView = sender as BandedGridView;
+                
+                Console.WriteLine(bandedGridView.ActiveEditor.EditorTypeName);
+                Database db = new Database();
 
-            if (bandedGridView != null)
+                ColumnView columnView = sender as ColumnView;
+                PopupContainerEdit popupContainerEdit = null;
+                ComboBoxEdit comboBoxEdit = null;
+
+                if (bandedGridView != null)
+                {
+
+                    if (bandedGridView.ActiveEditor.EditorTypeName == "PopupContainerEdit")
+                    {
+                        popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
+                    }
+                    else if (bandedGridView.ActiveEditor.EditorTypeName == "ComboBoxEdit")
+                    {
+                        comboBoxEdit = bandedGridView.ActiveEditor as ComboBoxEdit;
+                    }
+
+                    if (popupContainerEdit != null)
+                    {
+
+                        //RichEditControl richEditControl = (RichEditControl)activeEditor.Properties.PopupControl.Controls[0];
+
+                        ////// TODO: Use any RichEditControl API
+                        //richEditControl.ActiveViewType = RichEditViewType.PrintLayout;
+                        //richEditControl.ActiveView.ZoomFactor = 2f;
+                        //richEditControl.Document.Sections[0].Margins.Left = 50;
+                        //richEditControl.Document.Sections[0].Margins.Top = 50;
+
+                        RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+                        richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
+
+                        //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popupContainerEdit_QueryResultValue);
+                    }
+
+                    if (comboBoxEdit != null)
+                    {
+                        string column = bandedGridView1.FocusedColumn.FieldName;
+                        string personnelType = "";
+
+                        comboBoxEdit.Properties.Items.Clear();
+
+                        if (column == "RoughProgrammer")
+                        {
+                            personnelType = "Rough Programmer";
+                        }
+                        else if (column == "FinishProgrammer")
+                        {
+                            personnelType = "Finish Programmer";
+                        }
+                        else if (column == "ElectrodeProgrammer")
+                        {
+                            personnelType = "Electrode Programmer";
+                        }
+                        else if (column == "ToolMaker")
+                        {
+                            personnelType = "Tool Maker";
+                        }
+                        else if (column == "Stage")
+                        {
+                            comboBoxEdit.Properties.Items.Add("1 - In-Design");
+                            comboBoxEdit.Properties.Items.Add("2 - In-Programming");
+                            comboBoxEdit.Properties.Items.Add("3 - In-Shop");
+                            comboBoxEdit.Properties.Items.Add("4 - In-Mold Check-In or Outside Vendors");
+                            comboBoxEdit.Properties.Items.Add("5 - Rework");
+                            comboBoxEdit.Properties.Items.Add("6 - In-Repair / Development");
+                            comboBoxEdit.Properties.Items.Add("7 - Completed");
+                            comboBoxEdit.Properties.Items.Add("");
+
+                            return;
+                        }
+
+                        if (personnelType != "")
+                        {
+                            comboBoxEdit.Properties.Items.AddRange(db.GetResourceList(personnelType).ToArray());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
             {
 
-                if (bandedGridView.ActiveEditor.EditorTypeName == "PopupContainerEdit")
-                {
-                    popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
-                }
-                else if (bandedGridView.ActiveEditor.EditorTypeName == "ComboBoxEdit")
-                {
-                    comboBoxEdit = bandedGridView.ActiveEditor as ComboBoxEdit;
-                }
-
-                if (popupContainerEdit != null)
-                {
-
-                    //RichEditControl richEditControl = (RichEditControl)activeEditor.Properties.PopupControl.Controls[0];
-
-                    ////// TODO: Use any RichEditControl API
-                    //richEditControl.ActiveViewType = RichEditViewType.PrintLayout;
-                    //richEditControl.ActiveView.ZoomFactor = 2f;
-                    //richEditControl.Document.Sections[0].Margins.Left = 50;
-                    //richEditControl.Document.Sections[0].Margins.Top = 50;
-
-                    RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-
-                    richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
-
-                    //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popupContainerEdit_QueryResultValue);
-                }
-
-                if (comboBoxEdit != null)
-                {
-                    string personnelType = "";
-
-                    comboBoxEdit.Properties.Items.Clear();
-
-                    if (column == "RoughProgrammer")
-                    {
-                        personnelType = "Rough Programmer";
-                    }
-                    else if (column == "FinishProgrammer")
-                    {
-                        personnelType = "Finish Programmer";
-                    }
-                    else if (column == "ElectrodeProgrammer")
-                    {
-                        personnelType = "Electrode Programmer";
-                    }
-                    else if (column == "ToolMaker")
-                    {
-                        personnelType = "Tool Maker";
-                    }
-                    else if (column == "Stage")
-                    {
-                        comboBoxEdit.Properties.Items.Add("1 - In-Design");
-                        comboBoxEdit.Properties.Items.Add("2 - In-Programming");
-                        comboBoxEdit.Properties.Items.Add("3 - In-Shop");
-                        comboBoxEdit.Properties.Items.Add("4 - In-Mold Check-In or Outside Vendors");
-                        comboBoxEdit.Properties.Items.Add("5 - Rework");
-                        comboBoxEdit.Properties.Items.Add("6 - In-Repair / Development");
-                        comboBoxEdit.Properties.Items.Add("7 - Completed");
-                        comboBoxEdit.Properties.Items.Add("");
-
-                        return;
-                    }
-
-                    if (personnelType != "")
-                    {
-                        comboBoxEdit.Properties.Items.AddRange(db.GetResourceList(personnelType).ToArray());
-                    }
-                }
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
 
@@ -3329,10 +3408,11 @@ namespace Toolroom_Project_Viewer
 
         private void PopulateDepartmentComboBoxes()
         {
-            List<string> departmentList = new List<string> { "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNC", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire", "Polish", "All" };
+            List<string> departmentList1 = new List<string> { "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNC", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire", "Polish", "All" };
+            List<string> departmentList2 = new List<string> {"Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire", "Polish", "All" };
 
-            departmentComboBox.Properties.Items.AddRange(departmentList);
-            departmentComboBox2.Properties.Items.AddRange(departmentList);
+            departmentComboBox.Properties.Items.AddRange(departmentList1);
+            departmentComboBox2.Properties.Items.AddRange(departmentList2);
         }
 
         private bool UpdateTaskStorage2(Appointment apt)

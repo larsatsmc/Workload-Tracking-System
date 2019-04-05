@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Tool Number*");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tool Number*");
             this.MoldBuildTreeView = new System.Windows.Forms.TreeView();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
@@ -55,7 +55,6 @@
             this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
-            this.matchHoursCheckBox = new System.Windows.Forms.CheckBox();
             this.durationUnitsComboBox = new System.Windows.Forms.ComboBox();
             this.durationNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.hoursNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -74,7 +73,6 @@
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
-            this.label19 = new System.Windows.Forms.Label();
             this.dueDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.LookupDataButton = new System.Windows.Forms.Button();
             this.ProjectNumberTextBox = new System.Windows.Forms.TextBox();
@@ -110,6 +108,8 @@
             this.DeleteButton = new DevExpress.XtraEditors.SimpleButton();
             this.RenameButton = new DevExpress.XtraEditors.SimpleButton();
             this.GetQuoteButton = new DevExpress.XtraEditors.SimpleButton();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
+            this.matchHoursCheckBox = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).BeginInit();
@@ -138,6 +138,7 @@
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // MoldBuildTreeView
@@ -146,10 +147,10 @@
             this.MoldBuildTreeView.Location = new System.Drawing.Point(15, 32);
             this.MoldBuildTreeView.Margin = new System.Windows.Forms.Padding(4);
             this.MoldBuildTreeView.Name = "MoldBuildTreeView";
-            treeNode7.Name = "Node0";
-            treeNode7.Text = "Tool Number*";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Tool Number*";
             this.MoldBuildTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7});
+            treeNode1});
             this.MoldBuildTreeView.Size = new System.Drawing.Size(300, 736);
             this.MoldBuildTreeView.TabIndex = 0;
             this.MoldBuildTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.MoldBuildTreeView_BeforeSelect);
@@ -346,13 +347,13 @@
             this.panelControl5.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelControl5.Appearance.Options.UseFont = true;
             this.panelControl5.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl5.Controls.Add(this.matchHoursCheckBox);
             this.panelControl5.Controls.Add(this.labelControl16);
             this.panelControl5.Controls.Add(this.labelControl15);
             this.panelControl5.Controls.Add(this.labelControl14);
             this.panelControl5.Controls.Add(this.labelControl13);
             this.panelControl5.Controls.Add(this.labelControl12);
             this.panelControl5.Controls.Add(this.labelControl11);
-            this.panelControl5.Controls.Add(this.matchHoursCheckBox);
             this.panelControl5.Controls.Add(this.durationUnitsComboBox);
             this.panelControl5.Controls.Add(this.durationNumericUpDown);
             this.panelControl5.Controls.Add(this.hoursNumericUpDown);
@@ -425,17 +426,6 @@
             this.labelControl11.Size = new System.Drawing.Size(44, 17);
             this.labelControl11.TabIndex = 52;
             this.labelControl11.Text = "Hours:";
-            // 
-            // matchHoursCheckBox
-            // 
-            this.matchHoursCheckBox.AutoSize = true;
-            this.matchHoursCheckBox.Location = new System.Drawing.Point(155, 86);
-            this.matchHoursCheckBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.matchHoursCheckBox.Name = "matchHoursCheckBox";
-            this.matchHoursCheckBox.Size = new System.Drawing.Size(118, 21);
-            this.matchHoursCheckBox.TabIndex = 37;
-            this.matchHoursCheckBox.Text = "Match to Hours";
-            this.matchHoursCheckBox.UseVisualStyleBackColor = true;
             // 
             // durationUnitsComboBox
             // 
@@ -541,6 +531,7 @@
             this.panelControl2.Appearance.Options.UseBackColor = true;
             this.panelControl2.Appearance.Options.UseFont = true;
             this.panelControl2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl2.Controls.Add(this.labelControl24);
             this.panelControl2.Controls.Add(this.labelControl9);
             this.panelControl2.Controls.Add(this.labelControl8);
             this.panelControl2.Controls.Add(this.labelControl7);
@@ -550,7 +541,6 @@
             this.panelControl2.Controls.Add(this.labelControl3);
             this.panelControl2.Controls.Add(this.labelControl2);
             this.panelControl2.Controls.Add(this.pictureEdit1);
-            this.panelControl2.Controls.Add(this.label19);
             this.panelControl2.Controls.Add(this.dueDateTimePicker);
             this.panelControl2.Controls.Add(this.LookupDataButton);
             this.panelControl2.Controls.Add(this.ProjectNumberTextBox);
@@ -653,16 +643,6 @@
             this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             this.pictureEdit1.Size = new System.Drawing.Size(385, 318);
             this.pictureEdit1.TabIndex = 65;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(154, 88);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(193, 16);
-            this.label19.TabIndex = 64;
-            this.label19.Text = "* = Indicates required field.";
             // 
             // dueDateTimePicker
             // 
@@ -1146,6 +1126,28 @@
             this.GetQuoteButton.Text = "Get Quote";
             this.GetQuoteButton.Click += new System.EventHandler(this.GetQuoteButton_Click);
             // 
+            // labelControl24
+            // 
+            this.labelControl24.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl24.Appearance.Options.UseFont = true;
+            this.labelControl24.Location = new System.Drawing.Point(154, 88);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(184, 17);
+            this.labelControl24.TabIndex = 74;
+            this.labelControl24.Text = "* = Indicates Required Field";
+            // 
+            // matchHoursCheckBox
+            // 
+            this.matchHoursCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
+            this.matchHoursCheckBox.Location = new System.Drawing.Point(155, 86);
+            this.matchHoursCheckBox.Name = "matchHoursCheckBox";
+            this.matchHoursCheckBox.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.matchHoursCheckBox.Properties.Appearance.Options.UseFont = true;
+            this.matchHoursCheckBox.Properties.Caption = "Match to Hours";
+            this.matchHoursCheckBox.Size = new System.Drawing.Size(137, 21);
+            this.matchHoursCheckBox.TabIndex = 58;
+            this.matchHoursCheckBox.CheckStateChanged += new System.EventHandler(this.matchHoursCheckBox_CheckStateChanged);
+            // 
             // Project_Creation_Form
             // 
             this.Appearance.Options.UseFont = true;
@@ -1199,6 +1201,7 @@
             this.panelControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1214,7 +1217,6 @@
         private System.Windows.Forms.ComboBox materialComboBox;
         private System.Windows.Forms.TextBox componentNotesTextBox;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.CheckBox matchHoursCheckBox;
         private System.Windows.Forms.ComboBox durationUnitsComboBox;
         private System.Windows.Forms.NumericUpDown durationNumericUpDown;
         private System.Windows.Forms.NumericUpDown hoursNumericUpDown;
@@ -1223,7 +1225,6 @@
         private System.Windows.Forms.ListBox predecessorsListBox;
         private System.Windows.Forms.TextBox taskNotesTextBox;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.DateTimePicker dueDateTimePicker;
         private System.Windows.Forms.Button LookupDataButton;
         private System.Windows.Forms.TextBox ProjectNumberTextBox;
@@ -1285,5 +1286,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl18;
         private DevExpress.XtraEditors.LabelControl labelControl17;
         private DevExpress.XtraEditors.LabelControl labelControl23;
+        private DevExpress.XtraEditors.CheckEdit matchHoursCheckBox;
+        private DevExpress.XtraEditors.LabelControl labelControl24;
     }
 }

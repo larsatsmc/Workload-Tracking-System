@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
 using System.Windows.Forms;
-using System.Drawing;
-using System.IO;
 using System.Diagnostics;
-using Excel = Microsoft.Office.Interop.Excel;
 using DevExpress.Spreadsheet;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using ClassLibrary;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraEditors;
@@ -3478,9 +3471,28 @@ namespace Toolroom_Project_Viewer
                 OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes) VALUES " +
                                                                        "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @manifold, @moldBase, @generalNotes)", Connection);
 
+
                 cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
-                cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
-                cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
+
+
+                if (wli.MWONumber != -1)
+                {
+                    cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@mwoNumber", DBNull.Value);
+                }
+
+                if (wli.ProjectNumber != -1)
+                {
+                    cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@projectNumber", DBNull.Value);
+                }
+
                 cmd.Parameters.AddWithValue("@stage", wli.Stage);
                 cmd.Parameters.AddWithValue("@customer", wli.Customer);
                 cmd.Parameters.AddWithValue("@partName", wli.PartName);
@@ -3541,9 +3553,15 @@ namespace Toolroom_Project_Viewer
 
         #region Update
 
-        public void UpdateWorkloadTable(object s, CellValueChangedEventArgs ev)
+        public bool UpdateWorkloadTable(object s, CellValueChangedEventArgs ev)
         {
             var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
+
+            if (grid.GetFocusedRowCellValue("ID").ToString() == "")
+            {
+                // I'm tricking the system here.
+                return true;
+            }
 
             //queryString = "UPDATE Tasks SET JobNumber = @jobNumber, Component = @component, TaskID = @taskID, TaskName = @taskName, " +
             //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
@@ -3572,26 +3590,26 @@ namespace Toolroom_Project_Viewer
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET MWONumber = @mwoNumber WHERE (ID = @tID)";
 
-                    if (ev.Value.ToString() != "")
+                    if (int.TryParse(ev.Value.ToString(), out int mwoNumber))
                     {
-                        cmd.Parameters.AddWithValue("@mwoNumber", ev.Value.ToString());
+                        cmd.Parameters.AddWithValue("@mwoNumber", mwoNumber);
                     }
-                    else
+                    else if(ev.Value.ToString() == "")
                     {
-                        cmd.Parameters.AddWithValue("@mwoNumber", "");
+                        cmd.Parameters.AddWithValue("@mwoNumber", DBNull.Value);
                     }
                 }
                 else if (ev.Column.FieldName == "ProjectNumber")
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
 
-                    if (ev.Value.ToString() != "")
+                    if (int.TryParse(ev.Value.ToString(), out int projectNumber))
                     {
-                        cmd.Parameters.AddWithValue("@projectNumber", ev.Value.ToString());
+                        cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
                     }
-                    else
+                    else if(ev.ToString() == "")
                     {
-                        cmd.Parameters.AddWithValue("@projectNumber", "");
+                        cmd.Parameters.AddWithValue("@projectNumber", DBNull.Value);
                     }
                 }
                 else if (ev.Column.FieldName == "Stage")
@@ -3849,6 +3867,7 @@ namespace Toolroom_Project_Viewer
                 //Console.WriteLine((grid.Rows[ev.RowIndex]).Cells[0].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[1].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[2].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[3].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[4].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[5].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[6].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[7].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[8].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[9].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[10].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[11].Value.ToString() + " " + (grid.Rows[ev.RowIndex]).Cells[12].Value.ToString() + " ");
                 connection.Open();
                 cmd.ExecuteNonQuery();
+                return true;
             }
         }
 
