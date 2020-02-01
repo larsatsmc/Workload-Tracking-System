@@ -80,11 +80,11 @@ namespace Toolroom_Scheduler
             System.Console.ReadLine();
         }
 
-        public void WriteProjectToTextFile(List<TaskInfo> list)
+        public void WriteProjectToTextFile(List<TaskModel> list)
         {
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\170255.txt"))
             {
-                foreach (TaskInfo task in list)
+                foreach (TaskModel task in list)
                 {
                     if(task.IsSummary)
                     {
@@ -108,11 +108,11 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void WriteProjectToTextFile(List<TaskInfo> list, string fileName)
+        public void WriteProjectToTextFile(List<TaskModel> list, string fileName)
         {
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
             {
-                foreach (TaskInfo task in list)
+                foreach (TaskModel task in list)
                 {
                     if (task.IsSummary)
                     {
@@ -136,17 +136,17 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public void WriteProjectToTextFile(ProjectInfo project, string fileName)
+        public void WriteProjectToTextFile(ProjectModel project, string fileName)
         {
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
             {
                 file.WriteLine($"{project.JobNumber},{project.ProjectNumber},{project.DueDate.ToShortDateString()},{project.ToolMaker},{project.Designer},{project.RoughProgrammer},{project.ElectrodeProgrammer},{project.FinishProgrammer}");
 
-                foreach (Component component in project.ComponentList)
+                foreach (ComponentModel component in project.ComponentList)
                 {
                     file.WriteLine(component.Name);
 
-                    foreach (TaskInfo task in component.TaskList)
+                    foreach (TaskModel task in component.TaskList)
                     {
                         file.WriteLine($"        {task.TaskName}");
 
@@ -178,9 +178,9 @@ namespace Toolroom_Scheduler
             file.Close();
         }
 
-        public List<TaskInfo> ReadTasksFromTextFile(string filePath)
+        public List<TaskModel> ReadTasksFromTextFile(string filePath)
         {
-            List<TaskInfo> list = new List<TaskInfo>();
+            List<TaskModel> list = new List<TaskModel>();
             string line;
 
             System.IO.StreamReader file = new System.IO.StreamReader(filePath);
@@ -190,15 +190,15 @@ namespace Toolroom_Scheduler
 
                 if(count == 0)
                 {
-                    list.Add(new TaskInfo(line, 1));
+                    list.Add(new TaskModel(line, 1));
                 }
                 else if(count == 8)
                 {
-                    list.Add(new TaskInfo(line.Trim(), 2));
+                    list.Add(new TaskModel(line.Trim(), 2));
                 }
                 else if(count == 16)
                 {
-                    list.Add(new TaskInfo(line.Trim(), 3));
+                    list.Add(new TaskModel(line.Trim(), 3));
                 }
 
                 System.Console.WriteLine($"{count} {line}");
@@ -209,12 +209,12 @@ namespace Toolroom_Scheduler
             return list;
         }
 
-        public ProjectInfo ReadProjectFromTextFile(string filePath)
+        public ProjectModel ReadProjectFromTextFile(string filePath)
         {
-            ProjectInfo project = new ProjectInfo();
-            Component component = new Component();
-            TaskInfo task = new TaskInfo();
-            List<TaskInfo> list = new List<TaskInfo>();
+            ProjectModel project = new ProjectModel();
+            ComponentModel component = new ComponentModel();
+            TaskModel task = new TaskModel();
+            List<TaskModel> list = new List<TaskModel>();
             string[] projectInfoArr;
             string line;
 
@@ -245,12 +245,12 @@ namespace Toolroom_Scheduler
                 }
                 else if (count == 0)
                 {
-                    component = new Component(line.Trim());
+                    component = new ComponentModel(line.Trim());
                     project.AddComponent(component);
                 }
                 else if (count == 8)
                 {
-                    task = new TaskInfo(line.Trim(), component.Name);
+                    task = new TaskModel(line.Trim(), component.Name);
                     component.AddTask(task);
                 }
                 else if (count == 16)

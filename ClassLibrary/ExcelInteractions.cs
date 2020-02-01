@@ -1,9 +1,14 @@
-﻿using Microsoft.Win32;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,62 +21,191 @@ namespace ClassLibrary
 {
     public class ExcelInteractions
     {
-        public QuoteInfo GetQuoteInfo(string filePath = @"X:\TOOLROOM\Josh Meservey\Workload Tracking System\Simple Quote  Template - 2018-05-25.xlsx")
+        private static readonly string ColorPrinterString = "P-1336 HP CP5225 - Color";
+        private readonly string XPSDocWriterString = "Microsoft XPS Document Writer";
+        private static string KanBanBaseFilePath = @"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm";
+        private static string KanBanSheetCode = 
+                   "Function IsMarkedComplete(row As Integer) As String\r\n" +
+                   "\r\n" +
+                   "  If IsEmpty(Cells(row, 9)) = False And IsEmpty(Cells(row, 10)) = False Then\r\n" +
+                   "\r\n" +
+                   "    IsMarkedComplete = \"True\"\r\n" +
+                   "\r\n" +
+                   "  ElseIf IsEmpty(Cells(row, 9)) = True And IsEmpty(Cells(row, 10)) = True Then\r\n" +
+                   "\r\n" +
+                   "    IsMarkedComplete = \"False\"\r\n" +
+                   "\r\n" +
+                   "  Else\r\n" +
+                   "\r\n" +
+                   "    IsMarkedComplete = \"\r\n" +
+                   "\r\n" +
+                   "  End If\r\n" +
+                   "\r\n" +
+                   "End Function\r\n" +
+                   "\r\n" +
+                   "Private Sub Worksheet_Change(ByVal Target As Range)\r\n" +
+                   "\r\n" +
+                   "  Dim leftHeaderArr As Variant\r\n" +
+                   "  Dim jobNumberArr As Variant\r\n" +
+                   "  Dim componentArr As Variant\r\n" +
+                   "  jobNumberArr = Split(Range(\"A1\").Value, \":\")\r\n" +
+                   "  componentArr = Split(Range(\"A2\").Value, \":\")\r\n" +
+                   "  leftHeaderArr = Split(Me.PageSetup.LeftHeader, \" \")\r\n" +
+                   "\r\n" +
+                   "  If Target.column = 9 Or Target.column = 10 Then\r\n" +
+                   "\r\n" +
+                   "    Dim Completed As String\r\n" +
+                   "\r\n" +
+                   "    Completed = IsMarkedComplete(Target.row)\r\n" +
+                   "\r\n" +
+                   "    ThisWorkbook.Save\r\n" +
+                   "\r\n" +
+                   "    If Completed = \"True\" Then\r\n" +
+                   "\r\n" +
+                   "      Database.SetTaskAsCompleted _\r\n" +
+                   "      jobNumber:=jobNumberArr(1), _\r\n" +
+                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "      component:=componentArr(1), _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
+                   "      initials:=Cells(Target.row, 9).Value, _\r\n" +
+                   "      dateCompleted:=Cells(Target.row, 10).Value\r\n" +
+                   "\r\n" +
+                   "    ElseIf Completed = \"False\" Then\r\n" +
+                   "\r\n" +
+                   "      Database.SetTaskAsIncomplete _\r\n" +
+                   "      jobNumber:=jobNumberArr(1), _\r\n" +
+                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "      component:=componentArr(1), _\r\n" +
+                   "      taskID:=CInt(Cells(Target.row, 1).Value)\r\n" +
+                   "\r\n" +
+                   "    End If\r\n" +
+                   "\r\n" +
+                   "    Database.UpdateCompletedTasksPercent _\r\n" +
+                   "    jobNumber:=jobNumberArr(1), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "    component:=componentArr(1)\r\n" +
+                   "\r\n" +
+                   "    Database.UpdateProjectPercentComplete _\r\n" +
+                   "    jobNumber:=jobNumberArr(1), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2))\r\n" +
+                   "\r\n" +
+                   "  ElseIf Target.column = 7 Then\r\n" +
+                   "\r\n" +
+                   "    ThisWorkbook.Save\r\n" +
+                   "\r\n" +
+                   "    Database.SetNote _\r\n" +
+                   "    jobNumber:=jobNumberArr(1), _\r\n" +
+                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
+                   "    component:=componentArr(1), _\r\n" +
+                   "    taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
+                   "    notes:=Cells(Target.row, 7).Value\r\n" +
+                   "\r\n" +
+                   "  End If\r\n" +
+                   "\r\n" +
+                   "End Sub\r\n"
+                   ;
+
+        public QuoteModel GetQuoteInfo(string filePath = @"X:\TOOLROOM\Josh Meservey\Workload Tracking System\Simple Quote  Template - 2018-05-25.xlsx")
         {
-            QuoteInfo quote;
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbooks workbooks = excelApp.Workbooks;
+            QuoteModel quote;            
+            Excel.Application excelApp;
+            //var app = excelApp.Application;
+            Excel.Workbooks workbooks;
             Excel.Workbook workbook;
+            Excel.Sheets worksheets;
             Excel.Worksheet quoteWorksheet;
             Excel.Worksheet quoteLetter;
+            Excel.Range quoteLetterCells;
+            Excel.Range quoteWorksheetCells;
 
+            excelApp = new Excel.Application();
+            workbooks = excelApp.Workbooks;
             workbook = workbooks.Open(Filename: filePath, Password: "ENG505");
-            quoteWorksheet = workbook.Sheets[1];
-            quoteLetter = workbook.Sheets[2];
-
-            quote = new QuoteInfo(
-
-                customer: quoteLetter.Cells[8, 3].value,
-                partName: quoteLetter.Cells[10, 3].value,
-                programRoughHours: Convert.ToInt16(quoteWorksheet.Cells[22, 8].value),
-                programFinishHours: Convert.ToInt16(quoteWorksheet.Cells[23, 8].value),
-                programElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[24, 8].value + quoteWorksheet.Cells[21, 8].value),
-                cncRoughHours: Convert.ToInt16(quoteWorksheet.Cells[25, 8].value),
-                cncFinishHours: Convert.ToInt16(quoteWorksheet.Cells[26, 8].value),
-                grindFittingHours: Convert.ToInt16(quoteWorksheet.Cells[28, 8].value),
-                cncElectrodeHours: Convert.ToInt16(quoteWorksheet.Cells[27, 8].value),
-                edmSinkerHours: Convert.ToInt16(quoteWorksheet.Cells[29, 8].value)
-
-                );
-
-            Marshal.FinalReleaseComObject(quoteWorksheet);
-            Marshal.FinalReleaseComObject(quoteLetter);
-
-            workbook.Close(false);
-            Marshal.FinalReleaseComObject(workbook);
-            workbook = null;
-
-            workbooks.Close();
-            Marshal.FinalReleaseComObject(workbooks);
-            workbooks = null;
-
-            excelApp.Quit();
-            Marshal.FinalReleaseComObject(excelApp);
-            excelApp = null;
-
-            return quote;
-        }
-
-
-
-        private string GetPrinterPort()
-        {
-            var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
-            string printerName = "Microsoft XPS Document Writer";
+            worksheets = workbook.Worksheets;
+            quoteWorksheet = worksheets["Quote Worksheet"];
+            quoteLetter = worksheets["Quote Letter"];
+            quoteLetterCells = quoteLetter.Cells;
+            quoteWorksheetCells = quoteWorksheet.Cells;
 
             try
             {
 
+                //TODO: Change this method to read the Quote sheet by iterating through the list of tasks rather then by reading from specified task locations.
+
+                quote = new QuoteModel(
+
+                    customer: quoteLetterCells[8, 3].value,
+                    partName: quoteLetterCells[10, 3].value,
+                    designHours: quoteWorksheetCells[18, 8].value,
+                    designElectrodeHours: quoteWorksheetCells[21, 8].value,
+                    programRoughHours: quoteWorksheetCells[22, 8].value,
+                    programFinishHours: quoteWorksheetCells[23, 8].value,
+                    programElectrodeHours: quoteWorksheetCells[24, 8].value,
+                    cncRoughHours: quoteWorksheetCells[25, 8].value,
+                    cncFinishHours: quoteWorksheetCells[26, 8].value,
+                    grindFittingHours: quoteWorksheetCells[28, 8].value,
+                    cncElectrodeHours: quoteWorksheetCells[27, 8].value,
+                    edmSinkerHours: quoteWorksheetCells[29, 8].value
+
+                    );
+
+            }
+            finally
+            {
+                while (Marshal.ReleaseComObject(quoteLetterCells) != 0);
+                while (Marshal.ReleaseComObject(quoteWorksheetCells) != 0);
+                while (Marshal.ReleaseComObject(quoteWorksheet) != 0);
+                while (Marshal.ReleaseComObject(quoteLetter) != 0);
+                while (Marshal.ReleaseComObject(worksheets) != 0);
+
+                quoteLetterCells = null;
+                quoteWorksheetCells = null;
+                quoteWorksheet = null;
+                quoteLetter = null;
+                worksheets = null;
+
+                workbook.Close(0);
+                while (Marshal.ReleaseComObject(workbook) != 0);
+                workbook = null;
+
+                workbooks.Close();
+                while (Marshal.ReleaseComObject(workbooks) != 0);
+                workbooks = null;
+
+                //app.Quit();
+                excelApp.Quit();
+                while (Marshal.ReleaseComObject(excelApp) != 0);
+                excelApp = null;
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+
+
+            return quote;
+        }
+
+        private static bool DeviceExists(string device)
+        {
+            var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
+
+            return devices.GetValueNames().ToList().Exists(x => x.ToString().Contains(device));
+        }
+
+        private static string GetDevice(string device)
+        {
+            var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
+
+            return devices.GetValueNames().ToList().FirstOrDefault(x => x.ToString().Contains(device));
+        }
+
+        private static string GetDevicePort(string device)
+        {
+            var devices = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Devices"); //Read-accessible even when using a locked-down account
+            string printerName = device;
+
+            try
+            {
                 foreach (string name in devices.GetValueNames())
                 {
                     if (Regex.IsMatch(name, printerName, RegexOptions.IgnoreCase))
@@ -82,6 +216,8 @@ namespace ClassLibrary
                         return port;
                     }
                 }
+
+                MessageBox.Show(printerName + " is not installed on this computer.");
                 return "";
             }
             catch
@@ -90,7 +226,7 @@ namespace ClassLibrary
             }
         }
 
-        public string GenerateKanBanWorkbook(ProjectInfo pi)
+        public string GenerateKanBanWorkbook(ProjectModel pi)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
@@ -108,13 +244,22 @@ namespace ClassLibrary
                 excelApp.EnableEvents = false;
                 excelApp.DisplayAlerts = false;
 
-                wb = workbooks.Open(@"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm", ReadOnly: true);
+                wb = workbooks.Open(KanBanBaseFilePath, ReadOnly: true);
+
+                // Set to color printer.
+                if (DeviceExists(ColorPrinterString))
+                {
+                    excelApp.ActivePrinter = GetDevice(ColorPrinterString) + " on " + GetDevicePort(ColorPrinterString);
+                }
 
                 // Remember active printer.
                 activePrinterString = excelApp.ActivePrinter;
 
                 // Change active printer to XPS Document Writer.
-                excelApp.ActivePrinter = "Microsoft XPS Document Writer on " + GetPrinterPort(); // This speeds up page setup operations.
+                if (DeviceExists(XPSDocWriterString))
+                {
+                    excelApp.ActivePrinter = XPSDocWriterString + " on " + GetDevicePort(XPSDocWriterString); // This speeds up page setup operations.
+                }
 
                 //ws = wb.Sheets[1];
                 ws = wb.Sheets.Add(After: wb.Sheets[1]);
@@ -129,7 +274,7 @@ namespace ClassLibrary
                 ws.Cells[r, 5].value = "Duration";
                 ws.Cells[r, 6].value = "Start Date";
                 ws.Cells[r, 7].value = "Finish Date";
-                ws.Cells[r, 8].value = "   Predecessors";
+                ws.Cells[r, 8].value = "   Hours";
                 ws.Cells[r, 9].value = "Status";
                 ws.Cells[r, 10].value = "Initials";
                 ws.Cells[r, 11].value = "Date";
@@ -138,12 +283,12 @@ namespace ClassLibrary
 
                 ws.Range["H1"].EntireColumn.NumberFormat = "@";
 
-                foreach (Component component in pi.ComponentList)
+                foreach (ComponentModel component in pi.ComponentList)
                 {
                     border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
                     border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
 
-                    foreach (TaskInfo task in component.TaskList)
+                    foreach (TaskModel task in component.TaskList)
                     {
                         ws.Cells[r, 1].value = pi.JobNumber;
                         ws.Cells[r, 2].value = $"   {component.Name}";
@@ -151,17 +296,17 @@ namespace ClassLibrary
                         ws.Cells[r, 4].value = $"   {task.TaskName}";
                         ws.Cells[r, 5].value = $"   {task.Duration}";
 
-                        if (task.StartDate == null)
-                        {
-
-                        }
-                        else
+                        if(task.StartDate != null)
                         {
                             ws.Cells[r, 6].value = task.StartDate;
                         }
 
-                        ws.Cells[r, 7].value = task.FinishDate;
-                        ws.Cells[r, 8].value = $"  {task.Predecessors}";
+                        if (task.FinishDate != null)
+                        {
+                            ws.Cells[r, 7].value = task.FinishDate;
+                        }
+
+                        ws.Cells[r, 8].value = $"  {task.Hours}";
                         ws.Cells[r, 9].value = task.Status;
                         ws.Cells[r, 10].value = task.Initials;
                         if (task.DateCompleted != null)
@@ -216,7 +361,7 @@ namespace ClassLibrary
                 ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
                 ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
                 ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-                ws.PageSetup.Zoom = 67;
+                ws.PageSetup.Zoom = 71;
                 ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
                 ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
                 ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
@@ -230,7 +375,7 @@ namespace ClassLibrary
 
                 vBComponents = wb.VBProject.VBComponents;
 
-                foreach (Component component in pi.ComponentList)
+                foreach (ComponentModel component in pi.ComponentList)
                 {
                     wb.Sheets.Add(After: wb.Sheets[n++]);
                     //wb.Sheets[1].Copy(After: wb.Sheets[n++]);
@@ -246,7 +391,7 @@ namespace ClassLibrary
                         if (wsMod.Name == ws.CodeName)
                         {
                             Console.WriteLine($"{wsMod.Name} is {ws.Name}");
-                            wsMod.CodeModule.AddFromString(KanBanSheetCode());
+                            wsMod.CodeModule.AddFromString(KanBanSheetCode);
                         }
                     }
                 }
@@ -263,12 +408,7 @@ namespace ClassLibrary
 
                 CreateHoursSheet(pi, wb, ws.Index);
 
-                string initialDirectory = "";
-
-                if (pi.KanBanWorkbookPath != "")
-                {
-                    initialDirectory = pi.KanBanWorkbookPath.Substring(0, pi.KanBanWorkbookPath.LastIndexOf('\\'));
-                }
+                string initialDirectory = GetInitialDirectory(pi.KanBanWorkbookPath);
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
@@ -295,15 +435,14 @@ namespace ClassLibrary
 
                 return "";
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                //MessageBox.Show(e.Message + " GenerateKanBanWorkbook");
 
-                // TODO: Need to close and release workbooks variable.
-                // TODO: Need to remove garbage collection and have excel shutdown without it.
-
-                wb.Close();
-                Marshal.ReleaseComObject(wb);
+                if (wb != null)
+                {
+                    wb.Close();
+                    Marshal.ReleaseComObject(wb); 
+                }
 
                 workbooks.Close();
                 Marshal.ReleaseComObject(workbooks);
@@ -312,29 +451,18 @@ namespace ClassLibrary
                 Marshal.ReleaseComObject(excelApp);
 
 
-                Marshal.ReleaseComObject(ws);
+                if (ws != null)
+                {
+                    Marshal.ReleaseComObject(ws); 
+                }
 
-                throw ex;
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
 
-                //return "";
+                return "";
             }
-
-            //vBComponents = wb.VBProject.VBComponents;
-            //wsMod = vBComponents.Item(3);
-
-            //for (int i = 1; i <= vBComponents.Count; i++)
-            //{
-            //    MessageBox.Show(vBComponents.Item(i).Name);
-            //}
-
-            //string macroCode = "Sub main()\r\n" +
-            //                   "   MsgBox \"Hello world\"\r\n" +
-            //                   "end Sub";
-
-            //wsMod.CodeModule.AddFromString(macroCode);
         }
 
-        private void FormatComponentSheet(ProjectInfo pi, Excel.Worksheet ws)
+        private void FormatComponentSheet(ProjectModel pi, Excel.Worksheet ws)
         {
             Excel.Application excelApp = new Excel.Application();
             //Excel.Worksheet ws;
@@ -348,7 +476,7 @@ namespace ClassLibrary
             ws.PageSetup.RightHeader = "&\"Arial,Bold\"&18" + " Due Date: " + pi.DueDate.ToShortDateString();
             ws.PageSetup.RightFooter = "&\"Arial,Bold\"&12" + " Generated: " + dateTime;
             ws.PageSetup.HeaderMargin = excelApp.InchesToPoints(.2);
-            ws.PageSetup.Zoom = 75;
+            ws.PageSetup.Zoom = 79;
             ws.PageSetup.TopMargin = excelApp.InchesToPoints(.5);
             ws.PageSetup.BottomMargin = excelApp.InchesToPoints(.5);
             ws.PageSetup.LeftMargin = excelApp.InchesToPoints(.2);
@@ -365,9 +493,9 @@ namespace ClassLibrary
             // Start Date & Finish Date
             ws.Range["D1:E1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
             ws.Range["D1:E1"].EntireColumn.ColumnWidth = 10.86;
-            // Predecessors
-            ws.Range["F1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ws.Range["F1"].EntireColumn.ColumnWidth = 13.57;
+            // Hours
+            ws.Range["F1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            ws.Range["F1"].EntireColumn.ColumnWidth = 6;
             // Notes
             ws.Range["G1"].EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
             ws.Range["G1"].EntireColumn.ColumnWidth = 55.79;
@@ -386,7 +514,7 @@ namespace ClassLibrary
         // FreeSpire is limited to 200 rows and 5 sheets.
         // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
 
-        private int CreateKanBanComponentSheets(ProjectInfo pi, Excel.Application excelApp, Excel.Workbook wb)
+        private int CreateKanBanComponentSheets(ProjectModel pi, Excel.Application excelApp, Excel.Workbook wb)
         {
             Excel.Worksheet ws;
             Excel.Borders border;
@@ -409,7 +537,7 @@ namespace ClassLibrary
             ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
             ws.Select();
 
-            foreach (Component component in pi.ComponentList)
+            foreach (ComponentModel component in pi.ComponentList)
             {
                 wb.Sheets[1].Copy(After: wb.Sheets[n++]);
                 ws = wb.Sheets[n];
@@ -446,7 +574,7 @@ namespace ClassLibrary
 
                 ws.Range["H1"].EntireColumn.NumberFormat = "@";
 
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.TaskList)
                 {
                     border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
 
@@ -534,8 +662,263 @@ namespace ClassLibrary
 
             return n;
         }
+        public string GenerateKanBanWorkbook2(ProjectModel pi)
+        {
+            //try
+            //{
+            string kanBanSavePath = ChooseKanBanSavePath(pi);
 
-        private void PopulateKanBanComponentSheet(ProjectInfo pi, Component component, Excel.Worksheet ws)
+            if (kanBanSavePath == "")
+            {
+                return "";
+            }
+
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+
+            using (var wb = new XLWorkbook(KanBanBaseFilePath, XLEventTracking.Disabled))
+            {
+                var wsBase = wb.Worksheet(1);
+                var componentInfoCellRange = wsBase.Range("A1:J3");
+                int[] borderedColumnsArr = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                int r;
+                int taskRowCount;
+
+                wsBase.PageSetup.Header.Left.AddText("Project #: " + pi.ProjectNumber).SetBold().SetFontSize(18);
+                wsBase.PageSetup.Header.Center.AddText("Lead: " + pi.ToolMaker).SetBold().SetFontSize(18);
+                wsBase.PageSetup.Header.Right.AddText("Due Date: " + pi.DueDate.ToString("M/d/yyyy")).SetBold().SetFontSize(18);
+
+                //wsBase.Range("A1:G1").Merge();
+                //wsBase.Range("A2:G2").Merge();
+                //wsBase.Range("A3:G3").Merge();
+
+                //wsBase.Range("H1:J1").Merge();
+                //wsBase.Range("H2:J2").Merge();
+                //wsBase.Range("H3:J3").Merge();
+
+                //componentInfoCellRange.Style.Fill.BackgroundColor = XLColor.White;
+                //wsBase.Range("A1:G1").Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("A1:A3").Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("A3:G3").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("A3:G3").Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+
+                //wsBase.Range("H1:J1").Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("J1:J3").Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("H1:H3").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                //wsBase.Range("H3:J3").Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+
+                wsBase.Range("A5:J5").Style.Font.Bold = true;
+
+                wsBase.Cell(5, 1).Value = "Task ID";
+                wsBase.Cell(5, 2).Value = "   Task Name";
+                wsBase.Cell(5, 3).Value = "Duration";
+                wsBase.Cell(5, 4).Value = "Start Date";
+                wsBase.Cell(5, 5).Value = "Finish Date";
+                wsBase.Cell(5, 6).Value = "Hours";
+                wsBase.Cell(5, 7).Value = "Notes";
+                wsBase.Cell(5, 9).Value = "Initials";
+                wsBase.Cell(5, 10).Value = "Date";
+
+                foreach (ComponentModel component in pi.ComponentList)
+                {
+                    taskRowCount = component.TaskList.Count();
+                    var componentWs = wb.Worksheet(1).CopyTo(component.Name);
+                    r = 6;
+
+                    foreach (int c in borderedColumnsArr)
+                    {
+                        componentWs.Range(componentWs.Cell(6, c), componentWs.Cell(5 + taskRowCount, c)).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    }
+
+                    componentWs.Range("A6:J6").Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range($"A6:A{5 + taskRowCount}").Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range($"A{5 + taskRowCount}:J{5 + taskRowCount}").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                    componentWs.Range("A1").Value = " Job Number: " + pi.JobNumber;
+                    componentWs.Range("A2").Value = " Component: " + component.Name;
+                    componentWs.Range("A3").Value = " Material: " + component.Material;
+
+                    componentWs.Range("H1").Value = " Qty: " + component.Quantity;
+                    componentWs.Range("H2").Value = " Spares: " + component.Spares;
+                    componentWs.Range("H3").Value = " Finish: " + component.Finish;
+
+                    foreach (TaskModel task in component.TaskList)
+                    {
+                        if (r % 2 == 1)
+                        {
+                            componentWs.Range(componentWs.Cell(r, 1), componentWs.Cell(r, 10)).Style.Fill.BackgroundColor = XLColor.Pink;
+                        }
+                        else
+                        {
+                            componentWs.Range(componentWs.Cell(r, 1), componentWs.Cell(r, 10)).Style.Fill.BackgroundColor = XLColor.White;
+                        }
+
+                        componentWs.Range(componentWs.Cell(r, 7), componentWs.Cell(r, 8)).Merge();
+
+                        componentWs.Cell(r, 1).Value = task.ID;
+                        componentWs.Cell(r, 2).Value = task.TaskName;
+                        componentWs.Cell(r, 3).Value = task.Duration;
+                        componentWs.Cell(r, 4).Value = task.StartDate;
+                        componentWs.Cell(r, 5).Value = task.FinishDate;
+                        componentWs.Cell(r, 6).Value = task.Hours;
+                        componentWs.Cell(r, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        componentWs.Cell(r, 7).Value = task.Notes;
+                        componentWs.Cell(r, 9).Value = task.Initials;
+                        componentWs.Cell(r++, 10).Value = task.DateCompleted;
+                    }
+
+                    //ws.Range(ws.Cell(6, 1), ws.Cell(taskRowCount + 5, 8));
+                    componentWs.Cell(taskRowCount + 7, 1).Value = "Notes:";
+                    componentWs.Cell(taskRowCount + 7, 1).Style.Font.Bold = true;
+
+                    var noteArea = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 10));
+                    noteArea.Style.Fill.BackgroundColor = XLColor.White;
+
+                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 1)).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 10, 1), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 7, 10)).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 10), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
+                    var noteContentsRange = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 9, 10));
+                    noteContentsRange.Style.Fill.BackgroundColor = XLColor.White;
+                    noteContentsRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    noteContentsRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                    noteContentsRange.Style.Alignment.WrapText = true;
+                    noteContentsRange.Merge();
+
+                    if (component.Picture != null)
+                    {
+                        var image = componentWs.AddPicture((Bitmap)component.Picture);
+                        image.MoveTo(componentWs.Cell(taskRowCount + 12, 2));
+                    }
+
+                    componentWs.PageSetup.PrintAreas.Clear();
+
+                    //componentWs.PageSetup.PrintAreas.Add("A1:J61");
+                }
+
+                var sumWs = wb.Worksheets.Add("Summary");
+
+                var col1 = sumWs.Column("A");
+                col1.Style.Font.Bold = true;
+                sumWs.Range("A1").Value = "Work Type";
+                sumWs.Range("B1").Style.Font.Bold = true;
+                sumWs.Range("B1").Value = "Total Hours";
+
+                ProjectSummary ps = GetProjectSummary(pi);
+
+                r = 2;
+
+                foreach (Hours hour in ps.HoursList)
+                {
+                    sumWs.Cell(r, 1).Value = hour.WorkType;
+                    sumWs.Cell(r++, 2).Value = hour.Qty;
+                }
+
+                sumWs.Cell(r, 1).Value = "Total";
+                sumWs.Cell(r, 2).FormulaA1 = "=Sum(" + sumWs.Cell(r - 1, 2).Address + ":" + sumWs.Cell(r - ps.HoursList.Count, 2).Address + ")";
+                sumWs.Cell(r, 2).Style.Font.Bold = true;
+
+                wsBase.Delete();
+
+                wb.SaveAs(kanBanSavePath);
+                InsertVbaCode(kanBanSavePath); // Printer set to color here.
+
+
+                //sw.Stop();
+                //MessageBox.Show($"Kan Ban Generated: {sw.ElapsedMilliseconds}");
+
+                Process.Start(kanBanSavePath); // Opens up generated Kan Ban.
+
+                return kanBanSavePath;
+            }
+            
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+        }
+        public string ChooseKanBanSavePath(ProjectModel pi)
+        {
+            string initialDirectory = GetInitialDirectory(pi.KanBanWorkbookPath);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
+            saveFileDialog.FilterIndex = 0;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.CreatePrompt = false;
+            saveFileDialog.InitialDirectory = initialDirectory;
+            saveFileDialog.FileName = pi.JobNumber + "- Proj #" + pi.ProjectNumber + " Checkoff Sheet";
+            saveFileDialog.Title = "Save Path of Kan Ban";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //wb.SaveAs(saveFileDialog.FileName.ToString());
+                //InsertVbaCode(saveFileDialog.FileName.ToString()); // This code also sets the printer to the color printer.
+                //Process.Start(saveFileDialog.FileName.ToString());
+                return saveFileDialog.FileName.ToString();
+            }
+            else
+            {
+                MessageBox.Show("No Kan Ban was created since a file location wasn't chosen.");
+                return "";
+            }
+        }
+        public static void InsertVbaCode(string destinationFilePath)
+        {
+            Excel.Application excelApp = new Excel.Application();
+            Excel.Workbooks workbooks = excelApp.Workbooks;
+            Excel.Workbook workbook = workbooks.Open(destinationFilePath);
+            VBIDE.VBComponents vBComponents = workbook.VBProject.VBComponents;
+
+            // Set to color printer.
+            if (DeviceExists(ColorPrinterString))
+            {
+                excelApp.ActivePrinter = GetDevice(ColorPrinterString) + " on " + GetDevicePort(ColorPrinterString);
+            }
+
+            try
+            {
+                foreach (Excel.Worksheet ws in workbook.Worksheets)
+                {
+                    if (ws.Name != "Summary")
+                    {
+                        foreach (VBIDE.VBComponent wsMod in vBComponents)
+                        {
+                            if (wsMod.Name == ws.CodeName)
+                            {
+                                Console.WriteLine($"{wsMod.Name} is {ws.Name}");
+                                wsMod.CodeModule.AddFromString(KanBanSheetCode);
+                            }
+                        }
+                    }
+                }
+
+                workbook.Save();
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+
+                throw new Exception(ex.Message + "\n\n" + ex.StackTrace);
+            }
+            finally
+            {
+                if (workbook != null)
+                {
+                    workbook.Close();
+                    Marshal.ReleaseComObject(workbook);
+                }
+
+                workbooks.Close();
+                Marshal.ReleaseComObject(workbooks);
+
+                excelApp.Quit();
+                Marshal.ReleaseComObject(excelApp);
+            }
+        }
+        private void PopulateKanBanComponentSheet(ProjectModel pi, ComponentModel component, Excel.Worksheet ws)
         {
             Excel.Borders border;
             int r;
@@ -586,7 +969,7 @@ namespace ClassLibrary
             ws.Cells[r, 3].value = "Duration";
             ws.Cells[r, 4].value = "Start Date";
             ws.Cells[r, 5].value = "Finish Date";
-            ws.Cells[r, 6].value = " Predecessors";
+            ws.Cells[r, 6].value = "Hours";
             ws.Cells[r, 7].value = "Notes";
             ws.Cells[r, 8].value = "Initials";
             ws.Cells[r, 9].value = "Date";
@@ -595,7 +978,7 @@ namespace ClassLibrary
 
             ws.Range["F1"].EntireColumn.NumberFormat = "@";
 
-            foreach (TaskInfo task in component.TaskList)
+            foreach (TaskModel task in component.TaskList)
             {
                 border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 9]].Borders;
 
@@ -604,7 +987,7 @@ namespace ClassLibrary
                 ws.Cells[r, 3].value = "" + task.Duration;
                 ws.Cells[r, 4].value = " " + String.Format("{0:M/d/yyyy}", task.StartDate);
                 ws.Cells[r, 5].value = " " + String.Format("{0:M/d/yyyy}", task.FinishDate);
-                ws.Cells[r, 6].value = "  " + task.Predecessors;
+                ws.Cells[r, 6].value = task.Hours;
                 ws.Cells[r, 7].value = task.Notes;
                 ws.Cells[r, 8].value = task.Initials;
                 ws.Cells[r, 9].value = task.DateCompleted;
@@ -645,7 +1028,7 @@ namespace ClassLibrary
             //ws.Cells[r++ + 1, 2].Top();
             //ws.Range[r++, 2].Left();
 
-            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 718, 47);
+            Excel.Shape textBox3 = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, ws.Cells[r + 1, 1].Top(), 677, 47);
             textBox3.TextFrame2.TextRange.Characters.Text = "Notes: " + component.Notes;
             textBox3.TextFrame2.TextRange.Font.Size = 11;
             textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
@@ -654,15 +1037,13 @@ namespace ClassLibrary
             if (component.Picture != null)
             {
                 Clipboard.SetImage(component.Picture);
-                ws.Paste((Excel.Range)ws.Cells[r + 5, 2]);
+                ws.Paste((Excel.Range)ws.Cells[r + 5, 2]);  // This line throws an error when Brian tries to make a KanBan.
             }
         }
 
         public void OpenKanBanWorkbook(string filepath, string component)
         {
-            //Excel.Worksheet ws;
-
-            if (filepath != null)
+            if (filepath != null && filepath != "")
             {
                 FileInfo fi = new FileInfo(filepath);
 
@@ -718,12 +1099,12 @@ namespace ClassLibrary
             }
             else
             {
-                MessageBox.Show("There is no Kan Ban Workbook for this project.");
+                MessageBox.Show("No Kan Ban exists for this project.");
             }
 
         }
 
-        public void EditKanBanWorkbook(ProjectInfo pi, string kanBanWorkbookPath, List<string> componentsList)
+        public void EditKanBanWorkbook(ProjectModel pi, string kanBanWorkbookPath, List<string> componentsList)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
@@ -731,11 +1112,18 @@ namespace ClassLibrary
             Excel.Worksheet ws = null;
             int index = 0;
             VBIDE.VBComponents vBComponents;
-            Component component;
+            ComponentModel component;
+            int compareResult;
 
             try
             {
                 wb = workbooks.Open(kanBanWorkbookPath);
+
+                // Set to color printer.
+                if (DeviceExists(ColorPrinterString))
+                {
+                    excelApp.ActivePrinter = GetDevice(ColorPrinterString) + " on " + GetDevicePort(ColorPrinterString);
+                }
 
                 vBComponents = wb.VBProject.VBComponents;
 
@@ -759,10 +1147,17 @@ namespace ClassLibrary
                     {
                         foreach (Excel.Worksheet sheet in wb.Sheets)
                         {
-                            if (sheet.Name.CompareTo(componentName) < 0)
+                            compareResult = sheet.Name.CompareTo(componentName);
+
+                            if (compareResult < 0 && sheet.Index > 1)
                             {
-                                index = sheet.Index;
+                                index = sheet.Index - 1;
                             }
+                        }
+
+                        if (index == 0)
+                        {
+                            index = wb.Sheets.Count - 1;
                         }
                     }
 
@@ -781,7 +1176,7 @@ namespace ClassLibrary
                         if (wsMod.Name == ws.CodeName)
                         {
                             Console.WriteLine($"{wsMod.Name} is {ws.Name}");
-                            wsMod.CodeModule.AddFromString(KanBanSheetCode());
+                            wsMod.CodeModule.AddFromString(KanBanSheetCode);
                         }
                     }
                 }
@@ -802,12 +1197,18 @@ namespace ClassLibrary
             catch (Exception)
             {
                 if (ws != null)
+                {
                     Marshal.ReleaseComObject(ws);
-                ws = null;
+                    ws = null;
+                }
 
-                wb.Close(false);
-                Marshal.ReleaseComObject(wb);
-                wb = null;
+
+                if (wb != null)
+                {
+                    wb.Close(false);
+                    Marshal.ReleaseComObject(wb);
+                    wb = null; 
+                }
 
                 workbooks.Close();
                 Marshal.ReleaseComObject(workbooks);
@@ -821,7 +1222,7 @@ namespace ClassLibrary
             }
         }
 
-        private void CreateHoursSheet(ProjectInfo pi, Excel.Workbook wb, int sheetIndex)
+        private void CreateHoursSheet(ProjectModel pi, Excel.Workbook wb, int sheetIndex)
         {
             //Excel.Application excelApp = new Excel.Application();
             Excel.Worksheet ws = wb.Sheets[sheetIndex];
@@ -846,13 +1247,13 @@ namespace ClassLibrary
             ws.Cells[r, c + 1].Font.Bold = true;
         }
 
-        private ProjectSummary GetProjectSummary(ProjectInfo pi)
+        private ProjectSummary GetProjectSummary(ProjectModel pi)
         {
-            List<TaskInfo> taskList = new List<TaskInfo>();
-            List<TaskInfo> summaryTaskList = new List<TaskInfo>();
+            List<TaskModel> taskList = new List<TaskModel>();
+            List<TaskModel> summaryTaskList = new List<TaskModel>();
             ProjectSummary ps = new ProjectSummary();
 
-            foreach (Component component in pi.ComponentList)
+            foreach (ComponentModel component in pi.ComponentList)
             {
                 taskList.AddRange(component.TaskList);
             }
@@ -909,7 +1310,21 @@ namespace ClassLibrary
             public int Qty { get; set; }
             public string WorkType { get; set; }
         }
+        private string GetInitialDirectory(string path)
+        {
+            string initialDirectory;
 
+            if (File.Exists(path))
+            {
+                initialDirectory = path.Substring(0, path.LastIndexOf('\\'));
+            }
+            else
+            {
+                initialDirectory = @"X:\TOOLROOM\";
+            }
+
+            return initialDirectory;
+        }
         private Boolean SheetNExists(string sheetName, Excel.Workbook wb)
         {
             foreach (Excel.Worksheet sheet in wb.Sheets)
@@ -944,7 +1359,7 @@ namespace ClassLibrary
             }
         }
 
-        public void UpdateKanBanWorkbook(string filePath, ProjectInfo project)
+        public void UpdateKanBanWorkbook(string filePath, ProjectModel project)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
@@ -954,7 +1369,7 @@ namespace ClassLibrary
             VBIDE.VBComponent wsMod;
             int matchingSheetIndex;
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.ComponentList)
             {
                 matchingSheet = MatchingComponentSheet(workbook, component.Name);
 
@@ -966,123 +1381,13 @@ namespace ClassLibrary
                     vBComponents = workbook.VBProject.VBComponents;
                     wsMod = vBComponents.Item(1);
 
-                    wsMod.CodeModule.AddFromString(KanBanSheetCode());
+                    wsMod.CodeModule.AddFromString(KanBanSheetCode);
                 }
                 else
                 {
 
                 }
             }
-        }
-
-        private string KanBanSheetCode()
-        {
-            // \r moves cursor to beginning of line.
-            // \n moves cursor down one line.
-            return "Function IsMarkedComplete(row As Integer) As String\r\n" +
-                   "\r\n" +
-                   "  If IsEmpty(Cells(row, 8)) = False And IsEmpty(Cells(row, 9)) = False Then\r\n" +
-                   "\r\n" +
-                   "    IsMarkedComplete = \"True\"\r\n" +
-                   "\r\n" +
-                   "  ElseIf IsEmpty(Cells(row, 8)) = True And IsEmpty(Cells(row, 9)) = True Then\r\n" +
-                   "\r\n" +
-                   "    IsMarkedComplete = \"False\"\r\n" +
-                   "\r\n" +
-                   "  Else\r\n" +
-                   "\r\n" +
-                   "    IsMarkedComplete = \"\r\n" +
-                   "\r\n" +
-                   "  End If\r\n" +
-                   "\r\n" +
-                   "End Function\r\n" +
-                   "\r\n" +
-                   "Function GetTextBoxInfo() As String()\r\n" +
-                   "\r\n" +
-                   "  Dim shape as Shape\r\n" +
-                   "  Dim infoArr(0 To 1) as String\r\n" +
-                   "\r\n" +
-                   "    For Each shape In Me.Shapes\r\n" +
-                   "\r\n" +
-                   "      If shape.Type = msoTextBox Then\r\n" +
-                   "\r\n" +
-                   "        If shape.TextFrame2.TextRange.Characters.Text Like \"*Component*\" Then\r\n" +
-                   "\r\n" +
-                   "          detailArr = Split(shape.TextFrame2.TextRange.Characters.Text, vbLf)\r\n" +
-                   "          detailArr2 = Split(detailArr(0), \":\")\r\n" +
-                   "          infoArr(0) = Trim(detailArr2(1)) ' Job Number\r\n" +
-                   "          detailArr2 = Split(detailArr(1), \":\")\r\n" +
-                   "          infoArr(1) = Trim(detailArr2(1)) ' Component\r\n" +
-                   "\r\n" +
-                   "          GetTextBoxInfo = infoArr\r\n" +
-                   "\r\n" +
-                   "        End If\r\n" +
-                   "\r\n" +
-                   "      End If\r\n" +
-                   "\r\n" +
-                   "    Next\r\n" +
-                   "\r\n" +
-                   "End Function\r\n" +
-                   "\r\n" +
-                   "Private Sub Worksheet_Change(ByVal Target As Range)\r\n" +
-                   "\r\n" +
-                   "  Dim infoArr() As String\r\n" +
-                   "  Dim leftHeaderArr As Variant\r\n" +
-                   "  infoArr = GetTextBoxInfo\r\n" +
-                   "  leftHeaderArr = Split(Me.PageSetup.LeftHeader, \" \")\r\n" +
-                   "\r\n" +
-                   "  If Target.column = 8 Or Target.column = 9 Then\r\n" +
-                   "\r\n" +
-                   "    Dim Completed As String\r\n" +
-                   "\r\n" +
-                   "    Completed = IsMarkedComplete(Target.row)\r\n" +
-                   "\r\n" +
-                   "    ThisWorkbook.Save\r\n" +
-                   "\r\n" +
-                   "    If Completed = \"True\" Then\r\n" +
-                   "\r\n" +
-                   "      Database.SetTaskAsCompleted _\r\n" +
-                   "      jobNumber:=infoArr(0), _\r\n" +
-                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "      component:=infoArr(1), _\r\n" +
-                   "      taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
-                   "      initials:=Cells(Target.row, 8).Value, _\r\n" +
-                   "      dateCompleted:=Cells(Target.row, 9).Value\r\n" +
-                   "\r\n" +
-                   "    ElseIf Completed = \"False\" Then\r\n" +
-                   "\r\n" +
-                   "      Database.SetTaskAsIncomplete _\r\n" +
-                   "      jobNumber:=infoArr(0), _\r\n" +
-                   "      projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "      component:=infoArr(1), _\r\n" +
-                   "      taskID:=CInt(Cells(Target.row, 1).Value)\r\n" +
-                   "\r\n" +
-                   "    End If\r\n" +
-                   "\r\n" +
-                   "    Database.UpdateCompletedTasksPercent _\r\n" +
-                   "    jobNumber:=infoArr(0), _\r\n" +
-                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "    component:=infoArr(1)\r\n" +
-                   "\r\n" +
-                   "    Database.UpdateProjectPercentComplete _\r\n" +
-                   "    jobNumber:=infoArr(0), _\r\n" +
-                   "    projectNumber:=CLng(leftHeaderArr(2))\r\n" +
-                   "\r\n" +
-                   "  ElseIf Target.column = 7 Then\r\n" +
-                   "\r\n" +
-                   "    ThisWorkbook.Save\r\n" +
-                   "\r\n" +
-                   "    Database.SetNote _\r\n" +
-                   "    jobNumber:=infoArr(0), _\r\n" +
-                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "    component:=infoArr(1), _\r\n" +
-                   "    taskID:=CInt(Cells(Target.row, 1).Value), _\r\n" +
-                   "    notes:=Cells(Target.row, 7).Value\r\n" +
-                   "\r\n" +
-                   "  End If\r\n" +
-                   "\r\n" +
-                   "End Sub\r\n"
-                   ;
         }
 
         public bool WorkbookHasMatchingComponent(Excel.Workbook workbook, string component)
@@ -1100,7 +1405,7 @@ namespace ClassLibrary
                     {
                         if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoTextBox)
                         {
-                            if (shape.TextFrame2.TextRange.Characters.Text.Contains("Component"))
+                            if (shape.TextFrame2.TextRange.Characters.Text.Contains("Job Number:") && shape.TextFrame2.TextRange.Characters.Text.Contains("Component:"))
                             {
                                 componentSheet = shape.TextFrame2.TextRange.Characters.Text.Split('\n')[1].Split(':')[1].Trim();
                             }
@@ -1146,7 +1451,7 @@ namespace ClassLibrary
                         {
                             if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoTextBox)
                             {
-                                if (shape.TextFrame2.TextRange.Characters.Text.Contains("Component"))
+                                if (shape.TextFrame2.TextRange.Characters.Text.Contains("Job Number:") && shape.TextFrame2.TextRange.Characters.Text.Contains("Component:"))
                                 {
                                     if(shape.TextFrame2.TextRange.Characters.Text.Split('\n')[1].Split(':')[1].Trim()  == component)
                                     {
@@ -1161,16 +1466,6 @@ namespace ClassLibrary
             }
 
             return null;
-        }
-
-        public void InsertNewComponentSheets()
-        {
-
-        }
-
-        public void UpdateExistingComponentSheet()
-        {
-
         }
     }
 }

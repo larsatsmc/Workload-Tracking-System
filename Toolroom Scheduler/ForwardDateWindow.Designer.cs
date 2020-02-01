@@ -37,9 +37,9 @@
             // 
             this.calendarControl1.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.calendarControl1.Location = new System.Drawing.Point(21, 22);
+            this.calendarControl1.Location = new System.Drawing.Point(12, 12);
             this.calendarControl1.Name = "calendarControl1";
-            this.calendarControl1.Size = new System.Drawing.Size(232, 227);
+            this.calendarControl1.Size = new System.Drawing.Size(258, 227);
             this.calendarControl1.TabIndex = 0;
             // 
             // OKButton
@@ -57,7 +57,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(272, 312);
+            this.ClientSize = new System.Drawing.Size(284, 316);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.calendarControl1);
             this.Name = "ForwardDateWindow";

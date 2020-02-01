@@ -9,7 +9,7 @@ namespace Toolroom_Project_Viewer
     #region #customappointment
     public class CustomAppointment
     {
-        private int m_AppointmentID;
+        private int m_AppointmentId;
         private DateTime m_Start;
         private DateTime m_End;
         private string m_Subject;
@@ -22,9 +22,10 @@ namespace Toolroom_Project_Viewer
         private string m_RecurrenceInfo;
         private string m_ReminderInfo;
         private object m_OwnerId;
-        
+        private int m_TaskId;
 
-        public int AppointmentID { get { return m_AppointmentID; } set { m_AppointmentID = value; } }
+        
+        public int AppointmentId { get { return m_AppointmentId; } set { m_AppointmentId = value; } }
         public DateTime StartDate { get { return m_Start; } set { m_Start = value; } }
         public DateTime FinishDate { get { return m_End; } set { m_End = value; } }
         public string Subject { get { return m_Subject; } set { m_Subject = value; } }
@@ -37,6 +38,7 @@ namespace Toolroom_Project_Viewer
         public string RecurrenceInfo { get { return m_RecurrenceInfo; } set { m_RecurrenceInfo = value; } }
         public string ReminderInfo { get { return m_ReminderInfo; } set { m_ReminderInfo = value; } }
         public object OwnerId { get { return m_OwnerId; } set { m_OwnerId = value; } }
+        public int TaskId { get { return m_TaskId; } set { m_TaskId = value; } }
 
         public CustomAppointment()
         {

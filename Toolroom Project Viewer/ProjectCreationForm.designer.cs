@@ -1,6 +1,6 @@
 ﻿namespace Toolroom_Project_Viewer
 {
-    partial class Project_Creation_Form
+    partial class ProjectCreationForm
     {
         /// <summary>
         /// Required designer variable.
@@ -49,6 +49,7 @@
             this.componentNotesTextBox = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelControl5 = new DevExpress.XtraEditors.PanelControl();
+            this.matchHoursCheckBox = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl16 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
@@ -64,6 +65,9 @@
             this.taskNotesTextBox = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
+            this.SelectProjectButton = new DevExpress.XtraEditors.SimpleButton();
+            this.overLapAllowedCheckEdit = new DevExpress.XtraEditors.CheckEdit();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
@@ -74,7 +78,6 @@
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
             this.dueDateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.LookupDataButton = new System.Windows.Forms.Button();
             this.ProjectNumberTextBox = new System.Windows.Forms.TextBox();
             this.ElectrodeProgrammerComboBox = new System.Windows.Forms.ComboBox();
             this.FinishProgrammerComboBox = new System.Windows.Forms.ComboBox();
@@ -108,8 +111,6 @@
             this.DeleteButton = new DevExpress.XtraEditors.SimpleButton();
             this.RenameButton = new DevExpress.XtraEditors.SimpleButton();
             this.GetQuoteButton = new DevExpress.XtraEditors.SimpleButton();
-            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
-            this.matchHoursCheckBox = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).BeginInit();
@@ -120,11 +121,13 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl5)).BeginInit();
             this.panelControl5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hoursNumericUpDown)).BeginInit();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.overLapAllowedCheckEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -138,7 +141,6 @@
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // MoldBuildTreeView
@@ -203,7 +205,7 @@
             this.labelControl22.Appearance.Options.UseFont = true;
             this.labelControl22.Location = new System.Drawing.Point(31, 432);
             this.labelControl22.Name = "labelControl22";
-            this.labelControl22.Size = new System.Drawing.Size(43, 17);
+            this.labelControl22.Size = new System.Drawing.Size(43, 19);
             this.labelControl22.TabIndex = 69;
             this.labelControl22.Text = "Notes:";
             // 
@@ -213,7 +215,7 @@
             this.labelControl21.Appearance.Options.UseFont = true;
             this.labelControl21.Location = new System.Drawing.Point(23, 105);
             this.labelControl21.Name = "labelControl21";
-            this.labelControl21.Size = new System.Drawing.Size(51, 17);
+            this.labelControl21.Size = new System.Drawing.Size(51, 19);
             this.labelControl21.TabIndex = 68;
             this.labelControl21.Text = "Picture:";
             // 
@@ -223,7 +225,7 @@
             this.labelControl20.Appearance.Options.UseFont = true;
             this.labelControl20.Location = new System.Drawing.Point(33, 75);
             this.labelControl20.Name = "labelControl20";
-            this.labelControl20.Size = new System.Drawing.Size(41, 17);
+            this.labelControl20.Size = new System.Drawing.Size(41, 19);
             this.labelControl20.TabIndex = 67;
             this.labelControl20.Text = "Finish:";
             // 
@@ -233,7 +235,7 @@
             this.labelControl19.Appearance.Options.UseFont = true;
             this.labelControl19.Location = new System.Drawing.Point(14, 44);
             this.labelControl19.Name = "labelControl19";
-            this.labelControl19.Size = new System.Drawing.Size(60, 17);
+            this.labelControl19.Size = new System.Drawing.Size(60, 19);
             this.labelControl19.TabIndex = 66;
             this.labelControl19.Text = "Material:";
             // 
@@ -243,7 +245,7 @@
             this.labelControl18.Appearance.Options.UseFont = true;
             this.labelControl18.Location = new System.Drawing.Point(142, 14);
             this.labelControl18.Name = "labelControl18";
-            this.labelControl18.Size = new System.Drawing.Size(49, 17);
+            this.labelControl18.Size = new System.Drawing.Size(49, 19);
             this.labelControl18.TabIndex = 65;
             this.labelControl18.Text = "Spares:";
             // 
@@ -253,7 +255,7 @@
             this.labelControl17.Appearance.Options.UseFont = true;
             this.labelControl17.Location = new System.Drawing.Point(14, 14);
             this.labelControl17.Name = "labelControl17";
-            this.labelControl17.Size = new System.Drawing.Size(60, 17);
+            this.labelControl17.Size = new System.Drawing.Size(60, 19);
             this.labelControl17.TabIndex = 64;
             this.labelControl17.Text = "Quantity:";
             // 
@@ -367,13 +369,25 @@
             this.panelControl5.Size = new System.Drawing.Size(411, 728);
             this.panelControl5.TabIndex = 38;
             // 
+            // matchHoursCheckBox
+            // 
+            this.matchHoursCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
+            this.matchHoursCheckBox.Location = new System.Drawing.Point(155, 86);
+            this.matchHoursCheckBox.Name = "matchHoursCheckBox";
+            this.matchHoursCheckBox.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.matchHoursCheckBox.Properties.Appearance.Options.UseFont = true;
+            this.matchHoursCheckBox.Properties.Caption = "Match to Hours";
+            this.matchHoursCheckBox.Size = new System.Drawing.Size(137, 21);
+            this.matchHoursCheckBox.TabIndex = 58;
+            this.matchHoursCheckBox.CheckStateChanged += new System.EventHandler(this.matchHoursCheckBox_CheckStateChanged);
+            // 
             // labelControl16
             // 
             this.labelControl16.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControl16.Appearance.Options.UseFont = true;
             this.labelControl16.Location = new System.Drawing.Point(14, 481);
             this.labelControl16.Name = "labelControl16";
-            this.labelControl16.Size = new System.Drawing.Size(43, 17);
+            this.labelControl16.Size = new System.Drawing.Size(43, 19);
             this.labelControl16.TabIndex = 57;
             this.labelControl16.Text = "Notes:";
             // 
@@ -383,7 +397,7 @@
             this.labelControl15.Appearance.Options.UseFont = true;
             this.labelControl15.Location = new System.Drawing.Point(14, 214);
             this.labelControl15.Name = "labelControl15";
-            this.labelControl15.Size = new System.Drawing.Size(92, 17);
+            this.labelControl15.Size = new System.Drawing.Size(92, 19);
             this.labelControl15.TabIndex = 56;
             this.labelControl15.Text = "Predecessors:";
             // 
@@ -393,7 +407,7 @@
             this.labelControl14.Appearance.Options.UseFont = true;
             this.labelControl14.Location = new System.Drawing.Point(14, 164);
             this.labelControl14.Name = "labelControl14";
-            this.labelControl14.Size = new System.Drawing.Size(70, 17);
+            this.labelControl14.Size = new System.Drawing.Size(70, 19);
             this.labelControl14.TabIndex = 55;
             this.labelControl14.Text = "Personnel:";
             // 
@@ -403,7 +417,7 @@
             this.labelControl13.Appearance.Options.UseFont = true;
             this.labelControl13.Location = new System.Drawing.Point(14, 114);
             this.labelControl13.Name = "labelControl13";
-            this.labelControl13.Size = new System.Drawing.Size(60, 17);
+            this.labelControl13.Size = new System.Drawing.Size(60, 19);
             this.labelControl13.TabIndex = 54;
             this.labelControl13.Text = "Machine:";
             // 
@@ -413,7 +427,7 @@
             this.labelControl12.Appearance.Options.UseFont = true;
             this.labelControl12.Location = new System.Drawing.Point(14, 64);
             this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(62, 17);
+            this.labelControl12.Size = new System.Drawing.Size(62, 19);
             this.labelControl12.TabIndex = 53;
             this.labelControl12.Text = "Duration:";
             // 
@@ -423,12 +437,13 @@
             this.labelControl11.Appearance.Options.UseFont = true;
             this.labelControl11.Location = new System.Drawing.Point(14, 14);
             this.labelControl11.Name = "labelControl11";
-            this.labelControl11.Size = new System.Drawing.Size(44, 17);
+            this.labelControl11.Size = new System.Drawing.Size(44, 19);
             this.labelControl11.TabIndex = 52;
             this.labelControl11.Text = "Hours:";
             // 
             // durationUnitsComboBox
             // 
+            this.durationUnitsComboBox.Enabled = false;
             this.durationUnitsComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.durationUnitsComboBox.FormattingEnabled = true;
             this.durationUnitsComboBox.Items.AddRange(new object[] {
@@ -531,6 +546,8 @@
             this.panelControl2.Appearance.Options.UseBackColor = true;
             this.panelControl2.Appearance.Options.UseFont = true;
             this.panelControl2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl2.Controls.Add(this.SelectProjectButton);
+            this.panelControl2.Controls.Add(this.overLapAllowedCheckEdit);
             this.panelControl2.Controls.Add(this.labelControl24);
             this.panelControl2.Controls.Add(this.labelControl9);
             this.panelControl2.Controls.Add(this.labelControl8);
@@ -542,7 +559,6 @@
             this.panelControl2.Controls.Add(this.labelControl2);
             this.panelControl2.Controls.Add(this.pictureEdit1);
             this.panelControl2.Controls.Add(this.dueDateTimePicker);
-            this.panelControl2.Controls.Add(this.LookupDataButton);
             this.panelControl2.Controls.Add(this.ProjectNumberTextBox);
             this.panelControl2.Controls.Add(this.ElectrodeProgrammerComboBox);
             this.panelControl2.Controls.Add(this.FinishProgrammerComboBox);
@@ -555,13 +571,48 @@
             this.panelControl2.Size = new System.Drawing.Size(411, 728);
             this.panelControl2.TabIndex = 65;
             // 
+            // SelectProjectButton
+            // 
+            this.SelectProjectButton.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SelectProjectButton.Appearance.Options.UseFont = true;
+            this.SelectProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
+            this.SelectProjectButton.Location = new System.Drawing.Point(287, 24);
+            this.SelectProjectButton.Name = "SelectProjectButton";
+            this.SelectProjectButton.Size = new System.Drawing.Size(99, 44);
+            this.SelectProjectButton.TabIndex = 76;
+            this.SelectProjectButton.Text = "Select Project";
+            this.SelectProjectButton.ToolTip = "This calls up a list of projects to add project info from.";
+            this.SelectProjectButton.Click += new System.EventHandler(this.SelectProjectButton_Click);
+            // 
+            // overLapAllowedCheckEdit
+            // 
+            this.overLapAllowedCheckEdit.EditValue = true;
+            this.overLapAllowedCheckEdit.Location = new System.Drawing.Point(144, 34);
+            this.overLapAllowedCheckEdit.Name = "overLapAllowedCheckEdit";
+            this.overLapAllowedCheckEdit.Properties.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.overLapAllowedCheckEdit.Properties.Appearance.Options.UseFont = true;
+            this.overLapAllowedCheckEdit.Properties.Caption = "Overlap Allowed";
+            this.overLapAllowedCheckEdit.Size = new System.Drawing.Size(128, 23);
+            this.overLapAllowedCheckEdit.TabIndex = 75;
+            this.overLapAllowedCheckEdit.CheckedChanged += new System.EventHandler(this.overlapAllowedCheckEdit_CheckedChanged);
+            // 
+            // labelControl24
+            // 
+            this.labelControl24.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl24.Appearance.Options.UseFont = true;
+            this.labelControl24.Location = new System.Drawing.Point(154, 88);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(184, 19);
+            this.labelControl24.TabIndex = 74;
+            this.labelControl24.Text = "* = Indicates Required Field";
+            // 
             // labelControl9
             // 
             this.labelControl9.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControl9.Appearance.Options.UseFont = true;
             this.labelControl9.Location = new System.Drawing.Point(14, 373);
             this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(51, 17);
+            this.labelControl9.Size = new System.Drawing.Size(51, 19);
             this.labelControl9.TabIndex = 73;
             this.labelControl9.Text = "Picture:";
             // 
@@ -571,7 +622,7 @@
             this.labelControl8.Appearance.Options.UseFont = true;
             this.labelControl8.Location = new System.Drawing.Point(14, 314);
             this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(132, 17);
+            this.labelControl8.Size = new System.Drawing.Size(132, 19);
             this.labelControl8.TabIndex = 72;
             this.labelControl8.Text = "Finish Programmer:";
             // 
@@ -581,7 +632,7 @@
             this.labelControl7.Appearance.Options.UseFont = true;
             this.labelControl7.Location = new System.Drawing.Point(14, 264);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(158, 17);
+            this.labelControl7.Size = new System.Drawing.Size(158, 19);
             this.labelControl7.TabIndex = 71;
             this.labelControl7.Text = "Electrode Programmer:";
             // 
@@ -591,7 +642,7 @@
             this.labelControl6.Appearance.Options.UseFont = true;
             this.labelControl6.Location = new System.Drawing.Point(14, 214);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(138, 17);
+            this.labelControl6.Size = new System.Drawing.Size(138, 19);
             this.labelControl6.TabIndex = 70;
             this.labelControl6.Text = "Rough Programmer:";
             // 
@@ -601,7 +652,7 @@
             this.labelControl5.Appearance.Options.UseFont = true;
             this.labelControl5.Location = new System.Drawing.Point(14, 164);
             this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(63, 17);
+            this.labelControl5.Size = new System.Drawing.Size(63, 19);
             this.labelControl5.TabIndex = 69;
             this.labelControl5.Text = "Designer:";
             // 
@@ -611,7 +662,7 @@
             this.labelControl4.Appearance.Options.UseFont = true;
             this.labelControl4.Location = new System.Drawing.Point(14, 114);
             this.labelControl4.Name = "labelControl4";
-            this.labelControl4.Size = new System.Drawing.Size(133, 17);
+            this.labelControl4.Size = new System.Drawing.Size(133, 19);
             this.labelControl4.TabIndex = 68;
             this.labelControl4.Text = "Lead / Tool Maker:*";
             // 
@@ -621,7 +672,7 @@
             this.labelControl3.Appearance.Options.UseFont = true;
             this.labelControl3.Location = new System.Drawing.Point(14, 64);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(71, 17);
+            this.labelControl3.Size = new System.Drawing.Size(71, 19);
             this.labelControl3.TabIndex = 67;
             this.labelControl3.Text = "Due Date:*";
             // 
@@ -631,7 +682,7 @@
             this.labelControl2.Appearance.Options.UseFont = true;
             this.labelControl2.Location = new System.Drawing.Point(14, 14);
             this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(169, 17);
+            this.labelControl2.Size = new System.Drawing.Size(169, 19);
             this.labelControl2.TabIndex = 66;
             this.labelControl2.Text = "Project / MWO Number:*";
             // 
@@ -653,19 +704,6 @@
             this.dueDateTimePicker.Name = "dueDateTimePicker";
             this.dueDateTimePicker.Size = new System.Drawing.Size(113, 22);
             this.dueDateTimePicker.TabIndex = 59;
-            // 
-            // LookupDataButton
-            // 
-            this.LookupDataButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LookupDataButton.Location = new System.Drawing.Point(248, 14);
-            this.LookupDataButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.LookupDataButton.Name = "LookupDataButton";
-            this.LookupDataButton.Size = new System.Drawing.Size(99, 44);
-            this.LookupDataButton.TabIndex = 57;
-            this.LookupDataButton.Text = "Lookup Data";
-            this.LookupDataButton.UseVisualStyleBackColor = true;
-            this.LookupDataButton.Visible = false;
-            this.LookupDataButton.Click += new System.EventHandler(this.LookupDataButton_Click);
             // 
             // ProjectNumberTextBox
             // 
@@ -794,7 +832,7 @@
             this.labelControl10.Appearance.Options.UseFont = true;
             this.labelControl10.Location = new System.Drawing.Point(14, 67);
             this.labelControl10.Name = "labelControl10";
-            this.labelControl10.Size = new System.Drawing.Size(88, 17);
+            this.labelControl10.Size = new System.Drawing.Size(88, 19);
             this.labelControl10.TabIndex = 55;
             this.labelControl10.Text = "Components:";
             // 
@@ -916,7 +954,7 @@
             this.labelControl23.Appearance.Options.UseFont = true;
             this.labelControl23.Location = new System.Drawing.Point(14, 14);
             this.labelControl23.Name = "labelControl23";
-            this.labelControl23.Size = new System.Drawing.Size(40, 17);
+            this.labelControl23.Size = new System.Drawing.Size(40, 19);
             this.labelControl23.TabIndex = 52;
             this.labelControl23.Text = "Tasks:";
             // 
@@ -963,7 +1001,8 @@
             "Polish (In-House)",
             "Polish (Outsource)",
             "Inspection Post Polish",
-            "Texturing"});
+            "Texturing",
+            "Hole Pop"});
             this.TaskListBox.Location = new System.Drawing.Point(13, 34);
             this.TaskListBox.Margin = new System.Windows.Forms.Padding(4);
             this.TaskListBox.Name = "TaskListBox";
@@ -999,7 +1038,7 @@
             this.labelControl1.Appearance.Options.UseFont = true;
             this.labelControl1.Location = new System.Drawing.Point(14, 10);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(127, 17);
+            this.labelControl1.Size = new System.Drawing.Size(127, 19);
             this.labelControl1.TabIndex = 51;
             this.labelControl1.Text = "Work Project Tree:";
             // 
@@ -1012,7 +1051,7 @@
             this.groupControl1.Controls.Add(this.SaveTemplateButton);
             this.groupControl1.Controls.Add(this.LoadTemplateButton);
             this.groupControl1.GroupStyle = DevExpress.Utils.GroupStyle.Light;
-            this.groupControl1.Location = new System.Drawing.Point(338, 418);
+            this.groupControl1.Location = new System.Drawing.Point(339, 351);
             this.groupControl1.Name = "groupControl1";
             this.groupControl1.Size = new System.Drawing.Size(118, 121);
             this.groupControl1.TabIndex = 50;
@@ -1047,7 +1086,7 @@
             this.CreateProjectButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateProjectButton.Appearance.Options.UseFont = true;
             this.CreateProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.CreateProjectButton.Location = new System.Drawing.Point(347, 361);
+            this.CreateProjectButton.Location = new System.Drawing.Point(349, 517);
             this.CreateProjectButton.Name = "CreateProjectButton";
             this.CreateProjectButton.Size = new System.Drawing.Size(99, 34);
             this.CreateProjectButton.TabIndex = 47;
@@ -1059,7 +1098,7 @@
             this.UpdateButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UpdateButton.Appearance.Options.UseFont = true;
             this.UpdateButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.UpdateButton.Location = new System.Drawing.Point(356, 300);
+            this.UpdateButton.Location = new System.Drawing.Point(357, 300);
             this.UpdateButton.Name = "UpdateButton";
             this.UpdateButton.Size = new System.Drawing.Size(82, 31);
             this.UpdateButton.TabIndex = 46;
@@ -1071,7 +1110,7 @@
             this.DownButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownButton.Appearance.Options.UseFont = true;
             this.DownButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.DownButton.Location = new System.Drawing.Point(356, 228);
+            this.DownButton.Location = new System.Drawing.Point(357, 228);
             this.DownButton.Name = "DownButton";
             this.DownButton.Size = new System.Drawing.Size(82, 31);
             this.DownButton.TabIndex = 45;
@@ -1083,7 +1122,7 @@
             this.UpButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UpButton.Appearance.Options.UseFont = true;
             this.UpButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.UpButton.Location = new System.Drawing.Point(356, 191);
+            this.UpButton.Location = new System.Drawing.Point(357, 191);
             this.UpButton.Name = "UpButton";
             this.UpButton.Size = new System.Drawing.Size(82, 31);
             this.UpButton.TabIndex = 44;
@@ -1095,7 +1134,7 @@
             this.DeleteButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeleteButton.Appearance.Options.UseFont = true;
             this.DeleteButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.DeleteButton.Location = new System.Drawing.Point(356, 137);
+            this.DeleteButton.Location = new System.Drawing.Point(357, 137);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(82, 31);
             this.DeleteButton.TabIndex = 43;
@@ -1107,7 +1146,7 @@
             this.RenameButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RenameButton.Appearance.Options.UseFont = true;
             this.RenameButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.RenameButton.Location = new System.Drawing.Point(356, 100);
+            this.RenameButton.Location = new System.Drawing.Point(357, 100);
             this.RenameButton.Name = "RenameButton";
             this.RenameButton.Size = new System.Drawing.Size(82, 31);
             this.RenameButton.TabIndex = 42;
@@ -1119,36 +1158,14 @@
             this.GetQuoteButton.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GetQuoteButton.Appearance.Options.UseFont = true;
             this.GetQuoteButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.GetQuoteButton.Location = new System.Drawing.Point(356, 64);
+            this.GetQuoteButton.Location = new System.Drawing.Point(357, 64);
             this.GetQuoteButton.Name = "GetQuoteButton";
             this.GetQuoteButton.Size = new System.Drawing.Size(82, 31);
             this.GetQuoteButton.TabIndex = 41;
             this.GetQuoteButton.Text = "Get Quote";
             this.GetQuoteButton.Click += new System.EventHandler(this.GetQuoteButton_Click);
             // 
-            // labelControl24
-            // 
-            this.labelControl24.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl24.Appearance.Options.UseFont = true;
-            this.labelControl24.Location = new System.Drawing.Point(154, 88);
-            this.labelControl24.Name = "labelControl24";
-            this.labelControl24.Size = new System.Drawing.Size(184, 17);
-            this.labelControl24.TabIndex = 74;
-            this.labelControl24.Text = "* = Indicates Required Field";
-            // 
-            // matchHoursCheckBox
-            // 
-            this.matchHoursCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.matchHoursCheckBox.Location = new System.Drawing.Point(155, 86);
-            this.matchHoursCheckBox.Name = "matchHoursCheckBox";
-            this.matchHoursCheckBox.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.matchHoursCheckBox.Properties.Appearance.Options.UseFont = true;
-            this.matchHoursCheckBox.Properties.Caption = "Match to Hours";
-            this.matchHoursCheckBox.Size = new System.Drawing.Size(137, 21);
-            this.matchHoursCheckBox.TabIndex = 58;
-            this.matchHoursCheckBox.CheckStateChanged += new System.EventHandler(this.matchHoursCheckBox_CheckStateChanged);
-            // 
-            // Project_Creation_Form
+            // ProjectCreationForm
             // 
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1160,13 +1177,13 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Project_Creation_Form";
+            this.Name = "ProjectCreationForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create Project";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Project_Creation_Form_FormClosed);
-            this.Load += new System.EventHandler(this.Project_Creation_Form_Load);
-            this.Shown += new System.EventHandler(this.Project_Creation_Form_Shown);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProjectCreationForm_FormClosed);
+            this.Load += new System.EventHandler(this.ProjectCreationForm_Load);
+            this.Shown += new System.EventHandler(this.ProjectCreationForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             this.tabPage5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).EndInit();
@@ -1179,12 +1196,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl5)).EndInit();
             this.panelControl5.ResumeLayout(false);
             this.panelControl5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hoursNumericUpDown)).EndInit();
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).EndInit();
             this.panelControl2.ResumeLayout(false);
             this.panelControl2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.overLapAllowedCheckEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
@@ -1201,7 +1220,6 @@
             this.panelControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.matchHoursCheckBox.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1226,7 +1244,6 @@
         private System.Windows.Forms.TextBox taskNotesTextBox;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.DateTimePicker dueDateTimePicker;
-        private System.Windows.Forms.Button LookupDataButton;
         private System.Windows.Forms.TextBox ProjectNumberTextBox;
         private System.Windows.Forms.ComboBox ElectrodeProgrammerComboBox;
         private System.Windows.Forms.ComboBox FinishProgrammerComboBox;
@@ -1288,5 +1305,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl23;
         private DevExpress.XtraEditors.CheckEdit matchHoursCheckBox;
         private DevExpress.XtraEditors.LabelControl labelControl24;
+        private DevExpress.XtraEditors.CheckEdit overLapAllowedCheckEdit;
+        private DevExpress.XtraEditors.SimpleButton SelectProjectButton;
     }
 }

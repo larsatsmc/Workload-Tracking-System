@@ -37,8 +37,10 @@
             this.resourceListBox = new System.Windows.Forms.ListBox();
             this.addResourceTextBox = new System.Windows.Forms.TextBox();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.resourceTypeRadioGroup = new DevExpress.XtraEditors.RadioGroup();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.resourceTypeRadioGroup.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // RoleComboBox
@@ -54,13 +56,14 @@
             "Rough Mills",
             "Finish Mills",
             "Graphite Mills",
-            "EDM Sinker",
-            "EDM Wire",
+            "EDM Sinkers",
+            "EDM Wires",
             "Rough CNC Operators",
             "Electrode CNC Operators",
             "Finish CNC Operators",
             "EDM Sinker Operators",
             "EDM Wire Operators",
+            "Hole Popper Operators",
             "CMM Operators"});
             this.RoleComboBox.Location = new System.Drawing.Point(329, 23);
             this.RoleComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -128,6 +131,7 @@
             this.resourceListBox.Name = "resourceListBox";
             this.resourceListBox.Size = new System.Drawing.Size(181, 412);
             this.resourceListBox.TabIndex = 11;
+            this.resourceListBox.SelectedValueChanged += new System.EventHandler(this.ResourceListBox_SelectedValueChanged);
             // 
             // addResourceTextBox
             // 
@@ -142,6 +146,7 @@
             this.panelControl1.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelControl1.Appearance.Options.UseFont = true;
             this.panelControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl1.Controls.Add(this.resourceTypeRadioGroup);
             this.panelControl1.Controls.Add(this.RemoveResourceButton);
             this.panelControl1.Controls.Add(this.AddResourceButton);
             this.panelControl1.Controls.Add(this.resourceListBox);
@@ -154,6 +159,19 @@
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(634, 510);
             this.panelControl1.TabIndex = 14;
+            // 
+            // resourceTypeRadioGroup
+            // 
+            this.resourceTypeRadioGroup.Location = new System.Drawing.Point(224, 156);
+            this.resourceTypeRadioGroup.Name = "resourceTypeRadioGroup";
+            this.resourceTypeRadioGroup.Properties.Columns = 2;
+            this.resourceTypeRadioGroup.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
+            new DevExpress.XtraEditors.Controls.RadioGroupItem("Person", "Person"),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem("Machine", "Machine")});
+            this.resourceTypeRadioGroup.Properties.ItemsLayout = DevExpress.XtraEditors.RadioGroupItemsLayout.Flow;
+            this.resourceTypeRadioGroup.Size = new System.Drawing.Size(85, 51);
+            this.resourceTypeRadioGroup.TabIndex = 14;
+            this.resourceTypeRadioGroup.EditValueChanged += new System.EventHandler(this.ResourceTypeRadioGroup_EditValueChanged);
             // 
             // ManageResourcesForm
             // 
@@ -172,6 +190,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.resourceTypeRadioGroup.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -188,5 +207,6 @@
         private System.Windows.Forms.ListBox resourceListBox;
         private System.Windows.Forms.TextBox addResourceTextBox;
         private DevExpress.XtraEditors.PanelControl panelControl1;
+        private DevExpress.XtraEditors.RadioGroup resourceTypeRadioGroup;
     }
 }

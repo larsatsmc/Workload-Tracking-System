@@ -11,9 +11,17 @@ namespace Toolroom_Project_Viewer
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow());
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+            }
         }
     }
 }

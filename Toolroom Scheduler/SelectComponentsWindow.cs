@@ -19,11 +19,11 @@ namespace Toolroom_Scheduler
             InitializeComponent();
         }
 
-        public SelectComponentsWindow(List<ClassLibrary.Component> componentList)
+        public SelectComponentsWindow(List<ClassLibrary.ComponentModel> componentList)
         {
             InitializeComponent();
 
-            foreach (ClassLibrary.Component component in componentList)
+            foreach (ClassLibrary.ComponentModel component in componentList)
             {
                 ComponentCheckedListBox.Items.Add(component.Name);
             }
