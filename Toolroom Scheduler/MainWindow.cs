@@ -18,7 +18,7 @@ using ClassLibrary;
 
 namespace Toolroom_Scheduler
 {
-    public partial class MainWindow : Form
+    public partial class MainWindow : DevExpress.XtraEditors.XtraForm
     {
         // The real database.
         private static string ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;
@@ -276,7 +276,7 @@ namespace Toolroom_Scheduler
                 selectedIndex = JobNumberComboBox.SelectedIndex - 1;               
             }
 
-            db.ClearAllProjectData(number.jobNumber, number.projectNumber);
+            db.RemoveProject(number.jobNumber, number.projectNumber);
             RefreshDataGridView();
             PopulateJobNumberComboBox();
 
@@ -1158,7 +1158,7 @@ namespace Toolroom_Scheduler
         {
             Database db = new Database();
             var number = GetComboBoxInfo();
-            ProjectInfo pi = db.GetProjectInfo(number.jobNumber, number.projectNumber);
+            ProjectModel pi = db.GetProjectInfo(number.jobNumber, number.projectNumber);
 
             using (var form = new BackDateWindow(pi.DueDate))
             {
@@ -1222,7 +1222,7 @@ namespace Toolroom_Scheduler
             }
         }
 
-        private void EditProject(ProjectInfo project)
+        private void EditProject(ProjectModel project)
         {
             using (var form = new Project_Creation_Form(project))
             {
@@ -1392,11 +1392,11 @@ namespace Toolroom_Scheduler
             return (DateTime)latestFinishDate;
         }
 
-        private bool BlankStartFinishDateExists(ProjectInfo pi)
+        private bool BlankStartFinishDateExists(ProjectModel pi)
         {
-            foreach (ClassLibrary.Component component in pi.ComponentList)
+            foreach (ClassLibrary.ComponentModel component in pi.ComponentList)
             {
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.TaskList)
                 {
                     if (task.StartDate == null || task.FinishDate == null)
                     {
@@ -1640,7 +1640,7 @@ namespace Toolroom_Scheduler
                     string path;
                     List<string> componentList = new List<string>();
 
-                    ProjectInfo pi = db.GetProject(number.jobNumber, number.projectNumber);
+                    ProjectModel pi = db.GetProject(number.jobNumber, number.projectNumber);
 
                     if (BlankStartFinishDateExists(pi))
                     {
@@ -1812,7 +1812,7 @@ namespace Toolroom_Scheduler
                 {
                     Database db = new Database();
                     var number = GetComboBoxInfo();
-                    ProjectInfo project = db.GetProject(number.jobNumber, number.projectNumber);
+                    ProjectModel project = db.GetProject(number.jobNumber, number.projectNumber);
                     EditProject(project);
                 }
             }

@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ProcessTabs = new System.Windows.Forms.TabControl();
             this.Design = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
@@ -322,6 +322,23 @@
             this.label162 = new System.Windows.Forms.Label();
             this.All = new System.Windows.Forms.TabPage();
             this.DataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.JobNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Component = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TaskName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Hours = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FinishDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TaskID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Predecessors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Machine = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Resource = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProjectNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EarliestStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Priority = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tasksBindingSource1 = new System.Windows.Forms.BindingSource();
             this.workload_Tracking_SystemDataSet = new Toolroom_Scheduler.Workload_Tracking_SystemDataSet();
             this.workload_Tracking_SystemDataSet1 = new Toolroom_Scheduler.Workload_Tracking_SystemDataSet();
@@ -357,23 +374,6 @@
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ForwardDateButton = new System.Windows.Forms.Button();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.JobNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Component = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TaskName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Hours = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FinishDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TaskID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Predecessors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Machine = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Resource = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ProjectNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EarliestStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Priority = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProcessTabs.SuspendLayout();
             this.Design.SuspendLayout();
             this.Programming.SuspendLayout();
@@ -3178,8 +3178,8 @@
             this.DataGridView1.AllowUserToAddRows = false;
             this.DataGridView1.AllowUserToDeleteRows = false;
             this.DataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             this.DataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -3215,6 +3215,131 @@
             this.DataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView1_DataError);
             this.DataGridView1.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_RowValidated);
             this.DataGridView1.MouseEnter += new System.EventHandler(this.DataGridView1_MouseEnter);
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.Width = 55;
+            // 
+            // JobNumber
+            // 
+            this.JobNumber.DataPropertyName = "JobNumber";
+            this.JobNumber.HeaderText = "Job Number";
+            this.JobNumber.Name = "JobNumber";
+            // 
+            // Component
+            // 
+            this.Component.DataPropertyName = "Component";
+            this.Component.HeaderText = "Component";
+            this.Component.Name = "Component";
+            // 
+            // TaskName
+            // 
+            this.TaskName.DataPropertyName = "TaskName";
+            this.TaskName.HeaderText = "Task Name";
+            this.TaskName.Name = "TaskName";
+            // 
+            // Hours
+            // 
+            this.Hours.DataPropertyName = "Hours";
+            this.Hours.HeaderText = "Hours";
+            this.Hours.Name = "Hours";
+            this.Hours.Width = 55;
+            // 
+            // Duration
+            // 
+            this.Duration.DataPropertyName = "Duration";
+            this.Duration.HeaderText = "Duration";
+            this.Duration.Name = "Duration";
+            this.Duration.Width = 75;
+            // 
+            // StartDate
+            // 
+            this.StartDate.DataPropertyName = "StartDate";
+            this.StartDate.HeaderText = "Start Date";
+            this.StartDate.Name = "StartDate";
+            this.StartDate.Width = 85;
+            // 
+            // FinishDate
+            // 
+            this.FinishDate.DataPropertyName = "FinishDate";
+            this.FinishDate.HeaderText = "Finish Date";
+            this.FinishDate.Name = "FinishDate";
+            this.FinishDate.Width = 85;
+            // 
+            // TaskID
+            // 
+            this.TaskID.DataPropertyName = "TaskID";
+            this.TaskID.HeaderText = "Task ID";
+            this.TaskID.Name = "TaskID";
+            this.TaskID.Width = 60;
+            // 
+            // Predecessors
+            // 
+            this.Predecessors.DataPropertyName = "Predecessors";
+            this.Predecessors.HeaderText = "Predecessors";
+            this.Predecessors.Name = "Predecessors";
+            // 
+            // Machine
+            // 
+            this.Machine.DataPropertyName = "Machine";
+            this.Machine.HeaderText = "Machine";
+            this.Machine.Name = "Machine";
+            this.Machine.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Machine.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Resource
+            // 
+            this.Resource.DataPropertyName = "Resource";
+            this.Resource.HeaderText = "Personnel";
+            this.Resource.Name = "Resource";
+            this.Resource.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Resource.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Status
+            // 
+            this.Status.DataPropertyName = "Status";
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            // 
+            // Notes
+            // 
+            this.Notes.DataPropertyName = "Notes";
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.Notes.DefaultCellStyle = dataGridViewCellStyle11;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.Name = "Notes";
+            this.Notes.Width = 250;
+            // 
+            // ProjectNumber
+            // 
+            this.ProjectNumber.DataPropertyName = "ProjectNumber";
+            dataGridViewCellStyle12.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.ProjectNumber.DefaultCellStyle = dataGridViewCellStyle12;
+            this.ProjectNumber.HeaderText = "Project Number";
+            this.ProjectNumber.Name = "ProjectNumber";
+            this.ProjectNumber.Width = 65;
+            // 
+            // EarliestStartDate
+            // 
+            this.EarliestStartDate.DataPropertyName = "EarliestStartDate";
+            dataGridViewCellStyle13.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.EarliestStartDate.DefaultCellStyle = dataGridViewCellStyle13;
+            this.EarliestStartDate.HeaderText = "Earliest Start Date";
+            this.EarliestStartDate.Name = "EarliestStartDate";
+            this.EarliestStartDate.Visible = false;
+            this.EarliestStartDate.Width = 80;
+            // 
+            // Priority
+            // 
+            this.Priority.DataPropertyName = "Priority";
+            dataGridViewCellStyle14.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.Priority.DefaultCellStyle = dataGridViewCellStyle14;
+            this.Priority.HeaderText = "Priority";
+            this.Priority.Name = "Priority";
+            this.Priority.Visible = false;
             // 
             // tasksBindingSource1
             // 
@@ -3468,8 +3593,8 @@
             // dataGridViewTextBoxColumn12
             // 
             this.dataGridViewTextBoxColumn12.DataPropertyName = "Priority";
-            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.dataGridViewTextBoxColumn12.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.dataGridViewTextBoxColumn12.DefaultCellStyle = dataGridViewCellStyle15;
             this.dataGridViewTextBoxColumn12.Frozen = true;
             this.dataGridViewTextBoxColumn12.HeaderText = "Priority";
             this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
@@ -3478,8 +3603,8 @@
             // dataGridViewTextBoxColumn13
             // 
             this.dataGridViewTextBoxColumn13.DataPropertyName = "Priority";
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewTextBoxColumn13.Frozen = true;
             this.dataGridViewTextBoxColumn13.HeaderText = "Priority";
             this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
@@ -3488,8 +3613,8 @@
             // dataGridViewTextBoxColumn14
             // 
             this.dataGridViewTextBoxColumn14.DataPropertyName = "Notes";
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.dataGridViewTextBoxColumn14.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle17.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.dataGridViewTextBoxColumn14.DefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewTextBoxColumn14.Frozen = true;
             this.dataGridViewTextBoxColumn14.HeaderText = "Notes";
             this.dataGridViewTextBoxColumn14.Name = "dataGridViewTextBoxColumn14";
@@ -3499,8 +3624,8 @@
             // dataGridViewTextBoxColumn15
             // 
             this.dataGridViewTextBoxColumn15.DataPropertyName = "Notes";
-            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.dataGridViewTextBoxColumn15.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle18.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.dataGridViewTextBoxColumn15.DefaultCellStyle = dataGridViewCellStyle18;
             this.dataGridViewTextBoxColumn15.Frozen = true;
             this.dataGridViewTextBoxColumn15.HeaderText = "Notes";
             this.dataGridViewTextBoxColumn15.Name = "dataGridViewTextBoxColumn15";
@@ -3523,131 +3648,6 @@
             this.ForwardDateButton.Text = "Forward Date";
             this.ForwardDateButton.UseVisualStyleBackColor = true;
             this.ForwardDateButton.Click += new System.EventHandler(this.ForwardDateButton_Click);
-            // 
-            // ID
-            // 
-            this.ID.DataPropertyName = "ID";
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.Width = 55;
-            // 
-            // JobNumber
-            // 
-            this.JobNumber.DataPropertyName = "JobNumber";
-            this.JobNumber.HeaderText = "Job Number";
-            this.JobNumber.Name = "JobNumber";
-            // 
-            // Component
-            // 
-            this.Component.DataPropertyName = "Component";
-            this.Component.HeaderText = "Component";
-            this.Component.Name = "Component";
-            // 
-            // TaskName
-            // 
-            this.TaskName.DataPropertyName = "TaskName";
-            this.TaskName.HeaderText = "Task Name";
-            this.TaskName.Name = "TaskName";
-            // 
-            // Hours
-            // 
-            this.Hours.DataPropertyName = "Hours";
-            this.Hours.HeaderText = "Hours";
-            this.Hours.Name = "Hours";
-            this.Hours.Width = 55;
-            // 
-            // Duration
-            // 
-            this.Duration.DataPropertyName = "Duration";
-            this.Duration.HeaderText = "Duration";
-            this.Duration.Name = "Duration";
-            this.Duration.Width = 75;
-            // 
-            // StartDate
-            // 
-            this.StartDate.DataPropertyName = "StartDate";
-            this.StartDate.HeaderText = "Start Date";
-            this.StartDate.Name = "StartDate";
-            this.StartDate.Width = 85;
-            // 
-            // FinishDate
-            // 
-            this.FinishDate.DataPropertyName = "FinishDate";
-            this.FinishDate.HeaderText = "Finish Date";
-            this.FinishDate.Name = "FinishDate";
-            this.FinishDate.Width = 85;
-            // 
-            // TaskID
-            // 
-            this.TaskID.DataPropertyName = "TaskID";
-            this.TaskID.HeaderText = "Task ID";
-            this.TaskID.Name = "TaskID";
-            this.TaskID.Width = 60;
-            // 
-            // Predecessors
-            // 
-            this.Predecessors.DataPropertyName = "Predecessors";
-            this.Predecessors.HeaderText = "Predecessors";
-            this.Predecessors.Name = "Predecessors";
-            // 
-            // Machine
-            // 
-            this.Machine.DataPropertyName = "Machine";
-            this.Machine.HeaderText = "Machine";
-            this.Machine.Name = "Machine";
-            this.Machine.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Machine.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Resource
-            // 
-            this.Resource.DataPropertyName = "Resource";
-            this.Resource.HeaderText = "Personnel";
-            this.Resource.Name = "Resource";
-            this.Resource.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Resource.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Status
-            // 
-            this.Status.DataPropertyName = "Status";
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            // 
-            // Notes
-            // 
-            this.Notes.DataPropertyName = "Notes";
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.Notes.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.Name = "Notes";
-            this.Notes.Width = 250;
-            // 
-            // ProjectNumber
-            // 
-            this.ProjectNumber.DataPropertyName = "ProjectNumber";
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.ProjectNumber.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ProjectNumber.HeaderText = "Project Number";
-            this.ProjectNumber.Name = "ProjectNumber";
-            this.ProjectNumber.Width = 65;
-            // 
-            // EarliestStartDate
-            // 
-            this.EarliestStartDate.DataPropertyName = "EarliestStartDate";
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.EarliestStartDate.DefaultCellStyle = dataGridViewCellStyle4;
-            this.EarliestStartDate.HeaderText = "Earliest Start Date";
-            this.EarliestStartDate.Name = "EarliestStartDate";
-            this.EarliestStartDate.Visible = false;
-            this.EarliestStartDate.Width = 80;
-            // 
-            // Priority
-            // 
-            this.Priority.DataPropertyName = "Priority";
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.Priority.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Priority.HeaderText = "Priority";
-            this.Priority.Name = "Priority";
-            this.Priority.Visible = false;
             // 
             // MainWindow
             // 

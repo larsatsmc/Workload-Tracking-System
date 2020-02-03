@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Data.OleDb;
 using System.Windows.Forms;
 
 namespace Toolroom_Scheduler
 {
-	public partial class ManageResourcesForm : Form
+    public partial class ManageResourcesForm : Form
 	{
         Database db = new Database();
 

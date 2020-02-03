@@ -1,0 +1,47 @@
+﻿<dx:ThemedWindow x:Class="DatabaseBackupApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        Title="Database Backup" Height="215" Width="525" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.RowSpan="1" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Source:" FontSize="12"/>
+
+        <TextBox Name="SourceDBTextBox" Grid.Column ="2" Grid.Row="1"  Width="300" Margin="10,15"></TextBox>
+
+        <Button Name="ChooseSourceDBButton" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Width="80" Height="40" Click="ChooseSourceDBButton_Click">
+            <TextBlock Text="Choose Database" Width="60" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+
+        <TextBlock Grid.RowSpan="1" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Destination:" FontSize="12"/>
+
+        <TextBox Name="DestinationDBTextBox" Grid.Column ="2" Grid.Row="2"  Width="300" Margin="10,15"></TextBox>
+
+        <Button Name="ChooseDestinationDBButton" Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Width="80" Height="40" Click="ChooseDestinationDBButton_Click">
+            <TextBlock Text="Choose Database" Width="60" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+
+        <Button Name="CopyDBButton" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Width="80" Height="40" Click="CopyDBButton_Click">
+            <TextBlock Text="Copy Database" Width="60" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        
+    </Grid>
+</dx:ThemedWindow>

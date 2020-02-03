@@ -1,0 +1,2242 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.IO;
+using System.Runtime.InteropServices;
+using ClassLibrary;
+using DevExpress.XtraScheduler;
+using DevExpress.XtraScheduler.Xml;
+
+namespace Toolroom_Project_Viewer
+{
+    /// <summary>
+    /// Class for the ProjectCreationForm.
+    /// </summary> 
+    public partial class ProjectCreationForm : DevExpress.XtraEditors.XtraForm
+    {
+        Excel.Application excelApp;
+        string prefix, component, taskName;
+        int ID, taskCount;
+        bool formLoad = false;
+        bool missingTaskInfo = false;
+        bool quoteLoaded = false;
+
+        private DataTable RoleTable { get; set; }
+        public ProjectModel Project { get; private set; }
+        public SchedulerStorage SchedulerStorageProp { get; private set; }
+        public bool DataValidated { get; private set; }
+
+        /// <summary>
+        /// Initializes a new Project Form.
+        /// </summary> 
+        public ProjectCreationForm(SchedulerStorage schedulerStorage)
+        {
+            Console.WriteLine("ProjectCreationForm Constructor");
+
+            formLoad = true;
+            Project = new ProjectModel();
+            SchedulerStorageProp = schedulerStorage;
+
+            InitializeComponent();
+
+            if (GetDPI() == 120)
+            {
+                this.Width = 1330;
+            }
+            //MessageBox.Show($"{getScalingFactor()}");
+        }
+        /// <summary>
+        /// Initializes a new Project Form and sets the project property of the form to an instance of a property.
+        /// </summary> 
+        public ProjectCreationForm(ProjectModel project, SchedulerStorage schedulerStorage)
+        {
+            Console.WriteLine("ProjectCreationForm Constructor");
+
+            formLoad = true;
+            this.Project = project;
+            SchedulerStorageProp = schedulerStorage;
+
+            InitializeComponent();
+        }
+        private void ProjectCreationForm_Load(object sender, EventArgs e)
+        {
+            if (Project.HasProjectInfo)
+            {
+                this.Text = "Edit Project";
+                LoadProjectToForm(Project);
+                this.CreateProjectButton.Text = "Change";
+            }
+
+            RoleTable = Database.GetRoleTable();
+            prefix = "A-";
+            MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+            this.ActiveControl = MoldBuildTreeView;
+            MoldBuildTreeView.Nodes[0].Expand();
+        }
+
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        public enum DeviceCap
+        {
+            VERTRES = 10,
+            DESKTOPVERTRES = 117,
+            /// <summary>
+            /// Logical pixels inch in X
+            /// </summary>
+            LOGPIXELSX = 88,
+            /// <summary>
+            /// Logical pixels inch in Y
+            /// </summary>
+            LOGPIXELSY = 90
+            // http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
+        }
+
+        private float GetDPI()
+        {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
+            int LogicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
+            int PhysicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
+
+            int Xdpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSX);
+            int Ydpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSY);
+
+            //float ScreenScalingFactor = (float)PhysicalScreenHeight / (float)LogicalScreenHeight;
+
+            //MessageBox.Show($"{Xdpi} {Ydpi} {PhysicalScreenHeight} {LogicalScreenHeight}");
+
+            return Xdpi; // 1.25 = 125%
+        }
+
+        private void PopulateComboBox(ComboBox cb)
+        {
+            if (cb.Name == "ToolMakerComboBox")
+            {
+                cb.DataSource = GetResourceList("Tool Maker");
+            }
+            else if (cb.Name == "DesignerComboBox")
+            {
+                cb.DataSource = GetResourceList("Designer");
+            }
+            else if (cb.Name == "RoughProgrammerComboBox")
+            {
+                cb.DataSource = GetResourceList("Rough Programmer");
+            }
+            else if (cb.Name == "FinishProgrammerComboBox")
+            {
+                cb.DataSource = GetResourceList("Finish Programmer");
+            }
+            else if (cb.Name == "ElectrodeProgrammerComboBox")
+            {
+                cb.DataSource = GetResourceList("Electrode Programmer");
+            }
+        }
+        private List<string> GetResourceList(string role)
+        {
+            List<string> resourceList = new List<string>();
+
+            var result = from roleTable in RoleTable.AsEnumerable()
+                         where roleTable.Field<string>("Role") == role
+                         select roleTable;
+
+            resourceList.Add("");
+
+            foreach (var resource in result)
+            {
+                resourceList.Add(resource.Field<string>("ResourceName"));
+            }
+
+            return resourceList;
+        }
+        private void RenameNode(string newName)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            bool isValidChange = false;
+            if (selectedNode == null || newName == "") return;
+            
+
+            if (selectedNode.Level == 0)
+            {
+                if (selectedNode.BackColor == Color.Red)
+                {
+                    selectedNode.BackColor = Color.White;
+                    selectedNode.ForeColor = Color.Black; 
+                }
+
+                isValidChange = true;
+            }
+            else if (selectedNode.Level == 1)
+            {
+                if (!Project.ComponentNameExists(newName))
+                {
+                    ComponentModel component = Project.ComponentList.ElementAt(selectedNode.Index);
+                    if (component.SetName(newName))
+                    {
+                        isValidChange = true;
+                    }
+                }
+            }
+            else if (selectedNode.Level == 2)
+            {
+                ComponentModel component = Project.ComponentList.ElementAt(selectedNode.Parent.Index);
+                TaskModel task = component.TaskList.ElementAt(selectedNode.Index);
+                task.SetName(newName);
+                isValidChange = true;
+            }
+
+            if (isValidChange)
+            {
+                MoldBuildTreeView.SelectedNode.Text = newName;
+            }
+        }
+
+        private int CountTasks(TreeView treeView, string component)
+        {
+            taskCount = 0;
+            TreeNodeCollection nodes = treeView.Nodes[0].Nodes;
+
+            try
+            {
+
+                //if (nodes.Count == 1)
+                //{
+                //    return taskCount + 1;
+                //}
+
+                foreach (TreeNode n1 in nodes)
+                {
+
+                    if (n1.Text == component)
+                    {
+                        return taskCount;
+                    }
+
+                    foreach (TreeNode n2 in n1.Nodes)
+                    {
+                        taskCount++;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return 0;
+        }
+
+        private List<TaskModel> ReadTree(TreeView treeView, bool isTemplate)
+        {
+            // Print each node recursively.
+            TreeNodeCollection nodes = treeView.Nodes;
+            //TaskInfo[] tiArr = new TaskInfo[treeView.GetNodeCount(true) - 1];
+            List<TaskModel> tiList = new List<TaskModel>();
+            ID = 0;
+
+            try
+            {
+                foreach (TreeNode n in nodes)
+                {
+                    ReadTreeRecursive(tiList, n, isTemplate);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return tiList;
+        }
+
+        private List<TaskModel> ReadTree(TreeView treeView, bool isTemplate, ProjectModel pi)
+        {
+            // Print each node recursively.
+            TreeNodeCollection nodes = treeView.Nodes;
+            //TaskInfo[] tiArr = new TaskInfo[treeView.GetNodeCount(true) - 1];
+            List<TaskModel> tiList = new List<TaskModel>();
+            ID = 0;
+
+            try
+            {
+                foreach (TreeNode n in nodes)
+                {
+                    ReadTreeRecursive(tiList, n, isTemplate, pi);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return tiList;
+        }
+
+        private void ReadTreeRecursive(TreeNode treeNode)
+        {
+            // Print the node.
+            TreeNode parent = treeNode.Parent;
+
+            if (treeNode.Level == 0)
+            {
+                Console.WriteLine("MOLD: " + treeNode.Text);
+            }
+            else if (treeNode.Level == 1)
+            {
+                //Console.WriteLine("  COMPONENT: " + treeNode.Text);
+                //component = treeNode.Text;
+                //ID++;
+                //taskInfoList.Add(new TaskInfo(ID, "", component, true));
+            }
+            else if (treeNode.Level == 2)
+            {
+                Console.WriteLine("    " + treeNode.Text);
+                taskName = treeNode.Text;
+                taskCount++;
+
+            }
+            // MessageBox.Show(treeNode.Text);
+            // Print each node recursively.
+            foreach (TreeNode tn in treeNode.Nodes)
+            {
+                ReadTreeRecursive(tn);
+            }
+        }
+
+        private void ReadTreeRecursive(List<TaskModel> taskInfoList, TreeNode treeNode, bool isTemplate)
+        {
+            // Print the node.
+            TreeNode parent = treeNode.Parent;
+
+            if (treeNode.Level == 0)
+            {
+                Console.WriteLine("MOLD: " + treeNode.Text);
+                ID++;
+
+            }
+            else if (treeNode.Level == 1)
+            {
+                Console.WriteLine("  COMPONENT: " + treeNode.Text);
+                component = treeNode.Text;
+                ID++;
+                taskInfoList.Add(new TaskModel(ID, "", component, true));
+            }
+            else if (treeNode.Level == 2)
+            {
+                Console.WriteLine("    " + treeNode.Text);
+                taskName = treeNode.Text;
+                ID++;
+                if (treeNode.Nodes.Count > 0)
+                {
+                    taskInfoList.Add(new TaskModel(ID, taskName, component, false, treeNode.Nodes[0].Text, treeNode.Nodes[1].Text, treeNode.Nodes[2].Text, treeNode.Nodes[3].Text, treeNode.Nodes[4].Text, treeNode.Nodes[5].Text));
+                }
+                else if (isTemplate)
+                {
+                    taskInfoList.Add(new TaskModel(ID, taskName, "", false));
+                }
+                else if (!isTemplate)
+                {
+                    MessageBox.Show("No task info entered for " + taskName + " of the " + component);
+                    missingTaskInfo = true;
+                }
+            }
+            // MessageBox.Show(treeNode.Text);
+            // Print each node recursively.
+            foreach (TreeNode tn in treeNode.Nodes)
+            {
+                ReadTreeRecursive(taskInfoList, tn, isTemplate);
+            }
+        }
+
+        private void ReadTreeRecursive(List<TaskModel> taskInfoList, TreeNode treeNode, bool isTemplate, ProjectModel pi)
+        {
+            // Print the node.
+            TreeNode parent = treeNode.Parent;
+
+            if (treeNode.Level == 0)
+            {
+                Console.WriteLine("MOLD: " + treeNode.Text);
+                //ID++;
+            }
+            else if (treeNode.Level == 1)
+            {
+                Console.WriteLine("  COMPONENT: " + treeNode.Text);
+                component = treeNode.Text;
+                //ID++;
+                //taskInfoList.Add(new TaskInfo(ID, "", component, true));
+            }
+            else if (treeNode.Level == 2)
+            {
+                Console.WriteLine("    " + treeNode.Text);
+                taskName = treeNode.Text;
+                ID++;
+                if (treeNode.Nodes.Count > 0)
+                {
+                    taskInfoList.Add(new TaskModel(ID, pi.JobNumber, pi.ProjectNumber, taskName, component, false, treeNode.Nodes[0].Text, treeNode.Nodes[1].Text, treeNode.Nodes[2].Text, treeNode.Nodes[3].Text, treeNode.Nodes[4].Text, treeNode.Nodes[5].Text));
+                }
+                else if (!isTemplate)
+                {
+                    MessageBox.Show("No task info entered for " + taskName + " of the " + component);
+                    missingTaskInfo = true;
+                }
+            }
+            // MessageBox.Show(treeNode.Text);
+            // Print each node recursively.
+            foreach (TreeNode tn in treeNode.Nodes)
+            {
+                ReadTreeRecursive(taskInfoList, tn, isTemplate, pi);
+            }
+        }
+
+        private void AddComponentToTree(string newNodeName)
+        {
+            if (newNodeName == "" || !Project.AddComponent(newNodeName)) return;
+
+            TreeNode newNode = new TreeNode(newNodeName);
+            MoldBuildTreeView.Nodes[0].Nodes.Add(newNode);
+
+            if (MoldBuildTreeView.Nodes[0].Nodes.Count == 1)
+            {
+                MoldBuildTreeView.Nodes[0].Expand();
+            }
+
+            MoldBuildTreeView.Focus();
+            MoldBuildTreeView.SelectedNode = newNode;
+        }
+
+        private void AddSelectedTasksToSelectedComponent()
+        {
+            string processName;
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            var item = TaskListBox.SelectedItem;
+
+            if (selectedNode == null || item == null || selectedNode.Level != 1)
+            {
+                MessageBox.Show("Please select a component to add tasks to or select tasks to add to a component.");
+                return;
+            }
+
+            foreach (int i in TaskListBox.SelectedIndices)
+            {
+                var component = Project.ComponentList.Where(x => x.Name == selectedNode.Text).First();
+                processName = TaskListBox.Items[i].ToString();
+                MoldBuildTreeView.SelectedNode.Nodes.Add(processName);
+                component.AddTask(processName, component.Name);
+            }
+
+        }
+
+        private void SetTaskInfoForSelectedTask()
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel component;
+            TaskModel task;
+            //string predecessorString = getSelectedPredecessorText(predecessorsListBox); // Uncomment to use project.
+
+            if (durationNumericUpDown.Value.ToString() == "")
+            {
+                MessageBox.Show("Duration cannot be blank.");
+                return;
+            }
+
+            if (!int.TryParse(durationNumericUpDown.Value.ToString(), out int result))
+            {
+                MessageBox.Show("Please enter a whole number for duration.");
+                return;
+            }
+            // Check if task is selected.
+            if (selectedNode.Level != 2)
+            {
+                MessageBox.Show("Please select a task to add info to.");
+                return;
+            }
+
+            string predecessorString = GetSelectedPredecessorIndices(predecessorsListBox, 0); // countTasks(MoldBuildTreeView, selectedNode.Parent.Text)
+
+            // Check if selected task is set as its own predecessor.
+            foreach (int index in predecessorsListBox.SelectedIndices)
+            {
+                if (selectedNode.Index == index)
+                {
+                    //predecessorsListBox.SelectedIndices[index] = false;
+                    MessageBox.Show("A task cannot be its own predecessor.");
+                    return;
+                }
+            }
+
+            // Check if no predecessors are selected.
+            if (predecessorString.Length == 0 && !selectedNode.Text.Contains("Program") && selectedNode.Index != 0)
+            {
+                MessageBox.Show("Please select a predecessor or predecessors.");
+                return;
+            }
+
+            component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
+            task = component.TaskList.ElementAt(selectedNode.Index);
+
+            // Check if selected node contains nodes and if task info fields are empty.
+            // If true remove all task info nodes from selected task.
+            if (selectedNode.Nodes.Count != 0 && TaskInfoIsEmpty())
+            {
+                for (int i = selectedNode.Nodes.Count - 1; i >= 0; i--)
+                {
+                    selectedNode.Nodes[i].Remove();
+                }
+
+                task.HasInfo = false;
+            }
+            // Check if selected task node contains any task info nodes.
+            // If true change existing task info nodes to reflect changes in field (if any).
+            else if (selectedNode.Nodes.Count != 0 && !TaskInfoIsEmpty())
+            {
+
+                selectedNode.Nodes[0].Text = hoursNumericUpDown.Value.ToString() + " Hour(s)";
+
+                selectedNode.Nodes[1].Text = durationNumericUpDown.Value.ToString() + " " + durationUnitsComboBox.Text;
+
+                selectedNode.Nodes[2].Text = machineComboBox.Text;
+
+                selectedNode.Nodes[3].Text = personnelComboBox.Text;
+
+                selectedNode.Nodes[4].Text = predecessorString;
+
+                selectedNode.Nodes[5].Text = taskNotesTextBox.Text;
+
+                task.HasInfo = true;
+            }
+            // Check if selected task node contains any task info nodes.
+            // If false add nodes with info from fields.
+            else if (selectedNode.Nodes.Count == 0)
+            {
+                for (int i = 0; i <= 5; i++)
+                {
+                    selectedNode.Nodes.Add("");
+                }
+
+                selectedNode.Nodes[0].Text = hoursNumericUpDown.Value.ToString() + " Hour(s)";
+
+                selectedNode.Nodes[1].Text = durationNumericUpDown.Value.ToString() + " " + durationUnitsComboBox.Text;
+
+                selectedNode.Nodes[2].Text = machineComboBox.Text;
+
+                selectedNode.Nodes[3].Text = personnelComboBox.Text;
+
+                selectedNode.Nodes[4].Text = predecessorString;
+
+                selectedNode.Nodes[5].Text = taskNotesTextBox.Text;
+
+                task.HasInfo = true;
+            }
+
+            task.SetTaskInfo
+            (
+                hoursNumericUpDown.Value,
+                durationNumericUpDown.Value.ToString() + " " + durationUnitsComboBox.Text,
+                machineComboBox.Text,
+                personnelComboBox.Text,
+                GenerateResourceIDsString(machineComboBox.Text, personnelComboBox.Text, SchedulerStorageProp),
+                predecessorString,
+                taskNotesTextBox.Text
+            );
+
+            SelectNextTask();
+        }
+
+        private string GenerateResourceIDsString(string machine, string resource, SchedulerStorage schedulerStorage)
+        {
+            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
+            Resource res;
+            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
+            int resourceCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
+
+            if (machineCount == 0 && resourceCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("None");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            if (machine != "" && machineCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(machine);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            if (resource != "" && resourceCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(resource);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
+            return helper.ToXml();
+        }
+
+        private void LoadProjectToForm(ProjectModel project)
+        {
+            TreeNode currentComponentNode, currentTaskNode;
+
+            PrintObjectTree();
+
+            if (project.HasProjectInfo)
+            {
+                MoldBuildTreeView.Nodes[0].Text = project.JobNumber;
+                overLapAllowedCheckEdit.Checked = project.OverlapAllowed;
+                ProjectNumberTextBox.Text = project.ProjectNumber.ToString();
+                dueDateTimePicker.Value = project.DueDate;
+                ToolMakerComboBox.Text = project.ToolMaker;
+                DesignerComboBox.Text = project.Designer;
+                RoughProgrammerComboBox.Text = project.RoughProgrammer;
+                ElectrodeProgrammerComboBox.Text = project.ElectrodeProgrammer;
+                FinishProgrammerComboBox.Text = project.FinishProgrammer;
+            }
+
+            foreach (ComponentModel component in project.ComponentList)
+            {
+                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
+
+                foreach (TaskModel task in component.TaskList)
+                {
+                    currentTaskNode = currentComponentNode.Nodes.Add(task.TaskName);
+
+                    if (task.HasInfo == true)
+                    {
+                        currentTaskNode.Nodes.Add(task.Hours + " Hour(s)");
+                        currentTaskNode.Nodes.Add(task.Duration);
+                        currentTaskNode.Nodes.Add(task.Machine);
+                        currentTaskNode.Nodes.Add(task.Personnel);
+                        currentTaskNode.Nodes.Add(task.Predecessors);
+                        currentTaskNode.Nodes.Add(task.Notes);
+                    }
+                }
+            }
+        }
+
+        private void LoadComponentListToForm(List<ComponentModel> components)
+        {
+            TreeNode currentComponentNode, currentTaskNode;
+
+            foreach (ComponentModel component in components)
+            {
+                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
+
+                foreach (TaskModel task in component.TaskList)
+                {
+                    currentTaskNode = currentComponentNode.Nodes.Add(task.TaskName);
+
+                    if (task.HasInfo == true)
+                    {
+                        currentTaskNode.Nodes.Add(task.Hours + " Hour(s)");
+                        currentTaskNode.Nodes.Add(task.Duration);
+                        currentTaskNode.Nodes.Add(task.Machine);
+                        currentTaskNode.Nodes.Add(task.Personnel);
+                        currentTaskNode.Nodes.Add(task.Predecessors);
+                        currentTaskNode.Nodes.Add(task.Notes);
+                    }
+                }
+            }
+        }
+
+        private ProjectModel ConvertQuoteToProject(ProjectModel project)
+        {
+            // Need to check if form already contains project data.
+            if (project.ComponentList.Count > 0)
+            {
+                MessageBox.Show("Can't add a quote to a work project tree with data in it.");
+                return project;
+            }
+
+            project.JobNumber = project.QuoteInfo.Customer + "_" + project.QuoteInfo.PartName + "-Quote"; // What to do when these two pieces of information are missing?
+            project.SetProjectDueDate(DateTime.Today);
+            project.HasProjectInfo = true;
+            project.AddComponent("Quote");
+
+            // Task list is automatically generated inside the QuoteInfo class when quote is read.
+            project.ComponentList.First().AddTaskList(project.QuoteInfo.TaskList);
+
+            return project;
+        }
+
+        private bool TaskInfoIsEmpty()
+        {
+            if (
+                GetValue(hoursNumericUpDown.Value.ToString()) == 0 &&
+                GetValue(durationNumericUpDown.Value.ToString()) == 0 &&
+                machineComboBox.Text == "" &&
+                personnelComboBox.Text == "" &&
+                predecessorsListBox.Text == "" &&
+                taskNotesTextBox.Text == "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private int GetValue(string value)
+        {
+            if (value == "")
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(value);
+            }
+        }
+
+        private decimal GetDecimal(string value)
+        {
+            if (value == "")
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToDecimal(value);
+            }
+        }
+
+        private void UpdateDuration()
+        {
+            decimal duration;
+            decimal days;
+
+            if (matchHoursCheckBox.Checked == true)
+            {
+                days = GetDecimal(hoursNumericUpDown.Value.ToString()) / 8;
+                duration = Convert.ToDecimal(Math.Round(days, 0));
+                durationNumericUpDown.Value = duration;
+                durationUnitsComboBox.SelectedIndex = 1;
+            }
+        }
+
+        private List<string> GetMachineList(string taskName)
+        {
+            List<string> machineList;
+
+            if (taskName == "Program Rough")
+            {
+                machineList = new List<string> { "" };
+            }
+            else if (taskName == "Program Finish")
+            {
+                machineList = new List<string> { "" };
+            }
+            else if (taskName == "Program Electrodes")
+            {
+                machineList = new List<string> { "" };
+            }
+            else if (taskName == "CNC Rough")
+            {
+                machineList = GetResourceList("Rough Mill");
+            }
+            else if (taskName == "CNC Finish")
+            {
+                machineList = GetResourceList("Finish Mill");
+            }
+            else if (taskName == "CNC Electrodes")
+            {
+                machineList = GetResourceList("Graphite Mill");
+            }
+            else if (taskName == "EDM Sinker")
+            {
+                machineList = GetResourceList("EDM Sinker");
+            }
+            else if (taskName == "EDM Wire (In-House)")
+            {
+                machineList = GetResourceList("EDM Wire");
+            }
+            else
+            {
+                machineList = new List<string> { "" };
+            }
+
+            return machineList;
+        }
+        private List<string> GetPersonnelList(string taskName)
+        {
+            List<string> personnelList;
+
+            if (taskName == "Program Rough")
+            {
+                personnelList = GetResourceList("Rough Programmer");
+            }
+            else if (taskName == "Program Finish")
+            {
+                personnelList = GetResourceList("Finish Programmer");
+            }
+            else if (taskName == "Program Electrodes")
+            {
+                personnelList = GetResourceList("Electrode Programmer");
+            }
+            else if (taskName == "CNC Rough")
+            {
+                personnelList = GetResourceList("Rough CNC Operator");
+            }
+            else if (taskName == "CNC Finish")
+            {
+                personnelList = GetResourceList("Finish CNC Operator");
+            }
+            else if (taskName == "CNC Electrodes")
+            {
+                personnelList = GetResourceList("Electrode CNC Operator");
+            }
+            else if (taskName == "EDM Sinker")
+            {
+                personnelList = GetResourceList("EDM Sinker Operator");
+            }
+            else if (taskName == "EDM Wire (In-House)")
+            {
+                personnelList = GetResourceList("EDM Wire Operator");
+            }
+            else if (taskName == "Hole Pop")
+            {
+                personnelList = GetResourceList("Hole Popper Operator");
+            }
+            else if (taskName.Contains("Inspection"))
+            {
+                personnelList = GetResourceList("CMM Operator");
+            }
+            else
+            {
+                personnelList = new List<string> { "" };
+            }
+
+            return personnelList;
+        }
+
+        private TaskModel GetPresets(string taskName)
+        {
+            TaskModel ti;
+
+            if (taskName == "Program Rough")
+            {
+                ti = new TaskModel(RoughProgrammerComboBox.Text, "0", "1"); 
+            }
+            else if (taskName == "Program Finish")
+            {
+                ti = new TaskModel(FinishProgrammerComboBox.Text, "0", "1");
+            }
+            else if (taskName == "Program Electrodes")
+            {
+                ti = new TaskModel(ElectrodeProgrammerComboBox.Text, "0", "1");
+            }
+            else if (taskName == "CNC Rough")
+            {
+                ti = new TaskModel("", "0", "1");
+            }
+            else if (taskName == "CNC Finish")
+            {
+                ti = new TaskModel("", "0", "1");
+            }
+            else if (taskName == "CNC Electrodes")
+            {
+                ti = new TaskModel("", "0", "1");
+            }
+            else if (taskName == "Heat Treat")
+            {
+                ti = new TaskModel("", "0", "5");
+            }
+            else if (taskName.Contains("Inspection"))
+            {
+                ti = new TaskModel("", "1", "0");
+            }
+            else if (taskName.Contains("Grind"))
+            {
+                ti = new TaskModel("", "1", "0");
+            }
+            else if (taskName.Contains("EDM Sinker"))
+            {
+                ti = new TaskModel("", "0", "1");
+            }
+            else if (taskName.Contains("EDM Wire"))
+            {
+                ti = new TaskModel("", "0", "1");
+            }
+            else if (taskName == "Polish")
+            {
+                ti = new TaskModel("", "0", "8");
+            }
+            else if (taskName == "Texturing")
+            {
+                ti = new TaskModel("", "0", "5");
+            }
+            else
+            {
+                ti = new TaskModel("", "0", "0"); ;
+            }
+
+            return ti;
+        }
+
+        private List<string> GetPredecessorList(TreeNode node)
+        {
+            List<string> predecessorList = new List<string>();
+
+            for (int i = 0; i < node.Nodes.Count; i++)
+            {
+                predecessorList.Add(node.Nodes[i].Text);
+            }
+
+            return predecessorList;
+        }
+
+        private string GetSelectedPredecessorText(ListBox listBox)
+        {
+            StringBuilder predecessorString = new StringBuilder();
+
+            foreach (string item in listBox.SelectedItems)
+            {
+                if (predecessorString.Length == 0)
+                {
+                    predecessorString.Append(item);
+                }
+                else
+                {
+                    predecessorString.Append("," + item);
+                }
+
+            }
+
+            return predecessorString.ToString();
+        }
+
+        private string GetSelectedPredecessorIndices(ListBox listBox, int baseCount)
+        {
+            StringBuilder predecessorString = new StringBuilder();
+            int index;
+
+            foreach (int n in listBox.SelectedIndices)
+            {
+                if (predecessorString.Length == 0)
+                {
+                    index = n + baseCount + 1;
+                    predecessorString.Append(index);
+                }
+                else
+                {
+                    index = n + baseCount + 1;
+                    predecessorString.Append("," + index);
+                }
+
+            }
+
+            return predecessorString.ToString();
+        }
+
+        private string GetSelectedPredecessorIndexText(ListBox listBox)
+        {
+            StringBuilder predecessorIndexString = new StringBuilder();
+
+            foreach (string index in listBox.SelectedIndices)
+            {
+                if (predecessorIndexString.Length == 0)
+                {
+                    predecessorIndexString.Append(index);
+                }
+                else
+                {
+                    predecessorIndexString.Append("," + index);
+                }
+
+            }
+
+            return predecessorIndexString.ToString();
+        }
+
+        private bool NodeExists(TreeNode task, string node)
+        {
+            foreach (TreeNode item in task.Parent.Nodes)
+            {
+                if (item.Text == node)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private List<string> PredecessorsToPreselectList(TreeNode task)
+        {
+            List<string> list = new List<string>();
+            string[] taskNameArr;
+
+            if (task.PrevNode == null)
+                return list;
+
+            taskNameArr = task.Text.Split(' ');
+
+            if (task.Text.Contains("Rough") || task.Text.Contains("Finish") || task.Text.Contains("Electrodes"))
+            {
+                if (task.Text.Contains("Program"))
+                {
+                    list.Add("Design");
+                }
+                else if (task.Text == "CNC Rough" || task.Text == "CNC Electrodes")
+                {
+                    list.Add("Program " + taskNameArr[1].ToString());
+                }
+                else if (task.Text.Contains("CNC Finish"))
+                {
+                    list.Add("Program " + taskNameArr[1].ToString());
+                    list.Add(task.PrevNode.Text);
+                }
+                else if (task.Text.Contains("Inspection"))
+                {
+                    list.Add("CNC " + taskNameArr[3].ToString());
+                }
+                else if (task.Text == "Finish Grind")
+                {
+                    list.Add(task.PrevNode.Text);
+                }
+            }
+            else if (task.Text == "Heat Treat")
+            {
+                if (NodeExists(task, "Inspection Post CNC Rough"))
+                {
+                    list.Add("Inspection Post CNC Rough");
+                }
+                else
+                {
+                    list.Add("CNC Rough");
+                }
+            }
+            else if (task.Text == "Prep Grind")
+            {
+                list.Add("Heat Treat");
+            }
+            else if (task.Text.Contains("EDM Wire"))
+            {
+                if (task.PrevNode != null)
+                    list.Add(task.PrevNode.Text);
+            }
+            else if (task.Text.Contains("EDM Sinker"))
+            {
+                if (task.Text == "EDM Sinker")
+                {
+                    if (NodeExists(task, "Inspection Post CNC Electrodes"))
+                    {
+                        list.Add("Inspection Post CNC Electrodes");
+                    }
+                    else if (NodeExists(task, "CNC Electrodes"))
+                    {
+                        list.Add("CNC Electrodes");
+                    }
+
+                    list.Add(task.PrevNode.Text);
+                }
+                else if (task.Text.Contains("Inspection"))
+                {
+                    list.Add("EDM Sinker");
+                }
+            }
+            else if (task.Text.Contains("Polish"))
+            {
+                if (task.Text == "Polish (In-House)" || task.Text == "Polish (Outsource)")
+                {
+                    list.Add(task.PrevNode.Text);
+                }
+                else if (task.Text.Contains("Inspection"))
+                {
+                    if (NodeExists(task, "Polish (In-House)"))
+                    {
+                        list.Add("Polish (In-House)");
+                    }
+                    else if (NodeExists(task, "Polish (Outsource)"))
+                    {
+                        list.Add("Polish (Outsource)");
+                    }
+                }
+            }
+            else if (task.Text.Contains("Texturing"))
+            {
+                list.Add(task.PrevNode.Text);
+            }
+            else if (task.Text.Contains("Grind-Fitting"))
+            {
+                list.Add(task.PrevNode.Text);
+            }
+
+            return list;
+        }
+
+        private void RemoveSelectedNodeFromTree()
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+
+            if (selectedNode == null || selectedNode.Level == 0)
+            {
+                return;
+            }
+            else if (selectedNode.Level == 1)
+            {
+                Project.RemoveComponent(selectedNode.Text);
+            }
+            else if (selectedNode.Level == 2)
+            {
+                var component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
+                component.RemoveTask(selectedNode.Index);
+            }
+
+            MoldBuildTreeView.SelectedNode.Remove();
+            MoldBuildTreeView.Focus();
+        }
+
+        private void MoveSelectedNodeUp(TreeNode node)
+        {
+            TreeNode parent = node.Parent;
+
+            if (node.Level > 0 && node.Level < 3)
+            {
+                int index = parent.Nodes.IndexOf(node);
+
+                if (index > 0)
+                {
+                    if (node.Level == 1)
+                    {
+                        Project.MoveComponentUp(node.Index);
+                    }
+                    else if (node.Level == 2)
+                    {
+                        var component = Project.ComponentList.Where(x => x.Name == node.Parent.Text).First();
+                        component.MoveTaskUp(node.Index);
+                    }
+
+                    parent.Nodes.RemoveAt(index);
+                    parent.Nodes.Insert(index - 1, node);
+
+                    MoldBuildTreeView.SelectedNode = parent.Nodes[index - 1];
+                    MoldBuildTreeView.Focus();
+                }
+            }
+        }
+
+        private void MoveSelectedNodeDown(TreeNode node)
+        {
+            TreeNode parent = node.Parent;
+
+            if (node.Level > 0 && node.Level < 3)
+            {
+                int index = parent.Nodes.IndexOf(node);
+
+                if (index < parent.Nodes.Count - 1)
+                {
+                    if (node.Level == 1)
+                    {
+                        Project.MoveComponentDown(node.Index);
+                    }
+                    else if (node.Level == 2)
+                    {
+                        var component = Project.ComponentList.Where(x => x.Name == node.Parent.Text).First();
+                        component.MoveTaskDown(node.Index);
+                    }
+
+                    parent.Nodes.RemoveAt(index);
+                    parent.Nodes.Insert(index + 1, node);
+
+                    MoldBuildTreeView.SelectedNode = parent.Nodes[index + 1];
+                    MoldBuildTreeView.Focus();
+                }
+            }
+        }
+
+        private void SelectNextTask()
+        {
+            if (MoldBuildTreeView.SelectedNode.Level == 2)
+            {
+                TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+                // Tree needs to have focus in order to select the next node.
+                MoldBuildTreeView.Focus();
+
+                if (selectedNode.Index < selectedNode.Parent.Nodes.Count - 1)
+                {
+                    MoldBuildTreeView.SelectedNode = selectedNode.Parent.Nodes[selectedNode.Index + 1];
+                }
+            }
+        }
+
+        private void OpenWorkloadSheet()
+        {
+            FileInfo fi = new FileInfo(@"X:\TOOLROOM\FORMS\Work Load.xlsm");
+
+            if (fi.Exists)
+            {
+                System.Diagnostics.Process.Start("EXCEL.EXE", "/r \"" + fi.FullName + "\"");
+            }
+            else
+            {
+                MessageBox.Show("Can't find Work Load Sheet.");
+            }
+        }
+
+        private void OpenWorkloadSheetExcelCOM()
+        {
+            FileInfo fi = new FileInfo(@"X:\TOOLROOM\FORMS\Work Load.xlsm");
+
+            if (fi.Exists)
+            {
+                excelApp = new Excel.Application();
+                excelApp.Visible = true;
+                excelApp.DisplayAlerts = false;
+                excelApp.Workbooks.Open(@"X:\TOOLROOM\FORMS\Work Load.xlsm", ReadOnly: true);
+                excelApp.DisplayAlerts = true;
+            }
+            else
+            {
+                MessageBox.Show("Can't find Work Load Sheet.");
+            }
+        }
+
+        private void PrintObjectTree()
+        {
+            Console.WriteLine($"{Project.JobNumber} {Project.ProjectNumber} {Project.DueDate} {Project.ToolMaker} {Project.Designer} {Project.RoughProgrammer} {Project.FinishProgrammer} {Project.ElectrodeProgrammer}");
+
+            foreach (ComponentModel component in Project.ComponentList)
+            {
+                Console.WriteLine($"{component.Name}");
+
+                //foreach(TaskInfo task in component.TaskList)
+                //{
+                //    Console.WriteLine($"    {task.TaskName}");
+                //    Console.WriteLine($"        {task.Hours}");
+                //    Console.WriteLine($"        {task.Duration}");
+                //    Console.WriteLine($"        {task.Machine}");
+                //    Console.WriteLine($"        {task.Personnel}");
+                //    Console.WriteLine($"        {task.Predecessors}");
+                //    Console.WriteLine($"        {task.Notes}");
+                //}
+            }
+        }
+
+        private void SetProjectInfo()
+        {
+            Project.SetProjectInfo
+            (
+                jobNumber: MoldBuildTreeView.Nodes[0].Text,
+                projectNumber: ProjectNumberTextBox.Text,
+                dueDate: dueDateTimePicker.Value,
+                toolMaker: ToolMakerComboBox.Text,
+                designer: DesignerComboBox.Text,
+                roughProgrammer: RoughProgrammerComboBox.Text,
+                electrodeProgrammer: ElectrodeProgrammerComboBox.Text,
+                finishProgrammer: FinishProgrammerComboBox.Text
+            );
+        }
+
+        private void SelectRelatedTasks(string taskName)
+        {
+            if (TaskListBox.GetSelected(TaskListBox.Items.IndexOf(taskName)))
+            {
+                if (taskName.Contains("Rough"))
+                {
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Program Rough"), true);
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("CNC Rough"), true);
+                }
+                else if (taskName.Contains("Electrodes"))
+                {
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Program Electrodes"), true);
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("CNC Electrodes"), true);
+                    //TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Inspection Post CNC Electrodes"), true);
+
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("EDM Sinker"), true);
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Inspection Post EDM Sinker"), true);
+                }
+                else if (taskName.Contains("Finish") && !taskName.Contains("Grind"))
+                {
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Program Finish"), true);
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("CNC Finish"), true);
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Inspection Post CNC Finish"), true);
+                }
+                else if (taskName.Contains("Polish"))
+                {
+                    TaskListBox.SetSelected(TaskListBox.Items.IndexOf("Inspection Post Polish"), true);
+                }
+            }
+        }
+
+        private void SelectPredecessors(TreeNode selectedNode)
+        {
+            List<string> predecessorList = new List<string>();
+
+            predecessorsListBox.ClearSelected();
+
+            if (selectedNode.Nodes.Count > 0 && quoteLoaded == false)
+            {
+                if (selectedNode.Nodes[4].Text == "")
+                {
+                    // Leave predecessor list blank.
+                }
+                else if (selectedNode.Nodes[4].Text.Contains(","))
+                {
+                    predecessorList = selectedNode.Nodes[4].Text.Split(',').ToList();
+                }
+                else
+                {
+                    predecessorList.Add(selectedNode.Nodes[4].Text);
+                }
+
+                int baseCount = 0;
+
+                //int baseCount = countTasks(MoldBuildTreeView, selectedNode.Parent.Text); // Uncomment to reactivate to count tasks from components that are higher on the list to find task ID.
+
+                foreach (string item in predecessorList)
+                {
+                    predecessorsListBox.SelectedIndex = Convert.ToInt32(item) - baseCount - 1;
+                }
+            }
+            else
+            {
+                predecessorList = PredecessorsToPreselectList(selectedNode);
+
+                foreach (string item in predecessorList)
+                {
+                    if (predecessorsListBox.Items.Contains(item))
+                    {
+                        predecessorsListBox.SelectedItem = item;
+                    }
+                }
+            }
+        }
+
+        private void CheckForTasksWithNoSuccessors()
+        {
+            string[] preds = null;
+
+            foreach (ComponentModel component in Project.ComponentList)
+            {
+                List<int> predList = new List<int>();
+                int n = 1;
+
+                foreach (TaskModel task in component.TaskList)
+                {
+                    if (task.Predecessors == "")
+                    {
+
+                    }
+                    else if (task.Predecessors.Contains(','))
+                    {
+                        preds = task.Predecessors.Split(',');
+
+                        for (int i = 0; i < preds.Count(); i++)
+                        {
+                            //if (i < preds.Count() - 1)
+                            //{
+                            predList.Add(Convert.ToInt16(preds[i]));
+                            //}
+                            //else
+                            //{
+                            //newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber);
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        predList.Add(Convert.ToInt16(task.Predecessors));
+                    }
+                }
+
+                var result = from predInts in predList
+                             orderby predInts ascending
+                             select predInts;
+
+                foreach (int pred in result)
+                {
+                    //Console.WriteLine(n + " " + pred);
+
+                    if (n != pred)
+                    {
+                        Console.WriteLine(n);
+                        n = pred;
+                        n++;
+                    }
+                    else
+                    {
+                        n++;
+                    }
+                }
+            }
+        }
+
+        private void CheckComponentForTasksWithNoSuccessors(TreeNode selectedNode)
+        {
+            string[] preds = null;
+
+            foreach (ComponentModel component in Project.ComponentList)
+            {
+                List<int> predList = new List<int>();
+                int n = 1;
+
+                foreach (TaskModel task in component.TaskList)
+                {
+                    if (task.Predecessors == "")
+                    {
+
+                    }
+                    else if (task.Predecessors.Contains(','))
+                    {
+                        preds = task.Predecessors.Split(',');
+
+                        for (int i = 0; i < preds.Count(); i++)
+                        {
+                            //if (i < preds.Count() - 1)
+                            //{
+                            predList.Add(Convert.ToInt16(preds[i]));
+                            //}
+                            //else
+                            //{
+                            //newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber);
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        predList.Add(Convert.ToInt16(task.Predecessors));
+                    }
+                }
+
+                var result = from predInts in predList
+                             orderby predInts ascending
+                             select predInts;
+
+                foreach (int pred in result)
+                {
+                    //Console.WriteLine(n + " " + pred);
+
+                    if (n != pred)
+                    {
+                        Console.WriteLine(n);
+                        n = pred;
+                        n++;
+                    }
+                    else
+                    {
+                        n++;
+                    }
+                }
+            }
+        }
+
+        private void ActivateTaskHandlers()
+        {
+            // TaskInfo controls.
+            hoursNumericUpDown.ValueChanged += new System.EventHandler(hoursNumericUpDown_ValueChanged);
+            durationNumericUpDown.ValueChanged += new System.EventHandler(durationNumericUpDown_ValueChanged);
+            durationUnitsComboBox.TextChanged += new System.EventHandler(durationUnitsComboBox_TextChanged);
+            matchHoursCheckBox.CheckStateChanged += new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
+            machineComboBox.TextChanged += new System.EventHandler(machineComboBox_TextChanged);
+            personnelComboBox.TextChanged += new System.EventHandler(personnelComboBox_TextChanged);
+            predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            taskNotesTextBox.TextChanged += new System.EventHandler(taskNotesTextBox_TextChanged);
+        }
+
+        private void DeactivateTaskHandlers()
+        {
+            // TaskInfo controls.
+            hoursNumericUpDown.ValueChanged -= new System.EventHandler(hoursNumericUpDown_ValueChanged);
+            durationNumericUpDown.ValueChanged -= new System.EventHandler(durationNumericUpDown_ValueChanged);
+            durationUnitsComboBox.TextChanged -= new System.EventHandler(durationUnitsComboBox_TextChanged);
+            matchHoursCheckBox.CheckStateChanged -= new System.EventHandler(matchHoursCheckBox_CheckStateChanged);
+            machineComboBox.TextChanged -= new System.EventHandler(machineComboBox_TextChanged);
+            personnelComboBox.TextChanged -= new System.EventHandler(personnelComboBox_TextChanged);
+            predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            taskNotesTextBox.TextChanged -= new System.EventHandler(taskNotesTextBox_TextChanged);
+        }
+
+        private void ActivateComponentHandlers()
+        {
+            // ComponentInfo controls.
+            quantityNumericUpDown.ValueChanged += new System.EventHandler(quantityNumericUpDown_ValueChanged);
+            sparesNumericUpDown.ValueChanged += new System.EventHandler(sparesNumericUpDown_ValueChanged);
+            materialComboBox.TextChanged += new System.EventHandler(materialComboBox_TextChanged);
+            finishTextBox.TextChanged += new System.EventHandler(finishTextBox_TextChanged);
+            ComponentPictureEdit.EditValueChanged += new System.EventHandler(ComponentPictureEdit_EditValueChanged);
+            componentNotesTextBox.TextChanged += new System.EventHandler(componentNotesTextBox_TextChanged);
+        }
+
+        private void DeactivateComponentHandlers()
+        {
+            // ComponentInfo controls.
+            quantityNumericUpDown.ValueChanged -= new System.EventHandler(quantityNumericUpDown_ValueChanged);
+            sparesNumericUpDown.ValueChanged -= new System.EventHandler(sparesNumericUpDown_ValueChanged);
+            materialComboBox.TextChanged -= new System.EventHandler(materialComboBox_TextChanged);
+            finishTextBox.TextChanged -= new System.EventHandler(finishTextBox_TextChanged);
+            ComponentPictureEdit.EditValueChanged -= new System.EventHandler(ComponentPictureEdit_EditValueChanged);
+            componentNotesTextBox.TextChanged -= new System.EventHandler(componentNotesTextBox_TextChanged);
+        }
+
+        private void ProjectCreationForm_Shown(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Shown");
+            formLoad = false;
+        }
+
+        private void ProjectCreationForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (excelApp != null)
+            {
+                excelApp.Quit();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                Marshal.ReleaseComObject(excelApp);
+            }
+        }
+
+        private void RenameButton_Click(object sender, EventArgs e)
+        {
+            if (MoldBuildTreeView.SelectedNode == null)
+            {
+                MessageBox.Show("Please select a node to rename.");
+                return;
+            }
+
+            string input = Interaction.InputBox("Enter a new name:", "Change Name", MoldBuildTreeView.SelectedNode.Text, -1, -1);
+
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+
+            if (selectedNode.Level >= 0 && selectedNode.Level <= 2)
+            {
+                RenameNode(input);
+            }
+
+            if (selectedNode.Level == 2)
+            {
+                predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+
+                predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
+
+                predecessorsListBox.ClearSelected();
+
+                SelectPredecessors(selectedNode);
+
+                predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            }
+        }
+
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            MoveSelectedNodeUp(MoldBuildTreeView.SelectedNode);
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            MoveSelectedNodeDown(MoldBuildTreeView.SelectedNode);
+        }
+
+        private void ASideRadioButton_Click(object sender, EventArgs e)
+        {
+            prefix = "A-";
+            BSideRadioButton.Checked = false;
+        }
+
+        private void BSideRadioButton_Click(object sender, EventArgs e)
+        {
+            prefix = "B-";
+            ASideRadioButton.Checked = false;
+        }
+
+        private void ComponentListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComponentTextBox.Text = prefix + ComponentListBox.Text;
+        }
+
+        private void TaskListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show(TaskListBox.SelectedItem.ToString());
+        }
+
+        private void LookupDataButton_Click(object sender, EventArgs e)
+        {
+            //openWorkloadSheetExcelCOM();
+            OpenWorkloadSheet();
+        }
+
+        private void ToolMakerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void DesignerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void RoughProgrammerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void FinishProgrammerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void ElectrodeProgrammerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void hoursNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            //AddTaskInfoToSelectedTask("Hours", hoursNumericUpDown.Value.ToString() + " Hour(s)");
+            UpdateDuration();
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void durationNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            //AddTaskInfoToSelectedTask("Duration", durationNumericUpDown.Value.ToString() + " " + durationUnitsComboBox.Text + " Duration");
+
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void machineComboBox_TextChanged(object sender, EventArgs e)
+        {
+            //AddTaskInfoToSelectedTask("Machine", machineComboBox.Text);
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void personnelComboBox_TextChanged(object sender, EventArgs e)
+        {
+            //AddTaskInfoToSelectedTask("Personnel", personnelComboBox.Text);
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void predecessorsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            foreach (int index in predecessorsListBox.SelectedIndices)
+            {
+                if (selectedNode.Index == index)
+                {
+                    MessageBox.Show("A task cannot be its own predecessor.");
+                    //Console.WriteLine(Project.ComponentList[selectedNode.Parent.Index].TaskList[selectedNode.Index].Predecessors);
+
+                    //SelectPredecessors(selectedNode);
+                }
+            }
+
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void taskNotesTextBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void durationUnitsComboBox_TextChanged(object sender, EventArgs e)
+        {
+            //AddTaskInfoToSelectedTask("Duration", durationNumericUpDown.Value.ToString() + " " + durationUnitsComboBox.Text + " Duration");
+            UpdateButton.Appearance.BackColor = Color.Orange;
+        }
+
+        private void MoldBuildTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // Maybe use to look up or open up something.
+        }
+
+        private void MoldBuildTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+
+        }
+
+        private void MoldBuildTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+
+            if (selectedNode != null)
+            {
+                selectedNode.BackColor = Color.White;
+                selectedNode.ForeColor = Color.Black;
+            }
+        }
+
+        private void MoldBuildTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel component;
+            string[] str1Arr, str2Arr;
+            List<string> predecessorList = new List<string>();
+            TaskModel ti;
+
+            if (selectedNode.Level == 0 && formLoad == false)
+            {
+                tabControl1.SelectedTab = tabPage1;
+                tabControl2.Enabled = true;
+                tabControl2.SelectedTab = tabPage6;
+            }
+            else if (selectedNode.Level == 1)
+            {
+                DeactivateComponentHandlers();
+
+                component = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                quantityNumericUpDown.Value = component.Quantity;
+                sparesNumericUpDown.Value = component.Spares;
+                materialComboBox.Text = component.Material;
+                finishTextBox.Text = component.Finish;
+                ComponentPictureEdit.Image = component.Picture;
+
+                //if(component.Picture.Count > 0)
+                //{
+                //    componentPictureBox.Image = component.Picture[0];
+                //}
+                //else
+                //{
+                //    componentPictureBox.Image = null;
+                //}
+
+                componentNotesTextBox.Text = component.Notes;
+
+                tabControl1.SelectedTab = tabPage5;
+                tabControl2.Enabled = true;
+                tabControl2.SelectedTab = tabPage7;
+
+                ActivateComponentHandlers();
+            }
+            else if (selectedNode.Level == 2)
+            {
+                try
+                {
+                    DeactivateTaskHandlers();
+
+                    tabControl1.SelectedTab = tabPage4;
+                    tabControl2.Enabled = false;
+
+                    machineComboBox.DataSource = GetMachineList(selectedNode.Text);
+                    personnelComboBox.DataSource = GetPersonnelList(selectedNode.Text);
+                    predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
+
+                    predecessorsListBox.ClearSelected();
+
+                    ti = GetPresets(selectedNode.Text);
+
+                    if (selectedNode.Nodes.Count > 0)
+                    {
+                        str1Arr = selectedNode.Nodes[0].Text.Split(' ');
+                        str2Arr = selectedNode.Nodes[1].Text.Split(' ');
+
+                        if (int.TryParse(str1Arr[0], out int hours))
+                        {
+                            hoursNumericUpDown.Value = hours;
+                        }
+                        else
+                        {
+                            hoursNumericUpDown.Value = 0;
+                        }
+
+                        if (int.TryParse(str2Arr[0], out int duration))
+                        {
+                            durationNumericUpDown.Value = duration;
+                        }
+                        else
+                        {
+                            durationNumericUpDown.Value = 0;
+                        }
+
+                        machineComboBox.SelectedText = selectedNode.Nodes[2].Text;
+                        personnelComboBox.SelectedText = selectedNode.Nodes[3].Text;
+
+                        //int baseCount = countTasks(MoldBuildTreeView, selectedNode.Parent.Text); // Uncomment to reactivate to count tasks from components that are higher on the list to find task ID.
+
+                        //int baseCount = 0;
+
+                        //foreach (string item in predecessorList)
+                        //{
+                        //    predecessorsListBox.SelectedIndex = Convert.ToInt32(item) - baseCount - 1;
+                        //}
+
+                        taskNotesTextBox.Text = selectedNode.Nodes[5].Text;
+                    }
+                    else
+                    {
+                        hoursNumericUpDown.Value = ti.Hours;
+                        durationNumericUpDown.Value = Convert.ToDecimal(ti.Duration);
+                        machineComboBox.SelectedText = ti.Machine;
+                        personnelComboBox.SelectedText = ti.Personnel;
+
+                        //predecessorList = predecessorsToPreselectList(selectedNode);
+
+                        //foreach (string item in predecessorList)
+                        //{
+                        //    if (predecessorsListBox.Items.Contains(item))
+                        //    {
+                        //        predecessorsListBox.SelectedItem = item;
+                        //    }
+                        //}
+
+                        taskNotesTextBox.Text = "";
+                    }
+
+                    SelectPredecessors(selectedNode);
+
+                    ActivateTaskHandlers();
+                }
+                catch (Exception er)
+                {
+                    MessageBox.Show(er.Message);
+                }
+            }
+        }
+
+        private void MoldBuildTreeView_Leave(object sender, EventArgs e)
+        {
+            if (MoldBuildTreeView.SelectedNode != null)
+            {
+                TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+
+                selectedNode.BackColor = SystemColors.Highlight;
+                selectedNode.ForeColor = SystemColors.HighlightText;
+            }
+        }
+
+        private void updateInfoButton_Click(object sender, EventArgs e)
+        {
+            SetTaskInfoForSelectedTask();
+            UpdateButton.Appearance.BackColor = Color.Transparent;
+        }
+
+        private void matchHoursCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            UpdateDuration();
+        }
+
+        private void ProjectNumberTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ProjectNumberTextBox.BackColor = Color.White;
+
+            if (CreateProjectButton.Text == "Change")
+            {
+                if (ProjectNumberTextBox.Text == "0")
+                {
+                    MessageBox.Show("Project number cannot be 0.");
+                    ProjectNumberTextBox.Text = Project.ProjectNumber.ToString();
+                }
+                else
+                {
+                    Project.SetProjectNumber(ProjectNumberTextBox.Text);
+                }
+            }
+        }
+
+        private void ToolMakerComboBox_TextChanged(object sender, EventArgs e)
+        {
+            ToolMakerComboBox.BackColor = Color.White;
+        }
+
+        private void AddTasksButton_Click(object sender, EventArgs e)
+        {
+            AddSelectedTasksToSelectedComponent();
+        }
+
+        private void AddComponentButton_Click(object sender, EventArgs e)
+        {
+            AddComponentToTree(ComponentTextBox.Text);
+        }
+
+        private void saveTemplateButton_Click(object sender, EventArgs e)
+        {
+            int projectNumberResult;
+
+            if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
+            {
+                MessageBox.Show("Please enter a tool number.");
+                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                MoldBuildTreeView.Focus();
+                return;
+            }
+
+            if (ProjectNumberTextBox.Text == "")
+            {
+                MessageBox.Show("Please enter a project number.");
+                ProjectNumberTextBox.BackColor = Color.Red;
+                tabControl1.SelectedTab = tabPage1;
+                return;
+            }
+
+            if (!int.TryParse(ProjectNumberTextBox.Text, out projectNumberResult))
+            {
+                MessageBox.Show("Please enter a number for project number.");
+                ProjectNumberTextBox.BackColor = Color.Red;
+                tabControl1.SelectedTab = tabPage1;
+                return;
+            }
+
+            string fileName;
+            Template tmpt = new Template();
+            SetProjectInfo();
+            fileName = tmpt.SaveTemplateFile(MoldBuildTreeView.Nodes[0].Text + " - #" + projectNumberResult);
+
+            if (fileName != "")
+            {
+                tmpt.WriteProjectToTextFile(Project, fileName);
+            }
+        }
+
+        private void TaskListBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            string selectedItemName = TaskListBox.Items[TaskListBox.IndexFromPoint(e.Location)].ToString();
+            SelectRelatedTasks(selectedItemName);
+            //MessageBox.Show(selectedItemName);
+        }
+
+        private void GetQuoteButton_Click(object sender, EventArgs e)
+        {
+            //checkForTasksWithNoSuccessors();
+
+            try
+            {
+                ExcelInteractions ei = new ExcelInteractions();
+                string filename;
+
+                OpenFileDialog snapshotOpenFileDialog = new OpenFileDialog
+                {
+                    InitialDirectory = @"C:\Users\" + Environment.UserName + @"\Downloads",
+                    Filter = "Excel Files (*.xlsm, *.xlsx)|*.xlsm;*.xlsx"
+                };
+
+                Nullable<bool> result = Convert.ToBoolean(snapshotOpenFileDialog.ShowDialog());
+
+                if (result == true)
+                {
+                    filename = snapshotOpenFileDialog?.FileName;
+
+                    if (filename == "")
+                    {
+                        return;
+                    }
+
+                    Project.SetQuoteInfo(ei.GetQuoteInfo(filename));
+
+                    LoadProjectToForm(ConvertQuoteToProject(Project));
+                    quoteLoaded = true;
+                }
+                else
+                {
+                    return;
+                }
+
+                Console.WriteLine($"{Project.QuoteInfo.ProgramRoughHours} {Project.QuoteInfo.ProgramFinishHours} {Project.QuoteInfo.ProgramElectrodeHours} {Project.QuoteInfo.CNCRoughHours} {Project.QuoteInfo.CNCFinishHours} {Project.QuoteInfo.CNCElectrodeHours} {Project.QuoteInfo.EDMSinkerHours}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+
+        private void quantityNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetQuantity(Convert.ToInt16(quantityNumericUpDown.Value));
+            }
+        }
+
+        private void sparesNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetSpares(Convert.ToInt16(sparesNumericUpDown.Value));
+            }
+        }
+
+        private void materialComboBox_TextChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Material Text Changed.");
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetMaterial(materialComboBox.Text);
+            }
+        }
+
+        private void componentNotesTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetNote(componentNotesTextBox.Text);
+            }
+        }
+
+        private void clipboardButton_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetPicture();
+                //componentPictureBox.Image = selectedComponent.Picture;
+            }
+            else
+            {
+                MessageBox.Show("Please select a Component to add a picture to.");
+            }
+        }
+
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                if (Clipboard.ContainsImage())
+                {
+                    selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                    Clipboard.SetImage(selectedComponent.Picture);
+                }
+            }
+        }
+
+        private void finishTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode.Level == 1)
+            {
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetFinish(finishTextBox.Text);
+            }
+        }
+
+        private void ComponentPictureEdit_EditValueChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Picture Changed.");
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+            ComponentModel selectedComponent;
+
+            if (selectedNode != null && selectedNode.Level == 1)
+            {
+                if (ComponentModel.IsGoodComponentPicture(ComponentPictureEdit.Image) == false)
+                {
+                    ComponentPictureEdit.EditValueChanged -= new System.EventHandler(this.ComponentPictureEdit_EditValueChanged);
+                    ComponentPictureEdit.Image = null;
+                    ComponentPictureEdit.EditValueChanged += new System.EventHandler(this.ComponentPictureEdit_EditValueChanged);
+
+                    return;
+                }
+
+                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent.SetPicture(ComponentPictureEdit.Image);
+                
+            }
+            else
+            {
+                MessageBox.Show("Please select a Component to add a picture to.");
+                ComponentPictureEdit.EditValueChanged -= new System.EventHandler(this.ComponentPictureEdit_EditValueChanged);
+                ComponentPictureEdit.Image = null;
+                ComponentPictureEdit.EditValueChanged += new System.EventHandler(this.ComponentPictureEdit_EditValueChanged);
+            }
+        }
+
+        private void overlapAllowedCheckEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            if (overLapAllowedCheckEdit.Checked == true)
+            {
+                Project.OverlapAllowed = true;
+            }
+            else
+            {
+                Project.OverlapAllowed = false;
+            }
+        }
+
+        private void SelectProjectButton_Click(object sender, EventArgs e)
+        {
+            using (ProjectSelectionForm form = new ProjectSelectionForm())
+            {
+                var result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (form.Project.MWONumber != 0)
+                    {
+                        this.ProjectNumberTextBox.Text = form.Project.MWONumber.ToString();
+                    }
+                    else if(form.Project.ProjectNumber != 0)
+                    {
+                        this.ProjectNumberTextBox.Text = form.Project.ProjectNumber.ToString();
+                    }
+                    else
+                    {
+                        this.ProjectNumberTextBox.Text = "";
+                    }
+
+                    this.MoldBuildTreeView.Nodes[0].Text = form.Project.JobNumber;
+                    this.dueDateTimePicker.Value = form.Project.DueDate;
+                    this.ToolMakerComboBox.Text = form.Project.ToolMaker;
+                    this.DesignerComboBox.Text = form.Project.Designer;
+                    this.RoughProgrammerComboBox.Text = form.Project.RoughProgrammer;
+                    this.ElectrodeProgrammerComboBox.Text = form.Project.ElectrodeProgrammer;
+                    this.FinishProgrammerComboBox.Text = form.Project.FinishProgrammer;
+                    this.Project.Customer = form.Project.Customer;
+                    this.Project.Name = form.Project.Name;
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        private void loadTemplateButton_Click(object sender, EventArgs e)
+        {
+            Template tmpt = new Template();
+            string fileName = tmpt.OpenTemplateFile();
+            List<ComponentModel> components;
+            Console.WriteLine("Load Template Button Click.");
+
+            if (fileName != "")
+            {
+                DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
+                                                            "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Project = tmpt.ReadProjectFromTextFile(fileName);
+                    LoadProjectToForm(Project);
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    components = tmpt.ReadProjectFromTextFile(fileName).ComponentList;
+                    Project.ComponentList.AddRange(components);
+                    LoadComponentListToForm(components);
+                }
+
+                MoldBuildTreeView.Nodes[0].Expand();
+                //printObjectTree();
+            }
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            RemoveSelectedNodeFromTree();
+        }
+
+        private void CreateProjectButton_Click(object sender, EventArgs e)
+        {
+            DataValidated = true;
+
+            if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
+            {
+                MessageBox.Show("Please enter a Tool Number or Project Name.");
+                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                MoldBuildTreeView.Focus();
+                return;
+            }
+            else if (MoldBuildTreeView.Nodes[0].Text.Contains('#'))
+            {
+                MessageBox.Show("Tool Number cannot contain a '#' symbol.");
+                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                MoldBuildTreeView.Focus();
+                return;
+            }
+            else if (MoldBuildTreeView.Nodes[0].Text.Contains(' '))
+            {
+                MessageBox.Show("A Tool Number cannot contain spaces.  Use underscore instead.");
+                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                MoldBuildTreeView.Focus();
+                return;
+            }
+            else if (MoldBuildTreeView.Nodes[0].Text.Length > 20)
+            {
+                MessageBox.Show("A Tool Number can't have more than 20 characters.");
+                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                MoldBuildTreeView.Focus();
+                return;
+            }
+
+            if (ProjectNumberTextBox.Text == "")
+            {
+                MessageBox.Show("Project must have a Project # or a Work Order #.");
+                ProjectNumberTextBox.BackColor = Color.Red;
+                tabControl1.SelectedTab = tabPage1;
+                return;
+            }
+            else if (ToolMakerComboBox.Text == "")
+            {
+                MessageBox.Show("Project must have a lead or tool maker.");
+                ToolMakerComboBox.BackColor = Color.Red;
+                tabControl1.SelectedTab = tabPage1;
+                return;
+            }
+
+            if (Project.ComponentList.Count == 0)
+            {
+                MessageBox.Show("No components entered.");
+                return;
+            }
+
+            foreach (var item in Project.ComponentList)
+            {
+                if (item.Name.Length > ComponentModel.ComponentCharacterLimit)
+                {
+                    MessageBox.Show($"Component: '{item.Name}' is greater than {ComponentModel.ComponentCharacterLimit} characters. \n\nPlease shorten name.");
+                    return;
+                }
+            }
+
+            Database db = new Database();
+
+            if (missingTaskInfo == true)
+            {
+                return;
+            }
+
+            try
+            {
+                SetProjectInfo();
+
+                if (CreateProjectButton.Text == "Create")
+                {
+                    if (db.LoadProjectToDB(Project))
+                    {
+                        this.DialogResult = DialogResult.OK;
+                    }
+                }
+                else if (CreateProjectButton.Text == "Change")
+                {
+                    if (db.EditProjectInDB(Project))
+                    {
+                        this.DialogResult = DialogResult.OK;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+
+            //printObjectTree();
+        }
+    }
+}

@@ -118,63 +118,84 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="workload_Tracking_System_DBDataSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>194, 17</value>
   </metadata>
   <metadata name="projectsBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>773, 56</value>
+    <value>169, 56</value>
   </metadata>
   <metadata name="projectsTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>947, 56</value>
+    <value>343, 56</value>
   </metadata>
   <metadata name="tasksTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>485, 56</value>
-  </metadata>
-  <metadata name="workLoadTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
+  <metadata name="workLoadTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1471, 17</value>
+  </metadata>
   <metadata name="schedulerStorage1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>278, 17</value>
+    <value>455, 17</value>
   </metadata>
-  <metadata name="sqlDataSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>598, 17</value>
+  <metadata name="tasksBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>902, 56</value>
   </metadata>
-  <data name="sqlDataSource1.ResultSchemaSerializable" xml:space="preserve">
-    <value>PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxWaWV3IE5hbWU9IlByb2plY3RzIj48RmllbGQgTmFtZT0iSm9iTnVtYmVyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlByb2plY3ROdW1iZXIiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJEdWVEYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iVG9vbE1ha2VyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBvbmVudCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJUYXNrTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEdXJhdGlvbiIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdGFydERhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJGaW5pc2hEYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iUmVzb3VyY2UiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3RhdHVzIiBUeXBlPSJTdHJpbmciIC8+PC9WaWV3PjwvRGF0YVNldD4=</value>
-  </data>
   <metadata name="schedulerStorage2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1093, 17</value>
+    <value>1134, 17</value>
   </metadata>
   <metadata name="workLoadBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1246, 17</value>
+    <value>1287, 17</value>
   </metadata>
-  <metadata name="sqlDataSource3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>637, 56</value>
-  </metadata>
-  <data name="sqlDataSource3.ResultSchemaSerializable" xml:space="preserve">
-    <value>PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTMiPjxWaWV3IE5hbWU9IlByb2plY3RzIj48RmllbGQgTmFtZT0iSm9iTnVtYmVyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlByb2plY3ROdW1iZXIiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJEdWVEYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iUHJpb3JpdHkiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJTdGF0dXMiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iRGVzaWduZXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iVG9vbE1ha2VyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlJvdWdoUHJvZ3JhbW1lciIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJFbGVjdHJvZGVQcm9ncmFtbWVyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkZpbmlzaFByb2dyYW1tZXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iS2FuQmFuV29ya2Jvb2tQYXRoIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkN1c3RvbWVyTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQYXJ0TmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJOb3RlcyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJDb21wb25lbnRzX1ByaW9yaXR5IiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iUG9zaXRpb24iIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJNYXRlcmlhbCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJUYXNrSURDb3VudCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlF1YW50aXR5IiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iU3BhcmVzIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iUGljdHVyZXMiIFR5cGU9IkJ5dGVBcnJheSIgLz48RmllbGQgTmFtZT0iRmluaXNoIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBvbmVudHNfU3RhdHVzIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBlcmNlbnRDb21wbGV0ZSIgVHlwZT0iRG91YmxlIiAvPjxGaWVsZCBOYW1lPSJUYXNrSUQiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJUYXNrTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEdXJhdGlvbiIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdGFydERhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJGaW5pc2hEYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iRWFybGllc3RTdGFydERhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJQcmVkZWNlc3NvcnMiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iTWFjaGluZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJSZXNvdXJjZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJIb3VycyIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlRhc2tzX1Rvb2xNYWtlciIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJUYXNrc19Qcmlvcml0eSIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlRhc2tzX1N0YXR1cyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEYXRlQWRkZWQiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJUYXNrc19Ob3RlcyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEYXRlQ29tcGxldGVkIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkluaXRpYWxzIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBvbmVudHNfSm9iTnVtYmVyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBvbmVudHNfUHJvamVjdE51bWJlciIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IkNvbXBvbmVudCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJUYXNrc19Kb2JOdW1iZXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iVGFza3NfUHJvamVjdE51bWJlciIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlRhc2tzX0NvbXBvbmVudCIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48L0RhdGFTZXQ+</value>
-  </data>
   <metadata name="defaultLookAndFeel1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>431, 17</value>
+    <value>608, 17</value>
   </metadata>
   <metadata name="resourcesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>734, 17</value>
+    <value>775, 17</value>
   </metadata>
   <metadata name="resourcesTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>916, 17</value>
+    <value>957, 17</value>
   </metadata>
   <metadata name="behaviorManager1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>195, 56</value>
-  </metadata>
-  <metadata name="sqlDataSource2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>349, 56</value>
+    <value>1649, 17</value>
   </metadata>
   <metadata name="componentsBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1115, 56</value>
+    <value>511, 56</value>
   </metadata>
   <metadata name="componentsTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1313, 56</value>
+    <value>709, 56</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>196</value>
+    <value>154</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAMDAQAAEABABoBgAAFgAAACgAAAAwAAAAYAAAAAEABAAAAAAAgAQAAMMOAADDDgAAEAAAABAA
+        AADoogAAAEEAAAAAAACmQQAApqIAAF0AAABddAAAyFsAAMiiAAAAJQAA6HQAAIKLAAA0AAAA6IsAAIIl
+        AAA0WwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIlAAAAAAYiIiJw
+        AAAAAAAAAAAAAAAAAEIlAAAAABIiIiIs0AAAAAAAAAAAAAAAAEIlAAAAABKgAA8iUAAAAAAAAAAAAAAA
+        AEIlAAAAAAAAAADyKgAAAAAAAAAAAAAAAEIlAAAAAAAAAABiJwAAAAAAAAAAAAAAAEIlAAAAAAAAAAAS
+        JwAAAAAAAAAAAAAAAEIlAAAAAAAAAEIiUAAAAAAAAAAAAAAAAEIlAAAAAAAAEiIs0AAAAAAAAAAAAAAA
+        AEIlAAAAAAASIiJwAAAAAAAAAAAAAAAAAEIlAAAAAAEiLgAAAAAAAAAAAAAAAAAAAEIlAAAAALIs0AAA
+        AAAAAAAAAAAAAAAAAEIlAAAAALInAAAAAAAAAAAAAAAAAAAAAEIlAAAAALIjAAAAAAAAAAAAAAAAAAAA
+        AEIlAAAAAIkioABCMAAAAAAAAAAAAAAAAEIlAAAAAAQiIiIiMAAAAAAAAAAAAAAAAEIlAAAAAAAGIiIn
+        AAAAAAAAAAAAAAAAAEIlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIlAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AEIlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIlAAAAAAAAAAAAAAAAAAAAAAAAABIiIiIiIiIiMAAAAAAA
+        AAAAAAAAAAAAABIiIiIiIiIiMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</value>
+  </data>
 </root>
