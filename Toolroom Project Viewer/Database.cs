@@ -30,7 +30,6 @@ namespace Toolroom_Project_Viewer
 
         public bool LoadProjectToDB(ProjectModel project)
         {
-
             //if(result == DialogResult.Yes)
             //{
             //    //int baseIDNumber = getHighestProjectTaskID(project.JobNumber, project.ProjectNumber);

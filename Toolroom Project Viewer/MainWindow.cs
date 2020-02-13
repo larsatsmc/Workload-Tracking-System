@@ -93,7 +93,7 @@ namespace Toolroom_Project_Viewer
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
                 schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
                 //InitializeExample();
-                FilterTaskView();
+                gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
                 AddRepositoryItemToGrid();
                 gridView3.DetailHeight = int.MaxValue;
                 gridView4.DetailHeight = int.MaxValue;
@@ -769,6 +769,8 @@ namespace Toolroom_Project_Viewer
             //InitializeAppointments();
             SetRole();
             SetTasks();
+            //appointmentstorage.FilterCriteria = FilterTaskView(departmentComboBox.Text, includeQuotesCheckEdit.Checked, includeCompletesCheckEdit.Checked);
+            //schedulerControl1.SchedulerDataStorage.Appointments.FilterCriteria = FilterTaskView(departmentComboBox.Text, includeQuotesCheckEdit.Checked, includeCompletesCheckEdit.Checked);
             schedulerControl1.ActiveView.LayoutChanged();
             //if (departmentComboBox.Text.Contains("Program") || departmentComboBox.Text.Contains("CNC"))
             //{
@@ -825,6 +827,16 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        private void includeCompletesCheckEdit_CheckStateChanged(object sender, EventArgs e)
+        {
+            schedulerControl1.ActiveView.LayoutChanged();
+        }
+
+        private void includeQuotesCheckEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            schedulerControl1.ActiveView.LayoutChanged();
+        }
+
         private void schedulerControl1_DragDrop(object sender, DragEventArgs e)
         {
             //MessageBox.Show("DragDrop");
@@ -869,11 +881,27 @@ namespace Toolroom_Project_Viewer
             {
                 if (AllProjectItemsChecked == false)
                 {
-                    e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch(apt.Location)).Any();
+                    e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch(apt.Location)).Any(); // 
                 }
                 else
                 {
                     e.Cancel = !TaskRegExpression.IsMatch(apt.Location);
+                }
+
+                if (includeCompletesCheckEdit.Checked == false)
+                {
+                    if (apt.PercentComplete == 100)
+                    {
+                        e.Cancel = true;
+                    }
+                }
+
+                if (includeQuotesCheckEdit.Checked == false)
+                {
+                    if (apt.CustomFields["JobNumber"].ToString().Contains("quote"))
+                    {
+                        e.Cancel = true;
+                    }
                 }
 
                 //e.Cancel = !apt.Location.Contains(Tasks);
@@ -923,16 +951,25 @@ namespace Toolroom_Project_Viewer
             PrintDeptsCheckedComboBoxEdit.SetEditValue("Program Rough, Program Finish, Program Electrodes, CNC Rough, CNC Finish, CNC Electrodes, Grind, Inspection, EDM Sinker, EDM Wire (In-House)");
         }
 
-        private void FilterTaskView()
+        private CriteriaOperator FilterTaskView(string department, bool includeQuotes, bool includeCompleteTasks)
         {
             List<CriteriaOperator> criteriaOperators = new List<CriteriaOperator>();
 
-            criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("JobNumber"), "Quote")));
-            criteriaOperators.Add(new NullOperator("Status"));
+            if (includeQuotes == false)
+            {
+                criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("JobNumber"), "Quote"))); // Excludes tasks with quote in jobnumber. 
+            }
 
-            string department = departmentComboBox2.Text;
+            if (includeCompleteTasks == false)
+            {
+                criteriaOperators.Add(new NullOperator("Status"));  // Excludes tasks with Status set to null. 
+            }
 
-            if (department == "Program Rough")
+            if (department == "Program")
+            {
+                criteriaOperators.Add(new FunctionOperator(FunctionOperatorType.StartsWith, new OperandProperty("TaskName"), department));
+            }
+            else if (department == "Program Rough")
             {
                 //gridView1.ActiveFilterString = "[TaskName] = 'Program Rough'  AND [Status] = NULL";
                 criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
@@ -946,6 +983,10 @@ namespace Toolroom_Project_Viewer
             {
                 //gridView1.ActiveFilterString = "[TaskName] = 'Program Electrodes' AND [Status] = NULL";
                 criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
+            }
+            else if (department == "CNC")
+            {
+                criteriaOperators.Add(new FunctionOperator(FunctionOperatorType.StartsWith, new OperandProperty("TaskName"), department));
             }
             else if (department == "CNC Rough")
             {
@@ -990,14 +1031,15 @@ namespace Toolroom_Project_Viewer
             else if (department == "All")
             {
                 //gridView1.ActiveFilterString = String.Empty;
-                gridView1.ClearColumnsFilter();
+                //gridView1.ClearColumnsFilter();
             }
 
-            gridView1.ActiveFilterCriteria = GroupOperator.And(criteriaOperators);
-
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+
+            return GroupOperator.And(criteriaOperators);
         }
 
+        // This filter is used by the print resources function.
         private void FilterTaskView2(string resource)
         {
             List<CriteriaOperator> criteriaOperators = new List<CriteriaOperator>();
@@ -1083,7 +1125,7 @@ namespace Toolroom_Project_Viewer
 
         private void departmentComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FilterTaskView();
+            gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
         }
 
         private void gridControl1_MouseDown(object sender, MouseEventArgs e)
@@ -1575,6 +1617,12 @@ namespace Toolroom_Project_Viewer
                 {
                     if (form.DataValidated)
                     {
+                        if (gridView3.GetFocusedRowCellValue("KanBanWorkbookPath").ToString().Length > 0)
+                        {
+                            MessageBox.Show("A project has changed.  Need to regenerate and reprint Kan Ban.");
+                            gridView3.Appearance.FocusedRow.BackColor = Color.Red;
+                        }
+
                         RefreshProjectGrid();
                     }
                 }
@@ -2002,7 +2050,6 @@ namespace Toolroom_Project_Viewer
 
                     if (KanBanExists(jobNumber, projectNumber))
                     {
-                        
                         DialogResult result = XtraMessageBox.Show("A Kan Ban for this project already exists.\n\nDo you want to create a new one?\n\n" +
                             "(Click 'Yes' to create new one (All info preserved).  Click 'No' to cancel.)", "Warning",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -2010,6 +2057,8 @@ namespace Toolroom_Project_Viewer
                         if (result == DialogResult.Yes)
                         {
                             path = ei.GenerateKanBanWorkbook2(pi);
+
+                            gridView3.Appearance.FocusedRow.BackColor = Color.White;
 
                             if (path != "")
                             {
@@ -3752,6 +3801,11 @@ namespace Toolroom_Project_Viewer
             jobNumberComboBoxText2 = projectComboBox.Text.Split('#');
 
             return (jobNumberComboBoxText[0], Convert.ToInt32(jobNumberComboBoxText2[1]));
+        }
+
+        private void appointmentsFilterControl_FilterChanged(object sender, FilterChangedEventArgs e)
+        {
+            //schedulerControl1.DataStorage.Appointments.Filter = appointmentsFilterControl.FilterString;
         }
 
         private void schedulerControl1_EditAppointmentFormShowing(object sender, AppointmentFormEventArgs e)

@@ -119,6 +119,8 @@
             this.schedulerStorage1 = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.includeCompletesCheckEdit = new DevExpress.XtraEditors.CheckEdit();
+            this.includeQuotesCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
             this.projectCheckedComboBoxEdit = new DevExpress.XtraEditors.CheckedComboBoxEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
@@ -271,6 +273,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.includeCompletesCheckEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.includeQuotesCheckEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectCheckedComboBoxEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GroupByRadioGroup.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl1)).BeginInit();
@@ -1038,6 +1042,8 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.includeCompletesCheckEdit);
+            this.xtraTabPage1.Controls.Add(this.includeQuotesCheckEdit);
             this.xtraTabPage1.Controls.Add(this.labelControl7);
             this.xtraTabPage1.Controls.Add(this.projectCheckedComboBoxEdit);
             this.xtraTabPage1.Controls.Add(this.labelControl3);
@@ -1050,6 +1056,24 @@
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1514, 799);
             this.xtraTabPage1.Text = "Department Schedule View";
+            // 
+            // includeCompletesCheckEdit
+            // 
+            this.includeCompletesCheckEdit.Location = new System.Drawing.Point(899, 10);
+            this.includeCompletesCheckEdit.Name = "includeCompletesCheckEdit";
+            this.includeCompletesCheckEdit.Properties.Caption = "Include Completed Tasks";
+            this.includeCompletesCheckEdit.Size = new System.Drawing.Size(157, 19);
+            this.includeCompletesCheckEdit.TabIndex = 11;
+            this.includeCompletesCheckEdit.CheckStateChanged += new System.EventHandler(this.includeCompletesCheckEdit_CheckStateChanged);
+            // 
+            // includeQuotesCheckEdit
+            // 
+            this.includeQuotesCheckEdit.Location = new System.Drawing.Point(786, 10);
+            this.includeQuotesCheckEdit.Name = "includeQuotesCheckEdit";
+            this.includeQuotesCheckEdit.Properties.Caption = "Include Quotes";
+            this.includeQuotesCheckEdit.Size = new System.Drawing.Size(107, 19);
+            this.includeQuotesCheckEdit.TabIndex = 10;
+            this.includeQuotesCheckEdit.CheckedChanged += new System.EventHandler(this.includeQuotesCheckEdit_CheckedChanged);
             // 
             // labelControl7
             // 
@@ -2659,6 +2683,8 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.includeCompletesCheckEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.includeQuotesCheckEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectCheckedComboBoxEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GroupByRadioGroup.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl1)).EndInit();
@@ -2926,6 +2952,8 @@
         private DevExpress.XtraEditors.RangeControl rangeControl2;
         private DevExpress.XtraEditors.CheckedComboBoxEdit PrintEmployeeWorkCheckedComboBoxEdit;
         private DevExpress.XtraEditors.SimpleButton printEmployeeWorkButton;
+        private DevExpress.XtraEditors.CheckEdit includeCompletesCheckEdit;
+        private DevExpress.XtraEditors.CheckEdit includeQuotesCheckEdit;
     }
 }
 
