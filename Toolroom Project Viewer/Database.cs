@@ -79,8 +79,8 @@ namespace Toolroom_Project_Viewer
             try
             {
                 // Keep query in queryString to make query more visible.
-                queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, OverlapAllowed) " +
-                                "VALUES (@jobNumber, @projectNumber, @customer, @project, @DueDate, @Designer, @ToolMaker, @RoughProgrammer, @electrodeProgrammer, @finishProgrammer, @overlapAllowed)";
+                queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed) " +
+                                "VALUES (@jobNumber, @projectNumber, @customer, @project, @DueDate, @Designer, @ToolMaker, @RoughProgrammer, @electrodeProgrammer, @finishProgrammer, @apprentice, @overlapAllowed)";
 
                 adapter.InsertCommand = new OleDbCommand(queryString, Connection);
 
@@ -94,6 +94,7 @@ namespace Toolroom_Project_Viewer
                 adapter.InsertCommand.Parameters.AddWithValue("@roughProgrammer", project.RoughProgrammer);
                 adapter.InsertCommand.Parameters.AddWithValue("@electrodeProgrammer", project.ElectrodeProgrammer);
                 adapter.InsertCommand.Parameters.AddWithValue("@finishProgrammer", project.FinishProgrammer);
+                adapter.InsertCommand.Parameters.AddWithValue("@apprentice", project.Apprentice);
                 adapter.InsertCommand.Parameters.AddWithValue("@overlapAllowed", project.OverlapAllowed);
 
                 Connection.Open();
@@ -208,6 +209,7 @@ namespace Toolroom_Project_Viewer
                                   roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
                                electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
                                  finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                       apprentice: Convert.ToString(rdr["Apprentice"]),
                                kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
                                    overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
                         );
@@ -361,6 +363,7 @@ namespace Toolroom_Project_Viewer
                                       roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
                                    electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
                                      finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                           apprentice: Convert.ToString(rdr["Apprentice"]),
                                    kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
                                        overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
                             );
@@ -411,6 +414,7 @@ namespace Toolroom_Project_Viewer
                                       roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
                                    electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
                                      finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                           apprentice: Convert.ToString(rdr["Apprentice"]),
                                    kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"])
                                 );
 
@@ -636,7 +640,7 @@ namespace Toolroom_Project_Viewer
 
                 queryString = "UPDATE Projects " +
                               "SET JobNumber = @jobNumber, ProjectNumber = @newProjectNumber, DueDate = @dueDate, Designer = @designer, ToolMaker = @toolMaker, RoughProgrammer = @roughProgrammer, ElectrodeProgrammer = @electrodeProgrammer, " +
-                              "FinishProgrammer = @finishProgrammer " +
+                              "FinishProgrammer = @finishProgrammer, Apprentice = @apprentice " +
                               "WHERE ProjectNumber = @oldProjectNumber";
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -649,6 +653,7 @@ namespace Toolroom_Project_Viewer
                 adapter.UpdateCommand.Parameters.AddWithValue("@roughProgrammer", project.RoughProgrammer);
                 adapter.UpdateCommand.Parameters.AddWithValue("@electrodeProgrammer", project.ElectrodeProgrammer);
                 adapter.UpdateCommand.Parameters.AddWithValue("@finishProgrammer", project.FinishProgrammer);
+                adapter.UpdateCommand.Parameters.AddWithValue("@apprentice", project.Apprentice);
                 adapter.UpdateCommand.Parameters.AddWithValue("@oldProjectNumber", project.OldProjectNumber);  // By default this number is set to whatever is in the database when it was loaded to the Edit project form.
 
                 Connection.Open();

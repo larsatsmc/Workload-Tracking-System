@@ -516,6 +516,7 @@ namespace Toolroom_Scheduler
                                   roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
                                electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
                                  finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                       apprentice: Convert.ToString(rdr["Apprentice"]),
                                kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"])
                             );
                         }
@@ -565,6 +566,7 @@ namespace Toolroom_Scheduler
                                   roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
                                electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
                                  finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                       apprentice: Convert.ToString(rdr["Apprentice"]),
                                kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"])
                             );
                         }

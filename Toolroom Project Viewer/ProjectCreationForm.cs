@@ -2094,6 +2094,7 @@ namespace Toolroom_Project_Viewer
                     this.RoughProgrammerComboBox.Text = form.Project.RoughProgrammer;
                     this.ElectrodeProgrammerComboBox.Text = form.Project.ElectrodeProgrammer;
                     this.FinishProgrammerComboBox.Text = form.Project.FinishProgrammer;
+                    this.Project.Apprentice = form.Project.Apprentice;
                     this.Project.Customer = form.Project.Customer;
                     this.Project.Name = form.Project.Name;
                 }

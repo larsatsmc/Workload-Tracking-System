@@ -42,7 +42,8 @@ namespace Toolroom_Project_Viewer
                                             designer: bandedGridView1.GetFocusedRowCellValue("Designer"),
                                             roughProgrammer: bandedGridView1.GetFocusedRowCellValue("RoughProgrammer"),
                                             electrodProgrammer: bandedGridView1.GetFocusedRowCellValue("ElectrodeProgrammer"),
-                                            finishProgrammer: bandedGridView1.GetFocusedRowCellValue("FinishProgrammer")
+                                            finishProgrammer: bandedGridView1.GetFocusedRowCellValue("FinishProgrammer"),
+                                            apprentice: bandedGridView1.GetFocusedRowCellValue("Apprentice")
                                          );
 
                 this.DialogResult = DialogResult.OK;

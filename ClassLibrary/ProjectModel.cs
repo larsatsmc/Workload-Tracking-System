@@ -26,6 +26,7 @@ namespace ClassLibrary
         public string RoughProgrammer { get; set; }
         public string ElectrodeProgrammer { get; set; }
         public string FinishProgrammer { get; set; }
+        public string Apprentice { get; set; } = "";
         public string Engineer { get; private set; }
         public string KanBanWorkbookPath { get; private set; }
         public List<ComponentModel> ComponentList { get; private set; }
@@ -57,7 +58,7 @@ namespace ClassLibrary
             this.Engineer = e;
         }
 
-        public ProjectModel(string jobNumber, int projectNumber, DateTime dueDate, string status, string toolMaker, string designer, string roughProgrammer, string finishProgrammer, string electrodProgrammer, string kanBanWorkbookPath) // Project Creation Constructor. Leaving out status for now.  May add later.
+        public ProjectModel(string jobNumber, int projectNumber, DateTime dueDate, string status, string toolMaker, string designer, string roughProgrammer, string finishProgrammer, string electrodProgrammer, string apprentice, string kanBanWorkbookPath) // Project Creation Constructor. Leaving out status for now.  May add later.
         {
             this.HasProjectInfo = true;
             this.JobNumber = jobNumber;
@@ -70,11 +71,12 @@ namespace ClassLibrary
             this.RoughProgrammer = roughProgrammer;
             this.ElectrodeProgrammer = electrodProgrammer;
             this.FinishProgrammer = finishProgrammer;
+            this.Apprentice = apprentice;
             this.ComponentList = new List<ComponentModel>();
             this.KanBanWorkbookPath = kanBanWorkbookPath;
         }
 
-        public ProjectModel(object jobNumber, object projectNumber, object mwoNumber, object customer, object project, object dueDate, object toolMaker, object designer, object roughProgrammer, object finishProgrammer, object electrodProgrammer)
+        public ProjectModel(object jobNumber, object projectNumber, object mwoNumber, object customer, object project, object dueDate, object toolMaker, object designer, object roughProgrammer, object finishProgrammer, object electrodProgrammer, object apprentice)
         {
             this.JobNumber = ConvertObjectToString(jobNumber);
             this.ProjectNumber = ConvertObjectToInt(projectNumber);
@@ -87,9 +89,10 @@ namespace ClassLibrary
             this.RoughProgrammer = ConvertObjectToString(roughProgrammer);
             this.ElectrodeProgrammer = ConvertObjectToString(electrodProgrammer);
             this.FinishProgrammer = ConvertObjectToString(finishProgrammer);
+            this.Apprentice = ConvertObjectToString(apprentice);
         }
 
-        public ProjectModel(string jobNumber, int projectNumber, string name, string customer, DateTime dueDate, string status, string toolMaker, string designer, string roughProgrammer, string finishProgrammer, string electrodProgrammer, string kanBanWorkbookPath, bool overlapAllowed) // Project Creation Constructor. Leaving out status for now.  May add later.
+        public ProjectModel(string jobNumber, int projectNumber, string name, string customer, DateTime dueDate, string status, string toolMaker, string designer, string roughProgrammer, string finishProgrammer, string electrodProgrammer, string apprentice, string kanBanWorkbookPath, bool overlapAllowed) // Project Creation Constructor. Leaving out status for now.  May add later.
         {
             this.HasProjectInfo = true;
             this.JobNumber = jobNumber;
@@ -104,6 +107,7 @@ namespace ClassLibrary
             this.RoughProgrammer = roughProgrammer;
             this.ElectrodeProgrammer = electrodProgrammer;
             this.FinishProgrammer = finishProgrammer;
+            this.Apprentice = apprentice;
             this.ComponentList = new List<ComponentModel>();
             this.KanBanWorkbookPath = kanBanWorkbookPath;
             this.OverlapAllowed = overlapAllowed;

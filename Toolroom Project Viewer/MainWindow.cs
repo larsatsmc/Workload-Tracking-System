@@ -1358,28 +1358,38 @@ namespace Toolroom_Project_Viewer
         private void repositoryItemCheckedComboBoxEdit1_QueryPopUp(object sender, CancelEventArgs e)
         {
             string task = (string)gridView1.GetRowCellValue(gridView1.GetSelectedRows()[0], "TaskName");
-            string machineType = "";
-            Database db = new Database();
+            string role = "";
 
             if (task == "CNC Rough")
             {
-                machineType = "Rough Mill";
+                role = "Rough Mill";
             }
             else if (task == "CNC Finish")
             {
-                machineType = "Finish Mill";
+                role = "Finish Mill";
             }
             else if(task == "CNC Electrodes")
             {
-                machineType = "Graphite Mill";
+                role = "Graphite Mill";
             }
-
-            if (machineType != "")
+            else if(task == "EDM Sinker")
             {
-                repositoryItemCheckedComboBoxEdit1.DataSource = GetResourceList(machineType);
+                role = "EDM Sinker";
+            }
+            else if (task == "EDM Wire (In-House)")
+            {
+                role = "EDM Wire";
+            }
+            else
+            {
+                e.Cancel = true;
             }
 
-            //MessageBox.Show("Test1");
+            if (role != "")
+            {
+                repositoryItemCheckedComboBoxEdit1.DataSource = GetResourceList(role, "Machine");
+            }
+
         }
 
         private void gridView1_ShownEditor(object sender, EventArgs e)
@@ -1391,70 +1401,60 @@ namespace Toolroom_Project_Viewer
                 comboBoxEdit = gridView1.ActiveEditor as ComboBoxEdit;
             }
 
-            if (comboBoxEdit != null)
+            if (comboBoxEdit != null && gridView1.FocusedColumn.FieldName == "Resource")
             {
-                string department = departmentComboBox2.Text;
+                string task = (string)gridView1.GetRowCellValue(gridView1.GetSelectedRows()[0], "TaskName");
                 string role = "";
 
                 comboBoxEdit.Properties.Items.Clear();
 
-                if (department == "Program Rough")
+                if (task == "Program Rough")
                 {
                     role = "Rough Programmer";
                 }
-                else if (department == "Program Finish")
+                else if (task == "Program Finish")
                 {
                     role = "Finish Programmer";
                 }
-                else if (department == "Program Electrodes")
+                else if (task == "Program Electrodes")
                 {
                     role = "Electrode Programmer";
                 }
-                else if (department.EndsWith("Grind") || department == "Polish")
+                else if (task.EndsWith("Grind") || task == "Polish")
                 {
                     role = "Tool Maker";
                 }
-                else if (department == "CNC Rough")
+                else if (task == "CNC Rough")
                 {
                     role = "Rough CNC Operator";
                 }
-                else if (department == "CNC Finish")
+                else if (task == "CNC Finish")
                 {
                     role = "Finish CNC Operator";
                 }
-                else if( department == "CNC Electrodes")
+                else if( task == "CNC Electrodes")
                 {
                     role = "Electrode CNC Operator";
                 }
-                else if (department == "EDM Wire (In-House)")
+                else if (task == "EDM Wire (In-House)")
                 {
                     role = "EDM Wire Operator";
                 }
-                else if (department == "EDM Sinker")
+                else if (task == "EDM Sinker")
                 {
                     role = "EDM Sinker Operator";
                 }
-                else if (department == "Hole Pop")
+                else if (task == "Hole Pop")
                 {
                     role = "Hole Popper Operator";
                 }
-                else if (department.StartsWith("Inspection"))
+                else if (task.StartsWith("Inspection"))
                 {
                     role = "CMM Operator";
                 }
-                else if(department == "All")
-                {
-                    role = "";
-                }
 
-                comboBoxEdit.Properties.Items.Add("");
-                comboBoxEdit.Properties.Items.AddRange(GetResourceList(role).ToArray());
-
-                //if (role != "")
-                //{
-                //    comboBoxEdit.Properties.Items.Add("");
-                //    comboBoxEdit.Properties.Items.AddRange(GetResourceList(role).ToArray());
-                //}
+                comboBoxEdit.Properties.Items.Clear();
+                comboBoxEdit.Properties.Items.AddRange(GetResourceList(role, "Person").ToArray());
             }
         }
 
@@ -3792,25 +3792,27 @@ namespace Toolroom_Project_Viewer
                     if (comboBoxEdit != null)
                     {
                         string column = bandedGridView1.FocusedColumn.FieldName;
-                        string personnelType = "";
-
-                        comboBoxEdit.Properties.Items.Clear();
+                        string role = "";
 
                         if (column == "RoughProgrammer")
                         {
-                            personnelType = "Rough Programmer";
+                            role = "Rough Programmer";
                         }
                         else if (column == "FinishProgrammer")
                         {
-                            personnelType = "Finish Programmer";
+                            role = "Finish Programmer";
                         }
                         else if (column == "ElectrodeProgrammer")
                         {
-                            personnelType = "Electrode Programmer";
+                            role = "Electrode Programmer";
                         }
                         else if (column == "ToolMaker")
                         {
-                            personnelType = "Tool Maker";
+                            role = "Tool Maker";
+                        }
+                        else if (column == "Apprentice")
+                        {
+                            role = "Apprentice";
                         }
                         else if (column == "Stage")
                         {
@@ -3826,10 +3828,10 @@ namespace Toolroom_Project_Viewer
                             return;
                         }
 
-                        if (personnelType != "")
+                        if (role != "")
                         {
-                            comboBoxEdit.Properties.Items.Add("");
-                            comboBoxEdit.Properties.Items.AddRange(GetResourceList(personnelType).ToArray());
+                            comboBoxEdit.Properties.Items.Clear();
+                            comboBoxEdit.Properties.Items.AddRange(GetResourceList(role, "Person").ToArray());
                         }
                     }
                 }
@@ -3859,25 +3861,25 @@ namespace Toolroom_Project_Viewer
 
         #endregion
 
-        private List<string> GetResourceList(string role)
+        private List<string> GetResourceList(string role, string resourceType)
         {
             List<string> resourceList = new List<string>();
 
-            var result = from roleTable in RoleTable.AsEnumerable()
-                         where roleTable.Field<string>("Role") == role
-                         select roleTable;
-
-            //resourceList.Add("");
-
-            foreach (var resource in result)
+            if (role != "")
             {
-                resourceList.Add(resource.Field<string>("ResourceName"));
-            }
+                var result = from roleTable in RoleTable.AsEnumerable()
+                             where roleTable.Field<string>("Role") == role
+                             select roleTable;
 
-            if (role == "")
+                foreach (var resource in result)
+                {
+                    resourceList.Add(resource.Field<string>("ResourceName"));
+                }
+            }
+            else if (role == "")
             {
                 var result2 = from roleTable in RoleTable.AsEnumerable()
-                              where roleTable.Field<string>("ResourceType") == "Person"
+                              where roleTable.Field<string>("ResourceType") == resourceType
                               group roleTable by roleTable.Field<string>("ResourceName") into grp
                               orderby grp.Key
                               select grp;
@@ -3886,6 +3888,11 @@ namespace Toolroom_Project_Viewer
                 {
                     resourceList.Add(resource.Key);
                 }
+            }
+
+            if (resourceType == "Person")
+            {
+                resourceList.Add("");
             }
 
             return resourceList;

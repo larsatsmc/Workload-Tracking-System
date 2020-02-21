@@ -2511,6 +2511,7 @@
             // 
             // colApprentice1
             // 
+            this.colApprentice1.ColumnEdit = this.repositoryItemComboBox1;
             this.colApprentice1.FieldName = "Apprentice";
             this.colApprentice1.MinWidth = 25;
             this.colApprentice1.Name = "colApprentice1";
