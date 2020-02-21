@@ -76,11 +76,11 @@ namespace Toolroom_Project_Viewer
                 InitializeResources();
                 InitializeAppointments();
                 GroupByRadioGroup.SelectedIndex = 0;
+                chartRadioGroup.SelectedIndex = 0;
                 InitializePrintOptions();
                 schedulerControl1.Start = DateTime.Today.AddDays(-7);
                 schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.Custom;
-                schedulerControl1.AllowAppointmentDelete += new AppointmentOperationEventHandler
-                (schedulerControl1_AllowAppointmentDelete);
+                schedulerControl1.AllowAppointmentDelete += new AppointmentOperationEventHandler(schedulerControl1_AllowAppointmentDelete);
 
                 PopulateDepartmentComboBoxes();
                 PopulateProjectComboBox();
@@ -693,9 +693,13 @@ namespace Toolroom_Project_Viewer
             {
                 Role = "Graphite Mill";
             }
-            else if (department == "CNC")
+            else if (department == "CNCs")
             {
                 Role = "Mill";
+            }
+            else if (department == "CNC People")
+            {
+                Role = "CNC Operator";
             }
             else if (department == "EDM Sinker")
             {
@@ -1376,6 +1380,82 @@ namespace Toolroom_Project_Viewer
             }
 
             //MessageBox.Show("Test1");
+        }
+
+        private void gridView1_ShownEditor(object sender, EventArgs e)
+        {
+            ComboBoxEdit comboBoxEdit = null;
+
+            if (gridView1.ActiveEditor.EditorTypeName == "ComboBoxEdit")
+            {
+                comboBoxEdit = gridView1.ActiveEditor as ComboBoxEdit;
+            }
+
+            if (comboBoxEdit != null)
+            {
+                string department = departmentComboBox2.Text;
+                string role = "";
+
+                comboBoxEdit.Properties.Items.Clear();
+
+                if (department == "Program Rough")
+                {
+                    role = "Rough Programmer";
+                }
+                else if (department == "Program Finish")
+                {
+                    role = "Finish Programmer";
+                }
+                else if (department == "Program Electrodes")
+                {
+                    role = "Electrode Programmer";
+                }
+                else if (department.EndsWith("Grind") || department == "Polish")
+                {
+                    role = "Tool Maker";
+                }
+                else if (department == "CNC Rough")
+                {
+                    role = "Rough CNC Operator";
+                }
+                else if (department == "CNC Finish")
+                {
+                    role = "Finish CNC Operator";
+                }
+                else if( department == "CNC Electrodes")
+                {
+                    role = "Electrode CNC Operator";
+                }
+                else if (department == "EDM Wire (In-House)")
+                {
+                    role = "EDM Wire Operator";
+                }
+                else if (department == "EDM Sinker")
+                {
+                    role = "EDM Sinker Operator";
+                }
+                else if (department == "Hole Pop")
+                {
+                    role = "Hole Popper Operator";
+                }
+                else if (department.StartsWith("Inspection"))
+                {
+                    role = "CMM Operator";
+                }
+                else if(department == "All")
+                {
+                    role = "";
+                }
+
+                comboBoxEdit.Properties.Items.Add("");
+                comboBoxEdit.Properties.Items.AddRange(GetResourceList(role).ToArray());
+
+                //if (role != "")
+                //{
+                //    comboBoxEdit.Properties.Items.Add("");
+                //    comboBoxEdit.Properties.Items.AddRange(GetResourceList(role).ToArray());
+                //}
+            }
         }
 
         #endregion
@@ -2230,7 +2310,7 @@ namespace Toolroom_Project_Viewer
 
         #region Chart View
 
-        private void LoadGraph(List<Week> weekList)
+        private void LoadGraph(List<Week> weekList, List<string> departmentList)
         {
             Database db = new Database();
             Series tempSeries;
@@ -2239,7 +2319,6 @@ namespace Toolroom_Project_Viewer
 
             chartControl1.Series.Clear();
 
-            string[] departmentArr = {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind"};
             List<string> weekTitleArr = new List<string>();
             DataTable dailyDeptCapacities = db.GetDailyDepartmentCapacities();
             int dailyCapacity;
@@ -2259,7 +2338,7 @@ namespace Toolroom_Project_Viewer
                 foreach(Week week in weekList)
                 {
                     dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(week.Department)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
-                    tempSeries = new Series(week.Department + " Hours (Cap. " + dailyCapacity + ")", ViewType.Bar);
+                    tempSeries = new Series(week.Department, ViewType.Bar); //  + " Hours (Cap. " + dailyCapacity + ")"
 
                     foreach (Day day in week.DayList)
                     {
@@ -2271,11 +2350,11 @@ namespace Toolroom_Project_Viewer
             }
             else if(TimeUnits == "Weeks")
             {
-                foreach (string dept in departmentArr)
+                foreach (string dept in departmentList)
                 {
                     dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
-                    tempSeries = new Series(dept + " Hours (Cap." + dailyCapacity * 5 + ")", ViewType.Bar);
-                    
+                    tempSeries = new Series(dept, ViewType.Bar); //  + " Hours (Cap." + dailyCapacity * 5 + ")"
+
                     var deptWeeks = from wks in weekList
                                     where wks.Department == dept
                                     orderby wks.WeekStart
@@ -2309,7 +2388,6 @@ namespace Toolroom_Project_Viewer
             }
 
             chartControl2.Series.Add(series1);
-            
         }
 
         private void PopulateTimeFrameComboBox()
@@ -2350,6 +2428,17 @@ namespace Toolroom_Project_Viewer
         {
             Database db = new Database();
             List<Week> weeksList = new List<Week>();
+            List<string> departmentList = new List<string>();
+            string resourceType = GetResourceType();
+
+            if (resourceType == "Department")
+            {
+                departmentList = Database.GetDepartments();
+            }
+            else if (resourceType == "Personnel")
+            {
+                departmentList = Database.GetAllResourcesOfType("Person");
+            }
 
             if (timeFrameComboBoxEdit.Text != "")
             {
@@ -2364,13 +2453,16 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (TimeUnits == "Weeks")
                 {
-                    weeksList = db.GetWeekHours(weekStart, weekEnd);
+                    weeksList = db.GetWeekHours(weekStart, weekEnd, departmentList, resourceType);
                 }
 
-                LoadGraph(weeksList);
+                LoadGraph(weeksList, departmentList);
             }
         }
-
+        private string GetResourceType()
+        {
+            return chartRadioGroup.Properties.Items[chartRadioGroup.SelectedIndex].Description.ToString();
+        }
         private void GetDepartmentHours()
         {
             Database db = new Database();
@@ -3124,6 +3216,7 @@ namespace Toolroom_Project_Viewer
                     wli.RoughProgrammer = dataRowViewObj["RoughProgrammer"].ToString();
                     wli.FinisherProgrammer = dataRowViewObj["FinishProgrammer"].ToString();
                     wli.ElectrodeProgrammer = dataRowViewObj["ElectrodeProgrammer"].ToString();
+                    wli.Apprentice = dataRowViewObj["Apprentice"].ToString();
                     wli.Manifold = dataRowViewObj["Manifold"].ToString();
                     wli.MoldBase = dataRowViewObj["MoldBase"].ToString();
                     wli.GeneralNotes = dataRowViewObj["GeneralNotes"].ToString();
@@ -3370,13 +3463,17 @@ namespace Toolroom_Project_Viewer
                     {
                         color = GetColorFromUser("Personnel", e.Location, rowColor);
 
-                        SetSelectedCellColor(color);
+                        cells = bandedGridView1.GetSelectedCells();
+
+                        SetSelectedCellColor(color, cells);
                     }
                     else if (OtherColumns.Exists(x => x == column.FieldName))
                     {
                         color = GetColorFromUser("Other", e.Location, rowColor);
 
-                        SetSelectedCellColor(color);
+                        cells = bandedGridView1.GetSelectedCells();
+
+                        SetSelectedCellColor(color, cells);
                     }
                 }
                 else if (e.Button == MouseButtons.Left)
@@ -3411,16 +3508,14 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void SetSelectedCellColor(Color? color)
+        private void SetSelectedCellColor(Color? color, GridCell[] cells)
         {
             if (color == null)
             {
                 return;
             }
 
-            var cells = bandedGridView1.GetSelectedCells();
             int projectID;
-            Database db = new Database();
 
             //ColorList.Clear();
 
@@ -3433,7 +3528,7 @@ namespace Toolroom_Project_Viewer
                 if (colorItem == null)
                 {
                     ColorList.Add(new ColorStruct {ProjectID = projectID, Column = cell.Column.FieldName, Color = (Color)color, ColorARGB = ((Color)color).ToArgb() });
-                    db.AddColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
+                    Database.AddColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
 
                 }
                 else
@@ -3441,7 +3536,7 @@ namespace Toolroom_Project_Viewer
                     colorItem.Color = (Color)color;
                     colorItem.ColorARGB = colorItem.Color.ToArgb();
 
-                    db.UpdateColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
+                    Database.UpdateColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
                 }
             }
 
@@ -3682,7 +3777,6 @@ namespace Toolroom_Project_Viewer
 
                         //RichEditControl richEditControl = (RichEditControl)activeEditor.Properties.PopupControl.Controls[0];
 
-                        ////// TODO: Use any RichEditControl API
                         //richEditControl.ActiveViewType = RichEditViewType.PrintLayout;
                         //richEditControl.ActiveView.ZoomFactor = 2f;
                         //richEditControl.Document.Sections[0].Margins.Left = 50;
@@ -3780,6 +3874,20 @@ namespace Toolroom_Project_Viewer
                 resourceList.Add(resource.Field<string>("ResourceName"));
             }
 
+            if (role == "")
+            {
+                var result2 = from roleTable in RoleTable.AsEnumerable()
+                              where roleTable.Field<string>("ResourceType") == "Person"
+                              group roleTable by roleTable.Field<string>("ResourceName") into grp
+                              orderby grp.Key
+                              select grp;
+
+                foreach (var resource in result2)
+                {
+                    resourceList.Add(resource.Key);
+                }
+            }
+
             return resourceList;
         }
 
@@ -3815,7 +3923,7 @@ namespace Toolroom_Project_Viewer
 
         private void PopulateDepartmentComboBoxes()
         {
-            List<string> departmentList1 = new List<string> { "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNC", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
+            List<string> departmentList1 = new List<string> { "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
             List<string> departmentList2 = new List<string> {"Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
 
             departmentComboBox.Properties.Items.AddRange(departmentList1);

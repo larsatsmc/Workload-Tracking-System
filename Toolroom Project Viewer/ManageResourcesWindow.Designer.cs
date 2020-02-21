@@ -49,6 +49,7 @@
             this.RoleComboBox.FormattingEnabled = true;
             this.RoleComboBox.Items.AddRange(new object[] {
             "Tool Makers",
+            "Apprentices",
             "Designers",
             "Rough Programmers",
             "Finish Programmers",

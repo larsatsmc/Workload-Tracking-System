@@ -783,6 +783,12 @@ namespace Toolroom_Project_Viewer
 
                         cmd.Parameters.AddWithValue("@electrodeProgrammer", ev.Value.ToString());
                     }
+                    else if (ev.Column.FieldName == "Apprentice")
+                    {
+                        cmd.CommandText = "UPDATE Projects SET Apprentice = @apprentice " + whereClause;
+
+                        cmd.Parameters.AddWithValue("@apprentice", ev.Value.ToString());
+                    }
                     else if (ev.Column.FieldName == "KanBanWorkbookPath")
                     {
                         cmd.CommandText = "UPDATE Projects SET KanBanWorkbookPath = @kanBanWorkbookPath " + whereClause;
@@ -1397,7 +1403,6 @@ namespace Toolroom_Project_Viewer
         {
             var adapter = new OleDbDataAdapter();
 
-
             try
             {
                 adapter.SelectCommand = new OleDbCommand("SELECT * FROM Tasks", Connection);
@@ -1747,7 +1752,7 @@ namespace Toolroom_Project_Viewer
         {
             string department = "All";
             string queryString = null;
-            string selectStatment = "Projects.JobNumber, Projects.ProjectNumber, TaskName, Duration, Tasks.StartDate, FinishDate, Hours";
+            string selectStatment = "Projects.JobNumber, Projects.ProjectNumber, TaskName, Duration, Tasks.StartDate, FinishDate, Resource, Hours";
             //string fromStatement = "Tasks";
             string whereStatement = "(Tasks.StartDate BETWEEN #" + weekStart + "# AND #" + weekEnd + "#) AND Projects.IncludeHours = true";
             string orderByStatement = "ORDER BY Tasks.StartDate ASC";
@@ -1909,10 +1914,16 @@ namespace Toolroom_Project_Viewer
             return weeks;
         }
 
-        public List<Week> GetWeekHours(string weekStart, string weekEnd)
+        public static List<string> GetDepartments()
+        {
+            return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
+        }
+
+        public List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
         {
             List<Week> weekList = new List<Week>();
             List<Week> deptWeekList = new List<Week>();
+            //List<string> departmentList = new List<string>();
             Week weekTemp;
             DateTime wsDate = Convert.ToDateTime(weekStart);
             int weekNum;
@@ -1922,7 +1933,7 @@ namespace Toolroom_Project_Viewer
             OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
             OleDbCommand cmd = new OleDbCommand(queryString, Connection);
 
-            weekList = InitializeDeptWeeksList(wsDate);
+            weekList = InitializeDeptWeeksList(wsDate, departmentList);
 
             //Console.WriteLine("\nLoad");
 
@@ -1938,12 +1949,26 @@ namespace Toolroom_Project_Viewer
                     {
                         //Console.WriteLine($"{++count} {rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {rdr["Hours"].ToString()}");
 
-                        var week = from wk in weekList
-                                   where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
-                                   orderby wk.WeekNum ascending
-                                   select wk;
+                        if (resourceType == "Department")
+                        {
+                            var weeks = from wk in weekList
+                                    where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                    orderby wk.WeekNum ascending
+                                    select wk;
 
-                        deptWeekList = week.ToList();
+                            deptWeekList = weeks.ToList();
+                        }
+                        else if (resourceType == "Personnel")
+                        {
+                            var weeks = from wk in weekList
+                                    where (rdr["Resource"].ToString().Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                    orderby wk.WeekNum ascending
+                                    select wk;
+
+                            deptWeekList = weeks.ToList();
+                        }
+
+                        
 
                         if (deptWeekList.Any())
                         {
@@ -1973,7 +1998,6 @@ namespace Toolroom_Project_Viewer
                             {
                                 while (days > 0)
                                 {
-
                                     if (date.DayOfWeek == DayOfWeek.Saturday)
                                     {
                                         date = date.AddDays(1);
@@ -2213,8 +2237,18 @@ namespace Toolroom_Project_Viewer
 
                     if (predecessors != "" && GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors) > startDate)
                     {
-                        MessageBox.Show("You cannot put a task start date before its predecessor's finish date.");
-                        return false;
+                        DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
+                                                                    "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            // TODO: Validate this process.
+                            BackDatePredecessorTasks(projectNumber, component, taskID, startDate);
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
 
                     adapter.UpdateCommand.Parameters.AddWithValue("@startDate", startDate);
@@ -2231,12 +2265,13 @@ namespace Toolroom_Project_Viewer
                     adapter.UpdateCommand.ExecuteNonQuery();
                 }
 
-                MoveDescendents(jobNumber, projectNumber, component, finishDate, taskID);
+                MoveSuccessors(jobNumber, projectNumber, component, finishDate, taskID);
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
                 return false;
             } 
             
@@ -2278,7 +2313,7 @@ namespace Toolroom_Project_Viewer
 
                 Connection.Dispose();
 
-                MoveDescendents(jobNumber, projectNumber, component, finishDate, taskID);
+                MoveSuccessors(jobNumber, projectNumber, component, finishDate, taskID);
                 return true;
             }
             catch (Exception er)
@@ -2427,6 +2462,7 @@ namespace Toolroom_Project_Viewer
                 row["Hours"] = task.Hours;
                 row["Duration"] = task.Duration;
                 row["Machine"] = task.Machine;
+                row["Resources"] = task.Resources;
                 row["Resource"] = task.Personnel;
                 row["Predecessors"] = task.Predecessors;
                 row["Priority"] = task.Priority;
@@ -2472,6 +2508,7 @@ namespace Toolroom_Project_Viewer
                 row["Hours"] = task.Hours;
                 row["Duration"] = task.Duration;
                 row["Machine"] = task.Machine;
+                row["Resources"] = task.Resources;
                 row["Resource"] = task.Personnel;
                 row["Predecessors"] = task.Predecessors;
                 row["Priority"] = task.Priority;
@@ -2644,7 +2681,7 @@ namespace Toolroom_Project_Viewer
                     adapter.UpdateCommand.ExecuteNonQuery();
                 }
 
-                MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
+                MoveSuccessors(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
             }
             catch (OleDbException oleEx)
             {
@@ -2683,7 +2720,7 @@ namespace Toolroom_Project_Viewer
                     adapter.UpdateCommand.ExecuteNonQuery();
                 }
 
-                MoveDescendents(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
+                MoveSuccessors(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
 
             }
             catch (OleDbException oleException)
@@ -2697,7 +2734,7 @@ namespace Toolroom_Project_Viewer
 
         }
 
-        public void MoveDescendents(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
+        public void MoveSuccessors(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
@@ -3037,7 +3074,32 @@ namespace Toolroom_Project_Viewer
             adapter.Update(dt);
         }
 
-        private void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
+        public static void BackDatePredecessorTasks(int projectNumber, string component, int taskID, DateTime backDate)
+        {
+            DataTable dt = new DataTable();
+            string queryString = "SELECT * FROM Tasks WHERE ProjectNumber = @ProjectNumber AND Component = @Component ORDER BY TaskID";
+
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+
+                adapter.SelectCommand.Parameters.Add("@ProjectNumber", OleDbType.Integer, 12).Value = projectNumber;
+                adapter.SelectCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = component;
+
+                OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+                adapter.Fill(dt);
+
+                BackDateTask(taskID, component, false, backDate, dt);
+
+                adapter.UpdateCommand = builder.GetUpdateCommand();
+
+                adapter.Update(dt);
+            }
+
+        }
+
+        private static void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
         {
             string[] predecessors;
 
@@ -3091,7 +3153,7 @@ namespace Toolroom_Project_Viewer
             //}
         }
 
-        public DateTime SubtractBusinessDays(DateTime finishDate, string durationSt)
+        public static DateTime SubtractBusinessDays(DateTime finishDate, string durationSt)
         {
             int days;
             string[] duration = durationSt.Split(' ');
@@ -3563,6 +3625,18 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        public static List<string> GetAllResourcesOfType(string resourceType)
+        {
+            string queryString = "SELECT ResourceName FROM Resources WHERE ResourceType = @resourceType ORDER BY ResourceName";
+
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                var output = connection.Query<string>(queryString, new { ResourceType = resourceType }).ToList();
+
+                return output;
+            }
+        }
+
         #endregion
 
         #region Update
@@ -3724,8 +3798,8 @@ namespace Toolroom_Project_Viewer
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
-                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes) VALUES " +
-                                                                "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @manifold, @moldBase, @generalNotes)", connection);
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice Manifold, MoldBase, GeneralNotes) VALUES " +
+                                                                "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes)", connection);
 
 
                 cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
@@ -3788,6 +3862,7 @@ namespace Toolroom_Project_Viewer
                 cmd.Parameters.AddWithValue("@roughProgrammer", wli.RoughProgrammer);
                 cmd.Parameters.AddWithValue("@finishProgrammer", wli.FinisherProgrammer);
                 cmd.Parameters.AddWithValue("@electrodeProgrammer", wli.ElectrodeProgrammer);
+                cmd.Parameters.AddWithValue("@apprentice", wli.Apprentice);
                 cmd.Parameters.AddWithValue("@manifold", wli.Manifold);
                 cmd.Parameters.AddWithValue("@moldBase", wli.MoldBase);
                 cmd.Parameters.AddWithValue("@generalNotes", wli.GeneralNotes);
@@ -4059,6 +4134,19 @@ namespace Toolroom_Project_Viewer
                         cmd.Parameters.AddWithValue("@electrodeProgrammer", "");
                     }
                 }
+                else if (ev.Column.FieldName == "Apprentice")
+                {
+                    cmd.CommandText = "UPDATE WorkLoad SET Apprentice = @apprentice WHERE (ID = @tID)";
+
+                    if (ev.Value.ToString() != "")
+                    {
+                        cmd.Parameters.AddWithValue("@apprentice", ev.Value.ToString());
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@apprentice", "");
+                    }
+                }
                 else if (ev.Column.FieldName == "Manifold")
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET Manifold = @manifold WHERE (ID = @tID)";
@@ -4148,26 +4236,26 @@ namespace Toolroom_Project_Viewer
 
         #region Create
 
-        public void AddColorEntry(int projectID, string column, int aRGBColor)
+        public static void AddColorEntry(int projectID, string column, int aRGBColor)
         {
             try
             {
-                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)", Connection);
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                {
+                    OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)", connection);
 
-                cmd.Parameters.AddWithValue("@projectID", projectID);
-                cmd.Parameters.AddWithValue("@columnFieldName", column);
-                cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
+                    cmd.Parameters.AddWithValue("@projectID", projectID);
+                    cmd.Parameters.AddWithValue("@columnFieldName", column);
+                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
 
-
-                Connection.Open();
-                cmd.ExecuteNonQuery();
-                Connection.Close();
+                    connection.Open();
+                    cmd.ExecuteNonQuery(); 
+                }
 
             }
             catch (Exception e)
             {
-                Connection.Close();
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
             }
         }
 
@@ -4208,7 +4296,7 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
                 return null;
             }
         }
@@ -4217,15 +4305,15 @@ namespace Toolroom_Project_Viewer
 
         #region Update
 
-        public void UpdateColorEntry(int projectID, string column, int aRGBColor)
+        public static void UpdateColorEntry(int projectID, string column, int aRGBColor)
         {
-            using (Connection)
+            try
             {
-                try
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand();
                     cmd.CommandType = CommandType.Text;
-                    cmd.Connection = Connection;
+                    cmd.Connection = connection;
 
                     cmd.CommandText = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectID = @projectID AND ColumnFieldName = @column)";
 
@@ -4233,15 +4321,13 @@ namespace Toolroom_Project_Viewer
                     cmd.Parameters.AddWithValue("@projectID", projectID);
                     cmd.Parameters.AddWithValue("@column", column);
 
-                    Connection.Open();
+                    connection.Open();
                     cmd.ExecuteNonQuery();
-                    Connection.Close();
                 }
-                catch (Exception e)
-                {
-                    Connection.Close();
-                    MessageBox.Show(e.Message);
-                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
             }
         }
 
@@ -4367,10 +4453,9 @@ namespace Toolroom_Project_Viewer
         }
 
         // Creates a weeklist with 20 weeks for each department.
-        public List<Week> InitializeDeptWeeksList(DateTime wsDate)
+        public List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
         {
             List<Week> weekList = new List<Week>();
-            string[] departmentArr = {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
 
             for (int i = 1; i <= 20; i++)
             {

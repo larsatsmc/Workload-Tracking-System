@@ -21,6 +21,7 @@ namespace ClassLibrary
         public string RoughProgrammer { get; set; }
         public string FinisherProgrammer { get; set; }
         public string ElectrodeProgrammer { get; set; }
+        public string Apprentice { get; set; }
         public string Manifold { get; set; }
         public string MoldBase { get; set; }
         public string GeneralNotes { get; set; }

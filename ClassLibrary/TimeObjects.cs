@@ -13,11 +13,7 @@ namespace Toolroom_Project_Viewer
         public DateTime WeekStart { get; private set; }
         public DateTime WeekEnd { get; private set; }
         public List<Day> DayList { get; private set; }
-        public int MondayHours { get; private set; }
-        public int TuesdayHours { get; private set; }
-        public int WednesdayHours { get; private set; }
-        public int ThursdayHours { get; private set; }
-        public int FridayHours { get; private set; }
+
 
         public Week(string department)
         {

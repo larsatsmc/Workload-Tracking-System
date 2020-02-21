@@ -510,7 +510,6 @@ namespace ClassLibrary
             ws.Select();
         }
 
-        // TODO: Find an alternative to this method that does not use COM interop.
         // FreeSpire is limited to 200 rows and 5 sheets.
         // My current installation of DevExpress can only generate spreadsheets.  Loading and editing are unavailable.  Can add subscription for $500.
 
@@ -768,23 +767,27 @@ namespace ClassLibrary
                     }
 
                     //ws.Range(ws.Cell(6, 1), ws.Cell(taskRowCount + 5, 8));
-                    componentWs.Cell(taskRowCount + 7, 1).Value = "Notes:";
+                    componentWs.Cell(taskRowCount + 7, 1).Value = "Notes: " + component.Notes;
                     componentWs.Cell(taskRowCount + 7, 1).Style.Font.Bold = true;
 
                     var noteArea = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 10));
                     noteArea.Style.Fill.BackgroundColor = XLColor.White;
+                    noteArea.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    noteArea.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                    noteArea.Style.Alignment.WrapText = true;
+                    noteArea.Merge();
 
                     componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 1)).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
                     componentWs.Range(componentWs.Cell(taskRowCount + 10, 1), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 7, 10)).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     componentWs.Range(componentWs.Cell(taskRowCount + 7, 10), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
-                    var noteContentsRange = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 9, 10));
-                    noteContentsRange.Style.Fill.BackgroundColor = XLColor.White;
-                    noteContentsRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                    noteContentsRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
-                    noteContentsRange.Style.Alignment.WrapText = true;
-                    noteContentsRange.Merge();
+                    //var noteContentsRange = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 10));
+                    //noteContentsRange.Style.Fill.BackgroundColor = XLColor.White;
+                    //noteContentsRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    //noteContentsRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                    //noteContentsRange.Style.Alignment.WrapText = true;
+                    //noteContentsRange.Merge();
 
                     if (component.Picture != null)
                     {
