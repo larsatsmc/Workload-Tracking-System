@@ -833,6 +833,12 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnApprentice;
             
+            private global::System.Data.DataColumn columnDateCreated;
+            
+            private global::System.Data.DataColumn columnDateModified;
+            
+            private global::System.Data.DataColumn columnLastKanBanGenerationDate;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public ProjectsDataTable() {
@@ -1020,6 +1026,30 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn DateCreatedColumn {
+                get {
+                    return this.columnDateCreated;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn DateModifiedColumn {
+                get {
+                    return this.columnDateModified;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn LastKanBanGenerationDateColumn {
+                get {
+                    return this.columnLastKanBanGenerationDate;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1073,7 +1103,10 @@ namespace Toolroom_Project_Viewer {
                         string Project, 
                         bool OverlapAllowed, 
                         bool IncludeHours, 
-                        string Apprentice) {
+                        string Apprentice, 
+                        System.DateTime DateCreated, 
+                        System.DateTime DateModified, 
+                        System.DateTime LastKanBanGenerationDate) {
                 ProjectsRow rowProjectsRow = ((ProjectsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1094,7 +1127,10 @@ namespace Toolroom_Project_Viewer {
                         Project,
                         OverlapAllowed,
                         IncludeHours,
-                        Apprentice};
+                        Apprentice,
+                        DateCreated,
+                        DateModified,
+                        LastKanBanGenerationDate};
                 rowProjectsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowProjectsRow);
                 return rowProjectsRow;
@@ -1144,6 +1180,9 @@ namespace Toolroom_Project_Viewer {
                 this.columnOverlapAllowed = base.Columns["OverlapAllowed"];
                 this.columnIncludeHours = base.Columns["IncludeHours"];
                 this.columnApprentice = base.Columns["Apprentice"];
+                this.columnDateCreated = base.Columns["DateCreated"];
+                this.columnDateModified = base.Columns["DateModified"];
+                this.columnLastKanBanGenerationDate = base.Columns["LastKanBanGenerationDate"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1187,6 +1226,12 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnIncludeHours);
                 this.columnApprentice = new global::System.Data.DataColumn("Apprentice", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnApprentice);
+                this.columnDateCreated = new global::System.Data.DataColumn("DateCreated", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDateCreated);
+                this.columnDateModified = new global::System.Data.DataColumn("DateModified", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDateModified);
+                this.columnLastKanBanGenerationDate = new global::System.Data.DataColumn("LastKanBanGenerationDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLastKanBanGenerationDate);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnJobNumber,
                                 this.columnProjectNumber}, true));
@@ -2248,10 +2293,6 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnToolNumber;
             
-            private global::System.Data.DataColumn columnMWONumber;
-            
-            private global::System.Data.DataColumn columnProjectNumber;
-            
             private global::System.Data.DataColumn columnStage;
             
             private global::System.Data.DataColumn columnCustomer;
@@ -2288,11 +2329,11 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnGeneralNotesRTF;
             
-            private global::System.Data.DataColumn columnMWONumber1;
-            
-            private global::System.Data.DataColumn columnProjectNumber1;
-            
             private global::System.Data.DataColumn columnApprentice;
+            
+            private global::System.Data.DataColumn columnMWONumber;
+            
+            private global::System.Data.DataColumn columnProjectNumber;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -2348,22 +2389,6 @@ namespace Toolroom_Project_Viewer {
             public global::System.Data.DataColumn ToolNumberColumn {
                 get {
                     return this.columnToolNumber;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MWONumberColumn {
-                get {
-                    return this.columnMWONumber;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ProjectNumberColumn {
-                get {
-                    return this.columnProjectNumber;
                 }
             }
             
@@ -2513,25 +2538,25 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MWONumber1Column {
-                get {
-                    return this.columnMWONumber1;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ProjectNumber1Column {
-                get {
-                    return this.columnProjectNumber1;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn ApprenticeColumn {
                 get {
                     return this.columnApprentice;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn MWONumberColumn {
+                get {
+                    return this.columnMWONumber;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ProjectNumberColumn {
+                get {
+                    return this.columnProjectNumber;
                 }
             }
             
@@ -2575,8 +2600,6 @@ namespace Toolroom_Project_Viewer {
             public WorkLoadRow AddWorkLoadRow(
                         byte[] PartPicture, 
                         string ToolNumber, 
-                        string MWONumber, 
-                        string ProjectNumber, 
                         string Stage, 
                         string Customer, 
                         string PartName, 
@@ -2595,16 +2618,14 @@ namespace Toolroom_Project_Viewer {
                         string MoldBase, 
                         string GeneralNotes, 
                         string GeneralNotesRTF, 
-                        int MWONumber1, 
-                        int ProjectNumber1, 
-                        string Apprentice) {
+                        string Apprentice, 
+                        int MWONumber, 
+                        int ProjectNumber) {
                 WorkLoadRow rowWorkLoadRow = ((WorkLoadRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         PartPicture,
                         ToolNumber,
-                        MWONumber,
-                        ProjectNumber,
                         Stage,
                         Customer,
                         PartName,
@@ -2623,9 +2644,9 @@ namespace Toolroom_Project_Viewer {
                         MoldBase,
                         GeneralNotes,
                         GeneralNotesRTF,
-                        MWONumber1,
-                        ProjectNumber1,
-                        Apprentice};
+                        Apprentice,
+                        MWONumber,
+                        ProjectNumber};
                 rowWorkLoadRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowWorkLoadRow);
                 return rowWorkLoadRow;
@@ -2658,8 +2679,6 @@ namespace Toolroom_Project_Viewer {
                 this.columnID = base.Columns["ID"];
                 this.columnPartPicture = base.Columns["PartPicture"];
                 this.columnToolNumber = base.Columns["ToolNumber"];
-                this.columnMWONumber = base.Columns["MWONumber"];
-                this.columnProjectNumber = base.Columns["ProjectNumber"];
                 this.columnStage = base.Columns["Stage"];
                 this.columnCustomer = base.Columns["Customer"];
                 this.columnPartName = base.Columns["PartName"];
@@ -2678,9 +2697,9 @@ namespace Toolroom_Project_Viewer {
                 this.columnMoldBase = base.Columns["MoldBase"];
                 this.columnGeneralNotes = base.Columns["GeneralNotes"];
                 this.columnGeneralNotesRTF = base.Columns["GeneralNotesRTF"];
-                this.columnMWONumber1 = base.Columns["MWONumber1"];
-                this.columnProjectNumber1 = base.Columns["ProjectNumber1"];
                 this.columnApprentice = base.Columns["Apprentice"];
+                this.columnMWONumber = base.Columns["MWONumber"];
+                this.columnProjectNumber = base.Columns["ProjectNumber"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2692,10 +2711,6 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnPartPicture);
                 this.columnToolNumber = new global::System.Data.DataColumn("ToolNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnToolNumber);
-                this.columnMWONumber = new global::System.Data.DataColumn("MWONumber", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMWONumber);
-                this.columnProjectNumber = new global::System.Data.DataColumn("ProjectNumber", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnProjectNumber);
                 this.columnStage = new global::System.Data.DataColumn("Stage", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnStage);
                 this.columnCustomer = new global::System.Data.DataColumn("Customer", typeof(string), null, global::System.Data.MappingType.Element);
@@ -2732,12 +2747,12 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnGeneralNotes);
                 this.columnGeneralNotesRTF = new global::System.Data.DataColumn("GeneralNotesRTF", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGeneralNotesRTF);
-                this.columnMWONumber1 = new global::System.Data.DataColumn("MWONumber1", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMWONumber1);
-                this.columnProjectNumber1 = new global::System.Data.DataColumn("ProjectNumber1", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnProjectNumber1);
                 this.columnApprentice = new global::System.Data.DataColumn("Apprentice", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnApprentice);
+                this.columnMWONumber = new global::System.Data.DataColumn("MWONumber", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMWONumber);
+                this.columnProjectNumber = new global::System.Data.DataColumn("ProjectNumber", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProjectNumber);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -2746,8 +2761,6 @@ namespace Toolroom_Project_Viewer {
                 this.columnID.AllowDBNull = false;
                 this.columnID.Unique = true;
                 this.columnToolNumber.MaxLength = 255;
-                this.columnMWONumber.MaxLength = 255;
-                this.columnProjectNumber.MaxLength = 255;
                 this.columnStage.MaxLength = 255;
                 this.columnCustomer.MaxLength = 255;
                 this.columnPartName.MaxLength = 255;
@@ -2761,8 +2774,6 @@ namespace Toolroom_Project_Viewer {
                 this.columnMoldBase.MaxLength = 255;
                 this.columnGeneralNotes.MaxLength = 536870910;
                 this.columnGeneralNotesRTF.MaxLength = 536870910;
-                this.columnMWONumber1.Caption = "MWONumber";
-                this.columnProjectNumber1.Caption = "ProjectNumber";
                 this.columnApprentice.MaxLength = 255;
             }
             
@@ -3806,6 +3817,54 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime DateCreated {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableProjects.DateCreatedColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DateCreated\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.DateCreatedColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime DateModified {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableProjects.DateModifiedColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DateModified\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.DateModifiedColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime LastKanBanGenerationDate {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableProjects.LastKanBanGenerationDateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'LastKanBanGenerationDate\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.LastKanBanGenerationDateColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableProjects.IDColumn);
             }
@@ -4006,6 +4065,42 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetApprenticeNull() {
                 this[this.tableProjects.ApprenticeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsDateCreatedNull() {
+                return this.IsNull(this.tableProjects.DateCreatedColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetDateCreatedNull() {
+                this[this.tableProjects.DateCreatedColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsDateModifiedNull() {
+                return this.IsNull(this.tableProjects.DateModifiedColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetDateModifiedNull() {
+                this[this.tableProjects.DateModifiedColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsLastKanBanGenerationDateNull() {
+                return this.IsNull(this.tableProjects.LastKanBanGenerationDateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetLastKanBanGenerationDateNull() {
+                this[this.tableProjects.LastKanBanGenerationDateColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4763,38 +4858,6 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string MWONumber {
-                get {
-                    try {
-                        return ((string)(this[this.tableWorkLoad.MWONumberColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'MWONumber\' in table \'WorkLoad\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableWorkLoad.MWONumberColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string ProjectNumber {
-                get {
-                    try {
-                        return ((string)(this[this.tableWorkLoad.ProjectNumberColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ProjectNumber\' in table \'WorkLoad\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableWorkLoad.ProjectNumberColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string Stage {
                 get {
                     try {
@@ -5083,38 +5146,6 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int MWONumber1 {
-                get {
-                    try {
-                        return ((int)(this[this.tableWorkLoad.MWONumber1Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'MWONumber1\' in table \'WorkLoad\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableWorkLoad.MWONumber1Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int ProjectNumber1 {
-                get {
-                    try {
-                        return ((int)(this[this.tableWorkLoad.ProjectNumber1Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ProjectNumber1\' in table \'WorkLoad\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableWorkLoad.ProjectNumber1Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string Apprentice {
                 get {
                     try {
@@ -5126,6 +5157,38 @@ namespace Toolroom_Project_Viewer {
                 }
                 set {
                     this[this.tableWorkLoad.ApprenticeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int MWONumber {
+                get {
+                    try {
+                        return ((int)(this[this.tableWorkLoad.MWONumberColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'MWONumber\' in table \'WorkLoad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableWorkLoad.MWONumberColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int ProjectNumber {
+                get {
+                    try {
+                        return ((int)(this[this.tableWorkLoad.ProjectNumberColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ProjectNumber\' in table \'WorkLoad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableWorkLoad.ProjectNumberColumn] = value;
                 }
             }
             
@@ -5151,30 +5214,6 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetToolNumberNull() {
                 this[this.tableWorkLoad.ToolNumberColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsMWONumberNull() {
-                return this.IsNull(this.tableWorkLoad.MWONumberColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetMWONumberNull() {
-                this[this.tableWorkLoad.MWONumberColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsProjectNumberNull() {
-                return this.IsNull(this.tableWorkLoad.ProjectNumberColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetProjectNumberNull() {
-                this[this.tableWorkLoad.ProjectNumberColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5395,30 +5434,6 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsMWONumber1Null() {
-                return this.IsNull(this.tableWorkLoad.MWONumber1Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetMWONumber1Null() {
-                this[this.tableWorkLoad.MWONumber1Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsProjectNumber1Null() {
-                return this.IsNull(this.tableWorkLoad.ProjectNumber1Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetProjectNumber1Null() {
-                this[this.tableWorkLoad.ProjectNumber1Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsApprenticeNull() {
                 return this.IsNull(this.tableWorkLoad.ApprenticeColumn);
             }
@@ -5427,6 +5442,30 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetApprenticeNull() {
                 this[this.tableWorkLoad.ApprenticeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsMWONumberNull() {
+                return this.IsNull(this.tableWorkLoad.MWONumberColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetMWONumberNull() {
+                this[this.tableWorkLoad.MWONumberColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsProjectNumberNull() {
+                return this.IsNull(this.tableWorkLoad.ProjectNumberColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetProjectNumberNull() {
+                this[this.tableWorkLoad.ProjectNumberColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -6600,10 +6639,13 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             tableMapping.ColumnMappings.Add("OverlapAllowed", "OverlapAllowed");
             tableMapping.ColumnMappings.Add("IncludeHours", "IncludeHours");
             tableMapping.ColumnMappings.Add("Apprentice", "Apprentice");
+            tableMapping.ColumnMappings.Add("DateCreated", "DateCreated");
+            tableMapping.ColumnMappings.Add("DateModified", "DateModified");
+            tableMapping.ColumnMappings.Add("LastKanBanGenerationDate", "LastKanBanGenerationDate");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Projects` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` = ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Apprentice` IS NULL) OR (`Apprentice` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)) AND ((? = 1 AND `OverlapAllowed` IS NULL) OR (`OverlapAllowed` = ?)) AND ((? = 1 AND `IncludeHours` IS NULL) OR (`IncludeHours` = ?)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Projects` WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` = ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Apprentice` IS NULL) OR (`Apprentice` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)) AND ((? = 1 AND `OverlapAllowed` IS NULL) OR (`OverlapAllowed` = ?)) AND ((? = 1 AND `IncludeHours` IS NULL) OR (`IncludeHours` = ?)) AND ((? = 1 AND `DateCreated` IS NULL) OR (`DateCreated` = ?)) AND ((? = 1 AND `DateModified` IS NULL) OR (`DateModified` = ?)) AND ((? = 1 AND `LastKanBanGenerationDate` IS NULL) OR (`LastKanBanGenerationDate` = ?)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
@@ -6641,9 +6683,15 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_OverlapAllowed", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "OverlapAllowed", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_IncludeHours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_IncludeHours", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DateCreated", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DateCreated", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DateModified", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DateModified", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Projects` (`JobNumber`, `ProjectNumber`, `Customer`, `Project`, `DueDate`, `Priority`, `PercentComplete`, `Status`, `Designer`, `ToolMaker`, `RoughProgrammer`, `ElectrodeProgrammer`, `FinishProgrammer`, `Apprentice`, `Engineer`, `KanBanWorkbookPath`, `OverlapAllowed`, `IncludeHours`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO `Projects` (`JobNumber`, `ProjectNumber`, `Customer`, `Project`, `DueDate`, `Priority`, `PercentComplete`, `Status`, `Designer`, `ToolMaker`, `RoughProgrammer`, `ElectrodeProgrammer`, `FinishProgrammer`, `Apprentice`, `Engineer`, `KanBanWorkbookPath`, `OverlapAllowed`, `IncludeHours`, `DateCreated`, `DateModified`, `LastKanBanGenerationDate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
@@ -6663,9 +6711,34 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("KanBanWorkbookPath", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "KanBanWorkbookPath", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("OverlapAllowed", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "OverlapAllowed", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IncludeHours", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateCreated", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateModified", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `Projects` SET `JobNumber` = ?, `ProjectNumber` = ?, `Customer` = ?, `Project` = ?, `DueDate` = ?, `Priority` = ?, `PercentComplete` = ?, `Status` = ?, `Designer` = ?, `ToolMaker` = ?, `RoughProgrammer` = ?, `ElectrodeProgrammer` = ?, `FinishProgrammer` = ?, `Apprentice` = ?, `Engineer` = ?, `KanBanWorkbookPath` = ?, `OverlapAllowed` = ?, `IncludeHours` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` = ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` = ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Priority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?)) AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolMaker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`FinishProgrammer` = ?)) AND ((? = 1 AND `Apprentice` IS NULL) OR (`Apprentice` = ?)) AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBanWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)) AND ((? = 1 AND `OverlapAllowed` IS NULL) OR (`OverlapAllowed` = ?)) AND ((? = 1 AND `IncludeHours` IS NULL) OR (`IncludeHours` = ?)))";
+            this._adapter.UpdateCommand.CommandText = "UPDATE `Projects` SET `JobNumber` = ?, `ProjectNumber` = ?, `Customer` = ?, `Proj" +
+                "ect` = ?, `DueDate` = ?, `Priority` = ?, `PercentComplete` = ?, `Status` = ?, `D" +
+                "esigner` = ?, `ToolMaker` = ?, `RoughProgrammer` = ?, `ElectrodeProgrammer` = ?," +
+                " `FinishProgrammer` = ?, `Apprentice` = ?, `Engineer` = ?, `KanBanWorkbookPath` " +
+                "= ?, `OverlapAllowed` = ?, `IncludeHours` = ?, `DateCreated` = ?, `DateModified`" +
+                " = ?, `LastKanBanGenerationDate` = ? WHERE (((? = 1 AND `ID` IS NULL) OR (`ID` =" +
+                " ?)) AND (`JobNumber` = ?) AND (`ProjectNumber` = ?) AND ((? = 1 AND `Customer` " +
+                "IS NULL) OR (`Customer` = ?)) AND ((? = 1 AND `Project` IS NULL) OR (`Project` =" +
+                " ?)) AND ((? = 1 AND `DueDate` IS NULL) OR (`DueDate` = ?)) AND ((? = 1 AND `Pri" +
+                "ority` IS NULL) OR (`Priority` = ?)) AND ((? = 1 AND `PercentComplete` IS NULL) " +
+                "OR (`PercentComplete` = ?)) AND ((? = 1 AND `Status` IS NULL) OR (`Status` = ?))" +
+                " AND ((? = 1 AND `Designer` IS NULL) OR (`Designer` = ?)) AND ((? = 1 AND `ToolM" +
+                "aker` IS NULL) OR (`ToolMaker` = ?)) AND ((? = 1 AND `RoughProgrammer` IS NULL) " +
+                "OR (`RoughProgrammer` = ?)) AND ((? = 1 AND `ElectrodeProgrammer` IS NULL) OR (`" +
+                "ElectrodeProgrammer` = ?)) AND ((? = 1 AND `FinishProgrammer` IS NULL) OR (`Fini" +
+                "shProgrammer` = ?)) AND ((? = 1 AND `Apprentice` IS NULL) OR (`Apprentice` = ?))" +
+                " AND ((? = 1 AND `Engineer` IS NULL) OR (`Engineer` = ?)) AND ((? = 1 AND `KanBa" +
+                "nWorkbookPath` IS NULL) OR (`KanBanWorkbookPath` = ?)) AND ((? = 1 AND `OverlapA" +
+                "llowed` IS NULL) OR (`OverlapAllowed` = ?)) AND ((? = 1 AND `IncludeHours` IS NU" +
+                "LL) OR (`IncludeHours` = ?)) AND ((? = 1 AND `DateCreated` IS NULL) OR (`DateCre" +
+                "ated` = ?)) AND ((? = 1 AND `DateModified` IS NULL) OR (`DateModified` = ?)) AND" +
+                " ((? = 1 AND `LastKanBanGenerationDate` IS NULL) OR (`LastKanBanGenerationDate` " +
+                "= ?)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("ProjectNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ProjectNumber", global::System.Data.DataRowVersion.Current, false, null));
@@ -6685,6 +6758,9 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("KanBanWorkbookPath", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "KanBanWorkbookPath", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("OverlapAllowed", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "OverlapAllowed", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IncludeHours", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateCreated", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DateModified", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_JobNumber", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "JobNumber", global::System.Data.DataRowVersion.Original, false, null));
@@ -6721,6 +6797,12 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_OverlapAllowed", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "OverlapAllowed", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_IncludeHours", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_IncludeHours", global::System.Data.OleDb.OleDbType.Boolean, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "IncludeHours", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DateCreated", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DateCreated", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateCreated", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_DateModified", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_DateModified", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DateModified", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_LastKanBanGenerationDate", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "LastKanBanGenerationDate", global::System.Data.DataRowVersion.Original, false, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6736,8 +6818,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath, 
-                         OverlapAllowed, IncludeHours
+            this._commandCollection[0].CommandText = @"SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath,OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate
 FROM            Projects";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
@@ -6818,7 +6899,10 @@ FROM            Projects";
                     string Original_Engineer, 
                     string Original_KanBanWorkbookPath, 
                     bool Original_OverlapAllowed, 
-                    bool Original_IncludeHours) {
+                    bool Original_IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> Original_DateCreated, 
+                    global::System.Nullable<global::System.DateTime> Original_DateModified, 
+                    global::System.Nullable<global::System.DateTime> Original_LastKanBanGenerationDate) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((object)(0));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((int)(Original_ID));
             if ((Original_JobNumber == null)) {
@@ -6944,6 +7028,30 @@ FROM            Projects";
             this.Adapter.DeleteCommand.Parameters[33].Value = ((bool)(Original_OverlapAllowed));
             this.Adapter.DeleteCommand.Parameters[34].Value = ((object)(0));
             this.Adapter.DeleteCommand.Parameters[35].Value = ((bool)(Original_IncludeHours));
+            if ((Original_DateCreated.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[36].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[37].Value = ((System.DateTime)(Original_DateCreated.Value));
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[36].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[37].Value = global::System.DBNull.Value;
+            }
+            if ((Original_DateModified.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[38].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[39].Value = ((System.DateTime)(Original_DateModified.Value));
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[38].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[39].Value = global::System.DBNull.Value;
+            }
+            if ((Original_LastKanBanGenerationDate.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[40].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[41].Value = ((System.DateTime)(Original_LastKanBanGenerationDate.Value));
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[40].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[41].Value = global::System.DBNull.Value;
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -6982,7 +7090,10 @@ FROM            Projects";
                     string Engineer, 
                     string KanBanWorkbookPath, 
                     bool OverlapAllowed, 
-                    bool IncludeHours) {
+                    bool IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> DateCreated, 
+                    global::System.Nullable<global::System.DateTime> DateModified, 
+                    global::System.Nullable<global::System.DateTime> LastKanBanGenerationDate) {
             if ((JobNumber == null)) {
                 throw new global::System.ArgumentNullException("JobNumber");
             }
@@ -7076,6 +7187,24 @@ FROM            Projects";
             }
             this.Adapter.InsertCommand.Parameters[16].Value = ((bool)(OverlapAllowed));
             this.Adapter.InsertCommand.Parameters[17].Value = ((bool)(IncludeHours));
+            if ((DateCreated.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[18].Value = ((System.DateTime)(DateCreated.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[18].Value = global::System.DBNull.Value;
+            }
+            if ((DateModified.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[19].Value = ((System.DateTime)(DateModified.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[19].Value = global::System.DBNull.Value;
+            }
+            if ((LastKanBanGenerationDate.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[20].Value = ((System.DateTime)(LastKanBanGenerationDate.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[20].Value = global::System.DBNull.Value;
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -7115,6 +7244,9 @@ FROM            Projects";
                     string KanBanWorkbookPath, 
                     bool OverlapAllowed, 
                     bool IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> DateCreated, 
+                    global::System.Nullable<global::System.DateTime> DateModified, 
+                    global::System.Nullable<global::System.DateTime> LastKanBanGenerationDate, 
                     int Original_ID, 
                     string Original_JobNumber, 
                     int Original_ProjectNumber, 
@@ -7133,7 +7265,10 @@ FROM            Projects";
                     string Original_Engineer, 
                     string Original_KanBanWorkbookPath, 
                     bool Original_OverlapAllowed, 
-                    bool Original_IncludeHours) {
+                    bool Original_IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> Original_DateCreated, 
+                    global::System.Nullable<global::System.DateTime> Original_DateModified, 
+                    global::System.Nullable<global::System.DateTime> Original_LastKanBanGenerationDate) {
             if ((JobNumber == null)) {
                 throw new global::System.ArgumentNullException("JobNumber");
             }
@@ -7227,131 +7362,173 @@ FROM            Projects";
             }
             this.Adapter.UpdateCommand.Parameters[16].Value = ((bool)(OverlapAllowed));
             this.Adapter.UpdateCommand.Parameters[17].Value = ((bool)(IncludeHours));
-            this.Adapter.UpdateCommand.Parameters[18].Value = ((object)(0));
-            this.Adapter.UpdateCommand.Parameters[19].Value = ((int)(Original_ID));
+            if ((DateCreated.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((System.DateTime)(DateCreated.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[18].Value = global::System.DBNull.Value;
+            }
+            if ((DateModified.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[19].Value = ((System.DateTime)(DateModified.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[19].Value = global::System.DBNull.Value;
+            }
+            if ((LastKanBanGenerationDate.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((System.DateTime)(LastKanBanGenerationDate.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[20].Value = global::System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(0));
+            this.Adapter.UpdateCommand.Parameters[22].Value = ((int)(Original_ID));
             if ((Original_JobNumber == null)) {
                 throw new global::System.ArgumentNullException("Original_JobNumber");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[20].Value = ((string)(Original_JobNumber));
+                this.Adapter.UpdateCommand.Parameters[23].Value = ((string)(Original_JobNumber));
             }
-            this.Adapter.UpdateCommand.Parameters[21].Value = ((int)(Original_ProjectNumber));
+            this.Adapter.UpdateCommand.Parameters[24].Value = ((int)(Original_ProjectNumber));
             if ((Original_Customer == null)) {
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[23].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[23].Value = ((string)(Original_Customer));
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_Customer));
             }
             if ((Original_Project == null)) {
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[25].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(Original_Project));
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_Project));
             }
             if ((Original_DueDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((System.DateTime)(Original_DueDate.Value));
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((System.DateTime)(Original_DueDate.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
             }
             if ((Original_Priority.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((int)(Original_Priority.Value));
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((int)(Original_Priority.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
             }
             if ((Original_PercentComplete.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((double)(Original_PercentComplete.Value));
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((double)(Original_PercentComplete.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[31].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
             }
             if ((Original_Status == null)) {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((string)(Original_Status));
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((string)(Original_Status));
             }
             if ((Original_Designer == null)) {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((string)(Original_Designer));
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((string)(Original_Designer));
             }
             if ((Original_ToolMaker == null)) {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[37].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((string)(Original_ToolMaker));
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((string)(Original_ToolMaker));
             }
             if ((Original_RoughProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[39].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((string)(Original_RoughProgrammer));
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((string)(Original_RoughProgrammer));
             }
             if ((Original_ElectrodeProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[41].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((string)(Original_ElectrodeProgrammer));
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((string)(Original_ElectrodeProgrammer));
             }
             if ((Original_FinishProgrammer == null)) {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((string)(Original_FinishProgrammer));
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((string)(Original_FinishProgrammer));
             }
             if ((Original_Apprentice == null)) {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((string)(Original_Apprentice));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((string)(Original_Apprentice));
             }
             if ((Original_Engineer == null)) {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(Original_Engineer));
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[50].Value = ((string)(Original_Engineer));
             }
             if ((Original_KanBanWorkbookPath == null)) {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[52].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(Original_KanBanWorkbookPath));
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[52].Value = ((string)(Original_KanBanWorkbookPath));
             }
-            this.Adapter.UpdateCommand.Parameters[50].Value = ((object)(0));
-            this.Adapter.UpdateCommand.Parameters[51].Value = ((bool)(Original_OverlapAllowed));
-            this.Adapter.UpdateCommand.Parameters[52].Value = ((object)(0));
-            this.Adapter.UpdateCommand.Parameters[53].Value = ((bool)(Original_IncludeHours));
+            this.Adapter.UpdateCommand.Parameters[53].Value = ((object)(0));
+            this.Adapter.UpdateCommand.Parameters[54].Value = ((bool)(Original_OverlapAllowed));
+            this.Adapter.UpdateCommand.Parameters[55].Value = ((object)(0));
+            this.Adapter.UpdateCommand.Parameters[56].Value = ((bool)(Original_IncludeHours));
+            if ((Original_DateCreated.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[57].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[58].Value = ((System.DateTime)(Original_DateCreated.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[57].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[58].Value = global::System.DBNull.Value;
+            }
+            if ((Original_DateModified.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[59].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[60].Value = ((System.DateTime)(Original_DateModified.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[59].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[60].Value = global::System.DBNull.Value;
+            }
+            if ((Original_LastKanBanGenerationDate.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[61].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[62].Value = ((System.DateTime)(Original_LastKanBanGenerationDate.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[61].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[62].Value = global::System.DBNull.Value;
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -7389,6 +7566,9 @@ FROM            Projects";
                     string KanBanWorkbookPath, 
                     bool OverlapAllowed, 
                     bool IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> DateCreated, 
+                    global::System.Nullable<global::System.DateTime> DateModified, 
+                    global::System.Nullable<global::System.DateTime> LastKanBanGenerationDate, 
                     int Original_ID, 
                     string Original_JobNumber, 
                     int Original_ProjectNumber, 
@@ -7407,8 +7587,11 @@ FROM            Projects";
                     string Original_Engineer, 
                     string Original_KanBanWorkbookPath, 
                     bool Original_OverlapAllowed, 
-                    bool Original_IncludeHours) {
-            return this.Update(Original_JobNumber, Original_ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath, OverlapAllowed, IncludeHours, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_Customer, Original_Project, Original_DueDate, Original_Priority, Original_PercentComplete, Original_Status, Original_Designer, Original_ToolMaker, Original_RoughProgrammer, Original_ElectrodeProgrammer, Original_FinishProgrammer, Original_Apprentice, Original_Engineer, Original_KanBanWorkbookPath, Original_OverlapAllowed, Original_IncludeHours);
+                    bool Original_IncludeHours, 
+                    global::System.Nullable<global::System.DateTime> Original_DateCreated, 
+                    global::System.Nullable<global::System.DateTime> Original_DateModified, 
+                    global::System.Nullable<global::System.DateTime> Original_LastKanBanGenerationDate) {
+            return this.Update(Original_JobNumber, Original_ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath, OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate, Original_ID, Original_JobNumber, Original_ProjectNumber, Original_Customer, Original_Project, Original_DueDate, Original_Priority, Original_PercentComplete, Original_Status, Original_Designer, Original_ToolMaker, Original_RoughProgrammer, Original_ElectrodeProgrammer, Original_FinishProgrammer, Original_Apprentice, Original_Engineer, Original_KanBanWorkbookPath, Original_OverlapAllowed, Original_IncludeHours, Original_DateCreated, Original_DateModified, Original_LastKanBanGenerationDate);
         }
     }
     
@@ -8950,9 +9133,9 @@ FROM            Projects";
             tableMapping.ColumnMappings.Add("MoldBase", "MoldBase");
             tableMapping.ColumnMappings.Add("GeneralNotes", "GeneralNotes");
             tableMapping.ColumnMappings.Add("GeneralNotesRTF", "GeneralNotesRTF");
-            tableMapping.ColumnMappings.Add("MWONumber", "MWONumber1");
-            tableMapping.ColumnMappings.Add("ProjectNumber", "ProjectNumber1");
             tableMapping.ColumnMappings.Add("Apprentice", "Apprentice");
+            tableMapping.ColumnMappings.Add("MWONumber", "MWONumber");
+            tableMapping.ColumnMappings.Add("ProjectNumber", "ProjectNumber");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -9130,9 +9313,7 @@ FROM            Projects";
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT        ID, PartPicture, ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, Engineer, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Designer, ToolMaker, RoughProgrammer, 
-                         FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, GeneralNotesRTF
-FROM            WorkLoad";
+            this._commandCollection[0].CommandText = @"SELECT ID, PartPicture, ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, Engineer, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, GeneralNotesRTF FROM WorkLoad";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

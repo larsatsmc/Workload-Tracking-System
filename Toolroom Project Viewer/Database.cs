@@ -79,8 +79,8 @@ namespace Toolroom_Project_Viewer
             try
             {
                 // Keep query in queryString to make query more visible.
-                queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed) " +
-                                "VALUES (@jobNumber, @projectNumber, @customer, @project, @DueDate, @Designer, @ToolMaker, @RoughProgrammer, @electrodeProgrammer, @finishProgrammer, @apprentice, @overlapAllowed)";
+                queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed, DateCreated, DateModified) " +
+                                "VALUES (@jobNumber, @projectNumber, @customer, @project, @DueDate, @Designer, @ToolMaker, @RoughProgrammer, @electrodeProgrammer, @finishProgrammer, @apprentice, @overlapAllowed, Now(), Now())";
 
                 adapter.InsertCommand = new OleDbCommand(queryString, Connection);
 
@@ -640,7 +640,7 @@ namespace Toolroom_Project_Viewer
 
                 queryString = "UPDATE Projects " +
                               "SET JobNumber = @jobNumber, ProjectNumber = @newProjectNumber, DueDate = @dueDate, Designer = @designer, ToolMaker = @toolMaker, RoughProgrammer = @roughProgrammer, ElectrodeProgrammer = @electrodeProgrammer, " +
-                              "FinishProgrammer = @finishProgrammer, Apprentice = @apprentice " +
+                              "FinishProgrammer = @finishProgrammer, Apprentice = @apprentice, DateModified = Now() " +
                               "WHERE ProjectNumber = @oldProjectNumber";
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -848,7 +848,7 @@ namespace Toolroom_Project_Viewer
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
-                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @path " +
+                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @path, LastKanBanGenerationDate = Now() " +
                                      "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
 
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
@@ -3803,7 +3803,7 @@ namespace Toolroom_Project_Viewer
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
-                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice Manifold, MoldBase, GeneralNotes) VALUES " +
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes) VALUES " +
                                                                 "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes)", connection);
 
 

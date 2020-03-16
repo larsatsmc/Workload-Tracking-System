@@ -121,7 +121,7 @@ namespace Toolroom_Project_Viewer
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.Tasks' table. You can move, or remove it, as needed.
                 this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.WorkLoad' table. You can move, or remove it, as needed.
-                this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
+                //this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
 
                 gridControl2.DataSource = workLoadTableAdapter.GetData();
                 footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
@@ -902,7 +902,7 @@ namespace Toolroom_Project_Viewer
 
                 if (includeQuotesCheckEdit.Checked == false)
                 {
-                    if (apt.CustomFields["JobNumber"].ToString().Contains("quote"))
+                    if (apt.CustomFields["JobNumber"].ToString().Contains("quote") || apt.CustomFields["JobNumber"].ToString().Contains("Quote"))
                     {
                         e.Cancel = true;
                     }
@@ -1700,7 +1700,7 @@ namespace Toolroom_Project_Viewer
                         if (gridView3.GetFocusedRowCellValue("KanBanWorkbookPath").ToString().Length > 0)
                         {
                             MessageBox.Show("A project has changed.  Need to regenerate and reprint Kan Ban.");
-                            gridView3.Appearance.FocusedRow.BackColor = Color.Red;
+                            //gridView3.Appearance.FocusedRow.BackColor = Color.Red;
                         }
 
                         RefreshProjectGrid();
@@ -2138,12 +2138,13 @@ namespace Toolroom_Project_Viewer
                         {
                             path = ei.GenerateKanBanWorkbook2(pi);
 
-                            gridView3.Appearance.FocusedRow.BackColor = Color.White;
-
                             if (path != "")
                             {
                                 db.SetKanBanWorkbookPath(path, pi.JobNumber, pi.ProjectNumber);
                             }
+
+                            // This is here so that the rows color will be restored when the KanBan is generated.
+                            RefreshProjectGrid();
                         }
                         else if (result == DialogResult.No)
                         {
@@ -2304,6 +2305,25 @@ namespace Toolroom_Project_Viewer
         {
             ManageResourcesForm form = new ManageResourcesForm();
             form.Show();
+        }
+
+        private void gridView3_RowStyle(object sender, RowStyleEventArgs e)
+        {
+            GridView View = sender as GridView;
+            if (e.RowHandle >= 0)
+            {
+                DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["DateModified"]).ToString(), out DateTime dateModified);            
+
+                if(DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["LastKanBanGenerationDate"]).ToString(), out DateTime lastKanBanGeneratedDate))
+                {
+                    if (dateModified > lastKanBanGeneratedDate)
+                    {
+                        e.Appearance.BackColor = Color.Salmon;
+                        e.Appearance.BackColor2 = Color.SeaShell;
+                        e.HighPriority = true;
+                    }
+                }
+            }
         }
 
         #endregion

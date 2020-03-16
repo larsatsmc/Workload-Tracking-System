@@ -253,6 +253,8 @@
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.componentsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.componentsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter();
+            this.colDateModified = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colLastKanBanGenerationDate = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
@@ -633,7 +635,9 @@
             this.colOverlapAllowed,
             this.colIncludeHours,
             this.colKanBanWorkbookPath,
-            this.colPercentComplete1});
+            this.colPercentComplete1,
+            this.colDateModified,
+            this.colLastKanBanGenerationDate});
             gridFormatRule2.Column = this.colPercentComplete1;
             gridFormatRule2.ColumnApplyTo = this.colPercentComplete1;
             gridFormatRule2.Name = "PercentCompleteFormat";
@@ -657,6 +661,7 @@
             this.gridView3.OptionsView.RowAutoHeight = true;
             this.gridView3.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colDueDate1, DevExpress.Data.ColumnSortOrder.Ascending)});
+            this.gridView3.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.gridView3_RowStyle);
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
@@ -2682,6 +2687,16 @@
             // 
             this.componentsTableAdapter.ClearBeforeFill = true;
             // 
+            // colDateModified
+            // 
+            this.colDateModified.FieldName = "DateModified";
+            this.colDateModified.Name = "colDateModified";
+            // 
+            // colLastKanBanGenerationDate
+            // 
+            this.colLastKanBanGenerationDate.FieldName = "LastKanBanGenerationDate";
+            this.colLastKanBanGenerationDate.Name = "colLastKanBanGenerationDate";
+            // 
             // MainWindow
             // 
             this.Appearance.Options.UseFont = true;
@@ -2997,6 +3012,8 @@
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand Milestones;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand Personnel;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand GeneralInfo;
+        private DevExpress.XtraGrid.Columns.GridColumn colDateModified;
+        private DevExpress.XtraGrid.Columns.GridColumn colLastKanBanGenerationDate;
     }
 }
 

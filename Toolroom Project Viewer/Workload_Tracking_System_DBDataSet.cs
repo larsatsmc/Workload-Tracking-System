@@ -4,6 +4,9 @@
 
     partial class Workload_Tracking_System_DBDataSet
     {
+        partial class WorkLoadDataTable
+        {
+        }
     }
 }
 
