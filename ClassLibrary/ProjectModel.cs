@@ -10,7 +10,7 @@ namespace ClassLibrary
 {
     public class ProjectModel
     {
-        public int ProjectNumber { get; private set; }
+        public int ProjectNumber { get; set; }
         public bool ProjectNumberChanged { get; set; }
         public int OldProjectNumber { get; private set; }
         public string Project { get; set; }
@@ -18,10 +18,10 @@ namespace ClassLibrary
         public int MWONumber { get; set; }
         public string Customer { get; set; } = "";
         public string Name { get; set; } = "";
-        public DateTime DueDate { get; private set; }
+        public DateTime DueDate { get; set; }
         public int Priority { get; private set; }
         public string Status { get; private set; }
-        public string ToolMaker { get; private set; }
+        public string ToolMaker { get; set; }
         public string Designer { get; set; }
         public string RoughProgrammer { get; set; }
         public string ElectrodeProgrammer { get; set; }
@@ -132,11 +132,11 @@ namespace ClassLibrary
 
         public void SetProjectNumber(string projectNumber)
         {
-            bool isInteger = int.TryParse(projectNumber, out int n);
+            bool isInteger = int.TryParse(projectNumber, out int goodNumber);
 
             if(isInteger)
             {
-                this.ProjectNumber = n;
+                this.ProjectNumber = goodNumber;
             }
             else
             {
@@ -292,14 +292,10 @@ namespace ClassLibrary
 
         public bool ComponentNameExists(string name)
         {
-            // Perhaps try and find a linq statement that does this.
-            foreach(ComponentModel component in ComponentList)
+            if (ComponentList.Exists(x => x.Name == name))
             {
-                if(component.Name == name)
-                {
-                    MessageBox.Show("Component name already exists.");
-                    return true;
-                }
+                MessageBox.Show($"Component {name} already exists.");
+                return true;
             }
 
             return false;

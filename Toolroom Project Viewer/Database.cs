@@ -2190,7 +2190,17 @@ namespace Toolroom_Project_Viewer
 
             return dt;
         }
+        public List<TaskModel> GetAppointments(string department) // This is meant to replace the above GetAppointmentsData method.
+        {
+            string queryString = SetQueryString(department);
 
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                List<TaskModel> appointments = connection.Query<TaskModel>(queryString).ToList();
+
+                return appointments;
+            }
+        }
         public DataTable GetAppointmentData()
         {
             DataTable dt = new DataTable();

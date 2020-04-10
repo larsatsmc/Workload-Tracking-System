@@ -502,6 +502,7 @@
             this.personnelComboBox.Name = "personnelComboBox";
             this.personnelComboBox.Size = new System.Drawing.Size(193, 24);
             this.personnelComboBox.TabIndex = 32;
+            this.personnelComboBox.TextChanged += new System.EventHandler(this.personnelComboBox_TextChanged);
             // 
             // predecessorsListBox
             // 

@@ -434,17 +434,19 @@ namespace Toolroom_Project_Viewer
                 res = schedulerStorage1.Resources.Items.GetResourceById("None");
                 apt.ResourceIds.Add(res.Id);
             }
-
-            if (machine != "" && machineCount == 1)
+            else
             {
-                res = schedulerStorage1.Resources.Items.GetResourceById(machine);
-                apt.ResourceIds.Add(res.Id);
-            }
+                if (machine != "" && machineCount == 1)
+                {
+                    res = schedulerStorage1.Resources.Items.GetResourceById(machine);
+                    apt.ResourceIds.Add(res.Id);
+                }
 
-            if (resource != "" && resourceCount == 1)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById(resource);
-                apt.ResourceIds.Add(res.Id);
+                if (resource != "" && resourceCount == 1)
+                {
+                    res = schedulerStorage1.Resources.Items.GetResourceById(resource);
+                    apt.ResourceIds.Add(res.Id);
+                } 
             }
         }
 
@@ -1299,7 +1301,7 @@ namespace Toolroom_Project_Viewer
                     db.UpdateTasksTable(sender, e);
                 }
 
-                deptTaskViewHelper.SaveViewInfo();
+                deptTaskViewHelper.SaveViewInfo(); // I don't know why this is needed.  The grid shouldn't need to be refreshed if a change is successful.
                 this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
                 deptTaskViewHelper.LoadViewInfo();
             }
