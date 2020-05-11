@@ -715,6 +715,7 @@
             this.ProjectNumberTextBox.Size = new System.Drawing.Size(113, 22);
             this.ProjectNumberTextBox.TabIndex = 56;
             this.ProjectNumberTextBox.TextChanged += new System.EventHandler(this.ProjectNumberTextBox_TextChanged);
+            this.ProjectNumberTextBox.Leave += new System.EventHandler(this.ProjectNumberTextBox_Leave);
             // 
             // ElectrodeProgrammerComboBox
             // 

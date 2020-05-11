@@ -1,5 +1,8 @@
 ﻿
+using DevExpress.XtraScheduler;
+using DevExpress.XtraScheduler.Xml;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,28 +11,28 @@ namespace ClassLibrary
 {
 	public class TaskModel
 	{
-        public int ID { get; private set; }
-        public int DatabaseID { get; private set; }
-        public int ProjectNumber { get; private set; }
-        public string JobNumber { get; private set; }
-        public string Component { get; private set; }
-        public string TaskName { get; private set; }
+        public int ID { get; set; }
+        public int TaskID { get; set; }
+        public int ProjectNumber { get; set; }
+        public string JobNumber { get; set; }
+        public string Component { get; set; }
+        public string TaskName { get; set; }
         public bool IsSummary { get; private set; }
-        public string Duration { get; private set; }
-        public DateTime? StartDate { get; private set; }
-        public DateTime? FinishDate { get; private set; }
+        public string Duration { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? FinishDate { get; set; }
         public string Predecessors { get; set; }
-        public string Machine { get; private set; }
-        public string Personnel { get; private set; }
+        public string Machine { get; set; }
+        public string Personnel { get; set; }
         public string Resources { get; private set; }
-        public string Resource { get; private set; }
-        public int Hours { get; private set; }
-        public string ToolMaker { get; private set; }
+        public string Resource { get; set; }
+        public int Hours { get; set; }
+        public string ToolMaker { get; set; }
         public string Operator { get; private set; }
-        public int Priority { get; private set; }
-        public string Status { get; private set; }
+        public int Priority { get; set; }
+        public string Status { get; set; }
         public DateTime DateAdded { get; private set; }
-        public string Notes { get; private set; }
+        public string Notes { get; set; }
         public string Text { get; private set; }
         public int Level { get; private set; }
         public int Position { get; private set; }
@@ -37,6 +40,7 @@ namespace ClassLibrary
         public string Initials { get; private set; }
         public string DateCompleted { get; private set; }
         public bool DeleteTaskFromDB { get; private set; }
+        public DateTime DueDate { get; set; }  // This is only here for the task view grid.
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
         /// </summary>
@@ -44,63 +48,6 @@ namespace ClassLibrary
         {
 
         }
-
-        /// <summary>
-        /// This constructor is for reading tasks from a project file into the database.
-        /// </summary>
-        public TaskModel(int projectNumber, string jobnumber, string component, int id, string taskName, string duration, string predecessors, string resource, int hours, string toolMaker, int priority, DateTime dateAdded, string notes)
-		{
-			this.ProjectNumber = projectNumber;
-			this.JobNumber = jobnumber;
-			this.Component = component;
-			this.ID = id;
-			this.TaskName = taskName;
-			this.Duration = duration;
-			this.Predecessors = predecessors;
-			this.Resource = resource;
-			this.Hours = hours;
-			this.ToolMaker = toolMaker;
-			this.DateAdded = dateAdded;
-			this.Notes = notes;
-		}
-
-        // 
-        /// <summary>
-        /// This constructor is for reading tasks from a project file into the database (2).
-        /// </summary>
-        public TaskModel(int projectNumber, string jobnumber, string component, int id, string taskName, string duration, string predecessors, string resource, string machine, int hours, string toolMaker, int priority, DateTime dateAdded, string notes)
-        {
-            this.ProjectNumber = projectNumber;
-            this.JobNumber = jobnumber;
-            this.Component = component;
-            this.ID = id;
-            this.TaskName = taskName;
-            this.Duration = duration;
-            this.Predecessors = predecessors;
-            this.Resource = resource;
-            this.Machine = machine;
-            this.Hours = hours;
-            this.ToolMaker = toolMaker;
-            this.DateAdded = dateAdded;
-            this.Notes = notes;
-        }
-
-        // This constructor is for swapping tasks.
-
-        public TaskModel(string taskName, string duration, string predecessors, string resources, string resource, int hours, string operatorst, int priority, string status, DateTime dateAdded, string notes)
-		{
-			this.TaskName = taskName;
-			this.Duration = duration;
-			this.Predecessors = predecessors;
-			this.Resources = resources;
-			this.Resource = resource;
-			this.Hours = hours;
-			this.Operator = operatorst; // operator is a reserved word so I added st to the end.
-			this.Priority = priority;
-			this.Status = status;
-			this.DateAdded = dateAdded;
-			this.Notes = notes;
-		}
 
         // This constructor is for checking up on completed tasks.
 
@@ -110,7 +57,7 @@ namespace ClassLibrary
             this.ProjectNumber = projectNumber;
             this.Component = component;
             this.TaskName = taskName;
-            this.ID = id;
+            this.TaskID = id;
             this.Status = status;
         }
 
@@ -118,7 +65,7 @@ namespace ClassLibrary
 
         public TaskModel(int id, string taskName, string component, bool isSummary)
 		{
-            this.ID = id;
+            this.TaskID = id;
 			this.Component = component;
 			this.TaskName = taskName;
 			this.IsSummary = isSummary;
@@ -131,7 +78,7 @@ namespace ClassLibrary
             string[] hoursArr;
             string[] durationArr;
 
-            this.ID = id;
+            this.TaskID = id;
             this.Component = component;
             this.TaskName = taskName;
             this.IsSummary = isSummary;
@@ -168,7 +115,7 @@ namespace ClassLibrary
             string[] hoursArr;
             string[] durationArr;
 
-            this.ID = id;
+            this.TaskID = id;
             this.JobNumber = jobNumber;
             this.ProjectNumber = projectNumber;
             this.Component = component;
@@ -214,46 +161,13 @@ namespace ClassLibrary
             this.Component = component;
         }
 
-        // This constructor is for reading tasks from the database.
-
-        public TaskModel(object taskName, object id, object component, object hours, object duration, object machine, object personnel, object predecessors, object notes)
-        {
-            this.TaskName = ConvertObjectToString(taskName);
-            this.ID = Convert.ToInt32(id);
-            this.Component = ConvertObjectToString(component);
-            this.Hours = Convert.ToInt32(hours);
-            this.Duration = ConvertObjectToString(duration);
-            this.Machine = ConvertObjectToString(machine);
-            this.Personnel = ConvertObjectToString(personnel);
-            this.Predecessors = ConvertObjectToString(predecessors);
-            this.Notes = ConvertObjectToString(notes);
-        }
-
-        // This constructor is for reading tasks from the database.
-
-        public TaskModel(object taskName, object id, object component, object hours, object duration, object startDate, object finishDate, object status, object machine, object personnel, object predecessors, object notes)
-        {
-            this.TaskName = ConvertObjectToString(taskName);
-            this.ID = Convert.ToInt32(id);
-            this.Component = ConvertObjectToString(component);
-            this.Hours = Convert.ToInt32(hours);
-            this.Duration = ConvertObjectToString(duration);
-            this.StartDate = ConvertObjectToDate(startDate);
-            this.FinishDate = ConvertObjectToDate(finishDate);
-            this.Status = ConvertObjectToString(status);
-            this.Machine = ConvertObjectToString(machine);
-            this.Personnel = ConvertObjectToString(personnel);
-            this.Predecessors = ConvertObjectToString(predecessors);
-            this.Notes = ConvertObjectToString(notes);
-        }
-
         // This constructor is for reading tasks from the database. Used by GetProject method.
 
-        public TaskModel(object taskName, object id, object databaseId, object component, object hours, object duration, object startDate, object finishDate, object status, object dateCompleted, object initials, object machine, object personnel, object predecessors, object notes)
+        public TaskModel(object taskName, object taskID, object id, object component, object hours, object duration, object startDate, object finishDate, object status, object dateCompleted, object initials, object machine, object personnel, object predecessors, object notes)
         {
             this.TaskName = ConvertObjectToString(taskName);
+            this.TaskID = Convert.ToInt32(taskID);
             this.ID = Convert.ToInt32(id);
-            this.DatabaseID = Convert.ToInt32(databaseId);
             this.Component = ConvertObjectToString(component);
             this.Hours = ConvertObjectToInt(hours);
             this.Duration = ConvertObjectToString(duration);
@@ -279,20 +193,20 @@ namespace ClassLibrary
 
         public TaskModel(int id, string name)
         {
-            this.ID = id;
+            this.TaskID = id;
             this.TaskName = name;
         }
 
         public TaskModel(int id, string name, string component)
         {
-            this.ID = id;
+            this.TaskID = id;
             this.TaskName = name;
             this.Component = component;
         }
 
         public TaskModel(int id, TaskModel task)
         {
-            this.ID = id;
+            this.TaskID = id;
             this.TaskName = task.TaskName;
             this.Hours = task.Hours;
             this.Duration = task.Duration;
@@ -304,7 +218,7 @@ namespace ClassLibrary
 
         public void SetTaskID(int id)
         {
-            this.ID = id;
+            this.TaskID = id;
         }
         // This constructor is for adding task nodes to a tree.
 
@@ -318,7 +232,7 @@ namespace ClassLibrary
             StringBuilder newPreds = new StringBuilder();
             string[] preds = null;
 
-            this.ID = this.ID + baseNumber;
+            this.TaskID = this.TaskID + baseNumber;
 
             if(this.Predecessors == "")
             {
@@ -382,18 +296,66 @@ namespace ClassLibrary
                 return Convert.ToString(Convert.ToInt32(this.Predecessors.Trim()) + baseNumber);
             }
         }
+        public bool HasMatchingPredecessor(int id)
+        {
+            List<string> predecessors = this.Predecessors.Split(',').ToList();
+
+            foreach (string predecessor in predecessors)
+            {
+                if (predecessor == id.ToString())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         /// <summary>
         /// Sets the task info for a given task from task info tab.
         /// </summary> 
-        public void SetTaskInfo(decimal hours, string duration, string machine, string personnel, string resources, string predecessors, string notes)
+        public void SetTaskInfo(decimal hours, string duration, string machine, string personnel, string predecessors, string notes, SchedulerStorage schedulerStorage)
         {
             this.Hours = Convert.ToInt32(hours);
             this.Duration = duration;
             this.Machine = machine;
             this.Personnel = personnel;
-            this.Resources = resources;
+            this.Resource = personnel;
+            this.Resources = GenerateResourceIDsString(schedulerStorage);
             this.Predecessors = predecessors;
             this.Notes = notes;
+        }
+
+        public string GenerateResourceIDsString(SchedulerStorage schedulerStorage)
+        {
+            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
+            Resource res;
+            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == this.Machine).Count();
+            int personnelCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == this.Personnel).Count();
+
+            if (machineCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Machine");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (this.Machine != "" && machineCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(this.Machine);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            if (personnelCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Personnel");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (this.Personnel != "" && personnelCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(this.Personnel);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
+            return helper.ToXml();
         }
 
         public void SetComponent(string component)
@@ -445,6 +407,11 @@ namespace ClassLibrary
         public void SetNotes(string notesLine)
         {
             this.Notes = notesLine.Trim();
+        }
+
+        public void SetResources(SchedulerStorage schedulerStorage)
+        {
+            this.Resources = GenerateResourceIDsString(schedulerStorage);
         }
 
         private string ConvertObjectToString(object obj)

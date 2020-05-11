@@ -33,7 +33,6 @@
             this.workLoadBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
             this.bandedGridView1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
-            this.gridBand1 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colToolNumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colMWONumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colProjectNumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
@@ -42,25 +41,27 @@
             this.colPartName = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colMoldCost = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colDeliveryInWeeks = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.gridBand2 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colStartDate = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colID = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colFinishDate = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colAdjustedDeliveryDate = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.gridBand3 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colEngineer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colDesigner = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colToolMaker = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colRoughProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colElectrodeProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colFinishProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.gridBand4 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colManifold = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colMoldBase = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGeneralNotes = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGeneralNotesRTF = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.UseSelectedProjectButton = new DevExpress.XtraEditors.SimpleButton();
             this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
+            this.colApprentice = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.gridBand1 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.gridBand2 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.gridBand3 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.gridBand4 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
@@ -117,6 +118,7 @@
             this.colRoughProgrammer,
             this.colElectrodeProgrammer,
             this.colFinishProgrammer,
+            this.colApprentice,
             this.colManifold,
             this.colMoldBase,
             this.colGeneralNotes,
@@ -127,21 +129,6 @@
             this.bandedGridView1.OptionsView.ColumnAutoWidth = false;
             this.bandedGridView1.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colStage, DevExpress.Data.ColumnSortOrder.Ascending)});
-            // 
-            // gridBand1
-            // 
-            this.gridBand1.Caption = "Project";
-            this.gridBand1.Columns.Add(this.colToolNumber);
-            this.gridBand1.Columns.Add(this.colMWONumber);
-            this.gridBand1.Columns.Add(this.colProjectNumber);
-            this.gridBand1.Columns.Add(this.colStage);
-            this.gridBand1.Columns.Add(this.colCustomer);
-            this.gridBand1.Columns.Add(this.colPartName);
-            this.gridBand1.Columns.Add(this.colMoldCost);
-            this.gridBand1.Columns.Add(this.colDeliveryInWeeks);
-            this.gridBand1.Name = "gridBand1";
-            this.gridBand1.VisibleIndex = 0;
-            this.gridBand1.Width = 626;
             // 
             // colToolNumber
             // 
@@ -199,17 +186,6 @@
             this.colDeliveryInWeeks.Visible = true;
             this.colDeliveryInWeeks.Width = 66;
             // 
-            // gridBand2
-            // 
-            this.gridBand2.Caption = "Milestones";
-            this.gridBand2.Columns.Add(this.colStartDate);
-            this.gridBand2.Columns.Add(this.colID);
-            this.gridBand2.Columns.Add(this.colFinishDate);
-            this.gridBand2.Columns.Add(this.colAdjustedDeliveryDate);
-            this.gridBand2.Name = "gridBand2";
-            this.gridBand2.VisibleIndex = 1;
-            this.gridBand2.Width = 203;
-            // 
             // colStartDate
             // 
             this.colStartDate.FieldName = "StartDate";
@@ -235,19 +211,6 @@
             this.colAdjustedDeliveryDate.Name = "colAdjustedDeliveryDate";
             this.colAdjustedDeliveryDate.Visible = true;
             this.colAdjustedDeliveryDate.Width = 63;
-            // 
-            // gridBand3
-            // 
-            this.gridBand3.Caption = "Personnel";
-            this.gridBand3.Columns.Add(this.colEngineer);
-            this.gridBand3.Columns.Add(this.colDesigner);
-            this.gridBand3.Columns.Add(this.colToolMaker);
-            this.gridBand3.Columns.Add(this.colRoughProgrammer);
-            this.gridBand3.Columns.Add(this.colElectrodeProgrammer);
-            this.gridBand3.Columns.Add(this.colFinishProgrammer);
-            this.gridBand3.Name = "gridBand3";
-            this.gridBand3.VisibleIndex = 2;
-            this.gridBand3.Width = 380;
             // 
             // colEngineer
             // 
@@ -291,17 +254,6 @@
             this.colFinishProgrammer.Visible = true;
             this.colFinishProgrammer.Width = 65;
             // 
-            // gridBand4
-            // 
-            this.gridBand4.Caption = "General Info";
-            this.gridBand4.Columns.Add(this.colManifold);
-            this.gridBand4.Columns.Add(this.colMoldBase);
-            this.gridBand4.Columns.Add(this.colGeneralNotes);
-            this.gridBand4.Columns.Add(this.colGeneralNotesRTF);
-            this.gridBand4.Name = "gridBand4";
-            this.gridBand4.VisibleIndex = 3;
-            this.gridBand4.Width = 245;
-            // 
             // colManifold
             // 
             this.colManifold.FieldName = "Manifold";
@@ -343,6 +295,64 @@
             // workLoadTableAdapter
             // 
             this.workLoadTableAdapter.ClearBeforeFill = true;
+            // 
+            // colApprentice
+            // 
+            this.colApprentice.Caption = "Apprentice";
+            this.colApprentice.FieldName = "Apprentice";
+            this.colApprentice.Name = "colApprentice";
+            this.colApprentice.Visible = true;
+            // 
+            // gridBand1
+            // 
+            this.gridBand1.Caption = "Project";
+            this.gridBand1.Columns.Add(this.colToolNumber);
+            this.gridBand1.Columns.Add(this.colMWONumber);
+            this.gridBand1.Columns.Add(this.colProjectNumber);
+            this.gridBand1.Columns.Add(this.colStage);
+            this.gridBand1.Columns.Add(this.colCustomer);
+            this.gridBand1.Columns.Add(this.colPartName);
+            this.gridBand1.Columns.Add(this.colMoldCost);
+            this.gridBand1.Columns.Add(this.colDeliveryInWeeks);
+            this.gridBand1.Name = "gridBand1";
+            this.gridBand1.VisibleIndex = 0;
+            this.gridBand1.Width = 626;
+            // 
+            // gridBand2
+            // 
+            this.gridBand2.Caption = "Milestones";
+            this.gridBand2.Columns.Add(this.colStartDate);
+            this.gridBand2.Columns.Add(this.colID);
+            this.gridBand2.Columns.Add(this.colFinishDate);
+            this.gridBand2.Columns.Add(this.colAdjustedDeliveryDate);
+            this.gridBand2.Name = "gridBand2";
+            this.gridBand2.VisibleIndex = 1;
+            this.gridBand2.Width = 203;
+            // 
+            // gridBand3
+            // 
+            this.gridBand3.Caption = "Personnel";
+            this.gridBand3.Columns.Add(this.colEngineer);
+            this.gridBand3.Columns.Add(this.colDesigner);
+            this.gridBand3.Columns.Add(this.colToolMaker);
+            this.gridBand3.Columns.Add(this.colRoughProgrammer);
+            this.gridBand3.Columns.Add(this.colElectrodeProgrammer);
+            this.gridBand3.Columns.Add(this.colFinishProgrammer);
+            this.gridBand3.Columns.Add(this.colApprentice);
+            this.gridBand3.Name = "gridBand3";
+            this.gridBand3.VisibleIndex = 2;
+            this.gridBand3.Width = 455;
+            // 
+            // gridBand4
+            // 
+            this.gridBand4.Caption = "General Info";
+            this.gridBand4.Columns.Add(this.colManifold);
+            this.gridBand4.Columns.Add(this.colMoldBase);
+            this.gridBand4.Columns.Add(this.colGeneralNotes);
+            this.gridBand4.Columns.Add(this.colGeneralNotesRTF);
+            this.gridBand4.Name = "gridBand4";
+            this.gridBand4.VisibleIndex = 3;
+            this.gridBand4.Width = 245;
             // 
             // ProjectSelectionForm
             // 
@@ -391,12 +401,13 @@
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colMoldBase;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotes;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotesRTF;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand1;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand2;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand3;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand4;
         private Workload_Tracking_System_DBDataSet workload_Tracking_System_DBDataSet;
         private System.Windows.Forms.BindingSource workLoadBindingSource;
         private Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter workLoadTableAdapter;
+        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand1;
+        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand2;
+        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand3;
+        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colApprentice;
+        private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand4;
     }
 }

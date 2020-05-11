@@ -99,14 +99,14 @@ namespace Toolroom_Scheduler
             {
                 if (!Project.ComponentNameExists(newName))
                 {
-                    ClassLibrary.ComponentModel component = Project.ComponentList.ElementAt(selectedNode.Index);
+                    ClassLibrary.ComponentModel component = Project.Components.ElementAt(selectedNode.Index);
                     component.SetName(newName);
                 }
             }
             else if(selectedNode.Level == 2)
             {
-                ClassLibrary.ComponentModel component = Project.ComponentList.ElementAt(selectedNode.Parent.Index);
-                TaskModel task = component.TaskList.ElementAt(selectedNode.Index);
+                ClassLibrary.ComponentModel component = Project.Components.ElementAt(selectedNode.Parent.Index);
+                TaskModel task = component.Tasks.ElementAt(selectedNode.Index);
                 task.SetName(newName);
             }
         }
@@ -345,10 +345,10 @@ namespace Toolroom_Scheduler
 
             foreach (int i in TaskListBox.SelectedIndices)
             {
-                var component = Project.ComponentList.Where(x => x.Name == selectedNode.Text).First();
+                var component = Project.Components.Where(x => x.Component == selectedNode.Text).First();
                 processName = TaskListBox.Items[i].ToString();
                 MoldBuildTreeView.SelectedNode.Nodes.Add(processName);
-                component.AddTask(processName, component.Name);
+                component.AddTask(processName, component.Component);
             }
             
         }
@@ -444,8 +444,8 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
-            task = component.TaskList.ElementAt(selectedNode.Index);
+            component = Project.Components.Find(x => x.Component == selectedNode.Parent.Text);
+            task = component.Tasks.ElementAt(selectedNode.Index);
 
             // Check if selected node contains nodes and if task info fields are empty.
             // If true remove all task info nodes from selected task.
@@ -570,11 +570,11 @@ namespace Toolroom_Scheduler
                 FinishProgrammerComboBox.Text = project.FinishProgrammer;
             }
 
-            foreach (ClassLibrary.ComponentModel component in project.ComponentList)
+            foreach (ClassLibrary.ComponentModel component in project.Components)
             {
-                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
+                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Component);
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     currentTaskNode = currentComponentNode.Nodes.Add(task.TaskName);
 
@@ -597,9 +597,9 @@ namespace Toolroom_Scheduler
 
             foreach (ClassLibrary.ComponentModel component in components)
             {
-                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Name);
+                currentComponentNode = MoldBuildTreeView.Nodes[0].Nodes.Add(component.Component);
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     currentTaskNode = currentComponentNode.Nodes.Add(task.TaskName);
 
@@ -619,7 +619,7 @@ namespace Toolroom_Scheduler
         private ProjectModel ConvertQuoteToProject(ProjectModel project)
         {
             // Need to check if form already contains project data.
-            if(project.ComponentList.Count > 0)
+            if(project.Components.Count > 0)
             {
                 MessageBox.Show("Can't add a quote to a work project tree with data in it.");
                 return project;
@@ -631,7 +631,7 @@ namespace Toolroom_Scheduler
             project.AddComponent("Quote");
 
             // Task list is automatically generated inside the QuoteInfo class when quote is read.
-            project.ComponentList.First().AddTaskList(project.QuoteInfo.TaskList);
+            project.Components.First().AddTaskList(project.QuoteInfo.TaskList);
 
             return project;
         }
@@ -1088,7 +1088,7 @@ namespace Toolroom_Scheduler
             }
             else if(selectedNode.Level == 2)
             {
-                var component = Project.ComponentList.Find(x => x.Name == selectedNode.Parent.Text);
+                var component = Project.Components.Find(x => x.Component == selectedNode.Parent.Text);
                 component.RemoveTask(selectedNode.Index);
             }
 
@@ -1112,7 +1112,7 @@ namespace Toolroom_Scheduler
                     }
                     else if (node.Level == 2)
                     {
-                        var component = Project.ComponentList.Where(x => x.Name == node.Parent.Text).First();
+                        var component = Project.Components.Where(x => x.Component == node.Parent.Text).First();
                         component.MoveTaskUp(node.Index);
                     }
 
@@ -1141,7 +1141,7 @@ namespace Toolroom_Scheduler
                     }
                     else if (node.Level == 2)
                     {
-                        var component = Project.ComponentList.Where(x => x.Name == node.Parent.Text).First();
+                        var component = Project.Components.Where(x => x.Component == node.Parent.Text).First();
                         component.MoveTaskDown(node.Index);
                     }
 
@@ -1205,9 +1205,9 @@ namespace Toolroom_Scheduler
         {
             Console.WriteLine($"{Project.JobNumber} {Project.ProjectNumber} {Project.DueDate} {Project.ToolMaker} {Project.Designer} {Project.RoughProgrammer} {Project.FinishProgrammer} {Project.ElectrodeProgrammer}");
 
-            foreach(ClassLibrary.ComponentModel component in Project.ComponentList)
+            foreach(ClassLibrary.ComponentModel component in Project.Components)
             {
-                Console.WriteLine($"{component.Name}");
+                Console.WriteLine($"{component.Component}");
 
                 //foreach(TaskInfo task in component.TaskList)
                 //{
@@ -1316,12 +1316,12 @@ namespace Toolroom_Scheduler
         {
             string[] preds = null;
 
-            foreach (ClassLibrary.ComponentModel component in Project.ComponentList)
+            foreach (ClassLibrary.ComponentModel component in Project.Components)
             {
                 List<int> predList = new List<int>();
                 int n = 1;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     if (task.Predecessors == "")
                     {
@@ -1375,12 +1375,12 @@ namespace Toolroom_Scheduler
         {
             string[] preds = null;
 
-            foreach (ClassLibrary.ComponentModel component in Project.ComponentList)
+            foreach (ClassLibrary.ComponentModel component in Project.Components)
             {
                 List<int> predList = new List<int>();
                 int n = 1;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     if (task.Predecessors == "")
                     {
@@ -1676,13 +1676,13 @@ namespace Toolroom_Scheduler
             {
                 DeactivateComponentHandlers();
 
-                component = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                component = Project.Components.Find(x => x.Component == selectedNode.Text);
                 quantityNumericUpDown.Value = component.Quantity;
                 sparesNumericUpDown.Value = component.Spares;
                 materialComboBox.Text = component.Material;
                 finishTextBox.Text = component.Finish;
 
-                componentPictureBox.Image = component.Picture;
+                componentPictureBox.Image = component.Pictures;
 
                 //if(component.Picture.Count > 0)
                 //{
@@ -1935,7 +1935,7 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetQuantity(Convert.ToInt16(quantityNumericUpDown.Value));
             }
         }
@@ -1947,7 +1947,7 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetSpares(Convert.ToInt16(sparesNumericUpDown.Value));
             }
         }
@@ -1959,7 +1959,7 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetMaterial(materialComboBox.Text);
             }
         }
@@ -1971,7 +1971,7 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetNote(componentNotesTextBox.Text);
             }
         }
@@ -1983,9 +1983,9 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetPicture();
-                componentPictureBox.Image = selectedComponent.Picture;
+                componentPictureBox.Image = selectedComponent.Pictures;
             }
             else
             {
@@ -2002,8 +2002,8 @@ namespace Toolroom_Scheduler
             {
                 if (Clipboard.ContainsImage())
                 {
-                    selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
-                    Clipboard.SetImage(selectedComponent.Picture);
+                    selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
+                    Clipboard.SetImage(selectedComponent.Pictures);
                 }
             }
         }
@@ -2015,7 +2015,7 @@ namespace Toolroom_Scheduler
 
             if (selectedNode.Level == 1)
             {
-                selectedComponent = Project.ComponentList.Find(x => x.Name == selectedNode.Text);
+                selectedComponent = Project.Components.Find(x => x.Component == selectedNode.Text);
                 selectedComponent.SetFinish(finishTextBox.Text);
             }
         }
@@ -2039,8 +2039,8 @@ namespace Toolroom_Scheduler
                 }
                 else if (dialogResult == DialogResult.No)
                 {
-                    components = tmpt.ReadProjectFromTextFile(fileName).ComponentList;
-                    Project.ComponentList.AddRange(components);
+                    components = tmpt.ReadProjectFromTextFile(fileName).Components;
+                    Project.Components.AddRange(components);
                     LoadComponentListToForm(components);
                 }
                 
@@ -2106,7 +2106,7 @@ namespace Toolroom_Scheduler
                 return;
             }
 
-            if(Project.ComponentList.Count == 0)
+            if(Project.Components.Count == 0)
             {
                MessageBox.Show("No components entered.");
                return;

@@ -25,7 +25,7 @@ namespace Toolroom_Scheduler
 
             foreach (ClassLibrary.ComponentModel component in componentList)
             {
-                ComponentCheckedListBox.Items.Add(component.Name);
+                ComponentCheckedListBox.Items.Add(component.Component);
             }
         }
 

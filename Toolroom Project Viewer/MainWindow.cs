@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using DevExpress.Data.Filtering;
 using DevExpress.XtraSplashScreen;
 using DevExpress.Data;
+using System.Collections;
 
 namespace Toolroom_Project_Viewer
 {
@@ -42,12 +43,16 @@ namespace Toolroom_Project_Viewer
         private BindingList<CustomDependency> CustomDependencyList = new BindingList<CustomDependency>();
         private List<ColorStruct> ColorList = new List<ColorStruct>();
         private RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
-        private string printOrientation, paperSize;
+        private string PrintOrientation, PaperSize;
         private string[] departmentArr = { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish" };
         public DataTable RoleTable { get; set; }
         private string TimeUnits { get; set; }
+        private string NoResourceName { get; set; }
         private ProjectModel Project { get; set; }
-        private List<ProjectModel> ProjectInfoList { get; set; }
+        private List<ProjectModel> ProjectInfoList { get; set; } = new List<ProjectModel>();
+        public List<ProjectModel> ProjectsList { get; set; }
+        public List<ComponentModel> ComponentsList { get; set; }
+        public List<TaskModel> TasksList { get; set; }
 
         private List<int> gridView3ExpandedRowsList = new List<int>();
         private List<int> gridView4ExpandedRowsList = new List<int>();
@@ -59,6 +64,7 @@ namespace Toolroom_Project_Viewer
         private string Role, Tasks;
         Regex TaskRegExpression, RoleRegExpression;
         private bool AllProjectItemsChecked;
+        private string[] ValidEditorArr = { "michell.willey", "mikeh", "Mikeh", "marks", "Marks", "joshua.meservey" };
         //private ArrayList saveExpList;
 
         private RefreshHelper helper1, helper2, deptTaskViewHelper;
@@ -87,7 +93,7 @@ namespace Toolroom_Project_Viewer
                 PopulateTimeFrameComboBox();               
 
                 schedulerStorage2.Appointments.CommitIdToDataSource = false;
-
+                
                 schedulerControl2.Start = DateTime.Today.AddDays(-7);
                 schedulerControl2.Views.GanttView.ResourcesPerPage = 15;
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
@@ -114,12 +120,17 @@ namespace Toolroom_Project_Viewer
             {
                 helper1 = new RefreshHelper(gridView3, "JobNumber");
                 helper2 = new RefreshHelper(gridView4, "Component");
+
+                LoadProjects();
+                LoadProjectView();
+                LoadTaskView();
+
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.Components' table. You can move, or remove it, as needed.
-                this.componentsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Components);
+                //this.componentsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Components);
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.Projects' table. You can move, or remove it, as needed.
-                this.projectsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Projects);
+                //this.projectsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Projects);
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.Tasks' table. You can move, or remove it, as needed.
-                this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
+                //this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
                 // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.WorkLoad' table. You can move, or remove it, as needed.
                 //this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
 
@@ -153,6 +164,60 @@ namespace Toolroom_Project_Viewer
             {
                 await manager.UpdateApp();
             }
+        }
+        private void LoadProjects()
+        {
+            var data = Database.GetProjects();
+
+            ProjectsList = data.projects;
+            ComponentsList = data.components;
+            TasksList = data.tasks;
+
+            InitializeProjects();
+        }
+        private void LoadProjectView()
+        {
+            BindingList<ProjectModel> projects = new BindingList<ProjectModel>(ProjectsList);
+            gridControl3.DataSource = projects;
+        }
+        private void InitializeProjects()
+        {
+            foreach (var project in ProjectsList)
+            {
+                project.Components = new List<ComponentModel>(ComponentsList.FindAll(x => x.ProjectNumber == project.ProjectNumber));
+
+                foreach (var component in project.Components)
+                {
+                    component.Tasks = new List<TaskModel>(TasksList.FindAll(x => x.ProjectNumber == project.ProjectNumber && x.Component == component.Component));
+                }
+            }
+        }
+        private void LoadTaskView()
+        {
+            var result = from project in ProjectsList
+                         join task in TasksList on project.ProjectNumber equals task.ProjectNumber
+                         select new TaskModel()
+                         {
+                             ID = task.ID,
+                             JobNumber = project.JobNumber,
+                             ProjectNumber = project.ProjectNumber,
+                             Component = task.Component,
+                             ToolMaker = project.ToolMaker,
+                             TaskName = task.TaskName,
+                             Notes = task.Notes,
+                             Hours = task.Hours,
+                             Duration = task.Duration,
+                             StartDate = task.StartDate,
+                             FinishDate = task.FinishDate,
+                             DueDate = project.DueDate,
+                             Machine = task.Machine,
+                             Resource = task.Resource,
+                             Status = task.Status
+                         };
+
+            BindingList<TaskModel> tasks = new BindingList<TaskModel>(result.ToList());
+
+            gridControl1.DataSource = tasks;
         }
 
         #region Department Schedule View
@@ -307,7 +372,6 @@ namespace Toolroom_Project_Viewer
 
         private void InitializeAppointments()
         {
-            Database db = new Database();
             //bool grouped;
 
             schedulerStorage1.Appointments.Clear();
@@ -351,12 +415,12 @@ namespace Toolroom_Project_Viewer
             //    grouped = false;
             //}
 
-            schedulerStorage1.Appointments.DataSource = db.GetAppointmentData("All");
+            schedulerStorage1.Appointments.DataSource = Database.GetAppointmentData("All");
 
-            //for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
-            //{
-            //    Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} {schedulerStorage1.Appointments[i].Subject} Resource: {schedulerStorage1.Appointments[i].ResourceId}");
-            //}
+            for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
+            {
+                Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId}");
+            }
 
             Console.WriteLine();
             Console.WriteLine($"{departmentComboBox.Text} Appointments");
@@ -418,38 +482,17 @@ namespace Toolroom_Project_Viewer
                 return false;
             }
         }
-
-        private void SetAppointmentResources(int id, string machine, string resource)
+        private void SetAppointmentDate(Appointment apt, string column, DateTime date)
         {
-            Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(id);
-            Resource res;
-
-            apt.ResourceIds.Clear();
-
-            int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
-            int resourceCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
-
-            if (machineCount == 0 && resourceCount == 0)
+            if (column == "StartDate")
             {
-                res = schedulerStorage1.Resources.Items.GetResourceById("None");
-                apt.ResourceIds.Add(res.Id);
+                apt.Start = date;
             }
-            else
+            else if (column == "FinishDate")
             {
-                if (machine != "" && machineCount == 1)
-                {
-                    res = schedulerStorage1.Resources.Items.GetResourceById(machine);
-                    apt.ResourceIds.Add(res.Id);
-                }
-
-                if (resource != "" && resourceCount == 1)
-                {
-                    res = schedulerStorage1.Resources.Items.GetResourceById(resource);
-                    apt.ResourceIds.Add(res.Id);
-                } 
+                apt.End = date;
             }
         }
-
         private void SetAppointmentResources(Appointment apt, string machine, string resource)
         {
             Resource res;
@@ -459,19 +502,23 @@ namespace Toolroom_Project_Viewer
             int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
             int resourceCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
 
-            if (machineCount == 0 && resourceCount == 0)
+            if (machineCount == 0)
             {
-                res = schedulerStorage1.Resources.Items.GetResourceById("None");
+                res = schedulerStorage1.Resources.Items.GetResourceById("No Machine");
                 apt.ResourceIds.Add(res.Id);
             }
-
-            if (machine != "" && machineCount == 1)
+            else if (machine != "" && machineCount == 1)
             {
                 res = schedulerStorage1.Resources.Items.GetResourceById(machine);
                 apt.ResourceIds.Add(res.Id);
             }
 
-            if (resource != "" && resourceCount == 1)
+            if (resourceCount == 0)
+            {
+                res = schedulerStorage1.Resources.Items.GetResourceById("No Personnel");
+                apt.ResourceIds.Add(res.Id);
+            }
+            else if (resource != "" && resourceCount == 1)
             {
                 res = schedulerStorage1.Resources.Items.GetResourceById(resource);
                 apt.ResourceIds.Add(res.Id);
@@ -553,19 +600,23 @@ namespace Toolroom_Project_Viewer
             int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
             int resourceCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
 
-            if (machineCount == 0 && resourceCount == 0)
+            if (machineCount == 0)
             {
-                res = schedulerStorage1.Resources.Items.GetResourceById("None");
+                res = schedulerStorage1.Resources.Items.GetResourceById("No Machine");
                 appointmentResourceIdCollection.Add(res.Id);
             }
-
-            if (machine != "" && machineCount == 1)
+            else if (machine != "" && machineCount == 1)
             {
                 res = schedulerStorage1.Resources.Items.GetResourceById(machine);
                 appointmentResourceIdCollection.Add(res.Id);
             }
 
-            if (resource != "" && resourceCount == 1)
+            if (resourceCount == 0)
+            {
+                res = schedulerStorage1.Resources.Items.GetResourceById("No Personnel");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (resource != "" && resourceCount == 1)
             {
                 res = schedulerStorage1.Resources.Items.GetResourceById(resource);
                 appointmentResourceIdCollection.Add(res.Id);
@@ -666,62 +717,76 @@ namespace Toolroom_Project_Viewer
             if (department == "Program Rough")
             {
                 Role = "Rough Programmer";
+                NoResourceName = "No Personnel";
             }
             else if (department == "Program Finish")
             {
                 Role = "Finish Programmer";
+                NoResourceName = "No Personnel";
             }
             else if (department == "Program Electrodes")
             {
                 Role = "Electrode Programmer";
+                NoResourceName = "No Personnel";
             }
             else if (department == "Programming")
             {
                 Role = "Programmer";
+                NoResourceName = "No Personnel";
             }
             else if (department == "CNC Rough")
             {
                 Role = "Rough Mill";
+                NoResourceName = "No Machine";
             }
-            else if (department == "Rough")
+            else if (department == "Rough") // This option is not available in the Department Schedule View.  And that's okay.
             {
                 Role = "Rough";
             }
             else if (department == "CNC Finish")
             {
                 Role = "Finish Mill";
+                NoResourceName = "No Machine";
             }
             else if (department == "CNC Electrodes")
             {
                 Role = "Graphite Mill";
+                NoResourceName = "No Machine";
             }
             else if (department == "CNCs")
             {
                 Role = "Mill";
+                NoResourceName = "No Machine";
             }
             else if (department == "CNC People")
             {
                 Role = "CNC Operator";
+                NoResourceName = "No Personnel";
             }
             else if (department == "EDM Sinker")
             {
                 Role = @"^(EDM Sinker)$";
+                NoResourceName = "No Machine";
             }
-            else if (department == "EDM Wire")
+            else if (department == "EDM Wire (In-House)")
             {
                 Role = @"^EDM Wire$";
+                NoResourceName = "No Machine";
             }
             else if (department == "Grind")
             {
                 Role = "Tool Maker";
+                NoResourceName = "No Personnel";
             }
             else if (department == "Polish")
             {
                 Role = "Tool Maker";
+                NoResourceName = "No Personnel";
             }
             else if (department == "Inspection")
             {
                 Role = "CMM Operator";
+                NoResourceName = "No Personnel";
             }
             else if (department == "All")
             {
@@ -925,12 +990,12 @@ namespace Toolroom_Project_Viewer
                 {
                     if (GroupByRadioGroup.SelectedIndex == 0)
                     {
-                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("Role") == "None")).Count() < 1;
+                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("ResourceName") == NoResourceName)).Count() < 1;
                     }
                     else if (GroupByRadioGroup.SelectedIndex == 1)
                     {
                         Console.WriteLine($"Resource: {res.Id.ToString()}");
-                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (x.Field<string>("Department").Contains(departmentComboBox.Text) || x.Field<string>("Role") == "None")).Count() < 1;
+                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (x.Field<string>("Department").Contains(departmentComboBox.Text) || x.Field<string>("ResourceName") == NoResourceName)).Count() < 1;
                     }
                 }
             }
@@ -1133,36 +1198,25 @@ namespace Toolroom_Project_Viewer
         {
             gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
         }
-
-        private void gridControl1_MouseDown(object sender, MouseEventArgs e)
+        private void RefreshTasksButton_Click(object sender, EventArgs e)
         {
             try
             {
-                string clickInfo = "";
-                GridControl grid = sender as GridControl;
-                if (grid == null) return;
-                // Get a View at the current point.
-                BaseView view = grid.GetViewAt(e.Location);
-                if (view == null) return;
-                // Retrieve information on the current View element.
-                BaseHitInfo baseHI = view.CalcHitInfo(e.Location);
-                GridHitInfo gridHI = baseHI as GridHitInfo;
-                if (gridHI != null)
-                    clickInfo = gridHI.HitTest.ToString();
-
-                //MessageBox.Show(clickInfo);
-
-                if (clickInfo == "RowCell" && gridHI.Column.ToString() == "Component")
-                {
-                    OpenKanBanWorkbook(gridHI.RowHandle);
-                }
+                ProjectInfoList = Database.GetProjectInfoList();
+                deptTaskViewHelper = new RefreshHelper(gridView1, "ProjectNumber");
+                RoleTable = Database.GetRoleTable();
+                deptTaskViewHelper.SaveViewInfo();
+                //this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
+                LoadProjects();
+                LoadTaskView();
+                PopulateEmployeeComboBox();
+                deptTaskViewHelper.LoadViewInfo();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
-
         private void printTaskViewButton_Click(object sender, EventArgs e)
         {
             // Check whether the GridControl can be previewed.
@@ -1243,6 +1297,34 @@ namespace Toolroom_Project_Viewer
                 }
             }
         }
+        private void gridControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                string clickInfo = "";
+                GridControl grid = sender as GridControl;
+                if (grid == null) return;
+                // Get a View at the current point.
+                BaseView view = grid.GetViewAt(e.Location);
+                if (view == null) return;
+                // Retrieve information on the current View element.
+                BaseHitInfo baseHI = view.CalcHitInfo(e.Location);
+                GridHitInfo gridHI = baseHI as GridHitInfo;
+                if (gridHI != null)
+                    clickInfo = gridHI.HitTest.ToString();
+
+                //MessageBox.Show(clickInfo);
+
+                if (clickInfo == "RowCell" && gridHI.Column.ToString() == "Component")
+                {
+                    OpenKanBanWorkbook(gridHI.RowHandle);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
         private void gridView1_PrintInitialize(object sender, PrintInitializeEventArgs e)
         {
             PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
@@ -1262,76 +1344,54 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                //MessageBox.Show("gridView1_CellValueChanged");
                 GridView view = sender as GridView;
-                Database db = new Database();
-
-                int projectNumber, taskID, id;
-                string jobNumber, component, predecessors, duration, machine, resource;
-
-                id = (int)view.GetFocusedRowCellValue("ID");
-                jobNumber = (string)view.GetFocusedRowCellValue("JobNumber");
-                component = (string)view.GetFocusedRowCellValue("Component");
-                duration = (string)view.GetFocusedRowCellValue("Duration");
-                predecessors = (string)view.GetFocusedRowCellValue("Predecessors");
-                projectNumber = (int)view.GetFocusedRowCellValue("ProjectNumber");
-                taskID = (int)view.GetFocusedRowCellValue("TaskID");
-                machine = (string)view.GetFocusedRowCellValue("Machine");
-                resource = (string)view.GetFocusedRowCellValue("Resource");
+                TaskModel task = view.GetFocusedRow() as TaskModel;
+                ComponentModel component = ComponentsList.Find(x => x.Component == task.Component && x.ProjectNumber == task.ProjectNumber);
 
                 deptTaskViewHelper = new RefreshHelper(gridView1, "ProjectNumber");
 
-                //ProjectInfo pi = ProjectInfoList.Find(x => x.ProjectNumber == (int)view.GetListSourceRowCellValue(e.RowHandle, "ProjectNumber"));
+                if (e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate")
+                {
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    {
+                        MessageBox.Show("This login is not authorized to make changes to dates.");
+                        LoadTaskView();
+                        return;
+                    }
 
-                if (e.Column.FieldName == "StartDate")
-                {
-                    db.ChangeTaskStartDate(jobNumber, projectNumber, component, (DateTime)e.Value, duration, taskID);
-                }
-                else if (e.Column.FieldName == "FinishDate")
-                {
-                    db.ChangeTaskFinishDate(jobNumber, projectNumber, component, (DateTime)e.Value, taskID);
+                    //DateTime? date = (DateTime?)e.Value;
+                    //schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
+                    //Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
+                    //SetAppointmentDate(apt, e.Column.FieldName, date ?? new DateTime(0001, 1, 1));
+                    //schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
+                    Database.ChangeTaskDate(e.Column.FieldName, task, component);
                 }
                 else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Resource")
                 {
-                    SetAppointmentResources(id, machine, resource);
-                    db.UpdateTasksTable(sender, e);
+                    schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
+                    Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
+                    SetAppointmentResources(apt, task.Machine, task.Resource);
+                    schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
+                    Database.UpdateTasksTable(sender, e, GenerateResourceIDsString(apt.ResourceIds));
                 }
                 else
                 {
-                    db.UpdateTasksTable(sender, e);
+                    Database.UpdateTasksTable(sender, e);
                 }
-
-                deptTaskViewHelper.SaveViewInfo(); // I don't know why this is needed.  The grid shouldn't need to be refreshed if a change is successful.
-                this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
-                deptTaskViewHelper.LoadViewInfo();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+
+                deptTaskViewHelper.SaveViewInfo();
+                LoadTaskView();
+                deptTaskViewHelper.LoadViewInfo();
             }
         }
 
         private void gridView1_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("gridView1_Click");
-        }
-
-        private void RefreshTasksButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ProjectInfoList = Database.GetProjectInfoList();
-                deptTaskViewHelper = new RefreshHelper(gridView1, "ProjectNumber");
-                RoleTable = Database.GetRoleTable();
-                deptTaskViewHelper.SaveViewInfo();
-                this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
-                PopulateEmployeeComboBox();
-                deptTaskViewHelper.LoadViewInfo();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
-            }
         }
 
         private void gridView1_CustomUnboundColumnData(object sender, CustomColumnDataEventArgs e)
@@ -1463,20 +1523,6 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Project View
-
-        private void InitializeComponentGrid()
-        {
-            Database db = new Database();
-
-            try
-            {
-                //gridControl3.DataSource = db.GetComponentCompletionPercents();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
-            }
-        }
 
         private class ExpandedProjectRows
         {
@@ -1626,29 +1672,15 @@ namespace Toolroom_Project_Viewer
             GetSelectedRows();
             DetermineExpandedRows();
 
-            this.projectsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Projects);
-            this.componentsTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Components);
-            this.tasksTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.Tasks);
+            LoadProjects();
+            LoadProjectView();
 
             RecursiveExpand();
             SelectRows();
         }
 
-        private int GetRowHandleByColumnValue(GridView view, string ColumnFieldName, object value)
+        private bool KanBanExists(string kanBanWorkbookPath)
         {
-            int result = GridControl.InvalidRowHandle;
-            for (int i = 0; i < view.RowCount; i++)
-                if (view.GetDataRow(i)[ColumnFieldName].Equals(value))
-                    return i;
-            return result;
-        }
-
-        private bool KanBanExists(string jobNumber, int projectNumber)
-        {
-            Database db = new Database();
-
-            string kanBanWorkbookPath = db.GetKanBanWorkbookPath(jobNumber, projectNumber);
-
             if (kanBanWorkbookPath != "")
             {
                 FileInfo fi = new FileInfo(kanBanWorkbookPath);
@@ -1679,7 +1711,9 @@ namespace Toolroom_Project_Viewer
                     if (form.DataValidated)
                     {
                         RefreshProjectGrid();
-                        gridView3.FocusedRowHandle = GetRowHandleByColumnValue(gridView3, "ProjectNumber", form.Project.ProjectNumber);
+                        int rowHandle = gridView3.LocateByValue("ProjectNumber", form.Project.ProjectNumber);
+                        if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle)
+                            gridView3.FocusedRowHandle = rowHandle;
                         gridView3.SetMasterRowExpanded(gridView3.FocusedRowHandle, true);
                     }
                 }
@@ -1799,6 +1833,7 @@ namespace Toolroom_Project_Viewer
             {
                 Database db = new Database();
                 GridView view = sender as GridView;
+                ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
                 //string resource, jobNumber, department;
                 //int projectNumber;
 
@@ -2008,42 +2043,37 @@ namespace Toolroom_Project_Viewer
             try
             {
                 GridView view = sender as GridView;
-                Database db = new Database();
+                TaskModel task = view.GetFocusedRow() as TaskModel;
+                ComponentModel component = ComponentsList.Find(x => x.Component == task.Component && x.ProjectNumber == task.ProjectNumber);
+                ProjectModel project = ProjectsList.Find(x => x.ProjectNumber == task.ProjectNumber);
 
-                int projectNumber, taskID, id;
-                string jobNumber, component, predecessors, duration;
-
-                id = (int)view.GetFocusedRowCellValue("ID");
-                jobNumber = (string)view.GetFocusedRowCellValue("JobNumber");
-                component = (string)view.GetFocusedRowCellValue("Component");
-                duration = (string)view.GetFocusedRowCellValue("Duration");
-                predecessors = (string)view.GetFocusedRowCellValue("Predecessors");
-                projectNumber = (int)view.GetFocusedRowCellValue("ProjectNumber");
-                taskID = (int)view.GetFocusedRowCellValue("TaskID");
-
-                //ProjectInfo pi = ProjectInfoList.Find(x => x.ProjectNumber == (int)view.GetListSourceRowCellValue(e.RowHandle, "ProjectNumber"));
-
-                if (e.Column.FieldName == "StartDate" && e.Value != DBNull.Value)
+                if ((e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate") && e.Value != DBNull.Value)
                 {
-                    db.ChangeTaskStartDate(jobNumber, projectNumber, component, (DateTime)e.Value, duration, taskID);
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    {
+                        MessageBox.Show("This login is not authorized to make changes to dates.");
+                        RefreshProjectGrid();
+                        return;
+                    }
 
-                    RefreshProjectGrid();
-                }
-                else if (e.Column.FieldName == "FinishDate" && e.Value != DBNull.Value)
-                {
-                    db.ChangeTaskFinishDate(jobNumber, projectNumber, component, (DateTime)e.Value, taskID);
-
-                    RefreshProjectGrid();
+                    gridView5.BeginUpdate();
+                    Database.ChangeTaskDate(e.Column.FieldName, task, component);
+                    //project.IsProjectOnTime();
+                    gridView5.EndUpdate();
                 }
                 else
                 {
                     if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Resource")
                     {
-                        SetAppointmentResources(id, view.GetRowCellValue(e.RowHandle, "Machine").ToString(), view.GetRowCellValue(e.RowHandle, "Resource").ToString());
+                        Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
+                        // TODO: Determine why when I change a resource and the dates are blank the dates get set to 1/1/2001.
+                        SetAppointmentResources(apt, task.Machine, task.Resource);
                     }
 
-                    db.UpdateTasksTable(sender, e);  // Resources field is only updated when the Machine or Resource fields change., resources
+                    Database.UpdateTasksTable(sender, e);  // Resources field is only updated when the Machine or Resource fields change., resources
                 }
+;
+                LoadTaskView();
             }
             catch (Exception ex)
             {
@@ -2056,10 +2086,6 @@ namespace Toolroom_Project_Viewer
             try
             {
                 RefreshProjectGrid();
-                //helper1.LoadViewInfo();
-                //helper2.LoadViewInfo();
-
-                //ExpandStoredRows();
             }
             catch (Exception ex)
             {
@@ -2073,19 +2099,27 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                ProjectModel pi = db.GetProject((int)gridView3.GetFocusedRowCellValue("ProjectNumber")); // (string)gridView3.GetFocusedRowCellValue("JobNumber"), 
+                ProjectModel project = Database.GetProject4((int)gridView3.GetFocusedRowCellValue("ProjectNumber")); // (string)gridView3.GetFocusedRowCellValue("JobNumber"),
+                ProjectModel copiedProject;
 
                 if (gridView3.SelectedRowsCount == 1)
                 {
-                    var result = XtraInputBox.Show("Change Project #", "Copy Project", "");
+                    var result = XtraInputBox.Show("Change Project #", "Copy Project", "Enter a project number.");
 
-                    if (result != null)
+                    if (result.Length > 0)
                     {
                         if (int.TryParse(result.ToString(), out int projectNumber))
                         {
-                            pi.SetDefaultCopiedProjectInfo(projectNumber);
-                            db.LoadProjectToDB(pi);
+                            project.AvailableResources = schedulerStorage1;
+                            copiedProject = new ProjectModel(project, projectNumber);
+                            //project.SetDefaultCopiedProjectInfo(projectNumber);
+                            //db.LoadProjectToDB(pi);
+                            Database.CreateProject(copiedProject);
                             RefreshProjectGrid();
+                            int rowHandle = gridView3.LocateByValue("ProjectNumber", projectNumber);
+                            if (rowHandle != GridControl.InvalidRowHandle)
+                                gridView3.FocusedRowHandle = rowHandle;
+                            gridView3.SetMasterRowExpanded(gridView3.FocusedRowHandle, true);
                         }
                         else
                         {
@@ -2115,22 +2149,12 @@ namespace Toolroom_Project_Viewer
                 }
                 else
                 {
-                    Database db = new Database();
-                    ExcelInteractions ei = new ExcelInteractions();
-                    string jobNumber = gridView3.GetFocusedRowCellValue("JobNumber").ToString();
-                    int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
+                    ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
                     string path;
-                    List<string> componentList = new List<string>();
 
-                    ProjectModel pi = db.GetProject(projectNumber);
+                    project = Database.GetProject4(project.ProjectNumber);
 
-                    //if (BlankStartFinishDateExists(pi))
-                    //{
-                    //    MessageBox.Show("A blank start or finish date exists. Please fill in all dates.");
-                    //    return;
-                    //}
-
-                    if (KanBanExists(jobNumber, projectNumber))
+                    if (KanBanExists(project.KanBanWorkbookPath))
                     {
                         DialogResult result = XtraMessageBox.Show("A Kan Ban for this project already exists.\n\nDo you want to create a new one?\n\n" +
                             "(Click 'Yes' to create new one (All info preserved).  Click 'No' to cancel.)", "Warning",
@@ -2138,15 +2162,13 @@ namespace Toolroom_Project_Viewer
 
                         if (result == DialogResult.Yes)
                         {
-                            path = ei.GenerateKanBanWorkbook2(pi);
+                            path = ExcelInteractions.GenerateKanBanWorkbook2(project);
 
                             if (path != "")
                             {
-                                db.SetKanBanWorkbookPath(path, pi.JobNumber, pi.ProjectNumber);
+                                Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
                             }
 
-                            // This is here so that the rows color will be restored when the KanBan is generated.
-                            RefreshProjectGrid();
                         }
                         else if (result == DialogResult.No)
                         {
@@ -2170,11 +2192,11 @@ namespace Toolroom_Project_Viewer
                     }
                     else
                     {
-                        path = ei.GenerateKanBanWorkbook2(pi);
+                        path = ExcelInteractions.GenerateKanBanWorkbook2(project);
 
                         if (path != "")
                         {
-                            db.SetKanBanWorkbookPath(path, pi.JobNumber, pi.ProjectNumber);
+                            Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
                         }
                     }
 
@@ -2189,17 +2211,21 @@ namespace Toolroom_Project_Viewer
 
         private void forwardDateButton_Click(object sender, EventArgs e)
         {
-            List<string> componentList = new List<string>();
-            Database db = new Database();
+            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                MessageBox.Show("This login is not authorized to make changes to dates.");
+                return;
+            }
+
+            List<string> selectedComponentList = GetListOfSelectedComponents();
 
             try
             {
-                string jobNumber = gridView3.GetFocusedRowCellValue("JobNumber").ToString();
-                int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
-                //DateTime preselectDate = (DateTime)
-                componentList = GetListOfSelectedComponents();
+                var compResult = from component in ComponentsList
+                                 where selectedComponentList.Any(x => x == component.Component)
+                                 select component;
 
-                if (componentList.Count == 0)
+                if (selectedComponentList.Count == 0)
                 {
                     XtraMessageBox.Show("No components selected.");
                     return;
@@ -2211,43 +2237,51 @@ namespace Toolroom_Project_Viewer
 
                     if (result == DialogResult.OK)
                     {
-                        db.ForwardDateProjectTasks(jobNumber, projectNumber, componentList, form.ForwardDate);
-                        RefreshProjectGrid();
+                        gridView5.BeginUpdate();
+                        Database.ForwardDateTasks(compResult.ToList(), form.ForwardDate);
+                        gridView5.EndUpdate();
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                RefreshProjectGrid();
             }
         }
 
         private void backDateButton_Click(object sender, EventArgs e)
         {
-            List<string> componentList = new List<string>();
-            Database db = new Database();
+            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                MessageBox.Show("This login is not authorized to make changes to dates.");
+                return;
+            }
+
+            ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
+            List<string> selectedComponentList = GetListOfSelectedComponents();
 
             try
             {
-                string jobNumber = gridView3.GetFocusedRowCellValue("JobNumber").ToString();
-                int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
-                DateTime preselectDate = (DateTime)gridView3.GetFocusedRowCellValue("DueDate");
-                componentList = GetListOfSelectedComponents();
+                var compResult = from component in ComponentsList
+                                 where selectedComponentList.Any(x => x == component.Component)
+                                 select component;
 
-                if (componentList.Count == 0)
+                if (selectedComponentList.Count == 0)
                 {
                     XtraMessageBox.Show("No components selected.");
                     return;
                 }
 
-                using (var form = new ForwardDateWindow("Back Date", preselectDate))
+                using (var form = new ForwardDateWindow("Back Date", project.DueDate))
                 {
                     var result = form.ShowDialog();
 
                     if (result == DialogResult.OK)
                     {
-                        db.BackDateProjectTasks(jobNumber, projectNumber, componentList, form.ForwardDate);
-                        RefreshProjectGrid();
+                        gridView5.BeginUpdate();
+                        Database.BackDateTasks(compResult.ToList(), form.ForwardDate);
+                        gridView5.EndUpdate();
                     }
                 }
             }
@@ -2275,9 +2309,14 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 Database db = new Database();
-                int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");                    
-                ProjectModel project = db.GetProject(projectNumber);
+                int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
+                ProjectModel project = Database.GetProject4(projectNumber);
+                //ProjectModel project = db.GetProject(projectNumber);
+                sw.Stop();
+                //MessageBox.Show(sw.ElapsedMilliseconds.ToString());
                 EditProject(project);
             }
             catch (Exception ex)
@@ -2311,21 +2350,21 @@ namespace Toolroom_Project_Viewer
 
         private void gridView3_RowStyle(object sender, RowStyleEventArgs e)
         {
-            GridView View = sender as GridView;
-            if (e.RowHandle >= 0)
-            {
-                DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["DateModified"]).ToString(), out DateTime dateModified);            
+            //GridView View = sender as GridView;
+            //if (e.RowHandle >= 0)
+            //{
+            //    DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["DateModified"]).ToString(), out DateTime dateModified);            
 
-                if(DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["LastKanBanGenerationDate"]).ToString(), out DateTime lastKanBanGeneratedDate))
-                {
-                    if (dateModified > lastKanBanGeneratedDate)
-                    {
-                        e.Appearance.BackColor = Color.Salmon;
-                        e.Appearance.BackColor2 = Color.SeaShell;
-                        e.HighPriority = true;
-                    }
-                }
-            }
+            //    if(DateTime.TryParse(View.GetRowCellValue(e.RowHandle, View.Columns["LastKanBanGenerationDate"]).ToString(), out DateTime lastKanBanGeneratedDate))
+            //    {
+            //        if (dateModified > lastKanBanGeneratedDate)
+            //        {
+            //            e.Appearance.BackColor = Color.Salmon;
+            //            e.Appearance.BackColor2 = Color.SeaShell;
+            //            e.HighPriority = true;
+            //        }
+            //    }
+            //}
         }
 
         #endregion
@@ -2623,12 +2662,12 @@ namespace Toolroom_Project_Viewer
             //CustomResourceCollection.Clear();
             CustomResourceCollection = new BindingList<CustomResource>();
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 ParentID = i;
-                CustomResourceCollection.Add(CreateCustomResource(i++, -1, component.Name));
+                CustomResourceCollection.Add(CreateCustomResource(i++, -1, component.Component));
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     CustomResourceCollection.Add(CreateCustomResource(i++, ParentID, task.TaskName));
                 }
@@ -2660,14 +2699,14 @@ namespace Toolroom_Project_Viewer
             int i = 0;
             int baseCount;
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 baseCount = i++;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     Resource resource = schedulerStorage2.Resources[i++];
-                    eventList.Add(CreateEvent(task.ID + baseCount, project.JobNumber + " #" + project.ProjectNumber + " " + component.Name, resource.Id, task.ID, task.TaskName, task.StartDate, task.FinishDate));
+                    eventList.Add(CreateEvent(task.TaskID + baseCount, project.JobNumber + " #" + project.ProjectNumber + " " + component.Component, resource.Id, task.TaskID, task.TaskName, task.StartDate, task.FinishDate));
                 }
             }
 
@@ -2718,11 +2757,11 @@ namespace Toolroom_Project_Viewer
             int aID = 1;
             int baseCount;
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 baseCount = aID - 1;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     task.ChangeIDs(baseCount);
 
@@ -2757,23 +2796,13 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void LoadProject(string jobNumber, int projectNumber)
+        private void LoadProject(int projectNumber) // string jobNumber, 
         {
             Database db = new Database();
             DataTable dt1 = new DataTable();
             DataTable dt2 = new DataTable();
 
-            Project = db.GetProject(projectNumber); // jobNumber, 
-
-            //dt = db.getProjectData(jobNumber, projectNumber);
-
-            //foreach (ClassLibrary.Component compi in Project.ComponentList)
-            //{
-            //    foreach (TaskInfo taski in compi.TaskList)
-            //    {
-            //        Console.WriteLine(compi.Name + " " + taski.ID + " " + taski.TaskName);
-            //    }
-            //}
+            Project = Database.GetProject4(projectNumber);  // Formerly db.GetProject(projectNumber);
 
             ResourceMappingInfo resourceMappings = this.schedulerStorage2.Resources.Mappings;
 
@@ -2898,17 +2927,17 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("TaskName", typeof(string));
             dt.Columns.Add("ParentID", typeof(int));
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 DataRow newRow1 = dt.NewRow();
 
                 newRow1["AptID"] = i;
-                newRow1["TaskName"] = component.Name;
+                newRow1["TaskName"] = component.Component;
                 parentID = i++;
 
                 dt.Rows.Add(newRow1);
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow newRow2 = dt.NewRow();
 
@@ -2939,7 +2968,7 @@ namespace Toolroom_Project_Viewer
                 var number = GetComboBoxInfo();
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
                 //LoadProject();
-                LoadProject(number.jobNumber, number.projectNumber);
+                LoadProject(number.projectNumber);
 
                 SplashScreenManager.CloseForm();
             }
@@ -2969,7 +2998,7 @@ namespace Toolroom_Project_Viewer
                 {
                     var number = GetComboBoxInfo();
                     collapsedNodes = GetCollapsedNodes();
-                    LoadProject(number.jobNumber, number.projectNumber);
+                    LoadProject(number.projectNumber);
                     schedulerControl2.RefreshData();
                     CollapseNodes(collapsedNodes);
                 }
@@ -2977,7 +3006,7 @@ namespace Toolroom_Project_Viewer
                 {
                     var number = GetComboBoxInfo();
                     collapsedNodes = GetCollapsedNodes();
-                    LoadProject(number.jobNumber, number.projectNumber);
+                    LoadProject(number.projectNumber);
                     schedulerControl2.RefreshData();
                     CollapseNodes(collapsedNodes);
                 }
@@ -2997,7 +3026,7 @@ namespace Toolroom_Project_Viewer
 
                     SplashScreenManager.ShowForm(typeof(WaitForm1));
                     //LoadProject();
-                    LoadProject(number.jobNumber, number.projectNumber);
+                    LoadProject(number.projectNumber);
 
                     SplashScreenManager.CloseForm();
                 }
@@ -3012,8 +3041,7 @@ namespace Toolroom_Project_Viewer
 
         #region WorkLoad
 
-        private string[] validEditorArr = { "michell.willey", "mikeh", "Mikeh", "marks", "Marks", "joshua.meservey" };
-        private void CollapseCompletedGroup()
+        private void CollapseGroups()
         {
             int count = 0;
             for (int i = 0; i < bandedGridView1.RowCount; i++)
@@ -3023,7 +3051,7 @@ namespace Toolroom_Project_Viewer
                 {
                     count++;
                     //MessageBox.Show(count.ToString() + " " + rowHandle + " " + bandedGridView1.GetGroupRowDisplayText(rowHandle));
-                    if (bandedGridView1.GetGroupRowDisplayText(rowHandle).Contains("Completed"))
+                    if (bandedGridView1.GetGroupRowDisplayText(rowHandle).Contains("Completed") || bandedGridView1.GetGroupRowDisplayText(rowHandle).Contains("Quoted / Forecasted"))
                     {
                         bandedGridView1.CollapseGroupRow(rowHandle);
                     }
@@ -3035,7 +3063,7 @@ namespace Toolroom_Project_Viewer
         {
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
             ColorList = Database.GetColorEntries();
-            CollapseCompletedGroup();
+            CollapseGroups();
         }
 
         private void bandedGridView1_CellValueChanged(object sender, CellValueChangedEventArgs e)
@@ -3044,11 +3072,11 @@ namespace Toolroom_Project_Viewer
             {
                 Console.WriteLine("bandedGridView1 Cell Value Changed Event");
                 //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
-                if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
                 {
                     MessageBox.Show("This login is not authorized to make changes to work load tab.");
                     gridControl2.DataSource = workLoadTableAdapter.GetData();
-                    CollapseCompletedGroup();
+                    CollapseGroups();
                     return;
                 }
 
@@ -3159,7 +3187,7 @@ namespace Toolroom_Project_Viewer
             {
                 if (view.IsNewItemRow(e.RowHandle))
                 {
-                    if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
                     {
                         MessageBox.Show("This login is not authorized to make changes to work load tab.");
                         return;
@@ -3246,7 +3274,7 @@ namespace Toolroom_Project_Viewer
                     Database.AddWorkLoadEntry(wli);
 
                     gridControl2.DataSource = workLoadTableAdapter.GetData();
-                    CollapseCompletedGroup();
+                    CollapseGroups();
                 }
             }
             catch (Exception ex)
@@ -3269,11 +3297,11 @@ namespace Toolroom_Project_Viewer
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
             {
                 MessageBox.Show("This login is not authorized to make changes to work load tab.");
                 gridControl2.DataSource = workLoadTableAdapter.GetData();
-                CollapseCompletedGroup();
+                CollapseGroups();
                 return;
             }
 
@@ -3288,7 +3316,7 @@ namespace Toolroom_Project_Viewer
                     db.DeleteColorEntries(Convert.ToInt32(bandedGridView1.GetFocusedRowCellValue("ID")));
                     //bandedGridView1.DeleteRow(bandedGridView1.FocusedRowHandle);
                     gridControl2.DataSource = workLoadTableAdapter.GetData();
-                    CollapseCompletedGroup();
+                    CollapseGroups();
                 }
                 else
                 {
@@ -3329,21 +3357,21 @@ namespace Toolroom_Project_Viewer
             pb.PageSettings.LeftMargin = 25;
             pb.Document.AutoFitToPagesWidth = 1;
 
-            if (paperSize == "Tabloid")
+            if (PaperSize == "Tabloid")
             {
                 pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Tabloid;
                 pb.PageSettings.PrinterName = @"\\S-PS1-SMDRV\P-1336 HP CP5225 - Color";
             }
-            else if (paperSize == "Letter")
+            else if (PaperSize == "Letter")
             {
                 pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Letter;
             }
 
-            if (printOrientation == "Landscape")
+            if (PrintOrientation == "Landscape")
             {
                 pb.PageSettings.Landscape = true;
             }
-            else if (printOrientation == "Portrait")
+            else if (PrintOrientation == "Portrait")
             {
                 pb.PageSettings.Landscape = false;
             }
@@ -3365,7 +3393,7 @@ namespace Toolroom_Project_Viewer
         {
             gridControl2.DataSource = workLoadTableAdapter.GetData();
             RoleTable = Database.GetRoleTable();
-            CollapseCompletedGroup();
+            CollapseGroups();
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
         }
 
@@ -3383,8 +3411,8 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            printOrientation = "Landscape";
-            paperSize = "Tabloid";
+            PrintOrientation = "Landscape";
+            PaperSize = "Tabloid";
             FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
             fi.SetValue(bandedGridView1.Columns.ColumnByFieldName("Stage"), 0);
             //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 0;
@@ -3408,8 +3436,8 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            printOrientation = "Portrait";
-            paperSize = "Letter";
+            PrintOrientation = "Portrait";
+            PaperSize = "Letter";
             FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
             fi.SetValue(bandedGridView1.Columns.ColumnByFieldName("Stage"), 0);
             //bandedGridView1.Columns.ColumnByFieldName("Stage").Width = 0;
@@ -3420,8 +3448,8 @@ namespace Toolroom_Project_Viewer
 
         private void printPreviewButton_Click(object sender, EventArgs e)
         {
-            printOrientation = "Landscape";
-            paperSize = "Tabloid";
+            PrintOrientation = "Landscape";
+            PaperSize = "Tabloid";
             bandedGridView1.ShowPrintPreview();
         }
 
@@ -3454,7 +3482,7 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Button == MouseButtons.Right)
                 {
-                    if (!validEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
                     {
                         MessageBox.Show("This login is not authorized to make changes to work load tab.");
                         return;
@@ -3496,6 +3524,19 @@ namespace Toolroom_Project_Viewer
                         cells = bandedGridView1.GetSelectedCells();
 
                         SetSelectedCellColor(color, cells);
+                    }
+                    else if (column.FieldName == "JobFolderPath")
+                    {
+                        FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                        folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                        folderBrowserDialog.SelectedPath = @"X:\TOOLROOM\";
+                        var result = folderBrowserDialog.ShowDialog();
+
+                        if (result == DialogResult.OK)
+                        {
+                            Database.SetJobFolderPath((int)bandedGridView1.GetRowCellValue(rowHandle, "ID"), folderBrowserDialog.SelectedPath);
+                            
+                        }
                     }
                 }
                 else if (e.Button == MouseButtons.Left)
@@ -3832,20 +3873,24 @@ namespace Toolroom_Project_Viewer
                         {
                             role = "Tool Maker";
                         }
+                        else if (column == "Designer")
+                        {
+                            role = "Designer";
+                        }
                         else if (column == "Apprentice")
                         {
                             role = "Apprentice";
                         }
                         else if (column == "Stage")
                         {
-                            comboBoxEdit.Properties.Items.Add("1 - In-Design");
-                            comboBoxEdit.Properties.Items.Add("2 - In-Programming");
-                            comboBoxEdit.Properties.Items.Add("3 - In-Shop");
-                            comboBoxEdit.Properties.Items.Add("4 - In-Mold Check-In or Outside Vendors");
-                            comboBoxEdit.Properties.Items.Add("5 - Rework");
-                            comboBoxEdit.Properties.Items.Add("6 - In-Repair / Development");
-                            comboBoxEdit.Properties.Items.Add("7 - Completed");
-                            comboBoxEdit.Properties.Items.Add("");
+                            //comboBoxEdit.Properties.Items.Add("1 - In-Design");
+                            //comboBoxEdit.Properties.Items.Add("2 - In-Programming");
+                            //comboBoxEdit.Properties.Items.Add("3 - In-Shop");
+                            //comboBoxEdit.Properties.Items.Add("4 - In-Mold Check-In or Outside Vendors");
+                            //comboBoxEdit.Properties.Items.Add("5 - Rework");
+                            //comboBoxEdit.Properties.Items.Add("6 - In-Repair / Development");
+                            //comboBoxEdit.Properties.Items.Add("7 - Completed");
+                            //comboBoxEdit.Properties.Items.Add("");
 
                             return;
                         }
@@ -3945,6 +3990,20 @@ namespace Toolroom_Project_Viewer
             //schedulerControl1.DataStorage.Appointments.Filter = appointmentsFilterControl.FilterString;
         }
 
+        private void schedulerControl1_AppointmentFlyoutShowing(object sender, AppointmentFlyoutShowingEventArgs e)
+        {
+            System.Windows.Forms.Label myControl = new System.Windows.Forms.Label();
+            myControl.BackColor = Color.LightGreen;
+            myControl.Size = new Size(420, 135);
+            myControl.Text = $" Job#: {e.FlyoutData.Appointment.CustomFields["JobNumber"]}{Environment.NewLine}" +
+                             $"Proj#: {e.FlyoutData.Appointment.CustomFields["ProjectNumber"]}{Environment.NewLine}" +
+                             $" Comp: {e.FlyoutData.Appointment.CustomFields["Component"]}{Environment.NewLine}" +
+                             $" Task: {e.FlyoutData.Appointment.CustomFields["TaskName"]}{Environment.NewLine}" +
+                             $"  Hrs: {e.FlyoutData.Appointment.CustomFields["Hours"]}{Environment.NewLine}";
+            myControl.Font = new Font("Lucida Sans Typewriter", 18);
+            e.Control = myControl;
+        }
+
         private void schedulerControl1_EditAppointmentFormShowing(object sender, AppointmentFormEventArgs e)
         {
 
@@ -3991,13 +4050,13 @@ namespace Toolroom_Project_Viewer
             
             componentName = apt.CustomFields["Component"].ToString();
 
-            component = Project.ComponentList.Find(x => x.Name == componentName);
+            component = Project.Components.Find(x => x.Component == componentName);
 
             taskID = Convert.ToInt16(apt.CustomFields["TaskID"]);
 
-            task = component.TaskList[Convert.ToInt16(apt.CustomFields["TaskID"]) - 1];
+            task = component.Tasks[Convert.ToInt16(apt.CustomFields["TaskID"]) - 1];
 
-            if (db.UpdateTask(number.jobNumber, number.projectNumber, component.Name, task.ID, apt.Start, apt.End, Project.OverlapAllowed))
+            if (db.UpdateTask(number.jobNumber, number.projectNumber, component.Component, task.TaskID, apt.Start, apt.End, Project.OverlapAllowed))
             {
                 task.SetDates(apt.Start, apt.End);
                 return true;

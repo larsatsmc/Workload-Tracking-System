@@ -160,11 +160,11 @@ namespace Toolroom_Scheduler
                 if (ProjectHasComponents(project.ProjectNumber))
                 {
                     // Check modified project for added components.
-                    foreach (ComponentModel component in project.ComponentList)
+                    foreach (ComponentModel component in project.Components)
                     {
-                        component.SetPosition(project.ComponentList.IndexOf(component));
+                        component.SetPosition(project.Components.IndexOf(component));
 
-                        bool componentExists = databaseProject.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = databaseProject.Components.Exists(x => x.Component == component.Component);
 
                         if (componentExists)
                         {
@@ -173,24 +173,24 @@ namespace Toolroom_Scheduler
                             if (component.ReloadTaskList)
                             {
                                 RemoveTasks(project, component);
-                                newTaskList.AddRange(component.TaskList);
+                                newTaskList.AddRange(component.Tasks);
                             }
                             else
                             {
-                                UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
+                                UpdateTasks(project.JobNumber, project.ProjectNumber, component.Component, component.Tasks);
                             }
                         }
                         else
                         {
                             newComponentList.Add(component);
-                            newTaskList.AddRange(component.TaskList);
+                            newTaskList.AddRange(component.Tasks);
                         }
                     }
 
                     // Check modified project for deleted components.
-                    foreach (ComponentModel component in databaseProject.ComponentList)
+                    foreach (ComponentModel component in databaseProject.Components)
                     {
-                        bool componentExists = project.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = project.Components.Exists(x => x.Component == component.Component);
 
                         if (!componentExists)
                         {
@@ -414,53 +414,6 @@ namespace Toolroom_Scheduler
             }
         }
 
-        public TaskModel getTaskInfo(int id)
-		{
-			TaskModel ti = null;
-			DataTable dt = new DataTable();
-
-			string queryString3 = "SELECT TaskName, Duration, Predecessors, Resources, Resource, Hours, Operator, Priority, Status, DateAdded, Notes From Tasks WHERE ID = @id";
-			OleDbDataAdapter adapter3 = new OleDbDataAdapter(queryString3, Connection);
-			adapter3.SelectCommand.Parameters.AddWithValue("@id", id);
-			adapter3.Fill(dt);
-
-			foreach (DataRow nrow in dt.Rows)
-			{
-				Console.WriteLine($"Task Name: {nrow["TaskName"]?.ToString()} Duration: {nrow["Duration"]?.ToString()} Predecessors: {nrow["Predecessors"]?.ToString()} Resources: {nrow["Resources"]?.ToString()} Resource: {nrow["Resource"]?.ToString()} Hours: {nrow["Hours"]?.ToString()} Operator: {nrow["Operator"]?.ToString()} Priority: {nrow["Priority"]?.ToString()} Status: {nrow["Status"]?.ToString()} Date Added: {nrow["DateAdded"]?.ToString()} Notes: {nrow["Notes"]?.ToString()}");
-				ti = new TaskModel(nrow["TaskName"].ToString(), nrow["Duration"].ToString(), nrow["Predecessors"].ToString(), nrow["Resources"].ToString(), nrow["Resource"].ToString(), Convert.ToInt16(nrow["Hours"]), nrow["Operator"].ToString(), Convert.ToInt16(nrow["Priority"]), nrow["Status"].ToString(), (DateTime)nrow["DateAdded"], nrow["Notes"].ToString());
-			}
-
-			return ti;
-		}
-
-		public void SetTaskInfo(int id, TaskModel ti)
-		{
-			OleDbCommand cmd = new OleDbCommand();
-			cmd.CommandType = CommandType.Text;
-			cmd.Connection = Connection;
-
-			OleDbDataAdapter adapter = new OleDbDataAdapter();
-
-			cmd.CommandText = "UPDATE [Tasks] SET TaskName = ?, [Duration] = ?, [Predecessors] = ?, [Resources] = ?, [Resource] = ?, [Hours] = ?, [Operator] = ?, [Priority] = ?, [Status] = ?, [DateAdded] = ?, [Notes] = ? WHERE ID = ?";
-
-			cmd.Parameters.AddWithValue("TaskName", ti.TaskName);
-			cmd.Parameters.AddWithValue("Duration", ti.Duration);
-			cmd.Parameters.AddWithValue("Predecessors", ti.Predecessors);
-			cmd.Parameters.AddWithValue("Resources", ti.Resources);
-			cmd.Parameters.AddWithValue("Resource", ti.Resource);
-			cmd.Parameters.AddWithValue("Hours", ti.Hours.ToString());
-			cmd.Parameters.AddWithValue("Operators", ti.Operator);
-			cmd.Parameters.AddWithValue("Priority", ti.Priority.ToString());
-			cmd.Parameters.AddWithValue("Status", ti.Status);
-			cmd.Parameters.AddWithValue("DateAdded", ti.DateAdded.ToString());
-			cmd.Parameters.AddWithValue("Notes", ti.Notes);
-			cmd.Parameters.AddWithValue("ID", id.ToString());
-			
-			Connection.Open();
-			cmd.ExecuteNonQuery();
-			Connection.Close();
-		}
-
         public ProjectModel GetProject(string jobNumber, int projectNumber)
         {
             ProjectModel project = GetProjectInfo(jobNumber, projectNumber);
@@ -629,7 +582,7 @@ namespace Toolroom_Scheduler
                         {
                             component = new ComponentModel
                             (
-                                           name: rdr["Component"],
+                                           component: rdr["Component"],
                                           notes: rdr["Notes"],
                                        priority: rdr["Priority"],
                                        position: rdr["Position"],
@@ -753,11 +706,11 @@ namespace Toolroom_Scheduler
         {
             List<TaskModel> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 var tasks = from t in projectTaskList
-                            where t.Component == component.Name
-                            orderby t.ID ascending
+                            where t.Component == component.Component
+                            orderby t.TaskID ascending
                             select t;
 
                 component.AddTaskList(tasks.ToList());
@@ -767,9 +720,9 @@ namespace Toolroom_Scheduler
             // This can be assumed because all tasks before the project is created are checked
             // to see if they have task info.  If they do not project creation is disallowed.
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     task.HasInfo = true;
                 }
@@ -801,8 +754,8 @@ namespace Toolroom_Scheduler
                             taskList.Add(new TaskModel
                             (
                                     taskName: rdr["TaskName"],
-                                          id: rdr["TaskID"],
-                                  databaseId: rdr["ID"],
+                                          taskID: rdr["TaskID"],
+                                  id: rdr["ID"],
                                    component: rdr["Component"],
                                        hours: rdr["Hours"],
                                     duration: rdr["Duration"],
@@ -1604,7 +1557,7 @@ namespace Toolroom_Scheduler
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, 35).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, 35).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
@@ -1633,7 +1586,7 @@ namespace Toolroom_Scheduler
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
@@ -1905,14 +1858,14 @@ namespace Toolroom_Scheduler
             {
                 foreach(TaskModel ti in tia)
                 {
-                    if (Convert.ToInt16(nrow["TaskID"]) == ti.ID && nrow["Component"].ToString() == ti.Component)
+                    if (Convert.ToInt16(nrow["TaskID"]) == ti.TaskID && nrow["Component"].ToString() == ti.Component)
                     {
                         i++;
                         //Console.WriteLine($"   Loaded: {i} {ti.Component} {ti.TaskName}");
                         nrow["Status"] = ti.Status;
                         foreach (var task in tia)
                         {
-                            if (task.ID == ti.ID && task.Component == ti.Component)
+                            if (task.TaskID == ti.TaskID && task.Component == ti.Component)
                                 tasksTemp.Remove(task);
                         }
                         break;
@@ -1932,7 +1885,7 @@ namespace Toolroom_Scheduler
                 Console.WriteLine(" ");
                 foreach (var task in tasksTemp)
                 {
-                    Console.WriteLine($"   Missed: {task.ID} {task.Component} {task.TaskName}");
+                    Console.WriteLine($"   Missed: {task.TaskID} {task.Component} {task.TaskName}");
                 }
                 
             }
@@ -1962,13 +1915,13 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Status", typeof(string));
             dt.Columns.Add("PercentComplete", typeof(int));
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 DataRow row = dt.NewRow();
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
@@ -2024,7 +1977,7 @@ namespace Toolroom_Scheduler
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Notes"] = component.Notes;
                 row["Priority"] = component.Priority;
                 row["Position"] = component.Position;
@@ -2076,11 +2029,11 @@ namespace Toolroom_Scheduler
             dt.Columns.Add("Initials", typeof(string));
             dt.Columns.Add("DateCompleted", typeof(string));
            
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 i = 1;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow row = dt.NewRow();
 
@@ -2666,7 +2619,7 @@ namespace Toolroom_Scheduler
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Name);
+                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Component);
                 adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
                 adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
@@ -2696,7 +2649,7 @@ namespace Toolroom_Scheduler
 
                 adapter.UpdateCommand.ExecuteNonQuery();
 
-                Console.WriteLine($"{component.Name} Updated.");
+                Console.WriteLine($"{component.Component} Updated.");
                 //MessageBox.Show("Project Updated!");
             }
             catch (OleDbException ex)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraScheduler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -82,11 +83,11 @@ namespace ClassLibrary
             {
                 file.WriteLine($"{project.JobNumber},{project.ProjectNumber},{project.DueDate.ToShortDateString()},{project.ToolMaker},{project.Designer},{project.RoughProgrammer},{project.ElectrodeProgrammer},{project.FinishProgrammer}");
 
-                foreach (ComponentModel component in project.ComponentList)
+                foreach (ComponentModel component in project.Components)
                 {
-                    file.WriteLine($"{string.Empty.PadLeft(8)}{component.Name},{component.Quantity},{component.Spares},{component.Material},{component.Finish},{component.Notes}");
+                    file.WriteLine($"{string.Empty.PadLeft(8)}{component.Component},{component.Quantity},{component.Spares},{component.Material},{component.Finish},{component.Notes},{component.GetPictureString()}");
 
-                    foreach (TaskModel task in component.TaskList)
+                    foreach (TaskModel task in component.Tasks)
                     {
                         file.WriteLine($"{string.Empty.PadLeft(16)}{task.TaskName}");
 
@@ -104,14 +105,14 @@ namespace ClassLibrary
             }
         }
 
-        public ProjectModel ReadProjectFromTextFile(string filePath)
+        public ProjectModel ReadProjectFromTextFile(string filePath, SchedulerStorage schedulerStorage)
         {
             ProjectModel project = new ProjectModel();
             ComponentModel component = new ComponentModel();
             TaskModel task = new TaskModel();
             List<TaskModel> list = new List<TaskModel>();
             string[] projectInfoArr, componentInfoArr;
-            string line;
+            string line, hours, duration, machine, personnel, predecessors, notes;
 
             project.HasProjectInfo = false;
 
@@ -154,15 +155,31 @@ namespace ClassLibrary
                     {
                         componentInfoArr = line.Split(',');
 
-                        component = new ComponentModel
-                        (
-                            componentInfoArr[0].Trim(), 
-                            componentInfoArr[1], 
-                            componentInfoArr[2], 
-                            componentInfoArr[3], 
-                            componentInfoArr[4], 
-                            componentInfoArr[5]
-                        );
+                        if (componentInfoArr.Count() == 6)
+                        {
+                            component = new ComponentModel
+                            (
+                                componentInfoArr[0].Trim(),
+                                componentInfoArr[1],
+                                componentInfoArr[2],
+                                componentInfoArr[3],
+                                componentInfoArr[4],
+                                componentInfoArr[5]
+                            ); 
+                        }
+                        else if (componentInfoArr.Count() == 7)
+                        {
+                            component = new ComponentModel
+                            (
+                                componentInfoArr[0].Trim(),
+                                componentInfoArr[1],
+                                componentInfoArr[2],
+                                componentInfoArr[3],
+                                componentInfoArr[4],
+                                componentInfoArr[5],
+                                componentInfoArr[6]
+                            );
+                        }
 
                     }
                     else
@@ -174,34 +191,38 @@ namespace ClassLibrary
                 }
                 else if (count == 16)
                 {
-                    task = new TaskModel(line.Trim(), component.Name);
+                    task = new TaskModel(line.Trim(), component.Component);
                     component.AddTask(task);
                 }
                 else if (count == 24)
                 {
                     task.HasInfo = true;
 
-                    task.SetHours(line);
+                    hours = line;
 
-                    line = file.ReadLine();
+                    task.SetHours(hours);
 
-                    task.SetDuration(line);
+                    duration = file.ReadLine();
 
-                    line = file.ReadLine();
+                    task.SetDuration(duration);
 
-                    task.SetMachine(line);
+                    machine = file.ReadLine();
 
-                    line = file.ReadLine();
+                    task.SetMachine(machine);
 
-                    task.SetPersonnel(line);
+                    personnel = file.ReadLine();
 
-                    line = file.ReadLine();
+                    task.SetPersonnel(personnel);
 
-                    task.SetPredecessors(line);
+                    predecessors = file.ReadLine();
 
-                    line = file.ReadLine();
+                    task.SetPredecessors(predecessors);
 
-                    task.SetNotes(line);
+                    notes = file.ReadLine();
+
+                    task.SetNotes(notes);
+
+                    task.SetResources(schedulerStorage);
                 }
 
                 //System.Console.WriteLine($"{count} {line}");

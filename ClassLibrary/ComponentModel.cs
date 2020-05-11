@@ -6,31 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClassLibrary
 {
     public class ComponentModel
     {
-        /// <summary>
-        /// Gets the name property of a Component object.
-        /// </summary>
-        public string Name { get; private set; }
+        public int ID { get; set; }
+        public string JobNumber { get; set; }
+        public int ProjectNumber { get; set; }
+        public string Component { get; set; }
         public string OldName { get; private set; }
-        public Image Picture { get; private set; }
-        public string Material { get; private set; }
-        public string Notes { get; private set; }
-        public List<TaskModel> TaskList { get; private set; }
+        //public Image Picture { get; set; }
+        public Image picture;
+        public byte[] Pictures { get { return ImageToByteArray(picture); } set { picture = NullByteArrayCheck(value); } }
+        public string Material { get; set; }
+        public string Finish { get; set; }
+        public string Notes { get; set; }
+        public int Priority { get; set; }
+        public int Quantity { get; set; }
+        public int Spares { get; set; }
+        public string Status { get; set; }
+        public double PercentComplete { get; private set; }
+        public List<TaskModel> Tasks { get; set; } = new List<TaskModel>();
+        //public System.ComponentModel.BindingList<TaskModel> Tasks { get; set; }
         public bool ReloadTaskList { get; set; }
-        public int Hours { get; private set; }
-        public int Priority { get; private set; }
-        public int Position { get; private set; }
-        public int TaskIDCount { get; private set; }
-        public int Quantity { get; private set; }
-        public int Spares { get; private set; }
-        public string Initials { get; private set; }
-        public string Finish { get; private set; }
-        public string Status { get; private set; }
-        public int PercentComplete { get; private set; }
+        public int Position { get; set; }
+        public int TaskIDCount { get; set; }
 
         public static int ComponentCharacterLimit = 31;
         /// <summary>
@@ -40,18 +42,46 @@ namespace ClassLibrary
         {
             TaskIDCount = 0;
         }
+        public ComponentModel(ComponentModel component)
+        {
+            this.Component = component.Component;
+            this.Notes = component.Notes;
+            this.Priority = component.Priority;
+            this.Position = component.Position;
+            this.Material = component.Material;
+            this.TaskIDCount = component.TaskIDCount;
+            this.Quantity = component.Quantity;
+            this.Spares = component.Spares;
+            this.Pictures = component.Pictures;
+            this.Finish = component.Finish;
+        }
         /// <summary>
         /// Creates instance of a component and sets properties for template.
         /// </summary> 
         public ComponentModel(string name, string quantity, string spares, string material, string finish, string notes)
         {
-            this.Name = name;
+            this.Component = name;
             this.Quantity = Convert.ToInt16(quantity);
             this.Spares = Convert.ToInt16(spares);
             this.Material = material;
             this.Finish = finish;
             this.Notes = notes;
-            this.TaskList = new List<TaskModel>();
+            this.Tasks = new List<TaskModel>();
+        }
+        public ComponentModel(string name, string quantity, string spares, string material, string finish, string notes, string picture)
+        {
+            this.Component = name;
+            this.Quantity = Convert.ToInt16(quantity);
+            this.Spares = Convert.ToInt16(spares);
+            this.Material = material;
+            this.Finish = finish;
+            this.Notes = notes;
+            if (picture.Trim().Length > 0)
+            {
+                //this.Picture = ByteArrayToImage(Convert.FromBase64String(picture));
+                this.Pictures = Convert.FromBase64String(picture);
+            }
+            this.Tasks = new List<TaskModel>();
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
@@ -64,8 +94,8 @@ namespace ClassLibrary
             this.Notes = "";
             this.Material = "";
             this.Finish = "";
-            this.TaskList = new List<TaskModel>();
-            this.Name = name;
+            this.Tasks = new List<TaskModel>();
+            this.Component = name;
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
@@ -79,17 +109,17 @@ namespace ClassLibrary
             this.Material = "";
             this.Finish = "";
             this.Status = "";
-            this.TaskList = new List<TaskModel>();
-            this.Name = ConvertObjectToString(name);
+            this.Tasks = new List<TaskModel>();
+            this.Component = ConvertObjectToString(name);
         }
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
         /// </summary> 
         public ComponentModel(object name, object notes, object priority, object position, object material, object finish, object taskIDCount)
         {
-            this.TaskList = new List<TaskModel>();
-            this.Name = ConvertObjectToString(name);
-            this.OldName = this.Name;
+            this.Tasks = new List<TaskModel>();
+            this.Component = ConvertObjectToString(name);
+            this.OldName = this.Component;
             this.Notes = ConvertObjectToString(notes);
             this.Priority = NullIntegerCheck(priority);
             this.Position = NullIntegerCheck(position);
@@ -100,17 +130,17 @@ namespace ClassLibrary
         /// <summary>
         /// Creates instance of a component with given name, sets TaskIDCount property to 0, and initializes a list of type TaskInfo.
         /// </summary> 
-        public ComponentModel(object name, object notes, object priority, object position, object quantity, object spares, object picture, object material, object finish, object taskIDCount)
+        public ComponentModel(object component, object notes, object priority, object position, object quantity, object spares, object picture, object material, object finish, object taskIDCount)
         {
-            this.TaskList = new List<TaskModel>();
-            this.Name = ConvertObjectToString(name);
-            this.OldName = this.Name;
+            this.Tasks = new List<TaskModel>();
+            this.Component = ConvertObjectToString(component);
+            this.OldName = this.Component;
             this.Notes = ConvertObjectToString(notes);
             this.Priority = NullIntegerCheck(priority);
             this.Position = NullIntegerCheck(position);
             this.Quantity = NullIntegerCheck(quantity);
             this.Spares = NullIntegerCheck(spares);
-            this.Picture = NullByteArrayCheck(picture);
+            this.picture = NullByteArrayCheck(picture);
             this.Material = ConvertObjectToString(material);
             this.Finish = ConvertObjectToString(finish);
             this.TaskIDCount = NullIntegerCheck(taskIDCount);
@@ -126,11 +156,11 @@ namespace ClassLibrary
                 return false;
             }
 
-            this.Name = name;
+            this.Component = name;
 
-            if(TaskList.Any())
+            if(Tasks.Any())
             {
-                foreach(TaskModel task in TaskList)
+                foreach(TaskModel task in Tasks)
                 {
                     task.SetComponent(name);
                 }
@@ -144,7 +174,7 @@ namespace ClassLibrary
         public void AddTask(string name, string component)
         {
             this.ReloadTaskList = true;
-            this.TaskList.Add(new TaskModel(++TaskIDCount, name, component));
+            this.Tasks.Add(new TaskModel(++TaskIDCount, name, component));
         }
         /// <summary>
         /// Adds a task to a component.
@@ -152,15 +182,15 @@ namespace ClassLibrary
         public void AddTask(TaskModel task)
         {
             task.SetTaskID(++TaskIDCount);
-            this.TaskList.Add(task);
+            this.Tasks.Add(task);
         }
         /// <summary>
         /// Adds a tasklist to a component.
         /// </summary>
         public void AddTaskList(List<TaskModel> taskList)
         {
-            this.TaskList = new List<TaskModel>();
-            this.TaskList = taskList;
+            this.Tasks = new List<TaskModel>();
+            this.Tasks = taskList;
         }
         /// <summary>
         /// Adds a picture to a component's picture list from a filepath.
@@ -187,7 +217,7 @@ namespace ClassLibrary
             {
                 if(Clipboard.ContainsImage())
                 {
-                    this.Picture = Clipboard.GetImage();
+                    this.picture = Clipboard.GetImage();
                 }
                 else
                 {
@@ -204,16 +234,17 @@ namespace ClassLibrary
         /// </summary>
         public void SetPicture(Image image)
         {
-            this.Picture = image;
+            this.picture = image;
         }
         /// <summary>
         /// Gets a picture from component class in the form of a byte array.
         /// </summary> 
         public byte[] GetPictureByteArray()
         {
-            if(this.Picture != null)
+            if(this.Pictures != null)
             {
-                return ImageToByteArray(this.Picture);
+                //return ImageToByteArray(this.Picture);
+                return this.Pictures;
             }
             else
             {
@@ -228,7 +259,7 @@ namespace ClassLibrary
         {
             if (pictureByteArr != null)
             {
-                this.Picture = ByteArrayToImage(pictureByteArr);
+                //this.Picture = ByteArrayToImage(pictureByteArr);
             }
             else
             {
@@ -242,7 +273,7 @@ namespace ClassLibrary
         public void RemoveTask(int deletedTaskIndex)
         {
             this.ReloadTaskList = true;
-            this.TaskList.Remove(TaskList.ElementAt(deletedTaskIndex));
+            this.Tasks.Remove(Tasks.ElementAt(deletedTaskIndex));
             this.TaskIDCount = --TaskIDCount;
         }
         /// <summary>
@@ -255,10 +286,10 @@ namespace ClassLibrary
             if(promotedTaskIndex > 0)
             {
                 this.ReloadTaskList = true;
-                promotedTask = TaskList.ElementAt(promotedTaskIndex);
+                promotedTask = Tasks.ElementAt(promotedTaskIndex);
 
-                this.TaskList.RemoveAt(promotedTaskIndex);
-                this.TaskList.Insert(promotedTaskIndex - 1, promotedTask);
+                this.Tasks.RemoveAt(promotedTaskIndex);
+                this.Tasks.Insert(promotedTaskIndex - 1, promotedTask);
             }
             else
             {
@@ -272,13 +303,13 @@ namespace ClassLibrary
         {
             TaskModel demotedTask;
 
-            if (demotedTaskIndex < TaskList.Count - 1)
+            if (demotedTaskIndex < Tasks.Count - 1)
             {
                 this.ReloadTaskList = true;
-                demotedTask = TaskList.ElementAt(demotedTaskIndex);
+                demotedTask = Tasks.ElementAt(demotedTaskIndex);
 
-                this.TaskList.RemoveAt(demotedTaskIndex);
-                this.TaskList.Insert(demotedTaskIndex + 1, demotedTask);
+                this.Tasks.RemoveAt(demotedTaskIndex);
+                this.Tasks.Insert(demotedTaskIndex + 1, demotedTask);
             }
             else
             {
@@ -332,7 +363,7 @@ namespace ClassLibrary
         /// </summary> 
         public TaskModel GetTask(int taskID)
         {
-            TaskModel task = (TaskModel)TaskList.Where(t => t.ID == taskID);
+            TaskModel task = (TaskModel)Tasks.Where(t => t.TaskID == taskID);
 
             return task;
         }
@@ -388,9 +419,19 @@ namespace ClassLibrary
             //Image returnImage = Image.FromStream(ms);
             //return returnImage;
 
+            if (byteArrayIn.Length == 0)
+            {
+                return null;
+            }
+
             ImageConverter ic = new ImageConverter();
             Image img = (Image)ic.ConvertFrom(byteArrayIn);
             return img;
+        }
+        public string GetPictureString()
+        {
+            //return Convert.ToBase64String(ImageToByteArray(this.Picture));
+            return Convert.ToBase64String(this.Pictures);
         }
         public static bool IsGoodComponentPicture(Image image)
         {
@@ -407,6 +448,28 @@ namespace ClassLibrary
             }
 
             return true;
+        }
+        public DateTime? GetLatestPredecessorFinishDate(string predecessors)
+        {
+            DateTime? latestFinishDate = null;
+            DateTime? currentDate = null;
+            string[] predecessorArr;
+            string predecessor;
+
+            predecessorArr = predecessors.Split(',');
+
+            foreach (string currPredecessor in predecessorArr)
+            {
+                predecessor = currPredecessor.Trim();
+                currentDate = this.Tasks.Find(x => x.TaskID.ToString() == predecessor).FinishDate;
+
+                if (latestFinishDate == null || latestFinishDate < currentDate)
+                {
+                    latestFinishDate = currentDate;
+                }
+            }
+
+            return latestFinishDate;
         }
     }
 }

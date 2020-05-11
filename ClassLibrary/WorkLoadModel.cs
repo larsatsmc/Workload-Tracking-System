@@ -4,6 +4,7 @@ namespace ClassLibrary
 {
     public class WorkLoadModel
     {
+        public int ID { get; set; }
         public string ToolNumber { get; set; }
         public int MWONumber { get; set; }
         public int ProjectNumber { get; set; }
@@ -25,5 +26,6 @@ namespace ClassLibrary
         public string Manifold { get; set; }
         public string MoldBase { get; set; }
         public string GeneralNotes { get; set; }
+        public string JobFolderPath { get; set; }
     }
 }

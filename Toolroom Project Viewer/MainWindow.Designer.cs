@@ -58,6 +58,7 @@
             this.colPercentComplete = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colProjectNumber3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colComponent1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPictures = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMaterial = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -65,7 +66,6 @@
             this.colFinish = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colNotes = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPosition = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPriority1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemSpinEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -94,6 +94,8 @@
             this.colKanBanWorkbookPath = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemHyperLinkEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
             this.colPercentComplete1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDateModified = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colLastKanBanGenerationDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemImageEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
             this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
             this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
@@ -235,6 +237,8 @@
             this.colMoldBase = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGeneralNotes = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.repositoryItemMemoEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.colJobFolderPath = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.JobFolderHyperLinkEdit = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
             this.colID = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colPartPicture = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
@@ -253,8 +257,6 @@
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.componentsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.componentsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter();
-            this.colDateModified = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colLastKanBanGenerationDate = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
@@ -331,6 +333,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.JobFolderHyperLinkEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).BeginInit();
@@ -406,21 +409,23 @@
             this.colPercentComplete.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.colPercentComplete.FieldName = "PercentComplete";
             this.colPercentComplete.Name = "colPercentComplete";
+            this.colPercentComplete.OptionsColumn.AllowEdit = false;
             this.colPercentComplete.Visible = true;
-            this.colPercentComplete.VisibleIndex = 10;
+            this.colPercentComplete.VisibleIndex = 9;
             this.colPercentComplete.Width = 116;
             // 
             // gridView4
             // 
+            this.gridView4.ChildGridLevelName = "Tasks";
             this.gridView4.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colID2,
+            this.colProjectNumber3,
             this.colComponent1,
             this.colPictures,
             this.colMaterial,
             this.colFinish,
             this.colNotes,
             this.colPosition,
-            this.gridColumn1,
             this.colPriority1,
             this.colQuantity,
             this.colSpares,
@@ -440,6 +445,7 @@
             this.gridView4.FormatRules.Add(gridFormatRule1);
             this.gridView4.GridControl = this.gridControl3;
             this.gridView4.Name = "gridView4";
+            this.gridView4.OptionsBehavior.EditingMode = DevExpress.XtraGrid.Views.Grid.GridEditingMode.Inplace;
             this.gridView4.OptionsSelection.MultiSelect = true;
             this.gridView4.OptionsView.ColumnAutoWidth = false;
             this.gridView4.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
@@ -452,6 +458,11 @@
             // 
             this.colID2.FieldName = "ID";
             this.colID2.Name = "colID2";
+            // 
+            // colProjectNumber3
+            // 
+            this.colProjectNumber3.FieldName = "ProjectNumber";
+            this.colProjectNumber3.Name = "colProjectNumber3";
             // 
             // colComponent1
             // 
@@ -520,15 +531,6 @@
             this.colPosition.Name = "colPosition";
             this.colPosition.Width = 52;
             // 
-            // gridColumn1
-            // 
-            this.gridColumn1.Caption = "Hours";
-            this.gridColumn1.FieldName = "gridColumn1";
-            this.gridColumn1.Name = "gridColumn1";
-            this.gridColumn1.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
-            this.gridColumn1.Visible = true;
-            this.gridColumn1.VisibleIndex = 6;
-            // 
             // colPriority1
             // 
             this.colPriority1.ColumnEdit = this.repositoryItemSpinEdit2;
@@ -553,7 +555,7 @@
             this.colQuantity.FieldName = "Quantity";
             this.colQuantity.Name = "colQuantity";
             this.colQuantity.Visible = true;
-            this.colQuantity.VisibleIndex = 7;
+            this.colQuantity.VisibleIndex = 6;
             this.colQuantity.Width = 65;
             // 
             // colSpares
@@ -562,7 +564,7 @@
             this.colSpares.FieldName = "Spares";
             this.colSpares.Name = "colSpares";
             this.colSpares.Visible = true;
-            this.colSpares.VisibleIndex = 8;
+            this.colSpares.VisibleIndex = 7;
             this.colSpares.Width = 56;
             // 
             // colStatus2
@@ -570,7 +572,7 @@
             this.colStatus2.FieldName = "Status";
             this.colStatus2.Name = "colStatus2";
             this.colStatus2.Visible = true;
-            this.colStatus2.VisibleIndex = 9;
+            this.colStatus2.VisibleIndex = 8;
             this.colStatus2.Width = 151;
             // 
             // gridControl3
@@ -582,10 +584,10 @@
             this.gridControl3.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             gridLevelNode1.LevelTemplate = this.gridView4;
             gridLevelNode2.LevelTemplate = this.gridView5;
-            gridLevelNode2.RelationName = "ComponentsTasks";
+            gridLevelNode2.RelationName = "Tasks";
             gridLevelNode1.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode2});
-            gridLevelNode1.RelationName = "ProjectsComponents";
+            gridLevelNode1.RelationName = "Components";
             this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode1});
             this.gridControl3.Location = new System.Drawing.Point(13, 41);
@@ -616,6 +618,7 @@
             // 
             this.gridView3.Appearance.HeaderPanel.Options.UseTextOptions = true;
             this.gridView3.Appearance.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.gridView3.ChildGridLevelName = "Components";
             this.gridView3.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colID1,
             this.colJobNumber1,
@@ -654,6 +657,8 @@
             this.gridView3.GridControl = this.gridControl3;
             this.gridView3.Name = "gridView3";
             this.gridView3.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.True;
+            this.gridView3.OptionsBehavior.EditingMode = DevExpress.XtraGrid.Views.Grid.GridEditingMode.Inplace;
+            this.gridView3.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.MouseDownFocused;
             this.gridView3.OptionsPrint.AllowMultilineHeaders = true;
             this.gridView3.OptionsView.AllowHtmlDrawHeaders = true;
             this.gridView3.OptionsView.ColumnAutoWidth = false;
@@ -827,6 +832,16 @@
             this.colPercentComplete1.Visible = true;
             this.colPercentComplete1.VisibleIndex = 6;
             this.colPercentComplete1.Width = 108;
+            // 
+            // colDateModified
+            // 
+            this.colDateModified.FieldName = "DateModified";
+            this.colDateModified.Name = "colDateModified";
+            // 
+            // colLastKanBanGenerationDate
+            // 
+            this.colLastKanBanGenerationDate.FieldName = "LastKanBanGenerationDate";
+            this.colLastKanBanGenerationDate.Name = "colLastKanBanGenerationDate";
             // 
             // repositoryItemImageEdit2
             // 
@@ -1175,6 +1190,7 @@
             this.schedulerControl1.Views.WeekView.Enabled = false;
             this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler3);
             this.schedulerControl1.AppointmentResized += new DevExpress.XtraScheduler.AppointmentResizeEventHandler(this.schedulerControl1_AppointmentResized);
+            this.schedulerControl1.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl1_AppointmentFlyoutShowing);
             this.schedulerControl1.EditAppointmentFormShowing += new DevExpress.XtraScheduler.AppointmentFormEventHandler(this.schedulerControl1_EditAppointmentFormShowing);
             this.schedulerControl1.Click += new System.EventHandler(this.SchedulerControl1_Click);
             this.schedulerControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragDrop);
@@ -2138,7 +2154,8 @@
             this.repositoryItemMemoExEdit1,
             this.repositoryItemMemoEdit1,
             this.repositoryItemRadioGroup1,
-            this.repositoryItemSearchLookUpEdit1});
+            this.repositoryItemSearchLookUpEdit1,
+            this.JobFolderHyperLinkEdit});
             this.gridControl2.Size = new System.Drawing.Size(1490, 752);
             this.gridControl2.TabIndex = 0;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -2233,7 +2250,8 @@
             this.colManifold,
             this.colMoldBase,
             this.colGeneralNotes,
-            this.colGeneralNotesRTF});
+            this.colGeneralNotesRTF,
+            this.colJobFolderPath});
             gridFormatRule3.Name = "Format0";
             gridFormatRule3.Rule = null;
             this.bandedGridView1.FormatRules.Add(gridFormatRule3);
@@ -2342,7 +2360,8 @@
             "4 - In-Mold Check-In or Outside Vendors",
             "5 - Rework",
             "6 - In-Repair / Development",
-            "7 - Completed"});
+            "7 - Completed",
+            "8 - Quoted / Forecasted"});
             this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
             this.repositoryItemComboBox1.QueryPopUp += new System.ComponentModel.CancelEventHandler(this.repositoryItemComboBox1_QueryPopUp);
             this.repositoryItemComboBox1.BeforePopup += new System.EventHandler(this.repositoryItemComboBox1_BeforePopup);
@@ -2474,6 +2493,7 @@
             // 
             // colDesigner
             // 
+            this.colDesigner.ColumnEdit = this.repositoryItemComboBox1;
             this.colDesigner.FieldName = "Designer";
             this.colDesigner.Name = "colDesigner";
             this.colDesigner.Visible = true;
@@ -2530,10 +2550,11 @@
             this.GeneralInfo.Columns.Add(this.colManifold);
             this.GeneralInfo.Columns.Add(this.colMoldBase);
             this.GeneralInfo.Columns.Add(this.colGeneralNotes);
+            this.GeneralInfo.Columns.Add(this.colJobFolderPath);
             this.GeneralInfo.MinWidth = 13;
             this.GeneralInfo.Name = "GeneralInfo";
             this.GeneralInfo.VisibleIndex = 3;
-            this.GeneralInfo.Width = 871;
+            this.GeneralInfo.Width = 946;
             // 
             // colManifold
             // 
@@ -2562,6 +2583,21 @@
             // repositoryItemMemoEdit1
             // 
             this.repositoryItemMemoEdit1.Name = "repositoryItemMemoEdit1";
+            // 
+            // colJobFolderPath
+            // 
+            this.colJobFolderPath.Caption = "Job Folder Path";
+            this.colJobFolderPath.ColumnEdit = this.JobFolderHyperLinkEdit;
+            this.colJobFolderPath.FieldName = "JobFolderPath";
+            this.colJobFolderPath.Name = "colJobFolderPath";
+            this.colJobFolderPath.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.colJobFolderPath.Visible = true;
+            // 
+            // JobFolderHyperLinkEdit
+            // 
+            this.JobFolderHyperLinkEdit.AutoHeight = false;
+            this.JobFolderHyperLinkEdit.Name = "JobFolderHyperLinkEdit";
+            this.JobFolderHyperLinkEdit.SingleClick = true;
             // 
             // colID
             // 
@@ -2687,16 +2723,6 @@
             // 
             this.componentsTableAdapter.ClearBeforeFill = true;
             // 
-            // colDateModified
-            // 
-            this.colDateModified.FieldName = "DateModified";
-            this.colDateModified.Name = "colDateModified";
-            // 
-            // colLastKanBanGenerationDate
-            // 
-            this.colLastKanBanGenerationDate.FieldName = "LastKanBanGenerationDate";
-            this.colLastKanBanGenerationDate.Name = "colLastKanBanGenerationDate";
-            // 
             // MainWindow
             // 
             this.Appearance.Options.UseFont = true;
@@ -2793,6 +2819,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.JobFolderHyperLinkEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).EndInit();
@@ -2982,7 +3009,6 @@
         private DevExpress.XtraEditors.SimpleButton resourceButton;
         private DevExpress.XtraEditors.Repository.RepositoryItemRadioGroup repositoryItemRadioGroup1;
         private DevExpress.XtraEditors.CheckedComboBoxEdit PrintDeptsCheckedComboBoxEdit;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
         private DevExpress.XtraEditors.SimpleButton printPreviewButton;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
@@ -3008,12 +3034,15 @@
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox resourceRepositoryItemComboBox;
         private DevExpress.XtraGrid.Columns.GridColumn colApprentice;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colManifold;
+        private DevExpress.XtraGrid.Columns.GridColumn colDateModified;
+        private DevExpress.XtraGrid.Columns.GridColumn colLastKanBanGenerationDate;
+        private DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit JobFolderHyperLinkEdit;
+        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colJobFolderPath;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand ProjectBand2;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand Milestones;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand Personnel;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand GeneralInfo;
-        private DevExpress.XtraGrid.Columns.GridColumn colDateModified;
-        private DevExpress.XtraGrid.Columns.GridColumn colLastKanBanGenerationDate;
+        private DevExpress.XtraGrid.Columns.GridColumn colProjectNumber3;
     }
 }
 

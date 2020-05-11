@@ -58,23 +58,23 @@ namespace DemoLibrary.Tests
             Assert.True(project.ElectrodeProgrammer == "Rod Shilts", "Electrode programmer incorrect.");
             Assert.True(project.FinishProgrammer == "Alex Anderson", "Finish programmer incorrect.");
 
-            Assert.True(project.ComponentList.Count == 2, "Incorrect number of components read.");
+            Assert.True(project.Components.Count == 2, "Incorrect number of components read.");
 
-            Assert.True(project.ComponentList[0].Name == "A-Cavity", "Component name incorrect.");
-            Assert.True(project.ComponentList[0].Quantity == 2, "Quantity incorrect.");
-            Assert.True(project.ComponentList[0].Spares == 1, "Spares incorrect.");
-            Assert.True(project.ComponentList[0].Material == "S7", "Material incorrect.");
-            Assert.True(project.ComponentList[0].Finish == "80 Grit", "Finish incorrect.");
-            Assert.True(project.ComponentList[0].Notes == "Make it nice.", "Notes incorrect.");
+            Assert.True(project.Components[0].Component == "A-Cavity", "Component name incorrect.");
+            Assert.True(project.Components[0].Quantity == 2, "Quantity incorrect.");
+            Assert.True(project.Components[0].Spares == 1, "Spares incorrect.");
+            Assert.True(project.Components[0].Material == "S7", "Material incorrect.");
+            Assert.True(project.Components[0].Finish == "80 Grit", "Finish incorrect.");
+            Assert.True(project.Components[0].Notes == "Make it nice.", "Notes incorrect.");
 
-            Assert.True(project.ComponentList[0].TaskList.Count == 9, "Incorrect number of tasks read.");
+            Assert.True(project.Components[0].Tasks.Count == 9, "Incorrect number of tasks read.");
 
-            Assert.Equal(5, project.ComponentList[0].TaskList[0].Hours);
-            Assert.Equal("1 Day(s)", project.ComponentList[0].TaskList[0].Duration);
-            Assert.Equal("None", project.ComponentList[0].TaskList[0].Machine);
-            Assert.Equal("Micah Bruns", project.ComponentList[0].TaskList[0].Personnel);
-            Assert.Equal("", project.ComponentList[0].TaskList[0].Predecessors);
-            Assert.Equal("Leave .01\" stock.", project.ComponentList[0].TaskList[0].Notes);
+            Assert.Equal(5, project.Components[0].Tasks[0].Hours);
+            Assert.Equal("1 Day(s)", project.Components[0].Tasks[0].Duration);
+            Assert.Equal("None", project.Components[0].Tasks[0].Machine);
+            Assert.Equal("Micah Bruns", project.Components[0].Tasks[0].Personnel);
+            Assert.Equal("", project.Components[0].Tasks[0].Predecessors);
+            Assert.Equal("Leave .01\" stock.", project.Components[0].Tasks[0].Notes);
 
             //Assert.True(project.ComponentList[0].TaskList[0].Duration == "1 Day(s)", "Task Duration incorrect.");
             //Assert.True(project.ComponentList[0].TaskList[0].Machine == "None", "Machine incorrect.");

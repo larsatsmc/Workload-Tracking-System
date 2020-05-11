@@ -283,16 +283,16 @@ namespace ClassLibrary
 
                 ws.Range["H1"].EntireColumn.NumberFormat = "@";
 
-                foreach (ComponentModel component in pi.ComponentList)
+                foreach (ComponentModel component in pi.Components)
                 {
                     border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
                     border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
 
-                    foreach (TaskModel task in component.TaskList)
+                    foreach (TaskModel task in component.Tasks)
                     {
                         ws.Cells[r, 1].value = pi.JobNumber;
-                        ws.Cells[r, 2].value = $"   {component.Name}";
-                        ws.Cells[r, 3].value = task.ID;
+                        ws.Cells[r, 2].value = $"   {component.Component}";
+                        ws.Cells[r, 3].value = task.TaskID;
                         ws.Cells[r, 4].value = $"   {task.TaskName}";
                         ws.Cells[r, 5].value = $"   {task.Duration}";
 
@@ -375,7 +375,7 @@ namespace ClassLibrary
 
                 vBComponents = wb.VBProject.VBComponents;
 
-                foreach (ComponentModel component in pi.ComponentList)
+                foreach (ComponentModel component in pi.Components)
                 {
                     wb.Sheets.Add(After: wb.Sheets[n++]);
                     //wb.Sheets[1].Copy(After: wb.Sheets[n++]);
@@ -536,18 +536,18 @@ namespace ClassLibrary
             ws.PageSetup.RightMargin = excelApp.InchesToPoints(.2);
             ws.Select();
 
-            foreach (ComponentModel component in pi.ComponentList)
+            foreach (ComponentModel component in pi.Components)
             {
                 wb.Sheets[1].Copy(After: wb.Sheets[n++]);
                 ws = wb.Sheets[n];
 
-                Console.WriteLine(component.Name);
+                Console.WriteLine(component.Component);
 
-                if (component.Name.Length <= 31)
+                if (component.Component.Length <= 31)
                 {
-                    ws.Name = component.Name;
+                    ws.Name = component.Component;
                 }
-                else if (component.Name.Length > 31)
+                else if (component.Component.Length > 31)
                 {
                 }
                 else
@@ -573,14 +573,14 @@ namespace ClassLibrary
 
                 ws.Range["H1"].EntireColumn.NumberFormat = "@";
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 11]].Borders;
 
                     ws.Cells[r, 1].NumberFormat = "@"; // Allows for a number with a 0 in front to be entered otherwise the 0 gets dropped.
                     ws.Cells[r, 1].value = pi.JobNumber;
-                    ws.Cells[r, 2].value = "   " + component.Name;
-                    ws.Cells[r, 3].value = task.ID;
+                    ws.Cells[r, 2].value = "   " + component.Component;
+                    ws.Cells[r, 3].value = task.TaskID;
                     ws.Cells[r, 4].value = "   " + task.TaskName;
                     ws.Cells[r, 5].value = "   " + task.Duration;
                     ws.Cells[r, 6].value = task.StartDate;
@@ -644,9 +644,9 @@ namespace ClassLibrary
                 }
 
 
-                if (component.Picture != null)
+                if (component.Pictures != null)
                 {
-                    Clipboard.SetImage(component.Picture);
+                    Clipboard.SetImage(component.picture);
                     ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
                 }
             }
@@ -661,7 +661,7 @@ namespace ClassLibrary
 
             return n;
         }
-        public string GenerateKanBanWorkbook2(ProjectModel pi)
+        public static string GenerateKanBanWorkbook2(ProjectModel pi)
         {
             //try
             //{
@@ -718,10 +718,10 @@ namespace ClassLibrary
                 wsBase.Cell(5, 9).Value = "Initials";
                 wsBase.Cell(5, 10).Value = "Date";
 
-                foreach (ComponentModel component in pi.ComponentList)
+                foreach (ComponentModel component in pi.Components)
                 {
-                    taskRowCount = component.TaskList.Count();
-                    var componentWs = wb.Worksheet(1).CopyTo(component.Name);
+                    taskRowCount = component.Tasks.Count();
+                    var componentWs = wb.Worksheet(1).CopyTo(component.Component);
                     r = 6;
 
                     foreach (int c in borderedColumnsArr)
@@ -734,14 +734,14 @@ namespace ClassLibrary
                     componentWs.Range($"A{5 + taskRowCount}:J{5 + taskRowCount}").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
 
                     componentWs.Range("A1").Value = " Job Number: " + pi.JobNumber;
-                    componentWs.Range("A2").Value = " Component: " + component.Name;
+                    componentWs.Range("A2").Value = " Component: " + component.Component;
                     componentWs.Range("A3").Value = " Material: " + component.Material;
 
                     componentWs.Range("H1").Value = " Qty: " + component.Quantity;
                     componentWs.Range("H2").Value = " Spares: " + component.Spares;
                     componentWs.Range("H3").Value = " Finish: " + component.Finish;
 
-                    foreach (TaskModel task in component.TaskList)
+                    foreach (TaskModel task in component.Tasks)
                     {
                         if (r % 2 == 1)
                         {
@@ -754,7 +754,7 @@ namespace ClassLibrary
 
                         componentWs.Range(componentWs.Cell(r, 7), componentWs.Cell(r, 8)).Merge();
 
-                        componentWs.Cell(r, 1).Value = task.ID;
+                        componentWs.Cell(r, 1).Value = task.TaskID;
                         componentWs.Cell(r, 2).Value = task.TaskName;
                         componentWs.Cell(r, 3).Value = task.Duration;
                         componentWs.Cell(r, 4).Value = task.StartDate;
@@ -789,9 +789,9 @@ namespace ClassLibrary
                     //noteContentsRange.Style.Alignment.WrapText = true;
                     //noteContentsRange.Merge();
 
-                    if (component.Picture != null)
+                    if (component.picture != null)
                     {
-                        var image = componentWs.AddPicture((Bitmap)component.Picture);
+                        var image = componentWs.AddPicture((Bitmap)component.picture);
                         image.MoveTo(componentWs.Cell(taskRowCount + 12, 2));
                     }
 
@@ -842,9 +842,9 @@ namespace ClassLibrary
             //    throw ex;
             //}
         }
-        public string ChooseKanBanSavePath(ProjectModel pi)
+        public static string ChooseKanBanSavePath(ProjectModel project)
         {
-            string initialDirectory = GetInitialDirectory(pi.KanBanWorkbookPath);
+            string initialDirectory = GetInitialDirectory(project.KanBanWorkbookPath);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Excel files (*.xlsm)|*.xlsm";
@@ -852,7 +852,7 @@ namespace ClassLibrary
             saveFileDialog.RestoreDirectory = true;
             saveFileDialog.CreatePrompt = false;
             saveFileDialog.InitialDirectory = initialDirectory;
-            saveFileDialog.FileName = pi.JobNumber + "- Proj #" + pi.ProjectNumber + " Checkoff Sheet";
+            saveFileDialog.FileName = project.JobNumber + "- Proj #" + project.ProjectNumber + " Checkoff Sheet";
             saveFileDialog.Title = "Save Path of Kan Ban";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -932,13 +932,13 @@ namespace ClassLibrary
                 FormatComponentSheet(pi, ws);
             }
 
-            Console.WriteLine(component.Name);
+            Console.WriteLine(component.Component);
 
-            if (component.Name.Length <= 31)
+            if (component.Component.Length <= 31)
             {
-                ws.Name = component.Name;
+                ws.Name = component.Component;
             }
-            else if (component.Name.Length > 31)
+            else if (component.Component.Length > 31)
             {
             }
             else
@@ -950,7 +950,7 @@ namespace ClassLibrary
             ws.Range["E1"].EntireColumn.Hidden = true;
 
             Excel.Shape textBox = ws.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 300, 65);
-            textBox.TextFrame2.TextRange.Characters.Text = "Job Number: " + pi.JobNumber + "\n" + "Component: " + component.Name + "\n" + "Material: " + component.Material;
+            textBox.TextFrame2.TextRange.Characters.Text = "Job Number: " + pi.JobNumber + "\n" + "Component: " + component.Component + "\n" + "Material: " + component.Material;
             textBox.TextFrame2.TextRange.Font.Size = 14;
             textBox.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
             textBox.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
@@ -981,11 +981,11 @@ namespace ClassLibrary
 
             ws.Range["F1"].EntireColumn.NumberFormat = "@";
 
-            foreach (TaskModel task in component.TaskList)
+            foreach (TaskModel task in component.Tasks)
             {
                 border = ws.Range[ws.Cells[r - 1, 1], ws.Cells[r - 1, 9]].Borders;
 
-                ws.Cells[r, 1].value = task.ID;
+                ws.Cells[r, 1].value = task.TaskID;
                 ws.Cells[r, 2].value = "   " + task.TaskName;
                 ws.Cells[r, 3].value = "" + task.Duration;
                 ws.Cells[r, 4].value = " " + String.Format("{0:M/d/yyyy}", task.StartDate);
@@ -1037,9 +1037,9 @@ namespace ClassLibrary
             textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
             textBox3.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
 
-            if (component.Picture != null)
+            if (component.Pictures != null)
             {
-                Clipboard.SetImage(component.Picture);
+                Clipboard.SetImage(component.picture);
                 ws.Paste((Excel.Range)ws.Cells[r + 5, 2]);  // This line throws an error when Brian tries to make a KanBan.
             }
         }
@@ -1168,7 +1168,7 @@ namespace ClassLibrary
 
                     ws = wb.Sheets.Add(After: wb.Sheets[index]);
 
-                    component = pi.ComponentList.Find(x => x.Name == componentName);
+                    component = pi.Components.Find(x => x.Component == componentName);
 
                     PopulateKanBanComponentSheet(pi, component, ws);
 
@@ -1250,15 +1250,15 @@ namespace ClassLibrary
             ws.Cells[r, c + 1].Font.Bold = true;
         }
 
-        private ProjectSummary GetProjectSummary(ProjectModel pi)
+        private static ProjectSummary GetProjectSummary(ProjectModel pi)
         {
             List<TaskModel> taskList = new List<TaskModel>();
             List<TaskModel> summaryTaskList = new List<TaskModel>();
             ProjectSummary ps = new ProjectSummary();
 
-            foreach (ComponentModel component in pi.ComponentList)
+            foreach (ComponentModel component in pi.Components)
             {
-                taskList.AddRange(component.TaskList);
+                taskList.AddRange(component.Tasks);
             }
 
             foreach (Hours hours in ps.HoursList)
@@ -1313,7 +1313,7 @@ namespace ClassLibrary
             public int Qty { get; set; }
             public string WorkType { get; set; }
         }
-        private string GetInitialDirectory(string path)
+        private static string GetInitialDirectory(string path)
         {
             string initialDirectory;
 
@@ -1372,9 +1372,9 @@ namespace ClassLibrary
             VBIDE.VBComponent wsMod;
             int matchingSheetIndex;
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
-                matchingSheet = MatchingComponentSheet(workbook, component.Name);
+                matchingSheet = MatchingComponentSheet(workbook, component.Component);
 
                 if (matchingSheet != null)
                 {

@@ -1394,9 +1394,9 @@ namespace Toolroom_Scheduler
 
         private bool BlankStartFinishDateExists(ProjectModel pi)
         {
-            foreach (ClassLibrary.ComponentModel component in pi.ComponentList)
+            foreach (ClassLibrary.ComponentModel component in pi.Components)
             {
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     if (task.StartDate == null || task.FinishDate == null)
                     {

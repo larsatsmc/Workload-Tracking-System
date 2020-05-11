@@ -142,11 +142,11 @@ namespace Toolroom_Scheduler
             {
                 file.WriteLine($"{project.JobNumber},{project.ProjectNumber},{project.DueDate.ToShortDateString()},{project.ToolMaker},{project.Designer},{project.RoughProgrammer},{project.ElectrodeProgrammer},{project.FinishProgrammer}");
 
-                foreach (ComponentModel component in project.ComponentList)
+                foreach (ComponentModel component in project.Components)
                 {
-                    file.WriteLine(component.Name);
+                    file.WriteLine(component.Component);
 
-                    foreach (TaskModel task in component.TaskList)
+                    foreach (TaskModel task in component.Tasks)
                     {
                         file.WriteLine($"        {task.TaskName}");
 
@@ -250,7 +250,7 @@ namespace Toolroom_Scheduler
                 }
                 else if (count == 8)
                 {
-                    task = new TaskModel(line.Trim(), component.Name);
+                    task = new TaskModel(line.Trim(), component.Component);
                     component.AddTask(task);
                 }
                 else if (count == 16)

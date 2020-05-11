@@ -120,10 +120,135 @@ namespace Toolroom_Project_Viewer
             return true;
         }
 
+        public static bool CreateProject(ProjectModel project)
+        {
+            if (ProjectExists(project.ProjectNumber))
+            {
+                MessageBox.Show("There is another project with that same project number. Enter a different project number");
+            }
+            else
+            {
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                {
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed, DateCreated, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Priority, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @OverlapAllowed, Now(), Now())"; // 
+
+                    string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Pictures, Finish) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Pictures, @Finish)"; // 
+
+                    string queryString3 = "INSERT INTO Tasks (JobNumber, ProjectNumber, Component, TaskID, TaskName, Duration, StartDate, FinishDate, Predecessors, Machine, Resources, Resource, Hours, Priority, DateAdded, Notes) " +
+                                          "VALUES (@JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Duration, @StartDate, @FinishDate, @Predecessors, @Machine, @Resources, @Resource, @Hours, @Priority, Now(), @Notes)";
+
+                    connection.Open();
+
+                    using (var trans = connection.BeginTransaction())
+                    {
+                        // OleDBConnection doesn't like it when I feed the object directly into the DynamicParameters constructor.
+                        //var p1 = new DynamicParameters(project);
+
+                        var p1 = new
+                        {
+                            project.JobNumber,
+                            project.ProjectNumber,
+                            project.Customer,
+                            project.Project,
+                            project.DueDate,
+                            project.Priority,
+                            project.Designer,
+                            project.ToolMaker,
+                            project.RoughProgrammer,
+                            project.ElectrodeProgrammer,
+                            project.FinishProgrammer,
+                            project.Apprentice,
+                            project.OverlapAllowed
+                        };
+
+                        connection.Execute(queryString1, p1, trans);
+
+                        foreach (ComponentModel component in project.Components)
+                        {
+                            var p2 = new
+                            {
+                                project.JobNumber,
+                                project.ProjectNumber,
+                                component.Component,
+                                component.Notes,
+                                component.Priority,
+                                component.Position,
+                                component.Material,
+                                component.TaskIDCount,
+                                component.Quantity,
+                                component.Spares,
+                                component.Pictures,
+                                component.Finish,
+                                component.Status
+                            };
+
+                            Console.WriteLine($"{project.JobNumber} {project.ProjectNumber} {component.Component}");
+
+                            connection.Execute(queryString2, p2, trans);
+
+                            foreach (TaskModel task in component.Tasks)
+                            {
+                                var p3 = new 
+                                { 
+                                    project.JobNumber,
+                                    project.ProjectNumber,
+                                    component.Component,
+                                    task.TaskID,
+                                    task.TaskName,
+                                    task.Duration,
+                                    task.StartDate,
+                                    task.FinishDate,
+                                    task.Predecessors,
+                                    task.Machine,
+                                    task.Resources,
+                                    task.Resource,
+                                    task.Hours,
+                                    task.Priority,
+                                    task.Notes
+                                };
+
+                                connection.Execute(queryString3, p3, trans);
+
+                                task.ID = (int)connection.ExecuteScalar("SELECT @@IDENTITY", transaction: trans);
+                            }
+                        }
+
+                        trans.Commit();
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region Read
 
+        public static (List<ProjectModel> projects, List<ComponentModel> components, List<TaskModel> tasks) GetProjects()
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                List<ProjectModel> projects = connection.Query<ProjectModel>("SELECT * FROM Projects").ToList();
+                List<ComponentModel> components = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
+                List<TaskModel> tasks = connection.Query<TaskModel>("SELECT * FROM Tasks").ToList();
+
+                return (projects, components, tasks);
+            }
+        }
+        public static List<ProjectModel> GetAllProjects()
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                List<ProjectModel> projects = connection.Query<ProjectModel>("SELECT * FROM Projects").ToList();
+
+                return projects;
+            }
+        }
         public static bool ProjectExists(int projectNumber)
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
@@ -180,101 +305,165 @@ namespace Toolroom_Project_Viewer
 
             string queryString1 = "SELECT * FROM Projects WHERE ProjectNumber = @projectNumber";
             string queryString2 = "SELECT * FROM Components WHERE ProjectNumber = @projectNumber";
+            string queryString3 = "SELECT * FROM Tasks WHERE ProjectNumber = @projectNumber";
 
-            OleDbCommand cmd1 = new OleDbCommand(queryString1, Connection);
-            OleDbCommand cmd2 = new OleDbCommand(queryString2, Connection);
-
-            cmd1.Parameters.AddWithValue("@projectNumber", projectNumber);
-            cmd2.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-
-            Connection.Open();
-
-            using (var rdr = cmd1.ExecuteReader())
+            try
             {
-                if (rdr.HasRows)
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
-                    while (rdr.Read())
+                    OleDbCommand cmd1 = new OleDbCommand(queryString1, connection);
+                    OleDbCommand cmd2 = new OleDbCommand(queryString2, connection);
+                    OleDbCommand cmd3 = new OleDbCommand(queryString3, connection);
+
+                    cmd1.Parameters.AddWithValue("@projectNumber", projectNumber);
+                    cmd2.Parameters.AddWithValue("@projectNumber", projectNumber);
+                    cmd3.Parameters.AddWithValue("@projectNumber", projectNumber);
+
+                    connection.Open();
+
+                    using (var rdr = cmd1.ExecuteReader())
                     {
-                        pi = new ProjectModel
-                        (
-                                        jobNumber: Convert.ToString(rdr["JobNumber"]),
-                                    projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
-                                             name: Convert.ToString(rdr["Project"]),
-                                         customer: Convert.ToString(rdr["Customer"]),
-                                          dueDate: Convert.ToDateTime(rdr["DueDate"]),
-                                           status: Convert.ToString(rdr["Status"]),
-                                        toolMaker: Convert.ToString(rdr["ToolMaker"]),
-                                         designer: Convert.ToString(rdr["Designer"]),
-                                  roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
-                               electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
-                                 finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
-                                       apprentice: Convert.ToString(rdr["Apprentice"]),
-                               kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
-                                   overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
-                        );
+                        if (rdr.HasRows)
+                        {
+                            while (rdr.Read())
+                            {
+                                pi = new ProjectModel
+                                (
+                                                jobNumber: Convert.ToString(rdr["JobNumber"]),
+                                            projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
+                                                     name: Convert.ToString(rdr["Project"]),
+                                                 customer: Convert.ToString(rdr["Customer"]),
+                                                  dueDate: Convert.ToDateTime(rdr["DueDate"]),
+                                                   status: Convert.ToString(rdr["Status"]),
+                                                toolMaker: Convert.ToString(rdr["ToolMaker"]),
+                                                 designer: Convert.ToString(rdr["Designer"]),
+                                          roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
+                                       electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
+                                         finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
+                                               apprentice: Convert.ToString(rdr["Apprentice"]),
+                                       kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
+                                           overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
+                                );
+                            }
+                        }
+                    }
+
+                    using (var rdr = cmd2.ExecuteReader())
+                    {
+                        if (rdr.HasRows)
+                        {
+                            while (rdr.Read())
+                            {
+                                component = new ComponentModel
+                                (
+                                          component: rdr["Component"],
+                                              notes: rdr["Notes"],
+                                           priority: rdr["Priority"],
+                                           position: rdr["Position"],
+                                           quantity: rdr["Quantity"],
+                                             spares: rdr["Spares"],
+                                            picture: rdr["Pictures"],
+                                           material: rdr["Material"],
+                                             finish: rdr["Finish"],
+                                        taskIDCount: rdr["TaskIDCount"]
+                                );
+
+                                pi.AddComponent(component);
+                            }
+                        }
+                        else
+                        {
+                            pi.AddComponentList(GetComponentListFromTasksTable(pi.ProjectNumber));
+                        }
+                    }
+
+                    //List<TaskModel> taskList = GetProjectTaskList(pi.JobNumber, pi.ProjectNumber);
+                    List<TaskModel> taskList = new List<TaskModel>();
+
+                    using (var rdr = cmd3.ExecuteReader())
+                    {
+                        if (rdr.HasRows)
+                        {
+                            while (rdr.Read())
+                            {
+                                taskList.Add(new TaskModel
+                                (
+                                        taskName: rdr["TaskName"],
+                                          taskID: rdr["TaskID"],
+                                              id: rdr["ID"],
+                                       component: rdr["Component"],
+                                           hours: rdr["Hours"],
+                                        duration: rdr["Duration"],
+                                       startDate: rdr["StartDate"],
+                                      finishDate: rdr["FinishDate"],
+                                          status: rdr["Status"],
+                                   dateCompleted: rdr["DateCompleted"],
+                                        initials: rdr["Initials"],
+                                         machine: rdr["Machine"],
+                                       personnel: rdr["Resource"],
+                                    predecessors: rdr["Predecessors"],
+                                           notes: rdr["Notes"]
+                                ));
+                            }
+                        }
+                    }
+
+                    foreach (ComponentModel component2 in pi.Components)
+                    {
+                        var tasks = from t in taskList
+                                    where t.Component == component2.Component
+                                    orderby t.TaskID ascending
+                                    select t;
+
+                        component2.AddTaskList(tasks.ToList());
+                    }
+
+                    foreach (ComponentModel component2 in pi.Components)
+                    {
+                        //Console.WriteLine(component.Name);
+
+                        foreach (TaskModel task in component2.Tasks)
+                        {
+                            //Console.WriteLine($"   {task.ID} {task.TaskName}");
+                            task.HasInfo = true;
+                        }
                     }
                 }
             }
-
-            using (var rdr = cmd2.ExecuteReader())
+            catch (OleDbException ex)
             {
-                if (rdr.HasRows)
-                {
-                    while (rdr.Read())
-                    {
-                        component = new ComponentModel
-                        (
-                                       name: rdr["Component"],
-                                      notes: rdr["Notes"],
-                                   priority: rdr["Priority"],
-                                   position: rdr["Position"],
-                                   quantity: rdr["Quantity"],
-                                     spares: rdr["Spares"],
-                                    picture: rdr["Pictures"],
-                                   material: rdr["Material"],
-                                     finish: rdr["Finish"],
-                                taskIDCount: rdr["TaskIDCount"]
-                        );
-
-                        pi.AddComponent(component);
-                    }
-                }
-                else
-                {
-                    pi.AddComponentList(GetComponentListFromTasksTable(pi.ProjectNumber));
-                }
-            }
-
-            List<TaskModel> projectTaskList = GetProjectTaskList(pi.JobNumber, pi.ProjectNumber);
-
-            foreach (ComponentModel component2 in pi.ComponentList)
-            {
-                var tasks = from t in projectTaskList
-                            where t.Component == component2.Name
-                            orderby t.ID ascending
-                            select t;
-
-                component2.AddTaskList(tasks.ToList());
-            }
-
-            foreach (ComponentModel component2 in pi.ComponentList)
-            {
-                //Console.WriteLine(component.Name);
-
-                foreach (TaskModel task in component2.TaskList)
-                {
-                    //Console.WriteLine($"   {task.ID} {task.TaskName}");
-                    task.HasInfo = true;
-                }
-            }
-
-            if (Connection.State == ConnectionState.Open)
-            {
-                Connection.Close(); 
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
 
             return pi;
+        }
+
+        public static ProjectModel GetProject4(int projectNumber)
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                var p = new { ProjectNumber = projectNumber };
+
+                ProjectModel project = connection.QueryFirst<ProjectModel>("SELECT * FROM Projects WHERE ProjectNumber = @ProjectNumber", p);
+                List<ComponentModel> components = connection.Query<ComponentModel>("SELECT * FROM Components WHERE ProjectNumber = @ProjectNumber", p).ToList();
+
+                string taskQuery = "SELECT ID, TaskID, Component, TaskName, Duration, StartDate, FinishDate, Predecessors, Machine, Resources, Resource AS Personnel, Hours, Notes, DateCompleted, Initials, Status FROM Tasks WHERE ProjectNumber = @ProjectNumber";
+
+                List<TaskModel> tasks = connection.Query<TaskModel>(taskQuery, p).ToList();
+
+                project.Components = components;
+
+                foreach (var component in project.Components)
+                {
+                    component.Tasks = tasks.FindAll(x => x.Component == component.Component).OrderBy(x => x.TaskID).ToList();
+
+                    component.Tasks.ForEach(x => x.HasInfo = true);
+                }
+
+                project.HasProjectInfo = true;
+
+                return project;
+            }
         }
 
         //public ProjectModel GetProjectInfo(string jobNumber, int projectNumber)
@@ -451,18 +640,18 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("TaskID", typeof(int));
             dt.Columns.Add("NewTaskID", typeof(int));
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 count++;
                 baseCount = count;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow row = dt.NewRow();
 
-                    row["Component"] = component.Name;
+                    row["Component"] = component.Component;
                     row["AptID"] = ++count;
-                    row["TaskID"] = task.ID;
+                    row["TaskID"] = task.TaskID;
                     row["TaskName"] = task.TaskName;
                     row["Location"] = task.TaskName + " (" + task.Hours + " Hours)";
                     row["Subject"] = project.JobNumber + " #" + project.ProjectNumber;
@@ -532,7 +721,7 @@ namespace Toolroom_Project_Viewer
             // TODO: Need to make sure that all these methods are using the same database connection.
             try
             {
-                ProjectModel databaseProject = GetProject(project.OldProjectNumber);
+                ProjectModel databaseProject = GetProject4(project.OldProjectNumber);
                 List<ComponentModel> newComponentList = new List<ComponentModel>();
                 //List<Component> updatedComponentList = new List<Component>();
                 List<TaskModel> newTaskList = new List<TaskModel>();
@@ -549,22 +738,22 @@ namespace Toolroom_Project_Viewer
                 if (ProjectHasComponents(project.ProjectNumber))
                 {
                     // Check modified project for added components.
-                    foreach (ComponentModel component in project.ComponentList)
+                    foreach (ComponentModel component in project.Components)
                     {
-                        component.SetPosition(project.ComponentList.IndexOf(component));
+                        component.SetPosition(project.Components.IndexOf(component));
 
-                        bool componentExists = databaseProject.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = databaseProject.Components.Exists(x => x.Component == component.Component);
 
                         if (componentExists)
                         {
                             UpdateComponentData(project, component);
 
-                            foreach (TaskModel task in component.TaskList)
+                            foreach (TaskModel task in component.Tasks)
                             {
-                                Console.WriteLine($"{task.ID} {task.TaskName}");
+                                Console.WriteLine($"{task.TaskID} {task.TaskName}");
                             }
 
-                            UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
+                            UpdateTasks(project.JobNumber, project.ProjectNumber, component.Component, component.Tasks);
 
                             //if (component.ReloadTaskList)
                             //{
@@ -579,14 +768,14 @@ namespace Toolroom_Project_Viewer
                         else
                         {
                             newComponentList.Add(component);
-                            newTaskList.AddRange(component.TaskList);
+                            newTaskList.AddRange(component.Tasks);
                         }
                     }
 
                     // Check modified project for deleted components.
-                    foreach (ComponentModel component in databaseProject.ComponentList)
+                    foreach (ComponentModel component in databaseProject.Components)
                     {
-                        bool componentExists = project.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = project.Components.Exists(x => x.Component == component.Component);
 
                         if (!componentExists)
                         {
@@ -844,25 +1033,35 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public void SetKanBanWorkbookPath(string path, string jobNumber, int projectNumber)
+        public static void SetKanBanWorkbookPath(string path, int projectNumber)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
-                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @path, LastKanBanGenerationDate = Now() " +
-                                     "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
+                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @Path, LastKanBanGenerationDate = Now() " +
+                                     "WHERE ProjectNumber = @ProjectNumber";
 
-                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+                var p = new { Path = path, ProjectNumber = projectNumber };
 
-                adapter.UpdateCommand = new OleDbCommand(queryString, connection);
-
-                adapter.UpdateCommand.Parameters.AddWithValue("@path", path);
-                adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-                connection.Open();
-                adapter.UpdateCommand.ExecuteNonQuery();
+                connection.Execute(queryString, p);
             }
 
+        }
+
+        public static void SetJobFolderPath(int id, string jobFolderPath)
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                string queryString = "UPDATE WorkLoad SET JobFolderPath = @JobFolderPath " +
+                                     "WHERE ID = @ID";
+
+                var p = new
+                {
+                    JobFolderPath = jobFolderPath,
+                    ID = id
+                };
+
+                connection.Execute(queryString, p);
+            }
         }
 
         #endregion
@@ -901,7 +1100,6 @@ namespace Toolroom_Project_Viewer
         #region Components Table Operations
 
         #region Create
-
         private bool AddComponentDataTableToDatabase(DataTable dt)
         {
             var adapter = new OleDbDataAdapter();
@@ -945,7 +1143,15 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Read
+        public static List<ComponentModel> GetAllComponents()
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                List<ComponentModel> results = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
 
+                return results;
+            }
+        }
         public bool ProjectHasComponents(int projectNumber)
         {
             string queryString = "SELECT COUNT(*) FROM Components WHERE ProjectNumber = @projectNumber";
@@ -989,7 +1195,7 @@ namespace Toolroom_Project_Viewer
                         {
                             component = new ComponentModel
                             (
-                                           name: rdr["Component"],
+                                      component: rdr["Component"],
                                           notes: rdr["Notes"],
                                        priority: rdr["Priority"],
                                        position: rdr["Position"],
@@ -1078,16 +1284,16 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Name);
+                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Component);
                 adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
                 adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
                 adapter.UpdateCommand.Parameters.AddWithValue("@quantity", component.Quantity);
                 adapter.UpdateCommand.Parameters.AddWithValue("@spares", component.Spares);
 
-                if (component.GetPictureByteArray() != null)
+                if (component.Pictures != null)
                 {
-                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.GetPictureByteArray());
+                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.Pictures);
                 }
                 else
                 {
@@ -1108,7 +1314,7 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand.ExecuteNonQuery();
 
-                Console.WriteLine($"{component.Name} Updated.");
+                Console.WriteLine($"{component.Component} Updated.");
                 //MessageBox.Show("Project Updated!"); 
                 
             }
@@ -1138,7 +1344,7 @@ namespace Toolroom_Project_Viewer
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, ComponentModel.ComponentCharacterLimit).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, ComponentModel.ComponentCharacterLimit).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
@@ -1297,20 +1503,20 @@ namespace Toolroom_Project_Viewer
             //dt.Columns.Add("Status", typeof(string));
             //dt.Columns.Add("PercentComplete", typeof(int));
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 DataRow row = dt.NewRow();
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
                 row["Finish"] = component.Finish;
-                if (component.GetPictureByteArray() != null)
+                if (component.Pictures != null)
                 {
-                    row["Pictures"] = component.GetPictureByteArray();
+                    row["Pictures"] = component.Pictures;
                 }
                 else
                 {
@@ -1367,7 +1573,7 @@ namespace Toolroom_Project_Viewer
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Notes"] = component.Notes;
                 row["Priority"] = component.Priority;
                 row["Position"] = component.Position;
@@ -1375,9 +1581,9 @@ namespace Toolroom_Project_Viewer
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
                 row["Finish"] = component.Finish;
-                if (component.GetPictureByteArray() != null)
+                if (component.Pictures != null)
                 {
-                    row["Pictures"] = component.GetPictureByteArray();
+                    row["Pictures"] = component.Pictures;
                 }
                 else
                 {
@@ -1443,26 +1649,34 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Read
+        public static List<TaskModel> GetAllTasks()
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            {
+                List<TaskModel> results = connection.Query<TaskModel>("SELECT * FROM Tasks").ToList();
 
+                return results;
+            }
+        }
         private void GetTasks(ProjectModel project)
         {
             List<TaskModel> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 var tasks = from t in projectTaskList
-                            where t.Component == component.Name
-                            orderby t.ID ascending
+                            where t.Component == component.Component
+                            orderby t.TaskID ascending
                             select t;
 
                 component.AddTaskList(tasks.ToList());
             }
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 //Console.WriteLine(component.Name);
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     //Console.WriteLine($"   {task.ID} {task.TaskName}");
                     task.HasInfo = true;
@@ -1512,9 +1726,9 @@ namespace Toolroom_Project_Viewer
             return predecessors;
         }
 
-        public DateTime GetFinishDate(string jobNumber, int projectNumber, string component, int taskID)
+        public static DateTime? GetFinishDate(string jobNumber, int projectNumber, string component, int taskID)
         {
-            DateTime FinishDate = DateTime.Today;
+            DateTime? FinishDate = null;
 
             try
             {
@@ -1529,7 +1743,7 @@ namespace Toolroom_Project_Viewer
 
                     connection.Open();
 
-                    FinishDate = (DateTime)sqlCommand.ExecuteScalar(); 
+                    FinishDate = (DateTime?)sqlCommand.ExecuteScalar(); 
                 }
             }
             catch (Exception)
@@ -1540,11 +1754,10 @@ namespace Toolroom_Project_Viewer
             return FinishDate;
         }
 
-        private DateTime GetLatestPredecessorFinishDate(string jobNumber, int projectNumber, string component, string predecessors)
+        private static DateTime? GetLatestPredecessorFinishDate(string jobNumber, int projectNumber, string component, string predecessors)
         {
-            Database db = new Database();
             DateTime? latestFinishDate = null;
-            DateTime currentDate;
+            DateTime? currentDate = null;
             string[] predecessorArr;
             string predecessor;
 
@@ -1553,7 +1766,7 @@ namespace Toolroom_Project_Viewer
             foreach (string currPredecessor in predecessorArr)
             {
                 predecessor = currPredecessor.Trim();
-                currentDate = db.GetFinishDate(jobNumber, projectNumber, component, Convert.ToInt16(predecessor));
+                currentDate = GetFinishDate(jobNumber, projectNumber, component, Convert.ToInt16(predecessor));
 
                 if (latestFinishDate == null || latestFinishDate < currentDate)
                 {
@@ -1561,7 +1774,7 @@ namespace Toolroom_Project_Viewer
                 }
             }
 
-            return (DateTime)latestFinishDate;
+            return latestFinishDate;
         }
 
         public List<TaskModel> GetProjectTaskList(string jobNumber, int projectNumber)
@@ -1591,8 +1804,8 @@ namespace Toolroom_Project_Viewer
                             taskList.Add(new TaskModel
                             (
                                     taskName: rdr["TaskName"],
-                                          id: rdr["TaskID"],
-                                  databaseId: rdr["ID"],
+                                      taskID: rdr["TaskID"],
+                                          id: rdr["ID"],
                                    component: rdr["Component"],
                                        hours: rdr["Hours"],
                                     duration: rdr["Duration"],
@@ -1616,19 +1829,6 @@ namespace Toolroom_Project_Viewer
             }
 
             return taskList;
-        }
-
-        private DataTable GetAllTasks()
-        {
-            DataTable dt = new DataTable();
-            string queryString = "SELECT * FROM Tasks";
-
-            OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.Fill(dt);
-
-            return dt;
         }
 
         private string FindTask(DataTable dataTable, string jobNumber, int projectNumber, string component, int taskID)
@@ -1675,11 +1875,11 @@ namespace Toolroom_Project_Viewer
             //dt.Columns.Add("Initials", typeof(string));
             //dt.Columns.Add("DateCompleted", typeof(string));
 
-            foreach (ComponentModel component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 i = 1;
 
-                foreach (TaskModel task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow row = dt.NewRow();
 
@@ -2072,7 +2272,7 @@ namespace Toolroom_Project_Viewer
             return weekList;
         }
 
-        private string SetQueryString(string department)
+        private static string SetQueryString(string department)
         {
             string queryString = null;
             string selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName & ' (' & Hours & ' Hours)' As Location, JobNumber, ProjectNumber, " +
@@ -2139,45 +2339,43 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        public DataTable GetAppointmentData(string department, bool grouped = false)
+        public static DataTable GetAppointmentData(string department, bool grouped = false)
         {
             DataTable dt = new DataTable();
-            OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
-            //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
-            string queryString = SetQueryString(department);
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-            //int i = 1;
-
-            //adapter.SelectCommand.Parameters.AddWithValue("@department", setQueryString(department);
 
             try
             {
-                adapter.Fill(dt);
-
-                dt.Columns.Add("PercentComplete", typeof(int));
-
-                foreach (DataRow nrow in dt.Rows)
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
-                    if (nrow["Status"].ToString() == "Completed")
+                    string queryString = SetQueryString(department);
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+                    adapter.Fill(dt);
+
+                    dt.Columns.Add("PercentComplete", typeof(int));
+
+                    foreach (DataRow nrow in dt.Rows)
                     {
-                        nrow["PercentComplete"] = 100;
+                        if (nrow["Status"].ToString() == "Completed")
+                        {
+                            nrow["PercentComplete"] = 100;
+                        }
+
+                        if (nrow["Resources"].ToString() == "")
+                        {
+                            nrow["Resources"] = "<ResourceIds>\r\n<ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAAROb25lCw==\" />\r\n</ResourceIds>";
+                        }
                     }
 
-                    if (nrow["Resources"].ToString() == "")
-                    {
-                        nrow["Resources"] = "<ResourceIds>\r\n<ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAAROb25lCw==\" />\r\n</ResourceIds>";
-                    }
+                    //foreach (DataRow nrow in dt.Rows)
+                    //{
+                    //    nrow["ID"] = i++;
+                    //    if(nrow["Resource"].ToString() == "")
+                    //    {
+                    //        nrow["Resource"] = "None";
+                    //    }
+                    //    Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
+                    //} 
                 }
-
-                //foreach (DataRow nrow in dt.Rows)
-                //{
-                //    nrow["ID"] = i++;
-                //    if(nrow["Resource"].ToString() == "")
-                //    {
-                //        nrow["Resource"] = "None";
-                //    }
-                //    Console.WriteLine($"{nrow["ID"]} {nrow["Subject"]} {nrow["Location"]} {nrow["StartDate"]}");
-                //}
             }
             catch (OleDbException ex)
             {
@@ -2190,7 +2388,7 @@ namespace Toolroom_Project_Viewer
 
             return dt;
         }
-        public List<TaskModel> GetAppointments(string department) // This is meant to replace the above GetAppointmentsData method.
+        public static List<TaskModel> GetAppointments(string department) // This is meant to replace the above GetAppointmentsData method.
         {
             string queryString = SetQueryString(department);
 
@@ -2233,24 +2431,36 @@ namespace Toolroom_Project_Viewer
 
         #region Update
         // This method is for capturing changes made to tasks in the department schedule view.
-        public bool UpdateTask(string jobNumber, int projectNumber, string component, int taskID, DateTime startDate, DateTime finishDate, string machine, string resource, string resources)
+        public bool UpdateTask(string jobNumber, int projectNumber, string component, int taskID, DateTime? startDate, DateTime? finishDate, string machine, string resource, string resources)
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
                     string queryString;
 
                     queryString = "UPDATE Tasks SET StartDate = @startDate, FinishDate = @finishDate, Machine = @machine, Resource = @resource, Resources = @resources " +
                                     "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
 
-                    OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+                    if (startDate == new DateTime(0001, 1, 1))
+                    {
+                        startDate = null;
+                    }
 
-                    adapter.UpdateCommand = new OleDbCommand(queryString, connection);
+                    if (finishDate == new DateTime(0001, 1, 1))
+                    {
+                        finishDate = null;
+                    }
+
+                    if (startDate == null)
+                    {
+                        goto SkipBackDating;
+                    }
 
                     string predecessors = GetTaskPredecessors(jobNumber, projectNumber, component, taskID);
+                    DateTime? latestPredecessorFinishDate = GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors);
 
-                    if (predecessors != "" && GetLatestPredecessorFinishDate(jobNumber, projectNumber, component, predecessors) > startDate)
+                    if (predecessors != "" && latestPredecessorFinishDate > startDate)
                     {
                         DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
                                                                     "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -2266,18 +2476,22 @@ namespace Toolroom_Project_Viewer
                         }
                     }
 
-                    adapter.UpdateCommand.Parameters.AddWithValue("@startDate", startDate);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@finishDate", finishDate);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@machine", machine);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@resource", resource);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@resources", resources);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@component", component);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@taskID", taskID);
+                SkipBackDating:
 
-                    connection.Open();
-                    adapter.UpdateCommand.ExecuteNonQuery();
+                    var p = new
+                    {
+                        startDate,
+                        finishDate,
+                        machine,
+                        resource,
+                        resources,
+                        jobNumber,
+                        projectNumber,
+                        component,
+                        taskID
+                    };
+
+                    connection.Execute(queryString, p);
                 }
 
                 MoveSuccessors(jobNumber, projectNumber, component, finishDate, taskID);
@@ -2291,7 +2505,88 @@ namespace Toolroom_Project_Viewer
             } 
             
         }
+        public bool UpdateTask(TaskModel task, ComponentModel component)
+        {
+            try
+            {
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                {
+                    string queryString;
 
+                    queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Resource = @Resource, Resources = @Resources " +
+                                  "WHERE ID = @ID";
+
+                    if (task.StartDate == new DateTime(0001, 1, 1))
+                    {
+                        task.StartDate = null;
+                    }
+
+                    if (task.FinishDate == new DateTime(0001, 1, 1))
+                    {
+                        task.FinishDate = null;
+                    }
+
+                    if (task.StartDate == null)
+                    {
+                        goto SkipBackDating;
+                    }
+
+                    DateTime? latestPredecessorFinishDate = component.GetLatestPredecessorFinishDate(task.Predecessors);
+
+                    if (latestPredecessorFinishDate == null)
+                    {
+                        goto SkipBackDating;
+                    }
+
+                    if (task.Predecessors != "" && latestPredecessorFinishDate > task.StartDate)
+                    {
+                        DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
+                                                                    "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            // TODO: Validate this process.
+                            BackDateTask(task.TaskID, component.Tasks, (DateTime)task.StartDate);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                SkipBackDating:
+
+                    var p = new
+                    {
+                        task.StartDate,
+                        task.FinishDate,
+                        task.Machine,
+                        task.Resource,
+                        task.Resources,
+                        task.ID
+                    };
+
+                    connection.Execute(queryString, p);
+                }
+
+                if (task.FinishDate != null)
+                {
+                    UpdateStartAndFinishDates(task.TaskID, component.Tasks, (DateTime)task.FinishDate);
+                }
+
+                UpdateTaskDates(component.Tasks);
+
+                //MoveSuccessors(jobNumber, projectNumber, component, finishDate, taskID);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                return false;
+            }
+
+        }
         // string machine, string resource, 
         public bool UpdateTask(string jobNumber, int projectNumber, string component, int taskID, DateTime startDate, DateTime finishDate, bool overlapAllowed)
         {
@@ -2428,7 +2723,7 @@ namespace Toolroom_Project_Viewer
             for (int i = 0; i < taskList.Count; i++)
             {
                 taskList[i].SetTaskID(i + 1);
-                Console.WriteLine(taskList[i].ID);
+                Console.WriteLine(taskList[i].TaskID);
             }
 
             return taskList;
@@ -2450,7 +2745,7 @@ namespace Toolroom_Project_Viewer
             foreach (DataRow row in taskDataTable.Rows)
             {
                 id = (int)row["ID"];
-                if (!taskList.Exists(x => x.DatabaseID == (int)row["ID"]))
+                if (!taskList.Exists(x => x.ID == (int)row["ID"]))
                 {
                     row.Delete();
                 }
@@ -2462,14 +2757,14 @@ namespace Toolroom_Project_Viewer
         private DataTable AddTasksToDataTable(string jobNumber, int projectNumber, string component, List<TaskModel> taskList, DataTable taskDataTable)
         {
             var tasksToAdd = from t in taskList
-                             where t.DatabaseID == 0
+                             where t.ID == 0
                              select t;
 
             foreach (TaskModel task in tasksToAdd.ToList())
             {
                 DataRow row = taskDataTable.NewRow();
 
-                row["TaskID"] = task.ID;
+                row["TaskID"] = task.TaskID;
                 row["JobNumber"] = jobNumber;
                 row["ProjectNumber"] = projectNumber;
                 row["Component"] = component;
@@ -2493,7 +2788,7 @@ namespace Toolroom_Project_Viewer
         private DataTable UpdateTasksInDataTable(List<TaskModel> taskList, DataTable taskDataTable)
         {
             var tasksToUpdate = from t in taskList
-                                where t.DatabaseID != 0
+                                where t.ID != 0
                                 select t;
 
             Console.WriteLine("Task Datatable");
@@ -2507,18 +2802,18 @@ namespace Toolroom_Project_Viewer
 
             foreach (var item in taskList)
             {
-                Console.WriteLine($"{item.DatabaseID} {item.ID} {item.TaskName}");
+                Console.WriteLine($"{item.ID} {item.TaskID} {item.TaskName}");
             }
 
             foreach (TaskModel task in tasksToUpdate.ToList())
             {
                 var rows = from DataRow myRow in taskDataTable.Rows
-                           where (int)myRow["ID"] == task.DatabaseID
+                           where (int)myRow["ID"] == task.ID
                            select myRow;
 
                 DataRow row = rows.FirstOrDefault();
 
-                row["TaskID"] = task.ID;
+                row["TaskID"] = task.TaskID;
                 row["TaskName"] = task.TaskName;
                 row["Hours"] = task.Hours;
                 row["Duration"] = task.Duration;
@@ -2630,7 +2925,7 @@ namespace Toolroom_Project_Viewer
             return helper.ToXml();
         }
 
-        private DateTime AddBusinessDays(DateTime date, string durationSt)
+        private static DateTime AddBusinessDays(DateTime date, string durationSt)
         {
             int days;
             string[] duration = durationSt.Split(' ');
@@ -2666,90 +2961,53 @@ namespace Toolroom_Project_Viewer
 
         }
 
-        public void ChangeTaskStartDate(string jobNumber, int projectNumber, string component, DateTime currentTaskStartDate, string duration, int taskID)
+        public static void ChangeTaskDate(string fieldName, TaskModel task, ComponentModel component)
         {
-            try
+            // Checks if the start date changed.
+            if (fieldName == "StartDate")
             {
-                DateTime currentTaskFinishDate = AddBusinessDays(currentTaskStartDate, duration);
-
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                if (task.StartDate == null)
                 {
-                    OleDbDataAdapter adapter = new OleDbDataAdapter();
-
-                    string queryString;
-
-                    queryString = "UPDATE Tasks " +
-                                  "SET StartDate = @startDate, FinishDate = @finishDate " +
-                                  "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
-
-                    adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
-
-                    adapter.UpdateCommand.Parameters.AddWithValue("@startDate", currentTaskStartDate.ToShortDateString());
-                    adapter.UpdateCommand.Parameters.AddWithValue("@finishDate", currentTaskFinishDate.ToShortDateString());
-                    adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@component", component);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@taskID", taskID);
-
-                    Connection.Open();
-
-                    adapter.UpdateCommand.ExecuteNonQuery();
+                    task.FinishDate = null;
                 }
+                else
+                {
+                    task.FinishDate = AddBusinessDays((DateTime)task.StartDate, task.Duration);
+                }
+            }
 
-                MoveSuccessors(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
-            }
-            catch (OleDbException oleEx)
+            TaskModel temp = component.Tasks.Find(x => x.ID == task.ID);
+
+            temp.StartDate = task.StartDate;
+            temp.FinishDate = task.FinishDate;
+
+
+            if (task.FinishDate != null)
             {
-                throw oleEx;
+                UpdateStartAndFinishDates(task.TaskID, component.Tasks, (DateTime)task.FinishDate); 
             }
-            catch (Exception ex)
+
+            UpdateTaskDates(component.Tasks);
+        }
+
+        private static void UpdateTaskDates(List<TaskModel> tasks)
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
-                throw ex;
+                string queryString = "UPDATE Tasks " +
+                                     "SET StartDate = @StartDate, FinishDate = @FinishDate " +
+                                     "WHERE ID = @ID";
+
+                foreach (var task in tasks)
+                {
+                    var p = new { task.StartDate, task.FinishDate, task.ID };
+
+                    connection.Execute(queryString, p);
+                }
             }
         }
 
-        public void ChangeTaskFinishDate(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int taskID)
-        {
-            try
-            {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
-                {
-                    OleDbDataAdapter adapter = new OleDbDataAdapter();
-
-                    string queryString;
-
-                    queryString = "UPDATE Tasks " +
-                                  "SET FinishDate = @finishDate " +
-                                  "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
-
-                    adapter.UpdateCommand = new OleDbCommand(queryString, connection);
-
-                    adapter.UpdateCommand.Parameters.AddWithValue("@finishDate", currentTaskFinishDate);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@component", component);
-                    adapter.UpdateCommand.Parameters.AddWithValue("@taskID", taskID);
-
-                    connection.Open();
-
-                    adapter.UpdateCommand.ExecuteNonQuery();
-                }
-
-                MoveSuccessors(jobNumber, projectNumber, component, currentTaskFinishDate, taskID);
-
-            }
-            catch (OleDbException oleException)
-            {
-                throw oleException;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        public void MoveSuccessors(string jobNumber, int projectNumber, string component, DateTime currentTaskFinishDate, int currentTaskID)
+        public static void MoveSuccessors(string jobNumber, int projectNumber, string component, DateTime? currentTaskFinishDate, int currentTaskID)
         {
             using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
             {
@@ -2774,6 +3032,50 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        public static void ForwardDateTasks(List<ComponentModel> selectedComponents, DateTime forwardDate)
+        {
+            if (forwardDate == new DateTime(2000, 1, 1))
+            {
+                return;
+            }
+
+            if (selectedComponents.Count == 0)
+            {
+                XtraMessageBox.Show("No Components were selected.");
+                return;
+            }
+
+            ClearSelectedComponentDates(selectedComponents);
+
+            List<TaskModel> tasksToUpdate = new List<TaskModel>();
+
+            foreach (ComponentModel component in selectedComponents)
+            {
+                List<TaskModel> leadingTasks = component.Tasks.FindAll(x => x.Predecessors == "");
+
+                foreach (var task in leadingTasks)
+                {
+                    task.StartDate = forwardDate;
+                    task.FinishDate = AddBusinessDays(forwardDate, task.Duration);
+                    ForwardDateTask(task.TaskID, component.Tasks, (DateTime)task.FinishDate);
+                }
+
+                tasksToUpdate.AddRange(component.Tasks);
+            }
+
+            UpdateTaskDates(tasksToUpdate);
+        }
+        private static void ClearSelectedComponentDates(List<ComponentModel> selectedComponents)
+        {
+            foreach (ComponentModel component in selectedComponents)
+            {
+                foreach (TaskModel task in component.Tasks)
+                {
+                    task.StartDate = null;
+                    task.FinishDate = null;
+                }
+            }
+        }
         public void ForwardDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime forwardDate)
         {
             OleDbDataAdapter adapter;
@@ -2866,7 +3168,7 @@ namespace Toolroom_Project_Viewer
             adapter.UpdateCommand = builder.GetUpdateCommand();
             adapter.Update(dt);
         }
-
+        
         private void ForwardDateTask(int predecessorID, string component, bool skipDatedTasks, DateTime predecessorFinishDate, DataTable projectTaskTable)
         {
             var result = from DataRow myRow in projectTaskTable.Rows
@@ -2898,6 +3200,24 @@ namespace Toolroom_Project_Viewer
             //{
             //    Console.WriteLine(nrow["TaskID"].ToString() + " " + nrow["StartDate"].ToString() + " " + nrow["FinishDate"].ToString());
             //}
+        }
+
+        private static void ForwardDateTask(int predecessorID, List<TaskModel> componentTasks, DateTime predecessorFinishDate)
+        {
+            var result = from tasks in componentTasks
+                         where tasks.HasMatchingPredecessor(predecessorID)
+                         select tasks;
+
+            foreach (TaskModel task in result)
+            {
+                if (task.StartDate == null || task.StartDate < predecessorFinishDate)
+                {
+                    task.StartDate = predecessorFinishDate;
+                    task.FinishDate = AddBusinessDays((DateTime)task.StartDate, task.Duration);
+
+                    ForwardDateTask(task.TaskID, componentTasks, (DateTime)task.FinishDate);
+                }
+            }
         }
 
         private void ClearProjectTaskDates(string jobNumber, int projectNumber)
@@ -2980,8 +3300,13 @@ namespace Toolroom_Project_Viewer
         }
 
         // This needs to be a separate method so that recursion can take place.
-        private void UpdateStartAndFinishDates(int id, DataTable dt, DateTime fd)
+        private static void UpdateStartAndFinishDates(int id, DataTable dt, DateTime? fd)
         {
+            if (fd == null)
+            {
+                return;
+            }
+
             string[] predecessorArr;
 
             Console.WriteLine("Update Start and Finish Dates");
@@ -3030,7 +3355,46 @@ namespace Toolroom_Project_Viewer
                 //Console.WriteLine(nrow["Component"] + " " + nrow["Predecessors"]);
             }
         }
+        private static List<TaskModel> UpdateStartAndFinishDates(int id, List<TaskModel> componentTasks, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false)
+        {
+            var result = from tasks in componentTasks
+                         where tasks.HasMatchingPredecessor(id)
+                         select tasks;
 
+            Console.WriteLine("Update Start and Finish Dates");
+
+            foreach (TaskModel task in result)
+            {
+                if (task.StartDate == null)
+                {
+                    if (fillBlanks == true)
+                    {
+                        task.StartDate = finishDate;
+                        task.FinishDate = AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+
+                        Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + task.StartDate + " " + task.FinishDate + " " + task.Predecessors); 
+                    }
+                }
+                else if (Convert.ToDateTime(task.StartDate) < finishDate) // If start date of current task comes before finish date of predecessor.
+                {
+                    task.StartDate = finishDate;
+                    task.FinishDate = AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.Predecessors);
+                    //Console.WriteLine(currentTaskID + " " + currentTaskFinishDate + " " + nrow2["TaskID"] + " " + predecessorArr[i2].ToString() + " " + nrow2["Predecessors"]);
+                }
+                else if (Convert.ToDateTime(task.StartDate) > finishDate && pullBackStartDates == true) // If start date of current task comes after the finish date of predecessor.
+                {
+                    task.StartDate = finishDate;
+                    task.FinishDate = AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.FinishDate);
+                }
+
+                if (task.FinishDate != null)
+                    UpdateStartAndFinishDates(task.TaskID, componentTasks, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
+            }
+
+            return componentTasks;
+        }
         public void BackDateProjectTasks(string jobNumber, int projectNumber, List<string> componentList, DateTime backDate)
         {
             OleDbDataAdapter adapter;
@@ -3088,8 +3452,34 @@ namespace Toolroom_Project_Viewer
 
             adapter.Update(dt);
         }
+        public static void BackDateTasks(List<ComponentModel> selectedComponents, DateTime backDate)
+        {
+            int highestTaskID;
+            List<TaskModel> tasksToUpdate = new List<TaskModel>();
 
-        public static void BackDatePredecessorTasks(int projectNumber, string component, int taskID, DateTime backDate)
+            if (backDate == new DateTime(2000, 1, 1))
+            {
+                return;
+            }
+
+            if (selectedComponents.Count == 0)
+            {
+                XtraMessageBox.Show("No components selected.");
+                return;
+            }
+
+            foreach (ComponentModel component in selectedComponents)
+            {
+                highestTaskID = component.Tasks.Max(x => x.TaskID);
+
+                BackDateTask(highestTaskID, component.Tasks, backDate);
+
+                tasksToUpdate.AddRange(component.Tasks);
+            }
+
+            UpdateTaskDates(tasksToUpdate);
+        }
+        public static void BackDatePredecessorTasks(int projectNumber, string component, int taskID, DateTime? backDate)
         {
             DataTable dt = new DataTable();
             string queryString = "SELECT * FROM Tasks WHERE ProjectNumber = @ProjectNumber AND Component = @Component ORDER BY TaskID";
@@ -3111,10 +3501,31 @@ namespace Toolroom_Project_Viewer
 
                 adapter.Update(dt);
             }
-
         }
 
-        private static void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime descendantStartDate, DataTable projectTaskTable)
+        public static void BackDatePredecessorTasks(int taskID, List<TaskModel> componentTasks, bool skipDatedTasks, DateTime? descendantStartDate)
+        {
+
+        }
+        private static void BackDateTask(int taskID, List<TaskModel> componentTasks, bool skipDatedTasks, DateTime? descendantStartDate)
+        {
+            string[] predecessors;
+            TaskModel task = componentTasks.Find(x => x.TaskID == taskID);
+
+            task.FinishDate = descendantStartDate;
+            task.StartDate = SubtractBusinessDays((DateTime)task.FinishDate, task.Duration);
+
+            if (task.Predecessors.Contains(','))
+            {
+                predecessors = task.Predecessors.Split(',');
+
+                foreach (string id in predecessors)
+                {
+                    BackDateTask(Convert.ToInt32(id), componentTasks, skipDatedTasks, task.StartDate);
+                }
+            }
+        }
+        private static void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime? descendantStartDate, DataTable projectTaskTable)
         {
             string[] predecessors;
 
@@ -3167,7 +3578,34 @@ namespace Toolroom_Project_Viewer
             //    Console.WriteLine(nrow["TaskID"].ToString() + " " + nrow["StartDate"].ToString() + " " + nrow["FinishDate"].ToString());
             //}
         }
+        private static void BackDateTask(int id, List<TaskModel> componentTasks, DateTime descendentStartDate)
+        {
+            string[] predecessors;
 
+            var result = from tasks in componentTasks
+                         where tasks.TaskID == id
+                         select tasks;
+
+            foreach (TaskModel task in result)
+            {
+                task.FinishDate = descendentStartDate;
+                task.StartDate = SubtractBusinessDays((DateTime)task.FinishDate, task.Duration);
+
+                if (task.Predecessors.Contains(','))
+                {
+                    predecessors = task.Predecessors.Split(',');
+
+                    foreach (string predecessor in predecessors)
+                    {
+                        BackDateTask(Convert.ToInt32(predecessor), componentTasks, (DateTime)task.StartDate);
+                    }
+                }
+                else if (task.Predecessors != "")
+                {
+                    BackDateTask(Convert.ToInt32(task.Predecessors), componentTasks, (DateTime)task.StartDate);
+                }
+            }
+        }
         public static DateTime SubtractBusinessDays(DateTime finishDate, string durationSt)
         {
             int days;
@@ -3204,7 +3642,7 @@ namespace Toolroom_Project_Viewer
             return finishDate.AddDays(-extraDays);
         }
 
-        public void UpdateTasksTable(object s, CellValueChangedEventArgs ev, string resources = "")
+        public static void UpdateTasksTable(object s, CellValueChangedEventArgs ev, string resources = "")
         {
             try
             {
@@ -3214,75 +3652,61 @@ namespace Toolroom_Project_Viewer
                 //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
                 //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
 
-                using (Connection)
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
-                    OleDbCommand cmd = new OleDbCommand();
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Connection = Connection;
+                    string queryString;
+                    var p = new DynamicParameters();
 
-                    //else if (ev.Column.FieldName == "ProjectNumber")
-                    //{
-                    //    cmd.CommandText = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
-
-                    //    if (ev.Value.ToString() != "")
-                    //    {
-                    //        cmd.Parameters.AddWithValue("@projectNumber", ev.Value.ToString());
-                    //    }
-                    //    else
-                    //    {
-                    //        cmd.Parameters.AddWithValue("@projectNumber", "");
-                    //    }
-                    //}
                     if (ev.Column.FieldName == "TaskName")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET TaskName = @taskName WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET TaskName = @TaskName WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@taskName", ev.Value.ToString());
+                        p.Add("@TaskName", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Notes")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Notes = @notes WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Notes = @Notes WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@notes", ev.Value.ToString());
+                        p.Add("@Notes", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Hours")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Hours = @hours WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Hours = @Hours WHERE (ID = @ID)";
 
                         if (ev.Value.ToString() != "")
                         {
-                            cmd.Parameters.AddWithValue("@hours", ev.Value.ToString());
+                            p.Add("@Hours", ev.Value.ToString());
                         }
                         else
                         {
-                            cmd.Parameters.AddWithValue("@hours", 0);
+                            p.Add("@Hours", 0);
                         }
                     }
                     else if (ev.Column.FieldName == "Duration")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Duration = @duration WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Duration = @Duration WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@duration", ev.Value.ToString());
+                        p.Add("@Duration", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Predecessors")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Predecessors = @predecessors WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Predecessors = @Predecessors WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@predecessors", ev.Value.ToString());
+                        p.Add("@Predecessors", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Machine")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Machine = @machine WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Machine = @Machine, Resources = @Resources WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@machine", ev.Value.ToString());
-                        //cmd.Parameters.AddWithValue("@resources", resources);
+                        p.Add("@Machine", ev.Value.ToString());
+                        p.Add("@Resources", resources);
                     }
                     else if (ev.Column.FieldName == "Resource")
                     {
-                        cmd.CommandText = "UPDATE Tasks SET Resource = @resource WHERE (ID = @tID)";
+                        queryString = "UPDATE Tasks SET Resource = @Resource, Resources = @Resources WHERE (ID = @ID)";
 
-                        cmd.Parameters.AddWithValue("@resource", ev.Value.ToString());
-                        //cmd.Parameters.AddWithValue("@resources", resources);
+                        p.Add("@Resource", ev.Value.ToString());
+                        p.Add("@Resources", resources);
                     }
                     else
                     {
@@ -3290,19 +3714,14 @@ namespace Toolroom_Project_Viewer
                         return;
                     }
 
-                    cmd.Parameters.AddWithValue("@tID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
+                    p.Add("@ID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
 
-                    Connection.Open();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute(queryString, p);
                 }
             }
             catch (Exception e)
             {
                 throw e;
-            }
-            finally
-            {
-                Connection.Close();
             }
         }
 
@@ -3318,7 +3737,7 @@ namespace Toolroom_Project_Viewer
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
@@ -3607,13 +4026,23 @@ namespace Toolroom_Project_Viewer
 
                 adapter.Fill(dt);
 
-                DataRow row = dt.NewRow();
+                DataRow row1 = dt.NewRow();
 
-                row["ResourceName"] = "None";
-                row["Role"] = "None";
-                row["Department"] = "None";
+                row1["ResourceName"] = "No Machine";
+                row1["Role"] = "None";
+                row1["Department"] = "None";
+                row1["ResourceType"] = "Machine";
 
-                dt.Rows.Add(row);
+                dt.Rows.Add(row1);
+
+                DataRow row2 = dt.NewRow();
+
+                row2["ResourceName"] = "No Personnel";
+                row2["Role"] = "None";
+                row2["Department"] = "None";
+                row1["ResourceType"] = "Personnel";
+
+                dt.Rows.Add(row2);
 
                 //foreach (DataRow nrow in dt.Rows)
                 //{
