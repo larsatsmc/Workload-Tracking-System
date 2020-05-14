@@ -24,7 +24,7 @@ namespace ClassLibrary
         public string Predecessors { get; set; }
         public string Machine { get; set; }
         public string Personnel { get; set; }
-        public string Resources { get; private set; }
+        public string Resources { get; set; }
         public string Resource { get; set; }
         public int Hours { get; set; }
         public string ToolMaker { get; set; }
@@ -40,6 +40,27 @@ namespace ClassLibrary
         public string Initials { get; private set; }
         public string DateCompleted { get; private set; }
         public bool DeleteTaskFromDB { get; private set; }
+
+        public string Location
+        {
+            get { return TaskName; }
+            //set { myVar = value; }
+        }
+        public string Subject { get { return $"{JobNumber} {ProjectNumber} {TaskName} {Hours}"; } }
+        public int PercentComplete 
+        { 
+            get 
+            {
+                if (Status == "Complete")
+                {
+                    return 100;
+                }
+                else
+                {
+                    return 0;
+                }
+            } 
+        }
         public DateTime DueDate { get; set; }  // This is only here for the task view grid.
         /// <summary>
         /// Initializes an empty instance of TaskInfo.
@@ -197,11 +218,12 @@ namespace ClassLibrary
             this.TaskName = name;
         }
 
-        public TaskModel(int id, string name, string component)
+        public TaskModel(int id, string name, string component, SchedulerStorage schedulerStorage)
         {
             this.TaskID = id;
             this.TaskName = name;
             this.Component = component;
+            this.Resources = GenerateResourceIDsString(schedulerStorage);
         }
 
         public TaskModel(int id, TaskModel task)

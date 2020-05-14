@@ -15,7 +15,7 @@ namespace ClassLibrary
         public int ID { get; set; }
         public int ProjectNumber { get; set; }
         public bool ProjectNumberChanged { get; set; }
-        public int OldProjectNumber { get; private set; }
+        public int OldProjectNumber { get; set; }
         public string Project { get; set; } = "";
         public string JobNumber { get; set; }
         public string Customer { get; set; } = "";
@@ -33,6 +33,8 @@ namespace ClassLibrary
         public string Apprentice { get; set; } = "";
         public string Engineer { get; private set; }
         public string KanBanWorkbookPath { get; private set; } = "";
+        public DateTime? DateModified { get; set; }
+        public DateTime? LastKanBanGenerationDate { get; set; }
         public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
         //public System.ComponentModel.BindingList<ComponentModel> Components { get; set; }
         public QuoteModel QuoteInfo { get; private set; }
@@ -41,6 +43,14 @@ namespace ClassLibrary
         public bool OverlapAllowed { get; set; }
         public bool IncludeHours { get; set; }
         public bool IsOnTime { get; set; }
+
+        private DateTime? latestFinishDate;
+
+        public DateTime? LatestFinishDate
+        {
+            get { return GetLatestFinishDate(); }
+            set { latestFinishDate = value; }
+        }
 
         public ProjectModel()
         {
@@ -407,6 +417,11 @@ namespace ClassLibrary
             Components.ForEach(x => Console.WriteLine(x.Component));
 
             Console.WriteLine("");
+        }
+
+        public DateTime? GetLatestFinishDate()
+        {
+            return this.Components.Max(x => x.GetLatesFinishDate());
         }
 
         public void SetDefaultCopiedProjectInfo(int projectNumber)

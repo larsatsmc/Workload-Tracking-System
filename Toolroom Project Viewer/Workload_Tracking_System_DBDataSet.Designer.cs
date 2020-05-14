@@ -839,6 +839,8 @@ namespace Toolroom_Project_Viewer {
             
             private global::System.Data.DataColumn columnLastKanBanGenerationDate;
             
+            private global::System.Data.DataColumn columnLatestFinishDate;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public ProjectsDataTable() {
@@ -1050,6 +1052,14 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn LatestFinishDateColumn {
+                get {
+                    return this.columnLatestFinishDate;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1106,7 +1116,8 @@ namespace Toolroom_Project_Viewer {
                         string Apprentice, 
                         System.DateTime DateCreated, 
                         System.DateTime DateModified, 
-                        System.DateTime LastKanBanGenerationDate) {
+                        System.DateTime LastKanBanGenerationDate, 
+                        byte[] LatestFinishDate) {
                 ProjectsRow rowProjectsRow = ((ProjectsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1130,7 +1141,8 @@ namespace Toolroom_Project_Viewer {
                         Apprentice,
                         DateCreated,
                         DateModified,
-                        LastKanBanGenerationDate};
+                        LastKanBanGenerationDate,
+                        LatestFinishDate};
                 rowProjectsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowProjectsRow);
                 return rowProjectsRow;
@@ -1183,6 +1195,7 @@ namespace Toolroom_Project_Viewer {
                 this.columnDateCreated = base.Columns["DateCreated"];
                 this.columnDateModified = base.Columns["DateModified"];
                 this.columnLastKanBanGenerationDate = base.Columns["LastKanBanGenerationDate"];
+                this.columnLatestFinishDate = base.Columns["LatestFinishDate"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1232,6 +1245,8 @@ namespace Toolroom_Project_Viewer {
                 base.Columns.Add(this.columnDateModified);
                 this.columnLastKanBanGenerationDate = new global::System.Data.DataColumn("LastKanBanGenerationDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLastKanBanGenerationDate);
+                this.columnLatestFinishDate = new global::System.Data.DataColumn("LatestFinishDate", typeof(byte[]), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLatestFinishDate);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnJobNumber,
                                 this.columnProjectNumber}, true));
@@ -1252,6 +1267,7 @@ namespace Toolroom_Project_Viewer {
                 this.columnCustomer.MaxLength = 255;
                 this.columnProject.MaxLength = 255;
                 this.columnApprentice.MaxLength = 255;
+                this.columnLatestFinishDate.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3881,6 +3897,22 @@ namespace Toolroom_Project_Viewer {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte[] LatestFinishDate {
+                get {
+                    try {
+                        return ((byte[])(this[this.tableProjects.LatestFinishDateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'LatestFinishDate\' in table \'Projects\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProjects.LatestFinishDateColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableProjects.IDColumn);
             }
@@ -4117,6 +4149,18 @@ namespace Toolroom_Project_Viewer {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetLastKanBanGenerationDateNull() {
                 this[this.tableProjects.LastKanBanGenerationDateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsLatestFinishDateNull() {
+                return this.IsNull(this.tableProjects.LatestFinishDateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetLatestFinishDateNull() {
+                this[this.tableProjects.LatestFinishDateColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6686,6 +6730,7 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             tableMapping.ColumnMappings.Add("DateCreated", "DateCreated");
             tableMapping.ColumnMappings.Add("DateModified", "DateModified");
             tableMapping.ColumnMappings.Add("LastKanBanGenerationDate", "LastKanBanGenerationDate");
+            tableMapping.ColumnMappings.Add("LatestFinishDate", "LatestFinishDate");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -6862,7 +6907,8 @@ namespace Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapter
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath,OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate
+            this._commandCollection[0].CommandText = @"SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath, 
+                         OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate, LatestFinishDate
 FROM            Projects";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }

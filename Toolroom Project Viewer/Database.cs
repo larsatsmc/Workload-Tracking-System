@@ -621,7 +621,7 @@ namespace Toolroom_Project_Viewer
             return piList;
         }
 
-        public DataTable LoadProjectToDataTable(ProjectModel project)
+        public static DataTable LoadProjectToDataTable(ProjectModel project)
         {
             DataTable dt = new DataTable();
             int count = 0;
@@ -1280,7 +1280,7 @@ namespace Toolroom_Project_Viewer
 
                 queryString = "UPDATE Components " +
                         "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Quantity = @quantity, Spares = @spares, Pictures = @picture, Material = @material, Finish = @finish, TaskIDCount = @taskIDCount " +
-                        "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName";
+                        "WHERE ID = @ID"; // JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
@@ -1306,9 +1306,10 @@ namespace Toolroom_Project_Viewer
                 adapter.UpdateCommand.Parameters.AddWithValue("@finish", component.Finish);
                 adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
 
-                adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@oldName", component.OldName);
+                //adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
+                //adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
+                //adapter.UpdateCommand.Parameters.AddWithValue("@oldName", component.OldName);
+                adapter.UpdateCommand.Parameters.AddWithValue("@ID", component.ID);
 
                 Connection.Open();
 
@@ -1318,14 +1319,14 @@ namespace Toolroom_Project_Viewer
                 //MessageBox.Show("Project Updated!"); 
                 
             }
-            catch (OleDbException ex)
-            {
-                throw ex;
-            }
-            catch (Exception x)
-            {
-                throw x;
-            }
+            //catch (OleDbException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch (Exception x)
+            //{
+            //    throw x;
+            //}
             finally
             {
                 Connection.Close();
@@ -2276,7 +2277,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = null;
             string selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName & ' (' & Hours & ' Hours)' As Location, JobNumber, ProjectNumber, " +
-                                    "TaskID, TaskName, Component, Hours, StartDate, FinishDate, Machine, Resources, Resource, Status, Notes";
+                                    "TaskID, TaskName, Component, Hours, StartDate, FinishDate, Machine, Resources, Resource, Status, Notes, Predecessors";
             string orderByStatement = " ORDER BY StartDate ASC";
 
             if (department == "Design")
@@ -2338,7 +2339,6 @@ namespace Toolroom_Project_Viewer
 
             return queryString;
         }
-
         public static DataTable GetAppointmentData(string department, bool grouped = false)
         {
             DataTable dt = new DataTable();
@@ -2505,10 +2505,12 @@ namespace Toolroom_Project_Viewer
             } 
             
         }
-        public bool UpdateTask(TaskModel task, ComponentModel component)
+        public static bool UpdateTask(TaskModel task, ComponentModel component)
         {
             try
             {
+                bool batchUpdateTasks = false;
+
                 using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
                 {
                     string queryString;
@@ -2541,20 +2543,48 @@ namespace Toolroom_Project_Viewer
                     if (task.Predecessors != "" && latestPredecessorFinishDate > task.StartDate)
                     {
                         DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
-                                                                    "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                                                    "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
                         if (dialogResult == DialogResult.Yes)
                         {
                             // TODO: Validate this process.
                             BackDateTask(task.TaskID, component.Tasks, (DateTime)task.StartDate);
+                            batchUpdateTasks = true;
                         }
-                        else
+                        else if (dialogResult == DialogResult.No)
+                        {
+
+                        }
+                        else if (dialogResult == DialogResult.Cancel)
                         {
                             return false;
                         }
                     }
 
                 SkipBackDating:
+
+                    if (component.SuccessorOverlap(task))
+                    {
+                        DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more successors. \n" +
+                                                                    "Do you wish to push these tasks forward?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            if (task.FinishDate != null)
+                            {
+                                UpdateStartAndFinishDates(task.TaskID, component.Tasks, (DateTime)task.FinishDate);
+                                batchUpdateTasks = true;
+                            }
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+
+                        }
+                        else if (dialogResult == DialogResult.Cancel)
+                        {
+                            return false;
+                        }
+                    }
 
                     var p = new
                     {
@@ -2569,16 +2599,12 @@ namespace Toolroom_Project_Viewer
                     connection.Execute(queryString, p);
                 }
 
-                if (task.FinishDate != null)
+                if (batchUpdateTasks == true)
                 {
-                    UpdateStartAndFinishDates(task.TaskID, component.Tasks, (DateTime)task.FinishDate);
+                    UpdateTaskDates(component.Tasks); 
                 }
 
-                UpdateTaskDates(component.Tasks);
-
-                //MoveSuccessors(jobNumber, projectNumber, component, finishDate, taskID);
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -2595,7 +2621,7 @@ namespace Toolroom_Project_Viewer
                 string queryString;
 
                 queryString = "UPDATE Tasks SET StartDate = @startDate, FinishDate = @finishDate " +
-                                "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
+                              "WHERE ID = @ID";
 
                 OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
@@ -2665,7 +2691,6 @@ namespace Toolroom_Project_Viewer
                 Connection.Dispose();
             }
         }
-
         private void UpdateTasks(string jobNumber, int projectNumber, string component, List<TaskModel> taskList)
         {
             try
@@ -3355,7 +3380,7 @@ namespace Toolroom_Project_Viewer
                 //Console.WriteLine(nrow["Component"] + " " + nrow["Predecessors"]);
             }
         }
-        private static List<TaskModel> UpdateStartAndFinishDates(int id, List<TaskModel> componentTasks, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false)
+        private static List<TaskModel> UpdateStartAndFinishDates(int id, List<TaskModel> componentTasks, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false, bool promptToPushDatesForward = false)
         {
             var result = from tasks in componentTasks
                          where tasks.HasMatchingPredecessor(id)
@@ -3780,6 +3805,7 @@ namespace Toolroom_Project_Viewer
                 row["ToolMaker"] = task.ToolMaker;
                 row["Predecessors"] = task.Predecessors;
                 row["Resource"] = task.Resource;
+                row["Resources"] = task.Resources;
                 row["Machine"] = task.Machine;
                 row["Priority"] = task.Priority;
                 row["DateAdded"] = task.DateAdded;
@@ -3799,7 +3825,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private int GetPercentComplete(string status)
+        private static int GetPercentComplete(string status)
         {
             if (status == "Completed")
             {
@@ -3811,7 +3837,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public DataTable GetDependencyData(DataTable taskTable)
+        public static DataTable GetDependencyData(DataTable taskTable)
         {
             DataTable dt = new DataTable();
 
@@ -4040,9 +4066,18 @@ namespace Toolroom_Project_Viewer
                 row2["ResourceName"] = "No Personnel";
                 row2["Role"] = "None";
                 row2["Department"] = "None";
-                row1["ResourceType"] = "Personnel";
+                row2["ResourceType"] = "Personnel";
 
                 dt.Rows.Add(row2);
+
+                DataRow row3 = dt.NewRow();
+
+                row3["ResourceName"] = "None";
+                row3["Role"] = "None";
+                row3["Department"] = "None";
+                row3["ResourceType"] = "None";
+
+                dt.Rows.Add(row3);
 
                 //foreach (DataRow nrow in dt.Rows)
                 //{

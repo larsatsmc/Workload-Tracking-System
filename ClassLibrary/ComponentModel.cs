@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
+using DevExpress.XtraScheduler;
 
 namespace ClassLibrary
 {
@@ -34,6 +35,15 @@ namespace ClassLibrary
         public int Position { get; set; }
         public int TaskIDCount { get; set; }
 
+        private DateTime? latestFinishDate;
+
+        public DateTime? LatestFinishDate
+        {
+            get { return GetLatesFinishDate(); }
+            //set { latestFinishDate = value; }
+        }
+
+
         public static int ComponentCharacterLimit = 31;
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
@@ -44,7 +54,11 @@ namespace ClassLibrary
         }
         public ComponentModel(ComponentModel component)
         {
+            this.ID = component.ID;
+            this.JobNumber = component.JobNumber;
+            this.ProjectNumber = component.ProjectNumber;
             this.Component = component.Component;
+            this.OldName = component.OldName;
             this.Notes = component.Notes;
             this.Priority = component.Priority;
             this.Position = component.Position;
@@ -54,6 +68,9 @@ namespace ClassLibrary
             this.Spares = component.Spares;
             this.Pictures = component.Pictures;
             this.Finish = component.Finish;
+            this.Tasks = component.Tasks;
+            this.Status = component.Status;
+            this.PercentComplete = component.PercentComplete;
         }
         /// <summary>
         /// Creates instance of a component and sets properties for template.
@@ -171,10 +188,10 @@ namespace ClassLibrary
         /// <summary>
         /// Adds a task to a component.
         /// </summary>
-        public void AddTask(string name, string component)
+        public void AddTask(string name, string component, SchedulerStorage schedulerStorage)
         {
             this.ReloadTaskList = true;
-            this.Tasks.Add(new TaskModel(++TaskIDCount, name, component));
+            this.Tasks.Add(new TaskModel(++TaskIDCount, name, component, schedulerStorage));
         }
         /// <summary>
         /// Adds a task to a component.
@@ -449,6 +466,10 @@ namespace ClassLibrary
 
             return true;
         }
+        public DateTime? GetLatesFinishDate()
+        {
+            return this.Tasks.Max(x => x.FinishDate);
+        }
         public DateTime? GetLatestPredecessorFinishDate(string predecessors)
         {
             DateTime? latestFinishDate = null;
@@ -461,6 +482,12 @@ namespace ClassLibrary
             foreach (string currPredecessor in predecessorArr)
             {
                 predecessor = currPredecessor.Trim();
+
+                if (predecessor == "")
+                {
+                    break;
+                }
+
                 currentDate = this.Tasks.Find(x => x.TaskID.ToString() == predecessor).FinishDate;
 
                 if (latestFinishDate == null || latestFinishDate < currentDate)
@@ -470,6 +497,20 @@ namespace ClassLibrary
             }
 
             return latestFinishDate;
+        }
+        public bool SuccessorOverlap(TaskModel task)
+        {
+            List<TaskModel> successors = this.Tasks.FindAll(x => x.HasMatchingPredecessor(task.TaskID));
+
+            foreach (TaskModel currentTask in successors)
+            {
+                if (task.FinishDate > currentTask.StartDate)
+                {
+                    return true;
+                } 
+            }
+
+            return false;
         }
     }
 }

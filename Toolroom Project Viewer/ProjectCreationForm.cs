@@ -428,7 +428,7 @@ namespace Toolroom_Project_Viewer
                 var component = Project.Components.Where(x => x.Component == selectedNode.Text).First();
                 taskName = TaskListBox.Items[i].ToString();
                 MoldBuildTreeView.SelectedNode.Nodes.Add(taskName);
-                component.AddTask(taskName, component.Component);
+                component.AddTask(taskName, component.Component, SchedulerStorageProp);
             }
 
         }
@@ -2090,7 +2090,6 @@ namespace Toolroom_Project_Viewer
             Template tmpt = new Template();
             string fileName = tmpt.OpenTemplateFile();
             ProjectModel tempProject;
-            List<ComponentModel> components;
             Console.WriteLine("Load Template Button Click.");
 
             if (fileName != "")

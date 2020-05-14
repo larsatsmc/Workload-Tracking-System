@@ -156,7 +156,8 @@
                 </InsertCommand>
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath,OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate
+                    <CommandText>SELECT        ID, JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, PercentComplete, Status, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, Engineer, KanBanWorkbookPath, 
+                         OverlapAllowed, IncludeHours, DateCreated, DateModified, LastKanBanGenerationDate, LatestFinishDate
 FROM            Projects</CommandText>
                     <Parameters />
                   </DbCommand>
@@ -256,6 +257,7 @@ FROM            Projects</CommandText>
               <Mapping SourceColumn="DateCreated" DataSetColumn="DateCreated" />
               <Mapping SourceColumn="DateModified" DataSetColumn="DateModified" />
               <Mapping SourceColumn="LastKanBanGenerationDate" DataSetColumn="LastKanBanGenerationDate" />
+              <Mapping SourceColumn="LatestFinishDate" DataSetColumn="LatestFinishDate" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -913,6 +915,7 @@ FROM            Projects</CommandText>
               <xs:element name="DateCreated" msprop:Generator_ColumnVarNameInTable="columnDateCreated" msprop:Generator_ColumnPropNameInRow="DateCreated" msprop:Generator_ColumnPropNameInTable="DateCreatedColumn" msprop:Generator_UserColumnName="DateCreated" type="xs:dateTime" minOccurs="0" />
               <xs:element name="DateModified" msprop:Generator_ColumnVarNameInTable="columnDateModified" msprop:Generator_ColumnPropNameInRow="DateModified" msprop:Generator_ColumnPropNameInTable="DateModifiedColumn" msprop:Generator_UserColumnName="DateModified" type="xs:dateTime" minOccurs="0" />
               <xs:element name="LastKanBanGenerationDate" msprop:Generator_ColumnVarNameInTable="columnLastKanBanGenerationDate" msprop:Generator_ColumnPropNameInRow="LastKanBanGenerationDate" msprop:Generator_ColumnPropNameInTable="LastKanBanGenerationDateColumn" msprop:Generator_UserColumnName="LastKanBanGenerationDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="LatestFinishDate" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnLatestFinishDate" msprop:Generator_ColumnPropNameInRow="LatestFinishDate" msprop:Generator_ColumnPropNameInTable="LatestFinishDateColumn" msprop:Generator_UserColumnName="LatestFinishDate" type="xs:base64Binary" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
