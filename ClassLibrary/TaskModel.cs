@@ -21,7 +21,7 @@ namespace ClassLibrary
         public string Duration { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? FinishDate { get; set; }
-        public string Predecessors { get; set; }
+        public string Predecessors { get; set; } = "";
         public string Machine { get; set; }
         public string Personnel { get; set; }
         public string Resources { get; set; }

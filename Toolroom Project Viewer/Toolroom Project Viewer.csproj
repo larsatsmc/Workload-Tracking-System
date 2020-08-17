@@ -222,6 +222,12 @@
     <Compile Include="MainSplashScreen.Designer.cs">
       <DependentUpon>MainSplashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaskMovedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TaskMovedForm.Designer.cs">
+      <DependentUpon>TaskMovedForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaitForm1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -287,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainSplashScreen.resx">
       <DependentUpon>MainSplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TaskMovedForm.resx">
+      <DependentUpon>TaskMovedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WaitForm1.resx">
       <DependentUpon>WaitForm1.cs</DependentUpon>

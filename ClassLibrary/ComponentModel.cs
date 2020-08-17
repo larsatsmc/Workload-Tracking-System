@@ -13,7 +13,7 @@ namespace ClassLibrary
 {
     public class ComponentModel
     {
-        public int ID { get; set; }
+        public int ID { get; set; } = 0;
         public string JobNumber { get; set; }
         public int ProjectNumber { get; set; }
         public string Component { get; set; }

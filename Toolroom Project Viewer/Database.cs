@@ -12,113 +12,28 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraScheduler;
 using DevExpress.XtraScheduler.Xml;
 using Dapper;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
+using DevExpress.XtraSpreadsheet.PrintLayoutEngine;
 
 namespace Toolroom_Project_Viewer
 {
     class Database
     {
-        // See App.config for list of connection names.
-        static readonly string ConnectionName = "WorkloadTrackingSystemDB";        
+        // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
+        static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
+        static readonly string SQLClientConnectionName = "LocalSqlServerDB";
+        static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
-        OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
+        private static string UpdateProjectString = "dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID";
+
+        OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName));
 
         DataTable TaskIDKey = new DataTable();
 
         #region Projects Table Operations
 
         #region Create
-
-        public bool LoadProjectToDB(ProjectModel project)
-        {
-            //if(result == DialogResult.Yes)
-            //{
-            //    //int baseIDNumber = getHighestProjectTaskID(project.JobNumber, project.ProjectNumber);
-            //    //updateProjectData(pi);
-            //    //foreach (Component component in project.ComponentList)
-            //    //{
-            //    //    foreach (TaskInfo task in component.TaskList)
-            //    //    {
-            //    //        task.ChangeIDs(baseIDNumber);
-            //    //    }
-            //    //}
-
-            //    addTaskDataTableToDatabase(createDataTableFromTaskList(project));
-            //}
-            //else if (result == DialogResult.No)
-            //{
-            //    return;
-            //}
-
-            if (ProjectExists(project.ProjectNumber))
-            {
-                MessageBox.Show("There is another project with that same project number. Enter a different project number");
-                return false;
-            }
-            else
-            {
-                if (AddProjectDataToDatabase(project) &&
-                AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project)) &&
-                AddTaskDataTableToDatabase(CreateDataTableFromTaskList(project)))
-                {
-                    MessageBox.Show("Project Loaded!");
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("Project load failed.");
-                    return false;
-                }
-            }
-        }
-
-        private bool AddProjectDataToDatabase(ProjectModel project)
-        {
-            var adapter = new OleDbDataAdapter();
-            string queryString;
-
-            try
-            {
-                // Keep query in queryString to make query more visible.
-                queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed, DateCreated, DateModified) " +
-                                "VALUES (@jobNumber, @projectNumber, @customer, @project, @DueDate, @Designer, @ToolMaker, @RoughProgrammer, @electrodeProgrammer, @finishProgrammer, @apprentice, @overlapAllowed, Now(), Now())";
-
-                adapter.InsertCommand = new OleDbCommand(queryString, Connection);
-
-                adapter.InsertCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 20).Value = project.JobNumber;
-                adapter.InsertCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-                adapter.InsertCommand.Parameters.AddWithValue("@customer", project.Customer);
-                adapter.InsertCommand.Parameters.AddWithValue("@project", project.Name);
-                adapter.InsertCommand.Parameters.AddWithValue("@dueDate", project.DueDate);
-                adapter.InsertCommand.Parameters.AddWithValue("@designer", project.Designer);
-                adapter.InsertCommand.Parameters.AddWithValue("@toolMaker", project.ToolMaker);
-                adapter.InsertCommand.Parameters.AddWithValue("@roughProgrammer", project.RoughProgrammer);
-                adapter.InsertCommand.Parameters.AddWithValue("@electrodeProgrammer", project.ElectrodeProgrammer);
-                adapter.InsertCommand.Parameters.AddWithValue("@finishProgrammer", project.FinishProgrammer);
-                adapter.InsertCommand.Parameters.AddWithValue("@apprentice", project.Apprentice);
-                adapter.InsertCommand.Parameters.AddWithValue("@overlapAllowed", project.OverlapAllowed);
-
-                Connection.Open();
-                adapter.InsertCommand.ExecuteNonQuery();
-                Connection.Close();
-                Console.WriteLine("Project loaded."); 
-
-                //MessageBox.Show("Project Loaded!");
-            }
-            catch (OleDbException ex)
-            {
-                Connection.Close();
-                MessageBox.Show(ex.Message, "OledbException Error");
-                return false;
-            }
-            catch (Exception x)
-            {
-                Connection.Close();
-                MessageBox.Show(x.Message, "Exception Error");
-                return false;
-            }
-
-            return true;
-        }
 
         public static bool CreateProject(ProjectModel project)
         {
@@ -128,10 +43,10 @@ namespace Toolroom_Project_Viewer
             }
             else
             {
-                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, Apprentice, OverlapAllowed, DateCreated, DateModified) " + // 
-                                          "VALUES (@JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Priority, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @OverlapAllowed, Now(), Now())"; // 
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, OverlapAllowed, DateCreated, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Priority, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @OverlapAllowed, GETDATE(), GETDATE())"; // 
 
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Pictures, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Pictures, @Finish)"; // 
@@ -159,6 +74,11 @@ namespace Toolroom_Project_Viewer
                             project.RoughProgrammer,
                             project.ElectrodeProgrammer,
                             project.FinishProgrammer,
+                            project.EDMSinkerOperator,
+                            project.RoughCNCOperator,
+                            project.ElectrodeCNCOperator,
+                            project.FinishCNCOperator,
+                            project.EDMWireOperator,
                             project.Apprentice,
                             project.OverlapAllowed
                         };
@@ -231,7 +151,7 @@ namespace Toolroom_Project_Viewer
 
         public static (List<ProjectModel> projects, List<ComponentModel> components, List<TaskModel> tasks) GetProjects()
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 List<ProjectModel> projects = connection.Query<ProjectModel>("SELECT * FROM Projects").ToList();
                 List<ComponentModel> components = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
@@ -242,7 +162,7 @@ namespace Toolroom_Project_Viewer
         }
         public static List<ProjectModel> GetAllProjects()
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 List<ProjectModel> projects = connection.Query<ProjectModel>("SELECT * FROM Projects").ToList();
 
@@ -251,15 +171,10 @@ namespace Toolroom_Project_Viewer
         }
         public static bool ProjectExists(int projectNumber)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                OleDbCommand sqlCommand = new OleDbCommand("SELECT COUNT(*) from Projects WHERE ProjectNumber = @projectNumber", connection);
-
-                sqlCommand.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-                connection.Open();
-                int projectCount = (int)sqlCommand.ExecuteScalar();
-
+                int projectCount = connection.Execute("SELECT COUNT(*) from Projects WHERE ProjectNumber = @ProjectNumber", new { ProjectNumber = projectNumber } );
+                
                 if (projectCount > 0)
                 {
                     return true;
@@ -283,164 +198,9 @@ namespace Toolroom_Project_Viewer
         //    return project;
         //}
 
-        public ProjectModel GetProject2(int projectNumber)
-        {
-            //Connection.Open();
-
-            ProjectModel project = GetProjectInfo(projectNumber);
-
-            GetComponents(project);
-
-            GetTasks(project);
-
-            //Connection.Close();
-
-            return project;
-        }
-
-        public ProjectModel GetProject(int projectNumber)
-        {
-            ProjectModel pi = null;
-            ComponentModel component;
-
-            string queryString1 = "SELECT * FROM Projects WHERE ProjectNumber = @projectNumber";
-            string queryString2 = "SELECT * FROM Components WHERE ProjectNumber = @projectNumber";
-            string queryString3 = "SELECT * FROM Tasks WHERE ProjectNumber = @projectNumber";
-
-            try
-            {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
-                {
-                    OleDbCommand cmd1 = new OleDbCommand(queryString1, connection);
-                    OleDbCommand cmd2 = new OleDbCommand(queryString2, connection);
-                    OleDbCommand cmd3 = new OleDbCommand(queryString3, connection);
-
-                    cmd1.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    cmd2.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    cmd3.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-                    connection.Open();
-
-                    using (var rdr = cmd1.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                pi = new ProjectModel
-                                (
-                                                jobNumber: Convert.ToString(rdr["JobNumber"]),
-                                            projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
-                                                     name: Convert.ToString(rdr["Project"]),
-                                                 customer: Convert.ToString(rdr["Customer"]),
-                                                  dueDate: Convert.ToDateTime(rdr["DueDate"]),
-                                                   status: Convert.ToString(rdr["Status"]),
-                                                toolMaker: Convert.ToString(rdr["ToolMaker"]),
-                                                 designer: Convert.ToString(rdr["Designer"]),
-                                          roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
-                                       electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
-                                         finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
-                                               apprentice: Convert.ToString(rdr["Apprentice"]),
-                                       kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
-                                           overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
-                                );
-                            }
-                        }
-                    }
-
-                    using (var rdr = cmd2.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                component = new ComponentModel
-                                (
-                                          component: rdr["Component"],
-                                              notes: rdr["Notes"],
-                                           priority: rdr["Priority"],
-                                           position: rdr["Position"],
-                                           quantity: rdr["Quantity"],
-                                             spares: rdr["Spares"],
-                                            picture: rdr["Pictures"],
-                                           material: rdr["Material"],
-                                             finish: rdr["Finish"],
-                                        taskIDCount: rdr["TaskIDCount"]
-                                );
-
-                                pi.AddComponent(component);
-                            }
-                        }
-                        else
-                        {
-                            pi.AddComponentList(GetComponentListFromTasksTable(pi.ProjectNumber));
-                        }
-                    }
-
-                    //List<TaskModel> taskList = GetProjectTaskList(pi.JobNumber, pi.ProjectNumber);
-                    List<TaskModel> taskList = new List<TaskModel>();
-
-                    using (var rdr = cmd3.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                taskList.Add(new TaskModel
-                                (
-                                        taskName: rdr["TaskName"],
-                                          taskID: rdr["TaskID"],
-                                              id: rdr["ID"],
-                                       component: rdr["Component"],
-                                           hours: rdr["Hours"],
-                                        duration: rdr["Duration"],
-                                       startDate: rdr["StartDate"],
-                                      finishDate: rdr["FinishDate"],
-                                          status: rdr["Status"],
-                                   dateCompleted: rdr["DateCompleted"],
-                                        initials: rdr["Initials"],
-                                         machine: rdr["Machine"],
-                                       personnel: rdr["Resource"],
-                                    predecessors: rdr["Predecessors"],
-                                           notes: rdr["Notes"]
-                                ));
-                            }
-                        }
-                    }
-
-                    foreach (ComponentModel component2 in pi.Components)
-                    {
-                        var tasks = from t in taskList
-                                    where t.Component == component2.Component
-                                    orderby t.TaskID ascending
-                                    select t;
-
-                        component2.AddTaskList(tasks.ToList());
-                    }
-
-                    foreach (ComponentModel component2 in pi.Components)
-                    {
-                        //Console.WriteLine(component.Name);
-
-                        foreach (TaskModel task in component2.Tasks)
-                        {
-                            //Console.WriteLine($"   {task.ID} {task.TaskName}");
-                            task.HasInfo = true;
-                        }
-                    }
-                }
-            }
-            catch (OleDbException ex)
-            {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
-            }
-
-            return pi;
-        }
-
         public static ProjectModel GetProject4(int projectNumber)
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 var p = new { ProjectNumber = projectNumber };
 
@@ -466,109 +226,32 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        //public ProjectModel GetProjectInfo(string jobNumber, int projectNumber)
-        //{
-        //    OleDbCommand cmd;
-        //    ProjectModel pi = null;
-        //    string queryString;
-
-        //    try
-        //    {
-        //        using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
-        //        {
-        //            queryString = "SELECT * FROM Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
-
-        //            cmd = new OleDbCommand(queryString, connection);
-        //            cmd.Parameters.AddWithValue("@jobNumber", jobNumber);
-        //            cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-        //            connection.Open();
-
-        //            using (var rdr = cmd.ExecuteReader())
-        //            {
-        //                if (rdr.HasRows)
-        //                {
-        //                    while (rdr.Read())
-        //                    {
-        //                        pi = new ProjectModel
-        //                        (
-        //                                    jobNumber: Convert.ToString(rdr["JobNumber"]),
-        //                                projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
-        //                                         name: Convert.ToString(rdr["Project"]),
-        //                                     customer: Convert.ToString(rdr["Customer"]),
-        //                                      dueDate: Convert.ToDateTime(rdr["DueDate"]),
-        //                                       status: Convert.ToString(rdr["Status"]),
-        //                                    toolMaker: Convert.ToString(rdr["ToolMaker"]),
-        //                                     designer: Convert.ToString(rdr["Designer"]),
-        //                              roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
-        //                           electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
-        //                             finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
-        //                           kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
-        //                               overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
-        //                        );
-        //                    }
-        //                }
-        //            } 
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-
-        //    return pi;
-        //}
-
-        public ProjectModel GetProjectInfo(int projectNumber)
+        public static ProjectModel GetProjectSQL(int projectNumber)
         {
-            ProjectModel pi = null;
-
-            string queryString = "SELECT * FROM Projects WHERE ProjectNumber = @projectNumber";
-
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
-
-            cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-            try
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                Connection.Open();
+                var p = new { ProjectNumber = projectNumber };
 
-                using (var rdr = cmd.ExecuteReader())
+                ProjectModel project = connection.QueryFirst<ProjectModel>("dbo.spGetProject @ProjectNumber", p);
+                List<ComponentModel> components = connection.Query<ComponentModel>("dbo.spGetProjectComponents @ProjectNumber", p).ToList();
+
+                string taskQuery = "SELECT ID, TaskID, Component, TaskName, Duration, StartDate, FinishDate, Predecessors, Machine, Resources, Resource AS Personnel, Hours, Notes, DateCompleted, Initials, Status FROM Tasks WHERE ProjectNumber = @ProjectNumber";
+
+                List<TaskModel> tasks = connection.Query<TaskModel>(taskQuery, p).ToList();
+
+                project.Components = components;
+
+                foreach (var component in project.Components)
                 {
-                    if (rdr.HasRows)
-                    {
-                        while (rdr.Read())
-                        {
-                            pi = new ProjectModel
-                            (
-                                            jobNumber: Convert.ToString(rdr["JobNumber"]),
-                                        projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
-                                                 name: Convert.ToString(rdr["Project"]),
-                                             customer: Convert.ToString(rdr["Customer"]),
-                                              dueDate: Convert.ToDateTime(rdr["DueDate"]),
-                                               status: Convert.ToString(rdr["Status"]),
-                                            toolMaker: Convert.ToString(rdr["ToolMaker"]),
-                                             designer: Convert.ToString(rdr["Designer"]),
-                                      roughProgrammer: Convert.ToString(rdr["RoughProgrammer"]),
-                                   electrodProgrammer: Convert.ToString(rdr["ElectrodeProgrammer"]),
-                                     finishProgrammer: Convert.ToString(rdr["FinishProgrammer"]),
-                                           apprentice: Convert.ToString(rdr["Apprentice"]),
-                                   kanBanWorkbookPath: Convert.ToString(rdr["KanBanWorkbookPath"]),
-                                       overlapAllowed: Convert.ToBoolean(rdr["OverlapAllowed"])
-                            );
-                        }
-                    }
+                    component.Tasks = tasks.FindAll(x => x.Component == component.Component).OrderBy(x => x.TaskID).ToList();
+
+                    component.Tasks.ForEach(x => x.HasInfo = true);
                 }
 
-                Connection.Close();
-            }
-            catch (Exception e)
-            {
-                Connection.Close();
-                MessageBox.Show(e.Message, "GetProjectInfo");
-            }
+                project.HasProjectInfo = true;
 
-            return pi;
+                return project;
+            }
         }
 
         public static List<ProjectModel> GetProjectInfoList()
@@ -580,7 +263,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     cmd = new OleDbCommand(queryString, connection);
 
@@ -627,8 +310,11 @@ namespace Toolroom_Project_Viewer
             int count = 0;
             int baseCount = 0;
 
+            dt.Columns.Add("JobNumber", typeof(string));
+            dt.Columns.Add("ProjectNumber", typeof(int));
             dt.Columns.Add("Component", typeof(string));
             dt.Columns.Add("TaskName", typeof(string));
+            dt.Columns.Add("Hours", typeof(int));
             dt.Columns.Add("Location", typeof(string));
             dt.Columns.Add("Subject", typeof(string));
             dt.Columns.Add("StartDate", typeof(DateTime));
@@ -649,12 +335,15 @@ namespace Toolroom_Project_Viewer
                 {
                     DataRow row = dt.NewRow();
 
+                    row["JobNumber"] = project.JobNumber;
+                    row["ProjectNumber"] = project.ProjectNumber;
                     row["Component"] = component.Component;
                     row["AptID"] = ++count;
                     row["TaskID"] = task.TaskID;
                     row["TaskName"] = task.TaskName;
-                    row["Location"] = task.TaskName + " (" + task.Hours + " Hours)";
-                    row["Subject"] = project.JobNumber + " #" + project.ProjectNumber;
+                    row["Hours"] = task.Hours;
+                    //row["Location"] = task.TaskName + " (" + task.Hours + " Hours)";
+                    row["Subject"] = $"{project.JobNumber} #{project.ProjectNumber}";
                     if (task.StartDate == null)
                     {
                         row["StartDate"] = DBNull.Value;
@@ -689,7 +378,7 @@ namespace Toolroom_Project_Viewer
         {
             string kanBanWorkbookPath;
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 OleDbCommand sqlCommand = new OleDbCommand("SELECT KanBanWorkbookPath from Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", connection);
 
@@ -716,154 +405,261 @@ namespace Toolroom_Project_Viewer
 
         #region Update
 
-        public bool EditProjectInDB(ProjectModel project)
+        //public bool EditProjectInDB(ProjectModel project)
+        //{
+        //    // TODO: Need to make sure that all these methods are using the same database connection.
+        //    try
+        //    {
+        //        ProjectModel databaseProject = GetProjectSQL(project.OldProjectNumber);
+        //        List<ComponentModel> newComponentList = new List<ComponentModel>();
+        //        //List<Component> updatedComponentList = new List<Component>();
+        //        List<TaskModel> newTaskList = new List<TaskModel>();
+        //        List<ComponentModel> deletedComponentList = new List<ComponentModel>();
+
+        //        if (project.ProjectNumberChanged && ProjectExists(project.ProjectNumber))
+        //        {
+        //            MessageBox.Show("There is another project with that same project number. Enter a different project number.");
+        //            return false;
+        //        }
+
+        //        UpdateProjectData(project);
+
+        //        if (ProjectHasComponents(project.ProjectNumber))
+        //        {
+        //            // Check modified project for added components.
+        //            foreach (ComponentModel component in project.Components)
+        //            {
+        //                component.SetPosition(project.Components.IndexOf(component));
+
+        //                bool componentExists = databaseProject.Components.Exists(x => x.Component == component.Component);
+
+        //                if (componentExists)
+        //                {
+        //                    UpdateComponentData(project, component);
+
+        //                    foreach (TaskModel task in component.Tasks)
+        //                    {
+        //                        Console.WriteLine($"{task.TaskID} {task.TaskName}");
+        //                    }
+
+        //                    UpdateTasks(project.JobNumber, project.ProjectNumber, component.Component, component.Tasks);
+
+        //                    //if (component.ReloadTaskList)
+        //                    //{
+        //                    //    RemoveTasks(project, component);
+        //                    //    newTaskList.AddRange(component.TaskList);
+        //                    //}
+        //                    //else
+        //                    //{
+        //                    //    UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
+        //                    //}
+        //                }
+        //                else
+        //                {
+        //                    newComponentList.Add(component);
+        //                    newTaskList.AddRange(component.Tasks);
+        //                }
+        //            }
+
+        //            // Check modified project for deleted components.
+        //            foreach (ComponentModel component in databaseProject.Components)
+        //            {
+        //                bool componentExists = project.Components.Exists(x => x.Component == component.Component);
+
+        //                if (!componentExists)
+        //                {
+        //                    deletedComponentList.Add(component);
+        //                }
+        //            }
+
+        //            // Check modified project for updated tasks
+
+        //            if (newComponentList.Count > 0)
+        //            {
+        //                AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project, newComponentList));
+        //            }
+
+        //            if (newTaskList.Count > 0)
+        //            {
+        //                AddTaskDataTableToDatabase(CreateDataTableFromTaskList(project, newTaskList));
+        //            }
+
+        //            if (deletedComponentList.Count > 0)
+        //            {
+        //                foreach (ComponentModel component in deletedComponentList)
+        //                {
+        //                    RemoveComponent(project, component);
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project));
+        //        }
+
+        //        MessageBox.Show("Project Updated!");
+
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+        //        return false;
+        //    }
+        //}
+
+        //private void UpdateProjectData(ProjectModel project)
+        //{
+        //    try
+        //    {
+        //        OleDbDataAdapter adapter = new OleDbDataAdapter();
+
+        //        string queryString;
+
+        //        queryString = "UPDATE Projects " +
+        //                      "SET JobNumber = @jobNumber, ProjectNumber = @newProjectNumber, DueDate = @dueDate, Designer = @designer, ToolMaker = @toolMaker, RoughProgrammer = @roughProgrammer, ElectrodeProgrammer = @electrodeProgrammer, " +
+        //                      "FinishProgrammer = @finishProgrammer, Apprentice = @apprentice, EDMSinkerOperator = @EDMSinkerOperator, RoughCNCOperator = @RoughCNCOperator, ElectrodeCNCOperator = @ElectrodeCNCOperator, FinishCNCOperator = @FinishCNCOperator, EDMWireOperator = @EDMWireOperator, DateModified = Now() " +
+        //                      "WHERE ProjectNumber = @oldProjectNumber";
+
+        //        adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
+
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@newProjectNumber", project.ProjectNumber);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@dueDate", project.DueDate);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@designer", project.Designer);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@toolMaker", project.ToolMaker);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@roughProgrammer", project.RoughProgrammer);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@electrodeProgrammer", project.ElectrodeProgrammer);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@finishProgrammer", project.FinishProgrammer);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@EDMSinkerOperator", project.EDMSinkerOperator);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@RoughCNCOperator", project.RoughCNCOperator);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@ElectrodeCNCOperator", project.ElectrodeCNCOperator);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@FinishCNCOperator", project.FinishCNCOperator);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@EDMWireOperator", project.EDMWireOperator);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@apprentice", project.Apprentice);
+        //        adapter.UpdateCommand.Parameters.AddWithValue("@oldProjectNumber", project.OldProjectNumber);  // By default this number is set to whatever is in the database when it was loaded to the Edit project form.
+
+        //        Connection.Open();
+
+        //        adapter.UpdateCommand.ExecuteNonQuery();
+        //    }
+        //    catch (OleDbException ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    catch (Exception x)
+        //    {
+        //        throw x;
+        //    }
+        //    finally
+        //    {
+        //        Connection.Close();
+        //    }
+        //}
+
+        public static bool EditProject(ProjectModel project)
         {
-            // TODO: Need to make sure that all these methods are using the same database connection.
-            try
+            if (project.ProjectNumberChanged && ProjectExists(project.ProjectNumber))
             {
-                ProjectModel databaseProject = GetProject4(project.OldProjectNumber);
+                MessageBox.Show("There is another project with that same project number. Enter a different project number.");
+                return false;
+            }
+
+            ProjectModel databaseProject = GetProjectSQL(project.OldProjectNumber);
+
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
                 List<ComponentModel> newComponentList = new List<ComponentModel>();
                 //List<Component> updatedComponentList = new List<Component>();
-                List<TaskModel> newTaskList = new List<TaskModel>();
+                List<TaskModel> taskList = new List<TaskModel>();
+                List<TaskModel> databaseTaskList = new List<TaskModel>();
                 List<ComponentModel> deletedComponentList = new List<ComponentModel>();
 
-                if (project.ProjectNumberChanged && ProjectExists(project.ProjectNumber))
+                connection.Execute(UpdateProjectString, project);
+
+                var componentsToAdd = from component in project.Components
+                                      where component.ID == 0
+                                      select component;
+
+                var componentsToUpdate = from component in project.Components
+                                            where component.ID != 0
+                                            select component;
+
+                var componentsToRemove = from component in databaseProject.Components
+                                         where !project.Components.Exists(x => x.ID == component.ID)
+                                         select component;
+
+                connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Pictures, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
+                connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Pictures, @Material, @Finish, @TaskIDCount, @ID", componentsToUpdate.ToList());
+                connection.Execute("DELETE FROM Components WHERE ID = @ID", componentsToRemove.ToList());
+
+                int idIndex;
+
+                foreach (ComponentModel component in project.Components)
                 {
-                    MessageBox.Show("There is another project with that same project number. Enter a different project number.");
+                    idIndex = 1;
+
+                    foreach (TaskModel task in component.Tasks)
+                    {
+                        task.JobNumber = project.JobNumber;
+                        task.ProjectNumber = project.ProjectNumber;
+                        task.Component = component.Component;
+                        task.TaskID = idIndex++;
+                    }
+
+                    taskList.AddRange(component.Tasks);
+                }
+
+                databaseProject.Components.ForEach(x => databaseTaskList.AddRange(x.Tasks));
+                //taskList.ForEach(x => { x.ProjectNumber = project.ProjectNumber; x.JobNumber = project.JobNumber; });
+                
+                var tasksToAdd = from task in taskList
+                                 where task.ID == 0
+                                 select task;
+                
+                var tasksToUpdate = from task in taskList
+                                    where task.ID != 0
+                                    select task;
+                
+                var tasksToDelete = from task in databaseTaskList
+                                    where !taskList.Exists(x => x.ID == task.ID)
+                                    select task;
+
+                // TODO: Verify Task object properties will map to stored procedure.
+                connection.Execute("dbo.spCreateTask @JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Resource, @Predecessors, @Priority, @Notes", tasksToAdd.ToList());
+                connection.Execute("dbo.spUpdateTask @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Resource, @Predecessors, @Priority, @Notes, @ID", tasksToUpdate.ToList());
+                connection.Execute("DELETE FROM Tasks WHERE ID = @ID", tasksToDelete.ToList());
+            }
+
+            return true;
+        }
+        public static bool EditProjectRecord(ProjectModel project, CellValueChangedEventArgs ev)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    if (ev.Column.FieldName == "ProjectNumber" && connection.Execute("dbo.spGetProjectCount @ProjectNumber", project) > 0)
+                    {
+                        MessageBox.Show("There is a project with that same project number.");
+                        goto MyEnd;
+                    }
+
+                    connection.Execute(UpdateProjectString, project);
+
+                    return true;
+
+                MyEnd:;
                     return false;
                 }
-
-                UpdateProjectData(project);
-
-                if (ProjectHasComponents(project.ProjectNumber))
-                {
-                    // Check modified project for added components.
-                    foreach (ComponentModel component in project.Components)
-                    {
-                        component.SetPosition(project.Components.IndexOf(component));
-
-                        bool componentExists = databaseProject.Components.Exists(x => x.Component == component.Component);
-
-                        if (componentExists)
-                        {
-                            UpdateComponentData(project, component);
-
-                            foreach (TaskModel task in component.Tasks)
-                            {
-                                Console.WriteLine($"{task.TaskID} {task.TaskName}");
-                            }
-
-                            UpdateTasks(project.JobNumber, project.ProjectNumber, component.Component, component.Tasks);
-
-                            //if (component.ReloadTaskList)
-                            //{
-                            //    RemoveTasks(project, component);
-                            //    newTaskList.AddRange(component.TaskList);
-                            //}
-                            //else
-                            //{
-                            //    UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
-                            //}
-                        }
-                        else
-                        {
-                            newComponentList.Add(component);
-                            newTaskList.AddRange(component.Tasks);
-                        }
-                    }
-
-                    // Check modified project for deleted components.
-                    foreach (ComponentModel component in databaseProject.Components)
-                    {
-                        bool componentExists = project.Components.Exists(x => x.Component == component.Component);
-
-                        if (!componentExists)
-                        {
-                            deletedComponentList.Add(component);
-                        }
-                    }
-
-                    // Check modified project for updated tasks
-
-                    if (newComponentList.Count > 0)
-                    {
-                        AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project, newComponentList));
-                    }
-
-                    if (newTaskList.Count > 0)
-                    {
-                        AddTaskDataTableToDatabase(CreateDataTableFromTaskList(project, newTaskList));
-                    }
-
-                    if (deletedComponentList.Count > 0)
-                    {
-                        foreach (ComponentModel component in deletedComponentList)
-                        {
-                            RemoveComponent(project, component);
-                        }
-                    }
-                }
-                else
-                {
-                    AddComponentDataTableToDatabase(CreateDataTableFromComponentList(project));
-                }
-
-                MessageBox.Show("Project Updated!");
-
-                return true;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
-                return false;
+                Console.WriteLine(e.Message + "\n\n" + e.StackTrace);
+                throw e;
             }
         }
-
-        private void UpdateProjectData(ProjectModel project)
-        {
-            try
-            {
-                OleDbDataAdapter adapter = new OleDbDataAdapter();
-
-                string queryString;
-
-                queryString = "UPDATE Projects " +
-                              "SET JobNumber = @jobNumber, ProjectNumber = @newProjectNumber, DueDate = @dueDate, Designer = @designer, ToolMaker = @toolMaker, RoughProgrammer = @roughProgrammer, ElectrodeProgrammer = @electrodeProgrammer, " +
-                              "FinishProgrammer = @finishProgrammer, Apprentice = @apprentice, DateModified = Now() " +
-                              "WHERE ProjectNumber = @oldProjectNumber";
-
-                adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
-
-                adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@newProjectNumber", project.ProjectNumber);
-                adapter.UpdateCommand.Parameters.AddWithValue("@dueDate", project.DueDate);
-                adapter.UpdateCommand.Parameters.AddWithValue("@designer", project.Designer);
-                adapter.UpdateCommand.Parameters.AddWithValue("@toolMaker", project.ToolMaker);
-                adapter.UpdateCommand.Parameters.AddWithValue("@roughProgrammer", project.RoughProgrammer);
-                adapter.UpdateCommand.Parameters.AddWithValue("@electrodeProgrammer", project.ElectrodeProgrammer);
-                adapter.UpdateCommand.Parameters.AddWithValue("@finishProgrammer", project.FinishProgrammer);
-                adapter.UpdateCommand.Parameters.AddWithValue("@apprentice", project.Apprentice);
-                adapter.UpdateCommand.Parameters.AddWithValue("@oldProjectNumber", project.OldProjectNumber);  // By default this number is set to whatever is in the database when it was loaded to the Edit project form.
-
-                Connection.Open();
-
-                adapter.UpdateCommand.ExecuteNonQuery();
-            }
-            catch (OleDbException ex)
-            {
-                throw ex;
-            }
-            catch (Exception x)
-            {
-                throw x;
-            }
-            finally
-            {
-                Connection.Close();
-            }
-        }
-
-        public bool UpdateProjectsTable(object s, CellValueChangedEventArgs ev)
+        public static bool UpdateProjectsTable(object s, CellValueChangedEventArgs ev)
         {
             try
             {
@@ -883,15 +679,15 @@ namespace Toolroom_Project_Viewer
                 //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
                 //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
 
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    OleDbCommand cmd = new OleDbCommand();
+                    var cmd = new SqlCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.Connection = connection;
 
                     if (ev.Column.FieldName == "JobNumber")
                     {
-                        cmd.CommandText = "UPDATE Projects SET JobNumber = @jobNumber " + whereClause;
+                        cmd.CommandText = "UPDATE Projects SET JobNumber = @jobNumber, DateModified = Now() " + whereClause;
 
                         cmd.Parameters.AddWithValue("@jobNumber", ev.Value.ToString());
                     }
@@ -899,7 +695,7 @@ namespace Toolroom_Project_Viewer
                     {
                         if (!ProjectExists((int)ev.Value))
                         {
-                            cmd.CommandText = "UPDATE Projects SET ProjectNumber = @projectNumber " + whereClause;
+                            cmd.CommandText = "UPDATE Projects SET ProjectNumber = @projectNumber, DateModified = Now() " + whereClause;
 
                             if (ev.Value.ToString() != "")
                             {
@@ -1035,9 +831,9 @@ namespace Toolroom_Project_Viewer
 
         public static void SetKanBanWorkbookPath(string path, int projectNumber)
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @Path, LastKanBanGenerationDate = Now() " +
+                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @Path, LastKanBanGenerationDate = GETDATE() " +
                                      "WHERE ProjectNumber = @ProjectNumber";
 
                 var p = new { Path = path, ProjectNumber = projectNumber };
@@ -1049,7 +845,7 @@ namespace Toolroom_Project_Viewer
 
         public static void SetJobFolderPath(int id, string jobFolderPath)
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 string queryString = "UPDATE WorkLoad SET JobFolderPath = @JobFolderPath " +
                                      "WHERE ID = @ID";
@@ -1071,25 +867,30 @@ namespace Toolroom_Project_Viewer
         // Only need to delete the project from projects since the Database is set to cascade delete related records.
         public bool RemoveProject(string jobNumber, int projectNumber)
         {
-            var adapter = new OleDbDataAdapter();
-
-            adapter.DeleteCommand = new OleDbCommand("DELETE FROM Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", Connection);
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
-            adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = projectNumber;
-
-            Connection.Open();
-            adapter.DeleteCommand.ExecuteNonQuery();
-            Connection.Close();
-
-            if (!ProjectExists(projectNumber))
+            using (OleDbConnection connection = new OleDbConnection(OLEDBConnectionName))
             {
-                MessageBox.Show("Project Deleted.");
-                return true;
-            }
-            else
-            {
-                MessageBox.Show("Project Deletion Failed.");
-                return false;
+                //var adapter = new OleDbDataAdapter();
+
+                //adapter.DeleteCommand = new OleDbCommand("DELETE FROM Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", connection);
+                //adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
+                //adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = projectNumber;
+
+                connection.Execute("DELETE FROM Projects WHERE ProjectNumber = @projectNumber", new { ProjectNumber = projectNumber });
+
+                //Connection.Open();
+                //adapter.DeleteCommand.ExecuteNonQuery();
+                //Connection.Close();
+
+                if (!ProjectExists(projectNumber))
+                {
+                    MessageBox.Show("Project Deleted.");
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Project Deletion Failed.");
+                    return false;
+                } 
             }
         }
 
@@ -1127,13 +928,13 @@ namespace Toolroom_Project_Viewer
             catch (OleDbException ex)
             {
                 Connection.Close();
-                MessageBox.Show(ex.Message, "OledbException Error");
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
                 return false;
             }
             catch (Exception x)
             {
                 Connection.Close();
-                MessageBox.Show(x.Message, "Exception Error");
+                MessageBox.Show(x.Message + "\n\n" + x.StackTrace, "Exception Error");
                 return false;
             }
 
@@ -1145,7 +946,7 @@ namespace Toolroom_Project_Viewer
         #region Read
         public static List<ComponentModel> GetAllComponents()
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 List<ComponentModel> results = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
 
@@ -1233,7 +1034,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     cmd = new OleDbCommand(queryString, connection);
                     cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
@@ -1352,7 +1153,7 @@ namespace Toolroom_Project_Viewer
             Connection.Close();
         }
 
-        public void UpdateComponentsTable(object s, CellValueChangedEventArgs ev)
+        public static void UpdateComponentsTable(object s, CellValueChangedEventArgs ev)
         {
             try
             {
@@ -1362,11 +1163,11 @@ namespace Toolroom_Project_Viewer
                 //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
                 //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
 
-                using (Connection)
+                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    OleDbCommand cmd = new OleDbCommand();
+                    var cmd = new SqlCommand();
+                    cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
-                    cmd.Connection = Connection;
 
                     if (ev.Column.FieldName == "Component")
                     {
@@ -1460,17 +1261,13 @@ namespace Toolroom_Project_Viewer
 
                     cmd.Parameters.AddWithValue("@tID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
 
-                    Connection.Open();
+                    connection.Open();
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
             {
                 throw e;
-            }
-            finally
-            {
-                Connection.Close();
             }
         }
 
@@ -1634,13 +1431,13 @@ namespace Toolroom_Project_Viewer
             catch (OleDbException ex)
             {
                 Connection.Close();
-                MessageBox.Show(ex.Message, "OledbException Error");
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
                 return false;
             }
             catch (Exception x)
             {
                 Connection.Close();
-                MessageBox.Show(x.Message, "Exception Error");
+                MessageBox.Show(x.Message + "\n\n" + x.StackTrace, "Exception Error");
                 return false;
             }
 
@@ -1652,7 +1449,7 @@ namespace Toolroom_Project_Viewer
         #region Read
         public static List<TaskModel> GetAllTasks()
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 List<TaskModel> results = connection.Query<TaskModel>("SELECT * FROM Tasks").ToList();
 
@@ -1693,11 +1490,9 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     string queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
-
-                    OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
 
                     adapter.SelectCommand = new OleDbCommand(queryString, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@jobNumber", jobNumber);
@@ -1733,7 +1528,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand sqlCommand = new OleDbCommand("SELECT FinishDate from Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID", connection);
 
@@ -1917,7 +1712,7 @@ namespace Toolroom_Project_Viewer
         // Helper method for setting appointment resources.
         public DataTable GetTasksWithChangedResources(int projectNumber, string taskName)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 DataTable dt = new DataTable();
 
@@ -1939,28 +1734,31 @@ namespace Toolroom_Project_Viewer
             string queryString = "SELECT DISTINCT JobNumber, ProjectNumber FROM Tasks";
             DataTable dt = new DataTable();
             List<string> jobNumberList = new List<string>();
-            OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
 
-            adapter.Fill(dt);
-
-            foreach (DataRow nrow in dt.Rows)
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
-                //Console.WriteLine(nrow["JobNumber"]);
-                //
-                jobNumberList.Add($"{nrow["JobNumber"].ToString()} - #{nrow["ProjectNumber"].ToString()}");
+                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+
+                adapter.Fill(dt);
+
+                foreach (DataRow nrow in dt.Rows)
+                {
+                    //Console.WriteLine(nrow["JobNumber"]);
+                    //
+                    jobNumberList.Add($"{nrow["JobNumber"].ToString()} - #{nrow["ProjectNumber"].ToString()}");
+                } 
             }
 
             return jobNumberList;
         }
 
-        private string SetWeeklyHoursQueryString(string weekStart, string weekEnd)
+        private static string SetWeeklyHoursQueryString(string weekStart, string weekEnd)
         {
             string department = "All";
             string queryString = null;
             string selectStatment = "Projects.JobNumber, Projects.ProjectNumber, TaskName, Duration, Tasks.StartDate, FinishDate, Resource, Hours";
             //string fromStatement = "Tasks";
-            string whereStatement = "(Tasks.StartDate BETWEEN #" + weekStart + "# AND #" + weekEnd + "#) AND Projects.IncludeHours = true";
+            string whereStatement = "(Tasks.StartDate BETWEEN '" + weekStart + "' AND '" + weekEnd + "') AND Projects.IncludeHours = 1";
             string orderByStatement = "ORDER BY Tasks.StartDate ASC";
             //string groupByStatement = "GROUP BY ";
 
@@ -2020,91 +1818,91 @@ namespace Toolroom_Project_Viewer
             return queryString;
         }
 
-        public List<Week> GetDayHours(string weekStart, string weekEnd)
+        public static List<Week> GetDayHours(string weekStart, string weekEnd)
         {
             List<Week> weeks = new List<Week>();
 
             string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
-            OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
 
-            string[] departmentArr = {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
-
-            foreach (string item in departmentArr)
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
-                weeks.Add(new Week(item));
-            }
+                OleDbCommand cmd = new OleDbCommand(queryString, connection);
 
-            Connection.Open();
+                string[] departmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
 
-            using (var rdr = cmd.ExecuteReader())
-            {
-                if (rdr.HasRows)
+                foreach (string item in departmentArr)
                 {
-                    while (rdr.Read())
+                    weeks.Add(new Week(item));
+                }
+
+                connection.Open();
+
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.HasRows)
                     {
-                        if (rdr["TaskName"].ToString() == "Design")
+                        while (rdr.Read())
                         {
-                            weeks[0].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "Program Rough")
-                        {
-                            weeks[1].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "Program Finish")
-                        {
-                            weeks[2].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "Program Electrodes")
-                        {
-                            weeks[3].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "CNC Rough")
-                        {
-                            weeks[4].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "CNC Finish")
-                        {
-                            weeks[5].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "CNC Electrodes")
-                        {
-                            weeks[6].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "EDM Sinker")
-                        {
-                            weeks[7].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "EDM Wire (In-House)")
-                        {
-                            weeks[8].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString() == "Polish (In-House)")
-                        {
-                            weeks[9].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString().Contains("Inspection"))
-                        {
-                            weeks[10].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
-                        else if (rdr["TaskName"].ToString().Contains("Grind"))
-                        {
-                            weeks[11].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                        }
+                            if (rdr["TaskName"].ToString() == "Design")
+                            {
+                                weeks[0].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "Program Rough")
+                            {
+                                weeks[1].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "Program Finish")
+                            {
+                                weeks[2].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "Program Electrodes")
+                            {
+                                weeks[3].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "CNC Rough")
+                            {
+                                weeks[4].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "CNC Finish")
+                            {
+                                weeks[5].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "CNC Electrodes")
+                            {
+                                weeks[6].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "EDM Sinker")
+                            {
+                                weeks[7].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "EDM Wire (In-House)")
+                            {
+                                weeks[8].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString() == "Polish (In-House)")
+                            {
+                                weeks[9].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString().Contains("Inspection"))
+                            {
+                                weeks[10].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
+                            else if (rdr["TaskName"].ToString().Contains("Grind"))
+                            {
+                                weeks[11].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+                            }
 
-                        //Console.WriteLine($"{rdr["TaskName"]} {rdr["StartDate"]} {rdr["Hours"]}");
+                            //Console.WriteLine($"{rdr["TaskName"]} {rdr["StartDate"]} {rdr["Hours"]}");
+                        }
                     }
-                }
-                else
-                {
+                    else
+                    {
 
-                }
+                    }
 
 
+                } 
             }
-
-            Connection.Close();
-            Connection.Dispose();
 
             foreach (Week week in weeks)
             {
@@ -2125,7 +1923,7 @@ namespace Toolroom_Project_Viewer
             return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
         }
 
-        public List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
+        public static List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
         {
             List<Week> weekList = new List<Week>();
             List<Week> deptWeekList = new List<Week>();
@@ -2136,115 +1934,118 @@ namespace Toolroom_Project_Viewer
             Stopwatch stopwatch = new Stopwatch();
 
             string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
-            OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
 
-            weekList = InitializeDeptWeeksList(wsDate, departmentList);
-
-            //Console.WriteLine("\nLoad");
-
-            Connection.Open();
-
-            stopwatch.Start();
-
-            using (var rdr = cmd.ExecuteReader())
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
-                if (rdr.HasRows)
+                OleDbCommand cmd = new OleDbCommand(queryString, connection);
+
+                weekList = InitializeDeptWeeksList(wsDate, departmentList);
+
+                //Console.WriteLine("\nLoad");
+
+                connection.Open();
+
+                stopwatch.Start();
+
+                using (var rdr = cmd.ExecuteReader())
                 {
-                    while (rdr.Read())
+                    if (rdr.HasRows)
                     {
-                        //Console.WriteLine($"{++count} {rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {rdr["Hours"].ToString()}");
-
-                        if (resourceType == "Department")
+                        while (rdr.Read())
                         {
-                            var weeks = from wk in weekList
-                                    where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
-                                    orderby wk.WeekNum ascending
-                                    select wk;
+                            //Console.WriteLine($"{++count} {rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {rdr["Hours"].ToString()}");
 
-                            deptWeekList = weeks.ToList();
-                        }
-                        else if (resourceType == "Personnel")
-                        {
-                            var weeks = from wk in weekList
-                                    where (rdr["Resource"].ToString().Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
-                                    orderby wk.WeekNum ascending
-                                    select wk;
-
-                            deptWeekList = weeks.ToList();
-                        }
-
-                        
-
-                        if (deptWeekList.Any())
-                        {
-                            weekTemp = deptWeekList.Find(x => x.WeekStart <= Convert.ToDateTime(rdr["StartDate"]) && x.WeekEnd >= Convert.ToDateTime(rdr["StartDate"]));
-                            weekNum = weekTemp.WeekNum;
-                            //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-
-                            //Console.WriteLine(rdr["Duration"].ToString());
-
-                            //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
-
-                            double hours = Convert.ToInt32(rdr["Hours"]);
-                            double days = (int)GetBusinessDays(Convert.ToDateTime(rdr["StartDate"]), Convert.ToDateTime(rdr["FinishDate"]));
-                            DateTime date = Convert.ToDateTime(rdr["StartDate"]);
-                            decimal dailyAVG;
-
-                            if (days == 0)
+                            if (resourceType == "Department")
                             {
-                                dailyAVG = (decimal)hours;
+                                var weeks = from wk in weekList
+                                            where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                            orderby wk.WeekNum ascending
+                                            select wk;
+
+                                deptWeekList = weeks.ToList();
                             }
-                            else
+                            else if (resourceType == "Personnel")
                             {
-                                dailyAVG = (decimal)(hours / days);
+                                var weeks = from wk in weekList
+                                            where (rdr["Resource"].ToString().Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                            orderby wk.WeekNum ascending
+                                            select wk;
+
+                                deptWeekList = weeks.ToList();
                             }
 
-                            if (days >= 1)
+
+
+                            if (deptWeekList.Any())
                             {
-                                while (days > 0)
+                                weekTemp = deptWeekList.Find(x => x.WeekStart <= Convert.ToDateTime(rdr["StartDate"]) && x.WeekEnd >= Convert.ToDateTime(rdr["StartDate"]));
+                                weekNum = weekTemp.WeekNum;
+                                //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+
+                                //Console.WriteLine(rdr["Duration"].ToString());
+
+                                //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
+
+                                double hours = Convert.ToInt32(rdr["Hours"]);
+                                double days = (int)GetBusinessDays(Convert.ToDateTime(rdr["StartDate"]), Convert.ToDateTime(rdr["FinishDate"]));
+                                DateTime date = Convert.ToDateTime(rdr["StartDate"]);
+                                decimal dailyAVG;
+
+                                if (days == 0)
                                 {
-                                    if (date.DayOfWeek == DayOfWeek.Saturday)
+                                    dailyAVG = (decimal)hours;
+                                }
+                                else
+                                {
+                                    dailyAVG = (decimal)(hours / days);
+                                }
+
+                                if (days >= 1)
+                                {
+                                    while (days > 0)
                                     {
-                                        date = date.AddDays(1);
-
-                                        weekNum++;
-
-                                        if (weekNum > 20)
+                                        if (date.DayOfWeek == DayOfWeek.Saturday)
                                         {
-                                            goto MyEnd;
+                                            date = date.AddDays(1);
+
+                                            weekNum++;
+
+                                            if (weekNum > 20)
+                                            {
+                                                goto MyEnd;
+                                            }
+
+                                            //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
+                                            weekTemp = deptWeekList[weekNum - 1];
+                                            //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                            //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
+                                        }
+                                        else
+                                        {
+                                            weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                            if (weekTemp.Department == "Design")
+                                                Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
+                                            days -= 1;
                                         }
 
-                                        //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
-                                        weekTemp = deptWeekList[weekNum - 1];
-                                        //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                        //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
-                                    }
-                                    else
-                                    {
-                                        weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                        if (weekTemp.Department == "Design")
-                                            Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
-                                        days -= 1;
-                                    }
 
-
-                                    date = date.AddDays(1);
+                                        date = date.AddDays(1);
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
-                                if (weekTemp.Department == "Design")
-                                    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                                else
+                                {
+                                    weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
+                                    if (weekTemp.Department == "Design")
+                                        Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
+                    else
+                    {
 
-                }
+                    }
+                } 
             }
 
             TimeSpan ts = stopwatch.Elapsed;
@@ -2260,9 +2061,6 @@ namespace Toolroom_Project_Viewer
 
             MyEnd:;
 
-            Connection.Close();
-            Connection.Dispose();
-
             //Console.WriteLine("\nReview:");
 
             //foreach (Week week in weekList)
@@ -2276,8 +2074,19 @@ namespace Toolroom_Project_Viewer
         private static string SetQueryString(string department)
         {
             string queryString = null;
-            string selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName & ' (' & Hours & ' Hours)' As Location, JobNumber, ProjectNumber, " +
-                                    "TaskID, TaskName, Component, Hours, StartDate, FinishDate, Machine, Resources, Resource, Status, Notes, Predecessors";
+            string selectStatment = "";
+
+            if (DatabaseType == "Access")
+            {
+                selectStatment = "ID, JobNumber & ' #' & ProjectNumber & ' ' & Component As Subject, TaskName As Location, JobNumber, ProjectNumber, " +
+                                 "TaskID, TaskName, Component, Hours, StartDate, FinishDate, Machine, Resources, Resource, Status, Notes, Predecessors";
+            }
+            else if (DatabaseType == "SQL Server")
+            {
+                selectStatment = "ID, CONCAT(JobNumber, ' #', ProjectNumber, ' ', Component) As Subject, TaskName As Location, JobNumber, ProjectNumber, " +
+                                 "TaskID, TaskName, Component, Hours, StartDate, FinishDate, Machine, Resources, Resource, Status, Notes, Predecessors";
+            }
+
             string orderByStatement = " ORDER BY StartDate ASC";
 
             if (department == "Design")
@@ -2345,7 +2154,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     string queryString = SetQueryString(department);
                     OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
@@ -2379,11 +2188,11 @@ namespace Toolroom_Project_Viewer
             }
             catch (OleDbException ex)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "getAppointmentsData");
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace, "getAppointmentsData");
             }
 
             return dt;
@@ -2392,7 +2201,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = SetQueryString(department);
 
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 List<TaskModel> appointments = connection.Query<TaskModel>(queryString).ToList();
 
@@ -2405,7 +2214,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
                     string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resource, ToolMaker, Notes FROM Tasks WHERE TaskName = 'CNC Rough'";
@@ -2417,11 +2226,11 @@ namespace Toolroom_Project_Viewer
             }
             catch (OleDbException ex)
             {
-                MessageBox.Show(ex.Message, "OledbException Error");
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "getAppointmentsData");
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace, "getAppointmentsData");
             }
 
             return dt;
@@ -2435,7 +2244,7 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     string queryString;
 
@@ -2511,7 +2320,7 @@ namespace Toolroom_Project_Viewer
             {
                 bool batchUpdateTasks = false;
 
-                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     string queryString;
 
@@ -2548,7 +2357,7 @@ namespace Toolroom_Project_Viewer
                         if (dialogResult == DialogResult.Yes)
                         {
                             // TODO: Validate this process.
-                            BackDateTask(task.TaskID, component.Tasks, (DateTime)task.StartDate);
+                            BackDateTask2(task.TaskID, component.Tasks, (DateTime)task.StartDate, true);
                             batchUpdateTasks = true;
                         }
                         else if (dialogResult == DialogResult.No)
@@ -2623,7 +2432,7 @@ namespace Toolroom_Project_Viewer
                 queryString = "UPDATE Tasks SET StartDate = @startDate, FinishDate = @finishDate " +
                               "WHERE ID = @ID";
 
-                OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
+                OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName));
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -2665,7 +2474,7 @@ namespace Toolroom_Project_Viewer
             {
                 string queryString = "UPDATE Tasks SET Resource = @resource " +
                                      "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component AND TaskID = @taskID";
-                OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(ConnectionName));
+                OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName));
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
@@ -2854,13 +2663,16 @@ namespace Toolroom_Project_Viewer
         }
 
         // This means both machines and personnel.
-        public void SetTaskResources(object s, CellValueChangedEventArgs ev, SchedulerStorage schedulerStorage)
+        public static void SetTaskResources(object s, CellValueChangedEventArgs ev, SchedulerStorage schedulerStorage)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 string taskName;
+                int? projectNumber;
 
                 var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
+
+                WorkLoadModel wli = grid.GetRow(ev.RowHandle) as WorkLoadModel;
 
                 DataTable dt = new DataTable();
 
@@ -2869,25 +2681,26 @@ namespace Toolroom_Project_Viewer
 
                 string queryString = "SELECT * FROM Tasks WHERE ProjectNumber = @projectNumber AND TaskName = @taskName";
 
-                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+                var command = new SqlCommand(queryString);
 
-                if (grid.Columns["MWONumber"] != null)
+                command.Connection = connection;
+                command.CommandType = CommandType.Text;
+
+                if (wli.MWONumber != null) // If there is an MWONumber use it for the project number.
                 {
-                    if (grid.GetRowCellValue(ev.RowHandle, grid.Columns["MWONumber"]).ToString() != "")
-                    {
-                        adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = grid.GetRowCellValue(ev.RowHandle, grid.Columns["MWONumber"]);
-                    }
-                    else
-                    {
-                        adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = grid.GetRowCellValue(ev.RowHandle, grid.Columns["ProjectNumber"]);
-                    }
+                    projectNumber = wli.MWONumber;
                 }
                 else
                 {
-                    adapter.SelectCommand.Parameters.Add("@projectNumber", OleDbType.Integer, 12).Value = grid.GetRowCellValue(ev.RowHandle, grid.Columns["ProjectNumber"]);
+                    projectNumber = wli.ProjectNumber;
                 }
 
-                
+                if (projectNumber == null)
+                {
+                    return;
+                }
+
+                command.Parameters.Add("@projectNumber", SqlDbType.Int, 12).Value = projectNumber;
 
                 taskName = "Program " + ev.Column.FieldName.Remove(ev.Column.FieldName.Length - 10, 10);
 
@@ -2896,9 +2709,14 @@ namespace Toolroom_Project_Viewer
                     taskName = taskName + "s";
                 }
 
-                adapter.SelectCommand.Parameters.Add("@taskName", OleDbType.VarChar, 20).Value = taskName;
+                command.Parameters.Add("@taskName", SqlDbType.VarChar, 20).Value = taskName;
 
-                OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                SqlCommandBuilder builder = new SqlCommandBuilder(adapter); // This is needed in order for update command to work for some reason.
+
+                //builder.QuotePrefix = "[";
+                //builder.QuoteSuffix = "]";
 
                 adapter.Fill(dt);
 
@@ -2921,7 +2739,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private string GenerateResourceIDsString(string machine, string resource, SchedulerStorage schedulerStorage)
+        private static string GenerateResourceIDsString(string machine, string resource, SchedulerStorage schedulerStorage)
         {
             AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
             Resource res;
@@ -2953,7 +2771,17 @@ namespace Toolroom_Project_Viewer
         private static DateTime AddBusinessDays(DateTime date, string durationSt)
         {
             int days;
-            string[] duration = durationSt.Split(' ');
+            string[] duration = null;
+
+            if (durationSt != null)
+            {
+                duration = durationSt.Split(' '); 
+            }
+            else
+            {
+                MessageBox.Show("Duration cannot be null.");
+            }
+
             days = Convert.ToInt16(duration[0]);
 
             if (days < 0)
@@ -3017,7 +2845,7 @@ namespace Toolroom_Project_Viewer
 
         private static void UpdateTaskDates(List<TaskModel> tasks)
         {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "UPDATE Tasks " +
                                      "SET StartDate = @StartDate, FinishDate = @FinishDate " +
@@ -3034,7 +2862,7 @@ namespace Toolroom_Project_Viewer
 
         public static void MoveSuccessors(string jobNumber, int projectNumber, string component, DateTime? currentTaskFinishDate, int currentTaskID)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 DataTable datatable = new DataTable();
                 string queryString;
@@ -3076,7 +2904,7 @@ namespace Toolroom_Project_Viewer
 
             foreach (ComponentModel component in selectedComponents)
             {
-                List<TaskModel> leadingTasks = component.Tasks.FindAll(x => x.Predecessors == "");
+                List<TaskModel> leadingTasks = component.Tasks.FindAll(x => x.Predecessors == "" || x.Predecessors == null);
 
                 foreach (var task in leadingTasks)
                 {
@@ -3509,7 +3337,7 @@ namespace Toolroom_Project_Viewer
             DataTable dt = new DataTable();
             string queryString = "SELECT * FROM Tasks WHERE ProjectNumber = @ProjectNumber AND Component = @Component ORDER BY TaskID";
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
 
@@ -3548,6 +3376,18 @@ namespace Toolroom_Project_Viewer
                 {
                     BackDateTask(Convert.ToInt32(id), componentTasks, skipDatedTasks, task.StartDate);
                 }
+            }
+            // If a task has one predecessor.
+            // Backdate the one predecessor.
+            else if (task.Predecessors != "")
+            {
+                BackDateTask(Convert.ToInt32(task.Predecessors), componentTasks, skipDatedTasks, task.StartDate);
+            }
+            // If a task has no predecessors.
+            // Exit method.
+            else if (task.Predecessors == "")
+            {
+                return;
             }
         }
         private static void BackDateTask(int taskID, string component, bool skipDatedTasks, DateTime? descendantStartDate, DataTable projectTaskTable)
@@ -3607,28 +3447,57 @@ namespace Toolroom_Project_Viewer
         {
             string[] predecessors;
 
-            var result = from tasks in componentTasks
-                         where tasks.TaskID == id
-                         select tasks;
+            TaskModel task = componentTasks.Find(x => x.TaskID == id);
 
-            foreach (TaskModel task in result)
+            task.FinishDate = descendentStartDate;
+            task.StartDate = SubtractBusinessDays((DateTime)task.FinishDate, task.Duration); 
+
+            if (task.Predecessors.Contains(','))
             {
-                task.FinishDate = descendentStartDate;
-                task.StartDate = SubtractBusinessDays((DateTime)task.FinishDate, task.Duration);
+                predecessors = task.Predecessors.Split(',');
 
-                if (task.Predecessors.Contains(','))
+                foreach (string predecessor in predecessors)
                 {
-                    predecessors = task.Predecessors.Split(',');
+                    BackDateTask(Convert.ToInt32(predecessor), componentTasks, (DateTime)task.StartDate);
+                }
+            }
+            else if (task.Predecessors != "")
+            {
+                BackDateTask(Convert.ToInt32(task.Predecessors), componentTasks, (DateTime)task.StartDate);
+            }
+        }
+        private static void BackDateTask2(int id, List<TaskModel> componentTasks, DateTime descendentStartDate, bool movedTask = false)
+        {
+            string[] predecessors;
 
-                    foreach (string predecessor in predecessors)
-                    {
-                        BackDateTask(Convert.ToInt32(predecessor), componentTasks, (DateTime)task.StartDate);
-                    }
-                }
-                else if (task.Predecessors != "")
+            TaskModel task = componentTasks.Find(x => x.TaskID == id);
+
+            if (movedTask == false)
+            {
+                if (task.FinishDate > descendentStartDate)
                 {
-                    BackDateTask(Convert.ToInt32(task.Predecessors), componentTasks, (DateTime)task.StartDate);
+                    task.FinishDate = descendentStartDate;
+                    task.StartDate = SubtractBusinessDays((DateTime)task.FinishDate, task.Duration); 
                 }
+            }
+            else
+            {
+                task.FinishDate = AddBusinessDays((DateTime)task.StartDate, task.Duration);
+                task.StartDate = descendentStartDate; 
+            }
+
+            if (task.Predecessors.Contains(','))
+            {
+                predecessors = task.Predecessors.Split(',');
+
+                foreach (string predecessor in predecessors)
+                {
+                    BackDateTask2(Convert.ToInt32(predecessor), componentTasks, (DateTime)task.StartDate);
+                }
+            }
+            else if (task.Predecessors != "")
+            {
+                BackDateTask2(Convert.ToInt32(task.Predecessors), componentTasks, (DateTime)task.StartDate);
             }
         }
         public static DateTime SubtractBusinessDays(DateTime finishDate, string durationSt)
@@ -3677,7 +3546,7 @@ namespace Toolroom_Project_Viewer
                 //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
                 //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
 
-                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     string queryString;
                     var p = new DynamicParameters();
@@ -3747,6 +3616,19 @@ namespace Toolroom_Project_Viewer
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        public static void UpdateTaskProjectInfo(ProjectModel project)
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
+            {
+                string queryString;
+                var p = new DynamicParameters(project);
+
+                queryString = "UPDATE Tasks SET JobNumber = @JobNumber, ProjectNumber = @ProjectNumber WHERE (ProjectNumber = @OldProjectNumber)";
+
+                connection.Execute(queryString, p);
             }
         }
 
@@ -3895,7 +3777,7 @@ namespace Toolroom_Project_Viewer
         {
             if (resourceName != "")
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand("INSERT INTO Resources (ResourceName, ResourceType) VALUES (@resourceName, @resourceType)", connection);
 
@@ -3922,7 +3804,7 @@ namespace Toolroom_Project_Viewer
 
             string queryString = "SELECT DISTINCT Resources.ResourceName From Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID WHERE Role = @role OR Role LIKE @role ORDER BY Resources.ResourceName ASC";
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 using (OleDbCommand cmd = new OleDbCommand(queryString, connection))
                 {
@@ -3953,7 +3835,7 @@ namespace Toolroom_Project_Viewer
 
         public static DataTable GetRoleTable()
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 DataTable dt = new DataTable();
 
@@ -3972,7 +3854,7 @@ namespace Toolroom_Project_Viewer
             DataTable dt = new DataTable();
             List<string> ResourceList = new List<string>();
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "SELECT * From Resources ORDER BY ResourceName ASC";
 
@@ -3997,7 +3879,7 @@ namespace Toolroom_Project_Viewer
 
         private static int GetResourceID(string resourceName)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "SELECT ID FROM Resources WHERE ResourceName = @resourceName";
 
@@ -4017,7 +3899,7 @@ namespace Toolroom_Project_Viewer
             DataTable dt = new DataTable();
             List<string> RoleList = new List<string>();
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "SELECT Resources.ResourceName, Roles.Role FROM Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID WHERE Roles.Role = @role ORDER BY Resources.ResourceName ASC";
 
@@ -4044,7 +3926,7 @@ namespace Toolroom_Project_Viewer
         {
             DataTable dt = new DataTable();
             
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "SELECT ResourceName, ResourceType, Resources.ID, Role, Departments.Department From (Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID) LEFT OUTER JOIN Departments ON Roles.DepartmentID = Departments.ID ORDER BY ResourceName ASC";
 
@@ -4092,7 +3974,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = "SELECT ResourceType FROM Resources WHERE ResourceName = @resourceName";
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 OleDbCommand cmd = new OleDbCommand(queryString, connection);
 
@@ -4108,7 +3990,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = "SELECT ResourceName FROM Resources WHERE ResourceType = @resourceType ORDER BY ResourceName";
 
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 var output = connection.Query<string>(queryString, new { ResourceType = resourceType }).ToList();
 
@@ -4124,7 +4006,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = "UPDATE Resources SET ResourceType = @resourceType WHERE ResourceName = @resourceName";
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 OleDbCommand cmd = new OleDbCommand(queryString, connection);
 
@@ -4145,7 +4027,7 @@ namespace Toolroom_Project_Viewer
 
             if (resourceName != "")
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd1 = new OleDbCommand("DELETE FROM Roles WHERE ResourceID = @resourceID ", connection);
                     OleDbCommand cmd2 = new OleDbCommand("DELETE FROM Resources WHERE ID = @resourceID ", connection);
@@ -4176,7 +4058,7 @@ namespace Toolroom_Project_Viewer
         {
             if (resourceName != "")
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand("INSERT INTO Roles (ResourceID, Role, DepartmentID) VALUES (@resourceID, @role, @departmentID)", connection);
 
@@ -4204,7 +4086,7 @@ namespace Toolroom_Project_Viewer
         {
             DataTable dt = new DataTable();
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 string queryString = "SELECT COUNT(*) AS RoleCount, Role FROM Roles GROUP BY Role";
 
@@ -4228,7 +4110,7 @@ namespace Toolroom_Project_Viewer
         {
             if (resourceName != "")
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand("DELETE FROM Roles WHERE ResourceID = @resourceID AND Role = @role", connection);
 
@@ -4257,7 +4139,7 @@ namespace Toolroom_Project_Viewer
         {
             string queryString = "SELECT * FROM Departments";
 
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 var output = connection.Query<DepartmentModel>(queryString, new DynamicParameters()).ToList();
 
@@ -4273,81 +4155,14 @@ namespace Toolroom_Project_Viewer
 
         #region Create
 
-        public static void AddWorkLoadEntry(WorkLoadModel wli)
+        public static void CreateWorkloadEntry(WorkLoadModel workload)
         {
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes) VALUES " +
-                                                                "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes)", connection);
+                string queryString = "INSERT INTO Workload (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes) VALUES " +
+                                                          "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes)";
 
-
-                cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
-
-
-                if (wli.MWONumber != -1)
-                {
-                    cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@mwoNumber", DBNull.Value);
-                }
-
-                if (wli.ProjectNumber != -1)
-                {
-                    cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@projectNumber", DBNull.Value);
-                }
-
-                cmd.Parameters.AddWithValue("@stage", wli.Stage);
-                cmd.Parameters.AddWithValue("@customer", wli.Customer);
-                cmd.Parameters.AddWithValue("@partName", wli.PartName);
-                cmd.Parameters.AddWithValue("@deliveryInWeeks", wli.DeliveryInWeeks);
-
-                if (wli.StartDate != null)
-                {
-                    cmd.Parameters.AddWithValue("@startDate", wli.StartDate);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@startDate", DBNull.Value);
-                }
-
-                if (wli.FinishDate != null)
-                {
-                    cmd.Parameters.AddWithValue("@finishDate", wli.FinishDate);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@finishDate", DBNull.Value);
-                }
-
-                if (wli.AdjustedDeliveryDate != null)
-                {
-                    cmd.Parameters.AddWithValue("@adjustedDeliveryDate", wli.AdjustedDeliveryDate);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@adjustedDeliveryDate", DBNull.Value);
-                }
-
-                cmd.Parameters.AddWithValue("@moldCost", wli.MoldCost);
-                cmd.Parameters.AddWithValue("@engineer", wli.Engineer);
-                cmd.Parameters.AddWithValue("@designer", wli.Designer);
-                cmd.Parameters.AddWithValue("@toolMaker", wli.ToolMaker);
-                cmd.Parameters.AddWithValue("@roughProgrammer", wli.RoughProgrammer);
-                cmd.Parameters.AddWithValue("@finishProgrammer", wli.FinisherProgrammer);
-                cmd.Parameters.AddWithValue("@electrodeProgrammer", wli.ElectrodeProgrammer);
-                cmd.Parameters.AddWithValue("@apprentice", wli.Apprentice);
-                cmd.Parameters.AddWithValue("@manifold", wli.Manifold);
-                cmd.Parameters.AddWithValue("@moldBase", wli.MoldBase);
-                cmd.Parameters.AddWithValue("@generalNotes", wli.GeneralNotes);
-
-                connection.Open();
-                cmd.ExecuteNonQuery(); 
+                connection.Execute(queryString, workload);
             }
         }
 
@@ -4355,11 +4170,21 @@ namespace Toolroom_Project_Viewer
 
         #region Read
 
+        public static List<WorkLoadModel> GetWorkloads()
+        {
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
+            {
+                List<WorkLoadModel> workLoads = connection.Query<WorkLoadModel>("SELECT * FROM Workload").ToList();
+
+                return workLoads;
+            }
+        }
+
         #endregion
 
         #region Update
 
-        public bool UpdateWorkloadTable(object s, CellValueChangedEventArgs ev)
+        public static bool UpdateWorkloadTable(object s, CellValueChangedEventArgs ev)
         {
             var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
 
@@ -4369,13 +4194,15 @@ namespace Toolroom_Project_Viewer
                 return true;
             }
 
+            WorkLoadModel wli = grid.GetFocusedRow() as WorkLoadModel;
+
             //queryString = "UPDATE Tasks SET JobNumber = @jobNumber, Component = @component, TaskID = @taskID, TaskName = @taskName, " +
             //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
             //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                OleDbCommand cmd = new OleDbCommand();
+                var cmd = new SqlCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
 
@@ -4383,40 +4210,37 @@ namespace Toolroom_Project_Viewer
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET ToolNumber = @toolNumber WHERE (ID = @tID)";
 
-                    if (ev.Value.ToString() != "")
-                    {
-                        cmd.Parameters.AddWithValue("@toolNumber", ev.Value.ToString());
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@toolNumber", "");
-                    }
+                    cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
                 }
                 else if (ev.Column.FieldName == "MWONumber")
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET MWONumber = @mwoNumber WHERE (ID = @tID)";
 
-                    if (int.TryParse(ev.Value.ToString(), out int mwoNumber))
-                    {
-                        cmd.Parameters.AddWithValue("@mwoNumber", mwoNumber);
-                    }
-                    else if(ev.Value.ToString() == "")
-                    {
-                        cmd.Parameters.AddWithValue("@mwoNumber", DBNull.Value);
-                    }
+                    cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
+
+                    //if (int.TryParse(ev.Value.ToString(), out int mwoNumber))
+                    //{
+                    //    cmd.Parameters.AddWithValue("@mwoNumber", mwoNumber);
+                    //}
+                    //else if(ev.Value.ToString() == "")
+                    //{
+                    //    cmd.Parameters.AddWithValue("@mwoNumber", DBNull.Value);
+                    //}
                 }
                 else if (ev.Column.FieldName == "ProjectNumber")
                 {
                     cmd.CommandText = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
 
-                    if (int.TryParse(ev.Value.ToString(), out int projectNumber))
-                    {
-                        cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    }
-                    else if(ev.ToString() == "")
-                    {
-                        cmd.Parameters.AddWithValue("@projectNumber", DBNull.Value);
-                    }
+                    cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
+
+                    //if (int.TryParse(ev.Value.ToString(), out int projectNumber))
+                    //{
+                    //    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
+                    //}
+                    //else if(ev.ToString() == "")
+                    //{
+                    //    cmd.Parameters.AddWithValue("@projectNumber", DBNull.Value);
+                    //}
                 }
                 else if (ev.Column.FieldName == "Stage")
                 {
@@ -4690,19 +4514,190 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        public static bool UpdateWorkloadTable2(object s, CellValueChangedEventArgs ev)
+        {
+            var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
+
+            if (grid.GetFocusedRowCellValue("ID").ToString() == "")
+            {
+                // I'm tricking the system here.
+                return true;
+            }
+
+            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
+            {
+                string queryString;
+                var p = new DynamicParameters();
+
+                if (ev.Column.FieldName == "ToolNumber")
+                {
+                    queryString = "UPDATE WorkLoad SET ToolNumber = @toolNumber WHERE (ID = @tID)";
+
+                    p.Add("@toolNumber", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "MWONumber")
+                {
+                    queryString = "UPDATE WorkLoad SET MWONumber = @mwoNumber WHERE (ID = @tID)";
+
+                    p.Add("@mwoNumber", ev.Value);
+                }
+                else if (ev.Column.FieldName == "ProjectNumber")
+                {
+                    queryString = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
+
+                    if (int.TryParse(ev.Value.ToString(), out int projectNumber))
+                    {
+                        p.Add("@projectNumber", projectNumber);
+                    }
+                    else if (ev.ToString() == "")
+                    {
+                        p.Add("@projectNumber", DBNull.Value);
+                    }
+                }
+                else if (ev.Column.FieldName == "Stage")
+                {
+                    queryString = "UPDATE WorkLoad SET Stage = @stage WHERE (ID = @tID)";
+
+                    p.Add("@stage", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Customer")
+                {
+                    queryString = "UPDATE WorkLoad SET Customer = @customer WHERE (ID = @tID)";
+
+                    p.Add("@customer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "PartName")
+                {
+                    queryString = "UPDATE WorkLoad SET PartName = @partName WHERE (ID = @tID)";
+
+                    p.Add("@partName", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Engineer")
+                {
+                    queryString = "UPDATE WorkLoad SET Engineer = @engineer WHERE (ID = @tID)";
+
+                    p.Add("@engineer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "DeliveryInWeeks")
+                {
+                    queryString = "UPDATE WorkLoad SET DeliveryInWeeks = @deliveryInWeeks WHERE (ID = @tID)";
+
+                    p.Add("@deliveryInWeeks", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "StartDate")
+                {
+                    queryString = "UPDATE WorkLoad SET StartDate = @startDate WHERE (ID = @tID)";
+
+                    p.Add("@startDate", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "FinishDate")
+                {
+                    queryString = "UPDATE WorkLoad SET FinishDate = @finishDate WHERE (ID = @tID)";
+
+                    p.Add("@finishDate", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "AdjustedDeliveryDate")
+                {
+                    queryString = "UPDATE WorkLoad SET AdjustedDeliveryDate = @adjustedDeliveryDate WHERE (ID = @tID)";
+
+                    p.Add("@adjustedDeliveryDate", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "MoldCost")
+                {
+                    queryString = "UPDATE WorkLoad SET MoldCost = @moldCost WHERE (ID = @tID)";
+
+                    p.Add("@moldCost", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Designer")
+                {
+                    queryString = "UPDATE WorkLoad SET Designer = @designer WHERE (ID = @tID)";
+
+                    p.Add("@designer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Designer")
+                {
+                    queryString = "UPDATE WorkLoad SET Designer = @designer WHERE (ID = @tID)";
+
+                    p.Add("@designer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "ToolMaker")
+                {
+                    queryString = "UPDATE WorkLoad SET ToolMaker = @toolMaker WHERE (ID = @tID)";
+
+                    p.Add("@toolMaker", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "RoughProgrammer")
+                {
+                    queryString = "UPDATE WorkLoad SET RoughProgrammer = @roughProgrammer WHERE (ID = @tID)";
+
+                    p.Add("@roughProgrammer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "FinishProgrammer")
+                {
+                    queryString = "UPDATE WorkLoad SET FinishProgrammer = @finishProgrammer WHERE (ID = @tID)";
+
+                    p.Add("@finishProgrammer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "ElectrodeProgrammer")
+                {
+                    queryString = "UPDATE WorkLoad SET ElectrodeProgrammer = @electrodeProgrammer WHERE (ID = @tID)";
+
+                    p.Add("@electrodeProgrammer", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Apprentice")
+                {
+                    queryString = "UPDATE WorkLoad SET Apprentice = @apprentice WHERE (ID = @tID)";
+
+                    p.Add("@apprentice", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "Manifold")
+                {
+                    queryString = "UPDATE WorkLoad SET Manifold = @manifold WHERE (ID = @tID)";
+
+                    p.Add("@manifold", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "MoldBase")
+                {
+                    queryString = "UPDATE WorkLoad SET MoldBase = @moldBase WHERE (ID = @tID)";
+
+                    p.Add("@moldBase", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "GeneralNotes")
+                {
+                    queryString = "UPDATE WorkLoad SET GeneralNotes = @generalNotes WHERE (ID = @tID)";
+
+                    p.Add("@generalNotes", ev.Value.ToString());
+                }
+                else if (ev.Column.FieldName == "GeneralNotesRTF")
+                {
+                    queryString = "UPDATE WorkLoad SET GeneralNotesRTF = @generalNotesRTF WHERE (ID = @tID)";
+
+                    p.Add("@generalNotesRTF", ev.Value.ToString());
+                }
+                else
+                {
+                    MessageBox.Show(ev.Column.ToString() + " column is not editable.");
+                    return false;
+                }
+
+                p.Add("@tID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
+
+                connection.Execute(queryString, p);
+
+                return true;
+            }
+        }
+
         #endregion
 
         #region Delete
 
-        public bool DeleteWorkLoadEntry(int id)
+        public static bool DeleteWorkLoadEntry(int id)
         {
-            OleDbCommand cmd = new OleDbCommand("DELETE FROM WorkLoad WHERE ID = @id", Connection);
-
-            cmd.Parameters.AddWithValue("@id", id);
-
-            Connection.Open();
-            cmd.ExecuteNonQuery();
-            Connection.Close();
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                connection.Execute("DELETE FROM WorkLoad WHERE ID = @id", new { ID = id });
+            }
 
             return true;
         }
@@ -4719,7 +4714,7 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)", connection);
 
@@ -4748,7 +4743,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand("SELECT * FROM WorkLoadColors", connection);
 
@@ -4788,7 +4783,7 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
                 {
                     OleDbCommand cmd = new OleDbCommand();
                     cmd.CommandType = CommandType.Text;
@@ -4814,15 +4809,12 @@ namespace Toolroom_Project_Viewer
 
         #region Delete
 
-        public void DeleteColorEntries(int projectID)
+        public static void DeleteColorEntries(int projectID)
         {
-            OleDbCommand cmd = new OleDbCommand("DELETE FROM WorkLoadColors WHERE ProjectID = @projectID", Connection);
-
-            cmd.Parameters.AddWithValue("@projectID", projectID);
-
-            Connection.Open();
-            cmd.ExecuteNonQuery();
-            Connection.Close();
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                connection.Execute("DELETE FROM WorkLoadColors WHERE ProjectID = @projectID", new { ProjectID = projectID });
+            }
         }
 
         #endregion
@@ -4846,15 +4838,18 @@ namespace Toolroom_Project_Viewer
 
             string queryString = "SELECT MachineName From Machines WHERE MachineType LIKE @machineType ORDER BY MachineName ASC";
 
-            OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, Connection);
-
-            adapter.SelectCommand.Parameters.AddWithValue("@machineType", "%" + machineType + "%");
-
-            adapter.Fill(dt);
-
-            foreach (DataRow nrow in dt.Rows)
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
-                machineList.Add($"{nrow["MachineName"]}");
+                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
+
+                adapter.SelectCommand.Parameters.AddWithValue("@machineType", "%" + machineType + "%");
+
+                adapter.Fill(dt);
+
+                foreach (DataRow nrow in dt.Rows)
+                {
+                    machineList.Add($"{nrow["MachineName"]}");
+                } 
             }
 
             return machineList;
@@ -4895,7 +4890,7 @@ namespace Toolroom_Project_Viewer
 
             DataTable dt = new DataTable();
 
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(ConnectionName)))
+            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
             {
                 OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
 
@@ -4919,7 +4914,7 @@ namespace Toolroom_Project_Viewer
 
         #endregion // Departments Table Operations
         
-        public double GetBusinessDays(DateTime startD, DateTime endD)
+        public static double GetBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
                 1 + ((endD - startD).TotalDays * 5 -
@@ -4932,7 +4927,7 @@ namespace Toolroom_Project_Viewer
         }
 
         // Creates a weeklist with 20 weeks for each department.
-        public List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
+        public static List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
         {
             List<Week> weekList = new List<Week>();
 

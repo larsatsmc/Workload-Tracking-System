@@ -9,7 +9,7 @@ using DevExpress.XtraWaitForm;
 
 namespace Toolroom_Project_Viewer
 {
-    public partial class WaitForm1 : WaitForm
+    public partial class WaitForm1 : DevExpress.XtraWaitForm.WaitForm
     {
         public WaitForm1()
         {

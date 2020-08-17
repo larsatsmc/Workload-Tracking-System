@@ -1,11 +1,7 @@
 ﻿using DevExpress.XtraScheduler;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ClassLibrary
@@ -29,6 +25,11 @@ namespace ClassLibrary
         public string RoughProgrammer { get; set; }
         public string ElectrodeProgrammer { get; set; }
         public string FinishProgrammer { get; set; }
+        public string EDMSinkerOperator { get; set; }
+        public string RoughCNCOperator { get; set; }
+        public string ElectrodeCNCOperator { get; set; }
+        public string FinishCNCOperator { get; set; }
+        public string EDMWireOperator { get; set; }
         public double PercentComplete { get; private set; }
         public string Apprentice { get; set; } = "";
         public string Engineer { get; private set; }
@@ -234,7 +235,7 @@ namespace ClassLibrary
             this.OldProjectNumber = oldProjectNumber;
         }
 
-        public void SetProjectInfo(string jobNumber, string projectNumber, DateTime dueDate, object toolMaker, object designer, object roughProgrammer, object electrodeProgrammer, object finishProgrammer)
+        public void SetProjectInfo(string jobNumber, string projectNumber, DateTime dueDate, object toolMaker, object designer, object roughProgrammer, object electrodeProgrammer, object finishProgrammer, object edmSinkerOperator, object roughCNCOperator, object electrodeCNCOperator, object finishCNCOperator, object edmWireOperator)
         {
             int projectNumberResult;
             this.HasProjectInfo = true;
@@ -260,6 +261,11 @@ namespace ClassLibrary
             this.RoughProgrammer = ConvertObjectToString(roughProgrammer);
             this.ElectrodeProgrammer = ConvertObjectToString(electrodeProgrammer);
             this.FinishProgrammer = ConvertObjectToString(finishProgrammer);
+            this.EDMSinkerOperator = ConvertObjectToString(edmSinkerOperator);
+            this.RoughCNCOperator = ConvertObjectToString(roughCNCOperator);
+            this.ElectrodeCNCOperator = ConvertObjectToString(electrodeCNCOperator);
+            this.FinishCNCOperator = ConvertObjectToString(finishCNCOperator);
+            this.EDMWireOperator = ConvertObjectToString(edmWireOperator);
         }
 
         public void SetProjectInfo(object jobNumber, object projectNumber, object dueDate, object toolMaker, object designer, object roughProgrammer, object electrodeProgrammer, object finishProgrammer)

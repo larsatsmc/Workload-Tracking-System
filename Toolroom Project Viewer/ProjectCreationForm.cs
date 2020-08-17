@@ -11,7 +11,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ClassLibrary;
 using DevExpress.XtraScheduler;
-using DevExpress.XtraScheduler.Xml;
 
 namespace Toolroom_Project_Viewer
 {
@@ -137,6 +136,26 @@ namespace Toolroom_Project_Viewer
             else if (cb.Name == "ElectrodeProgrammerComboBox")
             {
                 cb.DataSource = GetResourceList("Electrode Programmer");
+            }
+            else if (cb.Name == "EDMSinkerOperatorComboBox")
+            {
+                cb.DataSource = GetResourceList("EDM Sinker Operator");
+            }
+            else if (cb.Name == "RoughCNCOperatorComboBox")
+            {
+                cb.DataSource = GetResourceList("Rough CNC Operator");
+            }
+            else if (cb.Name == "ElectrodeCNCOperatorComboBox")
+            {
+                cb.DataSource = GetResourceList("Electrode CNC Operator");
+            }
+            else if (cb.Name == "FinishCNCOperatorComboBox")
+            {
+                cb.DataSource = GetResourceList("Finish CNC Operator");
+            }
+            else if (cb.Name == "EDMWireOperatorComboBox")
+            {
+                cb.DataSource = GetResourceList("EDM Wire Operator");
             }
         }
         private List<string> GetResourceList(string role)
@@ -563,6 +582,11 @@ namespace Toolroom_Project_Viewer
                 RoughProgrammerComboBox.Text = project.RoughProgrammer;
                 ElectrodeProgrammerComboBox.Text = project.ElectrodeProgrammer;
                 FinishProgrammerComboBox.Text = project.FinishProgrammer;
+                EDMSinkerOperatorComboBox.Text = project.EDMSinkerOperator;
+                RoughCNCOperatorComboBox.Text = project.RoughCNCOperator;
+                ElectrodeCNCOperatorComboBox.Text = project.ElectrodeCNCOperator;
+                FinishCNCOperatorComboBox.Text = project.FinishCNCOperator;
+                EDMWireOperatorComboBox.Text = project.EDMWireOperator;
             }
         }
         private void LoadProjectToForm(ProjectModel project)
@@ -788,15 +812,15 @@ namespace Toolroom_Project_Viewer
             }
             else if (taskName == "CNC Rough")
             {
-                ti = new TaskModel("", "0", "1");
+                ti = new TaskModel(RoughCNCOperatorComboBox.Text, "0", "1");
             }
             else if (taskName == "CNC Finish")
             {
-                ti = new TaskModel("", "0", "1");
+                ti = new TaskModel(FinishCNCOperatorComboBox.Text, "0", "1");
             }
             else if (taskName == "CNC Electrodes")
             {
-                ti = new TaskModel("", "0", "1");
+                ti = new TaskModel(ElectrodeCNCOperatorComboBox.Text, "0", "1");
             }
             else if (taskName == "Heat Treat")
             {
@@ -812,11 +836,11 @@ namespace Toolroom_Project_Viewer
             }
             else if (taskName.Contains("EDM Sinker"))
             {
-                ti = new TaskModel("", "0", "1");
+                ti = new TaskModel(EDMSinkerOperatorComboBox.Text, "0", "1");
             }
             else if (taskName.Contains("EDM Wire"))
             {
-                ti = new TaskModel("", "0", "1");
+                ti = new TaskModel(EDMWireOperatorComboBox.Text, "0", "1");
             }
             else if (taskName == "Polish")
             {
@@ -1204,7 +1228,12 @@ namespace Toolroom_Project_Viewer
                 designer: DesignerComboBox.Text,
                 roughProgrammer: RoughProgrammerComboBox.Text,
                 electrodeProgrammer: ElectrodeProgrammerComboBox.Text,
-                finishProgrammer: FinishProgrammerComboBox.Text
+                finishProgrammer: FinishProgrammerComboBox.Text,
+                edmSinkerOperator: EDMSinkerOperatorComboBox.Text,
+                roughCNCOperator: RoughCNCOperatorComboBox.Text,
+                electrodeCNCOperator: ElectrodeCNCOperatorComboBox.Text,
+                finishCNCOperator: FinishCNCOperatorComboBox.Text,
+                edmWireOperator: EDMWireOperatorComboBox.Text
             );
         }
 
@@ -1578,11 +1607,6 @@ namespace Toolroom_Project_Viewer
             PopulateComboBox((ComboBox)sender);
         }
 
-        private void DesignerComboBox_DropDown(object sender, EventArgs e)
-        {
-            PopulateComboBox((ComboBox)sender);
-        }
-
         private void RoughProgrammerComboBox_DropDown(object sender, EventArgs e)
         {
             PopulateComboBox((ComboBox)sender);
@@ -1594,6 +1618,35 @@ namespace Toolroom_Project_Viewer
         }
 
         private void ElectrodeProgrammerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void EDMSinkerOperatorComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void DesignerComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void RoughCNCOperatorComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void ElectrodeCNCOperatorComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+
+        private void FinishCNCOperatorComboBox_DropDown(object sender, EventArgs e)
+        {
+            PopulateComboBox((ComboBox)sender);
+        }
+        private void EDMWireOperatorComboBox_DropDown(object sender, EventArgs e)
         {
             PopulateComboBox((ComboBox)sender);
         }
@@ -2185,7 +2238,7 @@ namespace Toolroom_Project_Viewer
                 }
             }
 
-            Database db = new Database();
+            //Database db = new Database();
 
             if (missingTaskInfo == true)
             {
@@ -2205,7 +2258,7 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (CreateProjectButton.Text == "Change")
                 {
-                    if (db.EditProjectInDB(Project))
+                    if (Database.EditProject(Project))
                     {
                         this.DialogResult = DialogResult.OK;
                     }

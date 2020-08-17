@@ -171,6 +171,7 @@
             this.repositoryItemDateEdit4 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
             this.repositoryItemDateEdit5 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
             this.xtraTabPage7 = new DevExpress.XtraTab.XtraTabPage();
+            this.refreshLabelControl = new DevExpress.XtraEditors.LabelControl();
             this.resourceButton = new DevExpress.XtraEditors.SimpleButton();
             this.editProjectButton = new DevExpress.XtraEditors.SimpleButton();
             this.createProjectButton = new DevExpress.XtraEditors.SimpleButton();
@@ -201,6 +202,7 @@
             this.departmentComboBox3 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.chartControl2 = new DevExpress.XtraCharts.ChartControl();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
+            this.refreshWorkloadLabelControl = new DevExpress.XtraEditors.LabelControl();
             this.printPreviewButton = new DevExpress.XtraEditors.SimpleButton();
             this.workLoadTabPrint2Button = new DevExpress.XtraEditors.SimpleButton();
             this.workLoadRefreshButton = new DevExpress.XtraEditors.SimpleButton();
@@ -681,6 +683,7 @@
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
+            this.gridView3.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanging);
             this.gridView3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView3_KeyDown);
             this.gridView3.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.GridView3_ValidatingEditor);
             this.gridView3.InvalidValueException += new DevExpress.XtraEditors.Controls.InvalidValueExceptionEventHandler(this.GridView3_InvalidValueException);
@@ -1652,6 +1655,7 @@
             // xtraTabPage7
             // 
             this.xtraTabPage7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.xtraTabPage7.Controls.Add(this.refreshLabelControl);
             this.xtraTabPage7.Controls.Add(this.resourceButton);
             this.xtraTabPage7.Controls.Add(this.editProjectButton);
             this.xtraTabPage7.Controls.Add(this.createProjectButton);
@@ -1665,6 +1669,16 @@
             this.xtraTabPage7.Name = "xtraTabPage7";
             this.xtraTabPage7.Size = new System.Drawing.Size(1514, 799);
             this.xtraTabPage7.Text = "Project View";
+            // 
+            // refreshLabelControl
+            // 
+            this.refreshLabelControl.Appearance.Options.UseTextOptions = true;
+            this.refreshLabelControl.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.refreshLabelControl.Location = new System.Drawing.Point(1426, 11);
+            this.refreshLabelControl.Name = "refreshLabelControl";
+            this.refreshLabelControl.Size = new System.Drawing.Size(65, 13);
+            this.refreshLabelControl.TabIndex = 13;
+            this.refreshLabelControl.Text = "Last Refresh:";
             // 
             // resourceButton
             // 
@@ -1981,6 +1995,7 @@
             this.schedulerControl2.Views.TimelineView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.WeekView.Enabled = false;
             this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler6);
+            this.schedulerControl2.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl2_AppointmentFlyoutShowing);
             // 
             // schedulerStorage2
             // 
@@ -2076,6 +2091,7 @@
             // 
             // xtraTabPage6
             // 
+            this.xtraTabPage6.Controls.Add(this.refreshWorkloadLabelControl);
             this.xtraTabPage6.Controls.Add(this.printPreviewButton);
             this.xtraTabPage6.Controls.Add(this.workLoadTabPrint2Button);
             this.xtraTabPage6.Controls.Add(this.workLoadRefreshButton);
@@ -2086,6 +2102,18 @@
             this.xtraTabPage6.Name = "xtraTabPage6";
             this.xtraTabPage6.Size = new System.Drawing.Size(1514, 799);
             this.xtraTabPage6.Text = "Work Load";
+            // 
+            // refreshWorkloadLabelControl
+            // 
+            this.refreshWorkloadLabelControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.refreshWorkloadLabelControl.Appearance.Options.UseTextOptions = true;
+            this.refreshWorkloadLabelControl.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.refreshWorkloadLabelControl.Location = new System.Drawing.Point(1296, 10);
+            this.refreshWorkloadLabelControl.Name = "refreshWorkloadLabelControl";
+            this.refreshWorkloadLabelControl.Size = new System.Drawing.Size(65, 13);
+            this.refreshWorkloadLabelControl.TabIndex = 7;
+            this.refreshWorkloadLabelControl.Text = "Last Refresh:";
+            this.refreshWorkloadLabelControl.Visible = false;
             // 
             // printPreviewButton
             // 
@@ -2309,6 +2337,7 @@
             this.bandedGridView1.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.bandedGridView1_RowUpdated);
             this.bandedGridView1.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.bandedGridView1_PrintInitialize);
             this.bandedGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bandedGridView1_MouseDown);
+            this.bandedGridView1.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.bandedGridView1_ValidatingEditor);
             // 
             // ProjectBand2
             // 
@@ -2802,6 +2831,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit5.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit5)).EndInit();
             this.xtraTabPage7.ResumeLayout(false);
+            this.xtraTabPage7.PerformLayout();
             this.xtraTabPage3.ResumeLayout(false);
             this.xtraTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartRadioGroup.Properties)).EndInit();
@@ -2824,6 +2854,7 @@
             ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).EndInit();
             this.xtraTabPage6.ResumeLayout(false);
+            this.xtraTabPage6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bandedGridView1)).EndInit();
@@ -3061,6 +3092,8 @@
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand GeneralInfo;
         private DevExpress.XtraGrid.Columns.GridColumn colProjectNumber3;
         private DevExpress.XtraGrid.Columns.GridColumn colLatestFinishDate;
+        private DevExpress.XtraEditors.LabelControl refreshLabelControl;
+        private DevExpress.XtraEditors.LabelControl refreshWorkloadLabelControl;
     }
 }
 
