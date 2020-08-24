@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toolroom_Project_Viewer
+namespace ClassLibrary
 {
     public class Week
     {

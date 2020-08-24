@@ -552,10 +552,6 @@
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Scheduler.exe.config
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Scheduler.exe
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Toolroom Scheduler.pdb
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\de\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\es\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ja\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ru\Toolroom Scheduler.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ClassLibrary.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Dapper.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DeltaCompressionDotNet.dll
@@ -808,23 +804,14 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.GeneralNotesEditor.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.MainWindow.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.ManageResourcesForm.resources
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.OutlookAppointmentForm.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.ProjectCreationForm.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.ProjectSelectionForm.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.Properties.Resources.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.SelectStatusWindow.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.MainSplashScreen.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.WaitForm1.resources
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.OutlookAppointmentForm.de.resources
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.OutlookAppointmentForm.es.resources
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.OutlookAppointmentForm.ja.resources
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.OutlookAppointmentForm.ru.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.GenerateResource.cache
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Scheduler.exe.licenses
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\de\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\es\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\ja\Toolroom Scheduler.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\ru\Toolroom Scheduler.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.CopyComplete
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Scheduler.exe
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Scheduler.pdb

@@ -24,7 +24,7 @@ namespace ClassLibrary
         public string Predecessors { get; set; } = "";
         public string Machine { get; set; }
         public string Personnel { get; set; }
-        public string Resources { get; set; }
+        public string Resources { get; set; } = "<ResourceIds>  <ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAApObyBNYWNoaW5lCw==\" />  <ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAAxObyBQZXJzb25uZWwL\" />  </ResourceIds>";
         public string Resource { get; set; }
         public int Hours { get; set; }
         public string ToolMaker { get; set; }
@@ -43,7 +43,7 @@ namespace ClassLibrary
 
         public string Location
         {
-            get { return TaskName; }
+            get { return this.TaskName; }
             //set { myVar = value; }
         }
         public string Subject { get { return $"{JobNumber} {ProjectNumber} {TaskName} {Hours}"; } }
@@ -119,7 +119,7 @@ namespace ClassLibrary
             }
 
             this.Machine = machine;
-            this.Resource = personnel;
+            this.Personnel = personnel;
             if(predecessors == "0")
             {
                 predecessors = "";
@@ -158,7 +158,7 @@ namespace ClassLibrary
             }
 
             this.Machine = machine;
-            this.Resource = personnel;
+            this.Personnel = personnel;
             if (predecessors == "0")
             {
                 predecessors = "";
@@ -236,6 +236,21 @@ namespace ClassLibrary
             this.Personnel = task.Personnel;
             this.Predecessors = task.Predecessors;
             this.Notes = task.Notes;
+        }
+
+        public TaskModel(TaskModel task)
+        {
+            this.ID = task.ID;
+            this.TaskName = task.TaskName;
+            this.TaskID = task.TaskID;
+            this.ProjectNumber = task.ProjectNumber;
+            this.Component = task.Component;
+            this.StartDate = task.StartDate;
+            this.FinishDate = task.FinishDate;
+            this.Resources = task.Resources;
+            this.Machine = task.Machine;
+            this.Personnel = task.Personnel;
+            this.Predecessors = task.Predecessors;
         }
 
         public void SetTaskID(int id)
@@ -341,7 +356,6 @@ namespace ClassLibrary
             this.Duration = duration;
             this.Machine = machine;
             this.Personnel = personnel;
-            this.Resource = personnel;
             this.Resources = GenerateResourceIDsString(schedulerStorage);
             this.Predecessors = predecessors;
             this.Notes = notes;
@@ -373,6 +387,39 @@ namespace ClassLibrary
             else if (this.Personnel != "" && personnelCount == 1)
             {
                 res = schedulerStorage.Resources.Items.GetResourceById(this.Personnel);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
+            return helper.ToXml();
+        }
+
+        public static string GenerateResourceIDsString(string machine, string personnel, SchedulerStorage schedulerStorage)
+        {
+            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
+            Resource res;
+            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
+            int personnelCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == personnel).Count();
+
+            if (machineCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Machine");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (machine != "" && machineCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(machine);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            if (personnelCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Personnel");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (personnel != "" && personnelCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(personnel);
                 appointmentResourceIdCollection.Add(res.Id);
             }
 

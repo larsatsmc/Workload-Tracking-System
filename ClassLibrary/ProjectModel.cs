@@ -94,7 +94,7 @@ namespace ClassLibrary
                 tempComponent.TaskIDCount = component.TaskIDCount;
                 tempComponent.Quantity = component.Quantity;
                 tempComponent.Spares = component.Spares;
-                tempComponent.Pictures = component.Pictures;
+                tempComponent.Picture = component.Picture;
                 tempComponent.Finish = component.Finish;
 
                 foreach (TaskModel task in component.Tasks)
@@ -451,7 +451,6 @@ namespace ClassLibrary
                     task.StartDate = null;
                     task.FinishDate = null;
                     task.Machine = "";
-                    task.Resource = "";
                     task.Personnel = "";
                     task.SetResources(AvailableResources);
                 }

@@ -121,10 +121,10 @@ namespace Toolroom_Project_Viewer
                 helper2 = new RefreshHelper(gridView4, "Component");
 
                 LoadProjects();
-                LoadWorkloadView(); //Activate when ready to make workload view object oriented.
                 LoadProjectView();
                 LoadTaskView();
                 InitializeAppointments();
+                LoadWorkloadView();
 
                 //gridControl2.DataSource = workLoadTableAdapter.GetData();
                 footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
@@ -168,10 +168,6 @@ namespace Toolroom_Project_Viewer
 
             InitializeProjects();
         }
-        private void LoadWorkloads()
-        {
-            WorkloadList = Database.GetWorkloads();
-        }
         private void LoadProjectView()
         {
             BindingList<ProjectModel> projects = new BindingList<ProjectModel>(ProjectsList);
@@ -198,28 +194,28 @@ namespace Toolroom_Project_Viewer
         }
         private void LoadTaskView()
         {
-            var result = from project in ProjectsList
-                         join task in TasksList on project.ProjectNumber equals task.ProjectNumber
-                         select new TaskModel()
-                         {
-                             ID = task.ID,
-                             JobNumber = project.JobNumber,
-                             ProjectNumber = project.ProjectNumber,
-                             Component = task.Component,
-                             ToolMaker = project.ToolMaker,
-                             TaskName = task.TaskName,
-                             Notes = task.Notes,
-                             Hours = task.Hours,
-                             Duration = task.Duration,
-                             StartDate = task.StartDate,
-                             FinishDate = task.FinishDate,
-                             DueDate = project.DueDate,
-                             Machine = task.Machine,
-                             Resource = task.Resource,
-                             Status = task.Status
-                         };
+            //var result = from project in ProjectsList
+            //             join task in TasksList on project.ProjectNumber equals task.ProjectNumber
+            //             select new TaskModel()
+            //             {
+            //                 ID = task.ID,
+            //                 JobNumber = project.JobNumber,
+            //                 ProjectNumber = project.ProjectNumber,
+            //                 Component = task.Component,
+            //                 ToolMaker = project.ToolMaker,
+            //                 TaskName = task.TaskName,
+            //                 Notes = task.Notes,
+            //                 Hours = task.Hours,
+            //                 Duration = task.Duration,
+            //                 StartDate = task.StartDate,
+            //                 FinishDate = task.FinishDate,
+            //                 DueDate = project.DueDate,
+            //                 Machine = task.Machine,
+            //                 Resource = task.Resource,
+            //                 Status = task.Status
+            //             };
 
-            BindingList<TaskModel> tasks = new BindingList<TaskModel>(result.ToList());
+            BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
 
             gridControl1.DataSource = tasks;
         }
@@ -321,16 +317,16 @@ namespace Toolroom_Project_Viewer
 
             //}
 
-            schedulerStorage1.Appointments.DataSource = Database.GetAppointmentData("All");
+            //schedulerStorage1.Appointments.DataSource = Database.GetAppointmentData("All");
 
-            //BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
+            BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
 
-            //schedulerStorage1.Appointments.DataSource = tasks;
+            schedulerStorage1.Appointments.DataSource = tasks;
 
-            //for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
-            //{
-            //    Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId}");
-            //}
+            for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
+            {
+                Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId} TaskName: {schedulerStorage1.Appointments[i].CustomFields["TaskName"]}");
+            }
 
             Console.WriteLine();
             Console.WriteLine($"{departmentComboBox.Text} Appointments");
@@ -347,26 +343,24 @@ namespace Toolroom_Project_Viewer
             //    this.schedulerStorage1.AppointmentsChanged += new DevExpress.XtraScheduler.PersistentObjectsEventHandler(this.schedulerStorage1_AppointmentsChanged);
             //}
         }
-        private bool UpdateTaskStorage1(Appointment apt)
+        private bool UpdateTaskStorage1(TaskModel movedTask, Appointment apt)
         {
+            
             bool retryHit = false;
             ComponentModel tempComponent = null;
             TaskModel globalTask, tempTask = null;
 
-            TaskModel movedTask = new TaskModel()
-            {
-                ID = (int)apt.Id,
-                TaskID = (int)apt.CustomFields["TaskID"],
-                ProjectNumber = (int)apt.CustomFields["ProjectNumber"],
-                Component = apt.CustomFields["Component"].ToString(),
-                StartDate = apt.Start,
-                FinishDate = apt.End,
-                Resources = GenerateResourceIDsString(apt.ResourceIds),
-                Machine = GetMachineFromResourceIDs(apt.ResourceIds),
-                Personnel = GetResourceFromResourceIDs(apt.ResourceIds),
-                Resource = GetResourceFromResourceIDs(apt.ResourceIds),
-                Predecessors = apt.CustomFields["Predecessors"].ToString()
-            };
+            gridView1.BeginUpdate();
+            gridView5.BeginUpdate();
+
+            movedTask.Resources = GenerateResourceIDsString(apt.ResourceIds);
+            movedTask.Machine = GetMachineFromResourceIDs(apt.ResourceIds);
+            movedTask.Personnel = GetResourceFromResourceIDs(apt.ResourceIds);
+            movedTask.StartDate = apt.Start;
+            movedTask.FinishDate = apt.End;
+
+            gridView5.EndUpdate();
+            gridView1.EndUpdate();
 
             Retry:
 
@@ -391,21 +385,10 @@ namespace Toolroom_Project_Viewer
                 goto Retry;
             }
 
-            tempTask.SetDates((DateTime)movedTask.StartDate, (DateTime)movedTask.FinishDate);
-
-            if (Database.UpdateTask(movedTask, tempComponent))
+            if (tempComponent.UpdateTask(movedTask))
             {
                 gridView5.BeginUpdate();
-
-                globalTask = TasksList.Find(x => x.ID == movedTask.ID);
-
-                // These values will be set when going through the tempComponent tasks.
-                //globalTask.StartDate = movedTask.StartDate;
-                //globalTask.FinishDate = movedTask.FinishDate;
-                globalTask.Resources = movedTask.Resources;
-                globalTask.Machine = movedTask.Machine;
-                globalTask.Personnel = movedTask.Personnel;
-                globalTask.Resource = movedTask.Resource;
+                schedulerControl1.BeginUpdate();
 
                 foreach (TaskModel currentTask in tempComponent.Tasks)
                 {
@@ -415,6 +398,8 @@ namespace Toolroom_Project_Viewer
                     globalTask.FinishDate = currentTask.FinishDate;
                 }
 
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
                 gridView5.EndUpdate();
 
                 gridView3.BeginUpdate();
@@ -753,7 +738,11 @@ namespace Toolroom_Project_Viewer
         {
             ResourceDataTable = Database.GetResourceData();
             InitializeResources();
-            InitializeAppointments();
+            LoadProjects();
+            BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
+
+            schedulerStorage1.Appointments.DataSource = tasks;
+            //InitializeAppointments();
             schedulerControl1.RefreshData();
         }
 
@@ -907,28 +896,22 @@ namespace Toolroom_Project_Viewer
 
             Thread.Sleep(250);
 
+            TaskModel movedTask;
+
             try
             {
                 foreach (Appointment apt in e.Objects)
                 {
-                    if (UpdateTaskStorage1(apt))
-                    {
-                        //using (var form = new TaskMovedForm())
-                        //{
-                        //    form.Show(); // Code execution continues without waiting for user input.
-                        //    Thread.Sleep(2500);
-                        //}
+                    movedTask = apt.GetSourceObject(schedulerStorage1) as TaskModel;
 
-                        InitializeAppointments();
-                        schedulerControl1.RefreshData();
+                    if (UpdateTaskStorage1(movedTask, apt))
+                    {
+                        
                     }
                     else
                     {
-                        InitializeAppointments();
-                        schedulerControl1.RefreshData();
+                        RefreshDepartmentScheduleView();
                     }
-
-                    //MessageBox.Show(apt.Subject);
                 }
             }
             catch (Exception ex)
@@ -1372,11 +1355,11 @@ namespace Toolroom_Project_Viewer
                     schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
                     Database.ChangeTaskDate(e.Column.FieldName, task, component);
                 }
-                else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Resource")
+                else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                 {
                     schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
-                    SetAppointmentResources(apt, task.Machine, task.Resource);
+                    SetAppointmentResources(apt, task.Machine, task.Personnel);
                     schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
                     Database.UpdateTasksTable(sender, e, GenerateResourceIDsString(apt.ResourceIds));
                 }
@@ -1801,11 +1784,10 @@ namespace Toolroom_Project_Viewer
                     return;
 
                 GridView view = sender as GridView;
-                Database db = new Database();
 
                 try
                 {
-                    if (db.RemoveProject((string)view.GetFocusedRowCellValue("JobNumber"), (int)view.GetFocusedRowCellValue("ProjectNumber")))
+                    if (Database.RemoveProject((string)view.GetFocusedRowCellValue("JobNumber"), (int)view.GetFocusedRowCellValue("ProjectNumber")))
                     {
                         view.DeleteRow(view.FocusedRowHandle);
                     }
@@ -1827,13 +1809,13 @@ namespace Toolroom_Project_Viewer
                 {
                     if (Database.ProjectExists(result))
                     {
-                        e.ErrorText = "There is already a project with that number.";
+                        e.ErrorText = "There is already a project with that number.  Hit ESC to cancel editing.";
                         e.Valid = false;
                     }
                 }
                 else
                 {
-                    e.ErrorText = "Project number must be a number.";
+                    e.ErrorText = "Project number must be a number.  Hit ESC to cancel editing.";
                     e.Valid = false;
                 }
             }
@@ -1847,14 +1829,6 @@ namespace Toolroom_Project_Viewer
             // Destroy the editor and discard the changes made within the edited cell. 
             view.HideEditor();
         }
-        private void gridView3_CellValueChanging(object sender, CellValueChangedEventArgs e)
-        {
-            //if (e.Column.FieldName == "ProjectNumber")
-            //{
-            //    ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
-            //    project.OldProjectNumber = project.ProjectNumber;
-            //}
-        }
         private void gridView3_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             try
@@ -1865,7 +1839,7 @@ namespace Toolroom_Project_Viewer
                 GridView view = sender as GridView;
                 ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
 
-                if (!Database.EditProjectRecord(project, e))
+                if (!Database.UpdateProjectRecord(project, e))
                 {
                     RefreshProjectGrid();
                 }
@@ -2108,11 +2082,11 @@ namespace Toolroom_Project_Viewer
                 }
                 else
                 {
-                    if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Resource")
+                    if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                     {
                         Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                         // TODO: Determine why when I change a resource and the dates are blank the dates get set to 1/1/2001.
-                        SetAppointmentResources(apt, task.Machine, task.Resource);
+                        SetAppointmentResources(apt, task.Machine, task.Personnel);
                     }
 
                     Database.UpdateTasksTable(sender, e);  // Resources field is only updated when the Machine or Resource fields change., resources
@@ -2152,7 +2126,7 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                ProjectModel project = Database.GetProjectSQL((int)gridView3.GetFocusedRowCellValue("ProjectNumber")); // (string)gridView3.GetFocusedRowCellValue("JobNumber"),
+                ProjectModel project = Database.GetProject((int)gridView3.GetFocusedRowCellValue("ProjectNumber")); // (string)gridView3.GetFocusedRowCellValue("JobNumber"),
                 ProjectModel copiedProject;
 
                 if (gridView3.SelectedRowsCount == 1)
@@ -2207,7 +2181,7 @@ namespace Toolroom_Project_Viewer
                     ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
                     string path;
 
-                    project = Database.GetProjectSQL(project.ProjectNumber);
+                    project = Database.GetProject(project.ProjectNumber);
 
                     if (KanBanExists(project.KanBanWorkbookPath))
                     {
@@ -2390,9 +2364,8 @@ namespace Toolroom_Project_Viewer
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                Database db = new Database();
                 int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
-                ProjectModel project = Database.GetProjectSQL(projectNumber);
+                ProjectModel project = Database.GetProject(projectNumber);
                 project.OldProjectNumber = project.ProjectNumber;
                 //ProjectModel project = db.GetProject(projectNumber);
                 sw.Stop();
@@ -2466,7 +2439,6 @@ namespace Toolroom_Project_Viewer
 
         private void LoadGraph(List<Week> weekList, List<string> departmentList)
         {
-            Database db = new Database();
             Series tempSeries;
 
             int i = 0;
@@ -2474,7 +2446,7 @@ namespace Toolroom_Project_Viewer
             chartControl1.Series.Clear();
 
             List<string> weekTitleArr = new List<string>();
-            DataTable dailyDeptCapacities = db.GetDailyDepartmentCapacities();
+            DataTable dailyDeptCapacities = Database.GetDailyDepartmentCapacities();
             int dailyCapacity;
 
             for (int n = 0; n < 20; n++)
@@ -2494,7 +2466,7 @@ namespace Toolroom_Project_Viewer
                     dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(week.Department)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
                     tempSeries = new Series(week.Department, ViewType.Bar); //  + " Hours (Cap. " + dailyCapacity + ")"
 
-                    foreach (Day day in week.DayList)
+                    foreach (ClassLibrary.Day day in week.DayList)
                     {
                         tempSeries.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
                     }
@@ -2536,7 +2508,7 @@ namespace Toolroom_Project_Viewer
             //Series series2 = new Series("Program Finish Hours", ViewType.Bar);
             //Series series3 = new Series("Program Electrode Hours", ViewType.Bar);
 
-            foreach (Day day in week.DayList)
+            foreach (ClassLibrary.Day day in week.DayList)
             {
                 series1.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
             }
@@ -2838,7 +2810,7 @@ namespace Toolroom_Project_Viewer
             DataTable dt1 = new DataTable();
             DataTable dt2 = new DataTable();
 
-            Project = Database.GetProjectSQL(projectNumber);  // Formerly db.GetProject(projectNumber);
+            Project = Database.GetProject(projectNumber);  // Formerly db.GetProject(projectNumber);
 
             ResourceMappingInfo resourceMappings = this.schedulerStorage2.Resources.Mappings;
 
@@ -3027,13 +2999,15 @@ namespace Toolroom_Project_Viewer
 
             movedTask.SetDates(apt.Start, apt.End);
 
-            if (Database.UpdateTask(movedTask, tempComponent)) // db.UpdateTask(number.jobNumber, number.projectNumber, component.Component, task.TaskID, apt.Start, apt.End, Project.OverlapAllowed)
+            if (tempComponent.UpdateTask(movedTask)) // Database.UpdateTask(movedTask, tempComponent), db.UpdateTask(number.jobNumber, number.projectNumber, component.Component, task.TaskID, apt.Start, apt.End, Project.OverlapAllowed)
             {
                 // This doesn't work.  Don't do it.
                 //task2 = task;
 
                 bool retryHit = false;
 
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
                 gridView5.BeginUpdate();
 
                 foreach (TaskModel currentTask in tempComponent.Tasks)
@@ -3067,6 +3041,9 @@ namespace Toolroom_Project_Viewer
                 }
 
                 gridView5.EndUpdate();
+                gridView1.EndUpdate();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
 
                 gridView3.BeginUpdate();
                 globalProject.LatestFinishDate = globalProject.GetLatestFinishDate();
@@ -3215,11 +3192,16 @@ namespace Toolroom_Project_Viewer
 
             if (column.FieldName == "MWONumber" || column.FieldName == "ProjectNumber")
             {
-                if (e.Value != "" && int.TryParse(e.Value.ToString(), out int result) == false)
+                if (e.Value.ToString() != "" && int.TryParse(e.Value.ToString(), out int result) == false)
                 {
-                    e.ErrorText = "Please enter a number.";
+                    e.ErrorText = "Please enter a number.  Hit ESC to cancel editing.";
                     e.Valid = false;
                 }
+            }
+            else if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                e.ErrorText = "This login is not authorized to make changes to work load tab.  Hit ESC to cancel editing.";
+                e.Valid = false;
             }
         }
 
@@ -3238,20 +3220,14 @@ namespace Toolroom_Project_Viewer
             {
                 Console.WriteLine("bandedGridView1 Cell Value Changed Event");
                 //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
-                if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
-                {
-                    MessageBox.Show("This login is not authorized to make changes to work load tab.");
-                    RefreshWorkloadGrid();
-                    return;
-                }
 
-                if (bandedGridView1.GetFocusedRowCellValue("ID").ToString() != "-1" && !Database.UpdateWorkloadTable(sender, e))
+                if (bandedGridView1.GetFocusedRowCellValue("ID").ToString() != "-1" && !Database.UpdateWorkloadColumn(wli, e))
                 {
                     RefreshWorkloadGrid();
                     return;
                 }
 
-                if (e.Column.FieldName == "DeliveryInWeeks" && bandedGridView1.GetFocusedRowCellValue("StartDate").ToString() != "")
+                if (e.Column.FieldName == "DeliveryInWeeks" && wli.StartDate.ToString() != "")
                 {
                     bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(bandedGridView1.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
                 }
@@ -3265,7 +3241,7 @@ namespace Toolroom_Project_Viewer
                 else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer")
                 {
 
-                    Database.UpdateProjectsTable(sender, e);
+                    Database.UpdateProjectField(wli, e);
                     Database.SetTaskResources(sender, e, schedulerStorage1);
                     RefreshProjectGrid();
                     RefreshDepartmentScheduleView();
@@ -3307,10 +3283,6 @@ namespace Toolroom_Project_Viewer
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
-
-            //bandedGridView1.RefreshData();
-
-            //MessageBox.Show("Change");
         }
 
         private void bandedGridView1_RowUpdated(object sender, RowObjectEventArgs e)

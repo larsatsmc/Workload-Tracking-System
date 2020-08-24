@@ -165,7 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomObjects.cs" />
-    <Compile Include="Database.cs" />
     <Compile Include="ForwardDateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,12 +188,6 @@
     </Compile>
     <Compile Include="ManageResourcesWindow.Designer.cs">
       <DependentUpon>ManageResourcesWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OutlookAppointmentForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OutlookAppointmentForm.Designer.cs">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ProjectCreationForm.cs">
@@ -254,22 +247,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ManageResourcesWindow.resx">
       <DependentUpon>ManageResourcesWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutlookAppointmentForm.de.resx">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutlookAppointmentForm.es.resx">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutlookAppointmentForm.ja.resx">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutlookAppointmentForm.resx">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutlookAppointmentForm.ru.resx">
-      <DependentUpon>OutlookAppointmentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectCreationForm.resx">
       <DependentUpon>ProjectCreationForm.cs</DependentUpon>

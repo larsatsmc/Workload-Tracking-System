@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.workLoadBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
+            this.workload_Tracking_System_DBDataSet = new Workload_Tracking_System_DBDataSet();
             this.bandedGridView1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
             this.colToolNumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colMWONumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
@@ -56,7 +56,7 @@
             this.colGeneralNotes = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGeneralNotesRTF = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.UseSelectedProjectButton = new DevExpress.XtraEditors.SimpleButton();
-            this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
+            this.workLoadTableAdapter = new Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
             this.colApprentice = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.gridBand1 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.gridBand2 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();

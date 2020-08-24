@@ -2258,7 +2258,7 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (CreateProjectButton.Text == "Change")
                 {
-                    if (Database.EditProject(Project))
+                    if (Database.UpdateWholeProject(Project))
                     {
                         this.DialogResult = DialogResult.OK;
                     }

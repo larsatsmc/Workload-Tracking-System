@@ -644,7 +644,7 @@ namespace ClassLibrary
                 }
 
 
-                if (component.Pictures != null)
+                if (component.Picture != null)
                 {
                     Clipboard.SetImage(component.picture);
                     ws.Paste((Excel.Range)ws.Cells[r + 2, 2]);
@@ -1037,7 +1037,7 @@ namespace ClassLibrary
             textBox3.TextFrame2.TextRange.Font.Bold = Microsoft.Office.Core.MsoTriState.msoTrue;
             textBox3.ShapeStyle = Microsoft.Office.Core.MsoShapeStyleIndex.msoShapeStylePreset1;
 
-            if (component.Pictures != null)
+            if (component.Picture != null)
             {
                 Clipboard.SetImage(component.picture);
                 ws.Paste((Excel.Range)ws.Cells[r + 5, 2]);  // This line throws an error when Brian tries to make a KanBan.

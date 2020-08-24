@@ -165,7 +165,7 @@
             this.colDueDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMachine1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemCheckedComboBoxEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckedComboBoxEdit();
-            this.colResource = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPersonnel = new DevExpress.XtraGrid.Columns.GridColumn();
             this.resourceRepositoryItemComboBox = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemDateEdit4 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
@@ -683,7 +683,6 @@
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
-            this.gridView3.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanging);
             this.gridView3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView3_KeyDown);
             this.gridView3.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.GridView3_ValidatingEditor);
             this.gridView3.InvalidValueException += new DevExpress.XtraEditors.Controls.InvalidValueExceptionEventHandler(this.GridView3_InvalidValueException);
@@ -935,7 +934,7 @@
             // 
             // colResource1
             // 
-            this.colResource1.FieldName = "Resource";
+            this.colResource1.FieldName = "Personnel";
             this.colResource1.Name = "colResource1";
             this.colResource1.Visible = true;
             this.colResource1.VisibleIndex = 9;
@@ -1396,7 +1395,7 @@
             this.colPredecessors,
             this.colDueDate,
             this.colMachine1,
-            this.colResource,
+            this.colPersonnel,
             this.colStatus});
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
@@ -1606,14 +1605,14 @@
             this.repositoryItemCheckedComboBoxEdit1.SeparatorChar = '/';
             this.repositoryItemCheckedComboBoxEdit1.QueryPopUp += new System.ComponentModel.CancelEventHandler(this.repositoryItemCheckedComboBoxEdit1_QueryPopUp);
             // 
-            // colResource
+            // colPersonnel
             // 
-            this.colResource.ColumnEdit = this.resourceRepositoryItemComboBox;
-            this.colResource.FieldName = "Resource";
-            this.colResource.Name = "colResource";
-            this.colResource.Visible = true;
-            this.colResource.VisibleIndex = 12;
-            this.colResource.Width = 117;
+            this.colPersonnel.ColumnEdit = this.resourceRepositoryItemComboBox;
+            this.colPersonnel.FieldName = "Personnel";
+            this.colPersonnel.Name = "colPersonnel";
+            this.colPersonnel.Visible = true;
+            this.colPersonnel.VisibleIndex = 12;
+            this.colPersonnel.Width = 117;
             // 
             // resourceRepositoryItemComboBox
             // 
@@ -2421,7 +2420,7 @@
             // 
             // colPartName
             // 
-            this.colPartName.FieldName = "PartName";
+            this.colPartName.FieldName = "Project";
             this.colPartName.Name = "colPartName";
             this.colPartName.Visible = true;
             this.colPartName.Width = 99;
@@ -3024,7 +3023,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colDuration;
         private DevExpress.XtraGrid.Columns.GridColumn colStartDate;
         private DevExpress.XtraGrid.Columns.GridColumn colFinishDate;
-        private DevExpress.XtraGrid.Columns.GridColumn colResource;
+        private DevExpress.XtraGrid.Columns.GridColumn colPersonnel;
         private DevExpress.XtraGrid.Columns.GridColumn colHours1;
         private DevExpress.XtraGrid.Columns.GridColumn colStatus;
         private DevExpress.XtraGrid.Columns.GridColumn colDueDate;

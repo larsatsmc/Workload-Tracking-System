@@ -96,7 +96,7 @@ namespace ClassLibrary
                             file.WriteLine($"{string.Empty.PadLeft(24)}{task.Hours} Hour(s)");
                             file.WriteLine($"{string.Empty.PadLeft(24)}{task.Duration}");
                             file.WriteLine($"{string.Empty.PadLeft(24)}{task.Machine}");
-                            file.WriteLine($"{string.Empty.PadLeft(24)}{task.Resource}");
+                            file.WriteLine($"{string.Empty.PadLeft(24)}{task.Personnel}");
                             file.WriteLine($"{string.Empty.PadLeft(24)}{task.Predecessors}");
                             file.WriteLine($"{string.Empty.PadLeft(24)}{task.Notes}");
                         }

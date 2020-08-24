@@ -10,7 +10,7 @@ namespace ClassLibrary
         public int? ProjectNumber { get; set; }
         public string Stage { get; set; } = "";
         public string Customer { get; set; } = "";
-        public string PartName { get; set; } = "";
+        public string Project { get; set; } = "";
         public int? DeliveryInWeeks { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? FinishDate { get; set; }

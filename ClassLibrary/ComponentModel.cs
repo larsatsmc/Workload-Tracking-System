@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
 using DevExpress.XtraScheduler;
+using System.Runtime.CompilerServices;
 
 namespace ClassLibrary
 {
@@ -20,7 +21,7 @@ namespace ClassLibrary
         public string OldName { get; private set; }
         //public Image Picture { get; set; }
         public Image picture;
-        public byte[] Pictures { get { return ImageToByteArray(picture); } set { picture = NullByteArrayCheck(value); } }
+        public byte[] Picture { get { return ImageToByteArray(picture); } set { picture = NullByteArrayCheck(value); } }
         public string Material { get; set; }
         public string Finish { get; set; }
         public string Notes { get; set; }
@@ -66,7 +67,7 @@ namespace ClassLibrary
             this.TaskIDCount = component.TaskIDCount;
             this.Quantity = component.Quantity;
             this.Spares = component.Spares;
-            this.Pictures = component.Pictures;
+            this.Picture = component.Picture;
             this.Finish = component.Finish;
             this.Tasks = component.Tasks;
             this.Status = component.Status;
@@ -96,7 +97,7 @@ namespace ClassLibrary
             if (picture.Trim().Length > 0)
             {
                 //this.Picture = ByteArrayToImage(Convert.FromBase64String(picture));
-                this.Pictures = Convert.FromBase64String(picture);
+                this.Picture = Convert.FromBase64String(picture);
             }
             this.Tasks = new List<TaskModel>();
         }
@@ -258,10 +259,10 @@ namespace ClassLibrary
         /// </summary> 
         public byte[] GetPictureByteArray()
         {
-            if(this.Pictures != null)
+            if(this.Picture != null)
             {
                 //return ImageToByteArray(this.Picture);
-                return this.Pictures;
+                return this.Picture;
             }
             else
             {
@@ -384,7 +385,187 @@ namespace ClassLibrary
 
             return task;
         }
+        public bool UpdateTask(TaskModel task)
+        {
+            bool batchUpdateTasks = false;
 
+
+            if (task.StartDate == new DateTime(0001, 1, 1))
+            {
+                task.StartDate = null;
+            }
+
+            if (task.FinishDate == new DateTime(0001, 1, 1))
+            {
+                task.FinishDate = null;
+            }
+
+            if (task.StartDate == null)
+            {
+                goto SkipBackDating;
+            }
+
+            DateTime? latestPredecessorFinishDate = this.GetLatestPredecessorFinishDate(task.Predecessors);
+
+            if (latestPredecessorFinishDate == null)
+            {
+                goto SkipBackDating;
+            }
+
+            if (task.Predecessors != "" && latestPredecessorFinishDate > task.StartDate)
+            {
+                DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
+                                                            "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    // TODO: Validate this process.
+                    this.BackDateTask(task.TaskID, this.Tasks, (DateTime)task.StartDate, true);
+                    batchUpdateTasks = true;
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    return false;
+                }
+            }
+
+        SkipBackDating:
+
+            if (this.SuccessorOverlap(task))
+            {
+                DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more successors. \n" +
+                                                            "Do you wish to push these tasks forward?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    if (task.FinishDate != null)
+                    {
+                        UpdateStartAndFinishDates(task.TaskID, this.Tasks, (DateTime)task.FinishDate);
+                        batchUpdateTasks = true;
+                    }
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    return false;
+                }
+            }
+
+            Database.UpdateTask(task);
+
+            if (batchUpdateTasks == true)
+            {
+                Database.UpdateTaskDates(this.Tasks);
+            }
+
+            return true;
+        }
+        private void BackDateTask(int id, List<TaskModel> componentTasks, DateTime descendentStartDate, bool movedTask = false)
+        {
+            string[] predecessors;
+
+            TaskModel task = this.Tasks.Find(x => x.TaskID == id);
+
+            if (movedTask == false)
+            {
+                if (task.FinishDate > descendentStartDate)
+                {
+                    task.FinishDate = descendentStartDate;
+                    task.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)task.FinishDate, task.Duration);
+                }
+            }
+            else
+            {
+                task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration);
+                task.StartDate = descendentStartDate;
+            }
+
+            if (task.Predecessors.Contains(','))
+            {
+                predecessors = task.Predecessors.Split(',');
+
+                foreach (string predecessor in predecessors)
+                {
+                    BackDateTask(Convert.ToInt32(predecessor), this.Tasks, (DateTime)task.StartDate);
+                }
+            }
+            else if (task.Predecessors != "")
+            {
+                BackDateTask(Convert.ToInt32(task.Predecessors), this.Tasks, (DateTime)task.StartDate);
+            }
+        }
+        public static List<TaskModel> UpdateStartAndFinishDates(int id, List<TaskModel> componentTasks, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false, bool promptToPushDatesForward = false)
+        {
+            var result = from tasks in componentTasks
+                         where tasks.HasMatchingPredecessor(id)
+                         select tasks;
+
+            Console.WriteLine("Update Start and Finish Dates");
+
+            foreach (TaskModel task in result)
+            {
+                if (task.StartDate == null)
+                {
+                    if (fillBlanks == true)
+                    {
+                        task.StartDate = finishDate;
+                        task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+
+                        Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + task.StartDate + " " + task.FinishDate + " " + task.Predecessors);
+                    }
+                }
+                else if (Convert.ToDateTime(task.StartDate) < finishDate) // If start date of current task comes before finish date of predecessor.
+                {
+                    task.StartDate = finishDate;
+                    task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.Predecessors);
+                    //Console.WriteLine(currentTaskID + " " + currentTaskFinishDate + " " + nrow2["TaskID"] + " " + predecessorArr[i2].ToString() + " " + nrow2["Predecessors"]);
+                }
+                else if (Convert.ToDateTime(task.StartDate) > finishDate && pullBackStartDates == true) // If start date of current task comes after the finish date of predecessor.
+                {
+                    task.StartDate = finishDate;
+                    task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
+                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.FinishDate);
+                }
+
+                if (task.FinishDate != null)
+                    UpdateStartAndFinishDates(task.TaskID, componentTasks, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
+            }
+
+            return componentTasks;
+        }
+        private static void ForwardDateTask(int predecessorID, List<TaskModel> componentTasks, DateTime predecessorFinishDate)
+        {
+            var result = from tasks in componentTasks
+                         where tasks.HasMatchingPredecessor(predecessorID)
+                         select tasks;
+
+            foreach (TaskModel task in result)
+            {
+                if (task.StartDate == null || task.StartDate < predecessorFinishDate)
+                {
+                    task.StartDate = predecessorFinishDate;
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration);
+
+                    ForwardDateTask(task.TaskID, componentTasks, (DateTime)task.FinishDate);
+                }
+            }
+        }
+        public void ClearTaskDates()
+        {
+            foreach (TaskModel task in Tasks)
+            {
+                task.StartDate = null;
+                task.FinishDate = null;
+            }
+        }
         private string ConvertObjectToString(object obj)
         {
             if (obj != null)
@@ -448,7 +629,7 @@ namespace ClassLibrary
         public string GetPictureString()
         {
             //return Convert.ToBase64String(ImageToByteArray(this.Picture));
-            return Convert.ToBase64String(this.Pictures);
+            return Convert.ToBase64String(this.Picture);
         }
         public static bool IsGoodComponentPicture(Image image)
         {
