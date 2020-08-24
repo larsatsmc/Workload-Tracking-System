@@ -385,6 +385,37 @@ namespace ClassLibrary
 
             return task;
         }
+        // Used by Department Task View and Tasks Gridview in Project View tab.
+        public void ChangeTaskDate(string fieldName, TaskModel task)
+        {
+            // Checks if the start date changed.
+            if (fieldName == "StartDate")
+            {
+                if (task.StartDate == null)
+                {
+                    task.FinishDate = null;
+                }
+                else
+                {
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration);
+                }
+            }
+
+            TaskModel temp = Tasks.Find(x => x.ID == task.ID);
+
+            temp.StartDate = task.StartDate;
+            temp.FinishDate = task.FinishDate;
+
+            if (task.FinishDate != null)
+            {
+                UpdateStartAndFinishDates(task.TaskID, (DateTime)task.FinishDate);
+            }
+
+            Database.UpdateTaskDates(Tasks);
+        }
+        /// <summary>
+        /// Updates a task and handles moving predecessors or successors that overlap.
+        /// </summary> 
         public bool UpdateTask(TaskModel task)
         {
             bool batchUpdateTasks = false;
@@ -405,14 +436,16 @@ namespace ClassLibrary
                 goto SkipBackDating;
             }
 
-            DateTime? latestPredecessorFinishDate = this.GetLatestPredecessorFinishDate(task.Predecessors);
+            //DateTime? latestPredecessorFinishDate = this.GetLatestPredecessorFinishDate(task.Predecessors);
 
-            if (latestPredecessorFinishDate == null)
+            TaskModel latestPredecessor = this.GetLatestPredecessor(task.Predecessors);
+
+            if (latestPredecessor == null)
             {
                 goto SkipBackDating;
             }
 
-            if (task.Predecessors != "" && latestPredecessorFinishDate > task.StartDate)
+            if (task.Predecessors != "" && latestPredecessor.FinishDate > task.StartDate)
             {
                 DialogResult dialogResult = MessageBox.Show("There is overlap between this task and one or more predecessors.  \n" +
                                                             "Do you wish to push the overlapping predecessors back?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -420,7 +453,7 @@ namespace ClassLibrary
                 if (dialogResult == DialogResult.Yes)
                 {
                     // TODO: Validate this process.
-                    this.BackDateTask(task.TaskID, this.Tasks, (DateTime)task.StartDate, true);
+                    this.BackDateTask(latestPredecessor.TaskID, (DateTime)task.StartDate);
                     batchUpdateTasks = true;
                 }
                 else if (dialogResult == DialogResult.No)
@@ -444,7 +477,7 @@ namespace ClassLibrary
                 {
                     if (task.FinishDate != null)
                     {
-                        UpdateStartAndFinishDates(task.TaskID, this.Tasks, (DateTime)task.FinishDate);
+                        UpdateStartAndFinishDates(task.TaskID, (DateTime)task.FinishDate);
                         batchUpdateTasks = true;
                     }
                 }
@@ -467,43 +500,74 @@ namespace ClassLibrary
 
             return true;
         }
-        private void BackDateTask(int id, List<TaskModel> componentTasks, DateTime descendentStartDate, bool movedTask = false)
+        /// <summary>
+        /// Forward dates all tasks in given component.
+        /// </summary> 
+        public void ForwardDate(DateTime forwardDate)
+        {
+            List<TaskModel> leadingTasks = this.Tasks.FindAll(x => x.Predecessors == "" || x.Predecessors == null);
+
+            foreach (var task in leadingTasks)
+            {
+                this.ForwardDateTask(task.TaskID, forwardDate);
+            }
+        }
+        public void ForwardDateTask(int successorID, DateTime predecessorFinishDate)
+        {
+            TaskModel successorTask = this.Tasks.Find(x => x.TaskID == successorID);
+
+            if (successorTask.StartDate == null || predecessorFinishDate > successorTask.StartDate)
+            {
+                successorTask.StartDate = predecessorFinishDate;
+                successorTask.FinishDate = GeneralOperations.AddBusinessDays((DateTime)successorTask.StartDate, successorTask.Duration);
+            }
+
+            var result = from tasks in Tasks
+                         where tasks.HasMatchingPredecessor(successorID)
+                         select tasks;
+
+            foreach (TaskModel newSuccessorTask in result)
+            {
+                ForwardDateTask(newSuccessorTask.TaskID, (DateTime)successorTask.FinishDate);
+            }
+        }
+        public void BackDate(DateTime backDate)
+        {
+            this.ClearTaskDates();
+
+            TaskModel finalTask = this.Tasks.Find(x => x.TaskID == this.Tasks.Max(x2 => x2.TaskID));
+
+            BackDateTask(finalTask.TaskID, backDate);
+        }
+        private void BackDateTask(int predecessorID, DateTime successorStartDate)
         {
             string[] predecessors;
 
-            TaskModel task = this.Tasks.Find(x => x.TaskID == id);
+            TaskModel predecessorTask = this.Tasks.Find(x => x.TaskID == predecessorID);
 
-            if (movedTask == false)
+            if (predecessorTask.FinishDate == null || predecessorTask.FinishDate > successorStartDate)
             {
-                if (task.FinishDate > descendentStartDate)
-                {
-                    task.FinishDate = descendentStartDate;
-                    task.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)task.FinishDate, task.Duration);
-                }
-            }
-            else
-            {
-                task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration);
-                task.StartDate = descendentStartDate;
+                predecessorTask.FinishDate = successorStartDate;
+                predecessorTask.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)predecessorTask.FinishDate, predecessorTask.Duration); 
             }
 
-            if (task.Predecessors.Contains(','))
+            if (predecessorTask.Predecessors.Contains(','))
             {
-                predecessors = task.Predecessors.Split(',');
+                predecessors = predecessorTask.Predecessors.Split(',');
 
                 foreach (string predecessor in predecessors)
                 {
-                    BackDateTask(Convert.ToInt32(predecessor), this.Tasks, (DateTime)task.StartDate);
+                    BackDateTask(Convert.ToInt32(predecessor), (DateTime)predecessorTask.StartDate);
                 }
             }
-            else if (task.Predecessors != "")
+            else if (predecessorTask.Predecessors != "")
             {
-                BackDateTask(Convert.ToInt32(task.Predecessors), this.Tasks, (DateTime)task.StartDate);
+                BackDateTask(Convert.ToInt32(predecessorTask.Predecessors), (DateTime)predecessorTask.StartDate);
             }
         }
-        public static List<TaskModel> UpdateStartAndFinishDates(int id, List<TaskModel> componentTasks, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false, bool promptToPushDatesForward = false)
+        public List<TaskModel> UpdateStartAndFinishDates(int id, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false, bool promptToPushDatesForward = false)
         {
-            var result = from tasks in componentTasks
+            var result = from tasks in Tasks
                          where tasks.HasMatchingPredecessor(id)
                          select tasks;
 
@@ -536,27 +600,10 @@ namespace ClassLibrary
                 }
 
                 if (task.FinishDate != null)
-                    UpdateStartAndFinishDates(task.TaskID, componentTasks, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
+                    UpdateStartAndFinishDates(task.TaskID, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
             }
 
-            return componentTasks;
-        }
-        private static void ForwardDateTask(int predecessorID, List<TaskModel> componentTasks, DateTime predecessorFinishDate)
-        {
-            var result = from tasks in componentTasks
-                         where tasks.HasMatchingPredecessor(predecessorID)
-                         select tasks;
-
-            foreach (TaskModel task in result)
-            {
-                if (task.StartDate == null || task.StartDate < predecessorFinishDate)
-                {
-                    task.StartDate = predecessorFinishDate;
-                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration);
-
-                    ForwardDateTask(task.TaskID, componentTasks, (DateTime)task.FinishDate);
-                }
-            }
+            return Tasks;
         }
         public void ClearTaskDates()
         {
@@ -650,6 +697,49 @@ namespace ClassLibrary
         public DateTime? GetLatesFinishDate()
         {
             return this.Tasks.Max(x => x.FinishDate);
+        }
+        public TaskModel GetLatestPredecessor(string predecessors)
+        {
+            DateTime? latestFinishDate = null;
+            DateTime? currentDate = null;
+            string[] predecessorArr;
+            string predecessor, latestPredecessor = "";
+
+            if (predecessors != "")
+            {
+                if (predecessors.Contains(","))
+                {
+                    predecessorArr = predecessors.Split(',');
+
+                    foreach (string currPredecessor in predecessorArr)
+                    {
+                        predecessor = currPredecessor.Trim();
+
+                        if (predecessor == "")
+                        {
+                            break;
+                        }
+
+                        currentDate = this.Tasks.Find(x => x.TaskID.ToString() == predecessor).FinishDate;
+
+                        if (latestFinishDate == null || latestFinishDate < currentDate)
+                        {
+                            latestPredecessor = predecessor;
+                            latestFinishDate = currentDate;
+                        }
+                    }
+
+                    return this.Tasks.Find(x => x.TaskID.ToString() == latestPredecessor);
+                }
+                else
+                {
+                    return this.Tasks.Find(x => x.TaskID.ToString() == predecessors);
+                } 
+            }
+            else
+            {
+                return null;
+            }
         }
         public DateTime? GetLatestPredecessorFinishDate(string predecessors)
         {

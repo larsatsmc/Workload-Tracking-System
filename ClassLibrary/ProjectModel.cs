@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraScheduler;
+using Microsoft.Vbe.Interop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -423,6 +424,32 @@ namespace ClassLibrary
             Components.ForEach(x => Console.WriteLine(x.Component));
 
             Console.WriteLine("");
+        }
+        public void ForwardDate(DateTime forwardDate)
+        {
+            List<TaskModel> tasksToUpdate = new List<TaskModel>();
+
+            foreach (var component in Components)
+            {
+                component.ForwardDate(forwardDate);
+
+                tasksToUpdate.AddRange(component.Tasks);
+            }
+
+            Database.UpdateTaskDates(tasksToUpdate);
+        }
+        public void BackDate(DateTime backDate)
+        {
+            List<TaskModel> tasksToUpdate = new List<TaskModel>();
+
+            foreach (var component in Components)
+            {
+                component.BackDate(backDate);
+
+                tasksToUpdate.AddRange(component.Tasks);
+            }
+
+            Database.UpdateTaskDates(tasksToUpdate);
         }
 
         public DateTime? GetLatestFinishDate()

@@ -1353,7 +1353,7 @@ namespace Toolroom_Project_Viewer
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                     SetAppointmentDate(apt, e.Column.FieldName, date ?? new DateTime(0001, 1, 1));
                     schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
-                    Database.ChangeTaskDate(e.Column.FieldName, task, component);
+                    component.ChangeTaskDate(e.Column.FieldName, task);
                 }
                 else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                 {
@@ -2056,12 +2056,6 @@ namespace Toolroom_Project_Viewer
             // Destroy the editor and discard the changes made within the edited cell. 
             view.HideEditor();
         }
-        // Not sure how this event works.
-        private void gridView5_CellValueChanging(object sender, CellValueChangedEventArgs e)
-        {
-
-
-        }
         private void gridView5_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             try
@@ -2076,7 +2070,7 @@ namespace Toolroom_Project_Viewer
                 if ((e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate") && e.Value != DBNull.Value)
                 {
                     gridView5.BeginUpdate();
-                    Database.ChangeTaskDate(e.Column.FieldName, task, component);
+                    component.ChangeTaskDate(e.Column.FieldName, task);
                     //project.IsProjectOnTime();
                     gridView5.EndUpdate();
                 }
