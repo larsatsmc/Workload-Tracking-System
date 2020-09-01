@@ -12,6 +12,7 @@ namespace ClassLibrary
 	public class TaskModel
 	{
         public int ID { get; set; }
+        public int AptID { get; set; }
         public int TaskID { get; set; }
         public int ProjectNumber { get; set; }
         public string JobNumber { get; set; }
@@ -22,6 +23,7 @@ namespace ClassLibrary
         public DateTime? StartDate { get; set; }
         public DateTime? FinishDate { get; set; }
         public string Predecessors { get; set; } = "";
+        public string NewPredecessors { get; set; } = "";
         public string Machine { get; set; }
         public string Personnel { get; set; }
         public string Resources { get; set; } = "<ResourceIds>  <ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAApObyBNYWNoaW5lCw==\" />  <ResourceId Value=\"~Xtra#Base64AAEAAAD/////AQAAAAAAAAAGAQAAAAxObyBQZXJzb25uZWwL\" />  </ResourceIds>";
@@ -51,7 +53,7 @@ namespace ClassLibrary
         { 
             get 
             {
-                if (Status == "Complete")
+                if (Status == "Completed")
                 {
                     return 100;
                 }
@@ -297,6 +299,41 @@ namespace ClassLibrary
             {
                 this.Predecessors = Convert.ToString(Convert.ToInt32(this.Predecessors) + baseNumber);
             }     
+        }
+        /// <summary>
+        /// Sets new predecessors to the NewPredecessors property numbered according to what is needed for dependencies in the scheduler control.
+        /// </summary>
+        public void SetNewPredecessors(int baseNumber)
+        {
+            StringBuilder newPreds = new StringBuilder();
+            string[] preds = null;
+
+            if (this.Predecessors == "")
+            {
+                this.NewPredecessors = "";
+            }
+            else if (this.Predecessors.Contains(","))
+            {
+                preds = this.Predecessors.Split(',');
+
+                for (int i = 0; i < preds.Count(); i++)
+                {
+                    if (i < preds.Count() - 1)
+                    {
+                        newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber + ",");
+                    }
+                    else
+                    {
+                        newPreds.Append(Convert.ToInt32(preds[i]) + baseNumber);
+                    }
+                }
+
+                this.NewPredecessors = newPreds.ToString();
+            }
+            else
+            {
+                this.NewPredecessors = Convert.ToString(Convert.ToInt32(this.Predecessors.Trim()) + baseNumber);
+            }
         }
         /// <summary>
         /// Gets predecessors numbered according to what is needed for dependencies in the scheduler control.

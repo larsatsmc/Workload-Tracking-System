@@ -80,15 +80,6 @@ namespace ClassLibrary
                    "\r\n" +
                    "    End If\r\n" +
                    "\r\n" +
-                   "    Database.UpdateCompletedTasksPercent _\r\n" +
-                   "    jobNumber:=jobNumberArr(1), _\r\n" +
-                   "    projectNumber:=CLng(leftHeaderArr(2)), _\r\n" +
-                   "    component:=componentArr(1)\r\n" +
-                   "\r\n" +
-                   "    Database.UpdateProjectPercentComplete _\r\n" +
-                   "    jobNumber:=jobNumberArr(1), _\r\n" +
-                   "    projectNumber:=CLng(leftHeaderArr(2))\r\n" +
-                   "\r\n" +
                    "  ElseIf Target.column = 7 Then\r\n" +
                    "\r\n" +
                    "    ThisWorkbook.Save\r\n" +

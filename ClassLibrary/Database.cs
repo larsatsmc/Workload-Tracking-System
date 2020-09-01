@@ -171,7 +171,7 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                int projectCount = connection.Execute("SELECT COUNT(*) from Projects WHERE ProjectNumber = @ProjectNumber", new { ProjectNumber = projectNumber } );
+                int projectCount = int.Parse(connection.ExecuteScalar("SELECT COUNT(*) from Projects WHERE ProjectNumber = @ProjectNumber", new { ProjectNumber = projectNumber } ).ToString());
                 
                 if (projectCount > 0)
                 {
@@ -263,7 +263,7 @@ namespace ClassLibrary
         {
             DataTable dt = new DataTable();
             int count = 0;
-            int baseCount = 0;
+            int baseCount;
 
             dt.Columns.Add("JobNumber", typeof(string));
             dt.Columns.Add("ProjectNumber", typeof(int));
@@ -317,7 +317,7 @@ namespace ClassLibrary
                         row["FinishDate"] = task.FinishDate;
                     }
                     
-                    row["PercentComplete"] = GetPercentComplete(task.Status);
+                    row["PercentComplete"] = task.PercentComplete;
                     row["Predecessors"] = task.GetNewPredecessors(baseCount);
                     row["Notes"] = task.Notes;
                     row["NewTaskID"] = count;
@@ -1055,29 +1055,6 @@ namespace ClassLibrary
             }
 
             return FinishDate;
-        }
-
-        private static DateTime? GetLatestPredecessorFinishDate(string jobNumber, int projectNumber, string component, string predecessors)
-        {
-            DateTime? latestFinishDate = null;
-            DateTime? currentDate = null;
-            string[] predecessorArr;
-            string predecessor;
-
-            predecessorArr = predecessors.Split(',');
-
-            foreach (string currPredecessor in predecessorArr)
-            {
-                predecessor = currPredecessor.Trim();
-                currentDate = GetFinishDate(jobNumber, projectNumber, component, Convert.ToInt16(predecessor));
-
-                if (latestFinishDate == null || latestFinishDate < currentDate)
-                {
-                    latestFinishDate = currentDate;
-                }
-            }
-
-            return latestFinishDate;
         }
 
         public List<TaskModel> GetProjectTaskList(string jobNumber, int projectNumber)
@@ -1823,11 +1800,11 @@ namespace ClassLibrary
                         p.Add("@Machine", ev.Value.ToString());
                         p.Add("@Resources", resources);
                     }
-                    else if (ev.Column.FieldName == "Resource")
+                    else if (ev.Column.FieldName == "Personnel")
                     {
-                        queryString = "UPDATE Tasks SET Resource = @Resource, Resources = @Resources WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Personnel = @Personnel, Resources = @Resources WHERE (ID = @ID)";
 
-                        p.Add("@Resource", ev.Value.ToString());
+                        p.Add("@Personnel", ev.Value.ToString());
                         p.Add("@Resources", resources);
                     }
                     else
@@ -1942,8 +1919,8 @@ namespace ClassLibrary
                 {
                     SqlCommand cmd = new SqlCommand("INSERT INTO Resources (ResourceName, ResourceType) VALUES (@resourceName, @resourceType)", connection);
 
-                    cmd.Parameters.AddWithValue("resourceID", resourceName);
-                    cmd.Parameters.AddWithValue("resourceType", resourceType);
+                    cmd.Parameters.AddWithValue("@resourceName", resourceName);
+                    cmd.Parameters.AddWithValue("@resourceType", resourceType);
 
                     connection.Open();
                     cmd.ExecuteNonQuery();
@@ -2193,8 +2170,10 @@ namespace ClassLibrary
                     SqlCommand cmd1 = new SqlCommand("DELETE FROM Roles WHERE ResourceID = @resourceID ", connection);
                     SqlCommand cmd2 = new SqlCommand("DELETE FROM Resources WHERE ID = @resourceID ", connection);
 
-                    cmd1.Parameters.AddWithValue("resourceID", GetResourceID(resourceName));
-                    cmd2.Parameters.AddWithValue("ID", GetResourceID(resourceName));
+                    int resourceID = GetResourceID(resourceName);
+
+                    cmd1.Parameters.AddWithValue("@resourceID", resourceID);
+                    cmd2.Parameters.AddWithValue("@resourceID", resourceID);
 
                     connection.Open();
                     cmd1.ExecuteNonQuery();

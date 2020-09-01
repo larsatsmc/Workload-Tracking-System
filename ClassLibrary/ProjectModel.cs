@@ -456,7 +456,6 @@ namespace ClassLibrary
         {
             return this.Components.Max(x => x.GetLatesFinishDate());
         }
-
         public void SetDefaultCopiedProjectInfo(int projectNumber)
         {
             this.JobNumber = "XXXXXX";
@@ -482,6 +481,21 @@ namespace ClassLibrary
                     task.SetResources(AvailableResources);
                 }
             }
+        }
+
+        public List<TaskModel> GetTaskList()
+        {
+            List<TaskModel> taskList = new List<TaskModel>();
+
+            foreach (var component in Components)
+            {
+                foreach (var task in component.Tasks)
+                {
+                    taskList.Add(task);
+                }
+            }
+
+            return taskList;
         }
 
         private string ConvertObjectToString(object obj)

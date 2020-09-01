@@ -2147,15 +2147,17 @@ namespace Toolroom_Project_Viewer
 
             if (fileName != "")
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
-                                                            "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
+                // Project Info insertion removed per Mark's request 9/1/2020.
+
+                //DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
+                //                                            "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
 
                 tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
 
-                if (dialogResult == DialogResult.Yes)
-                {
-                    LoadProjectInfoToForm(tempProject);
-                }
+                //if (dialogResult == DialogResult.Yes)
+                //{
+                //    LoadProjectInfoToForm(tempProject);
+                //}
 
                 Project.Components.AddRange(tempProject.Components);
 

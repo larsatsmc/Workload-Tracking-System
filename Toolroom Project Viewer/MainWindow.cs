@@ -129,7 +129,7 @@ namespace Toolroom_Project_Viewer
                 //gridControl2.DataSource = workLoadTableAdapter.GetData();
                 footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
                 refreshWorkloadLabelControl.Text = "Last Refresh: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss tt");
-
+                gridView5.SortInfo.Add(new GridColumnSortInfo(colTaskID1, DevExpress.Data.ColumnSortOrder.Ascending));
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
                 RoleTable = Database.GetRoleTable();
@@ -194,27 +194,6 @@ namespace Toolroom_Project_Viewer
         }
         private void LoadTaskView()
         {
-            //var result = from project in ProjectsList
-            //             join task in TasksList on project.ProjectNumber equals task.ProjectNumber
-            //             select new TaskModel()
-            //             {
-            //                 ID = task.ID,
-            //                 JobNumber = project.JobNumber,
-            //                 ProjectNumber = project.ProjectNumber,
-            //                 Component = task.Component,
-            //                 ToolMaker = project.ToolMaker,
-            //                 TaskName = task.TaskName,
-            //                 Notes = task.Notes,
-            //                 Hours = task.Hours,
-            //                 Duration = task.Duration,
-            //                 StartDate = task.StartDate,
-            //                 FinishDate = task.FinishDate,
-            //                 DueDate = project.DueDate,
-            //                 Machine = task.Machine,
-            //                 Resource = task.Resource,
-            //                 Status = task.Status
-            //             };
-
             BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
 
             gridControl1.DataSource = tasks;
@@ -1215,7 +1194,7 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            gridView1.Columns["Resource"].OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.True;
+            gridView1.Columns["Personnel"].OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.True;
             gridView1.Columns["TaskName"].OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             //// Used richEditControl to generate desired Rtf code.
             //gridView1.OptionsPrint.RtfPageHeader = @"{\rtf1\deff0{\fonttbl{\f0 Calibri;}{\f1 Microsoft Sans Serif;}}{\colortbl ;\red0\green0\blue255 ;}{\*\defchp \b\f1\fs22}{\stylesheet {\ql\b\f1\fs22 Normal;}{\*\cs1\b\f1\fs22 Default Paragraph Font;}{\*\cs2\sbasedon1\b\f1\fs22 Line Number;}{\*\cs3\b\ul\f1\fs22\cf1 Hyperlink;}{\*\ts4\tsrowd\b\f1\fs22\ql\tscellpaddfl3\tscellpaddl108\tscellpaddfb3\tscellpaddfr3\tscellpaddr108\tscellpaddft3\tsvertalt\cltxlrtb Normal Table;}{\*\ts5\tsrowd\sbasedon4\b\f1\fs22\ql\trbrdrt\brdrs\brdrw10\trbrdrl\brdrs\brdrw10\trbrdrb\brdrs\brdrw10\trbrdrr\brdrs\brdrw10\trbrdrh\brdrs\brdrw10\trbrdrv\brdrs\brdrw10\tscellpaddfl3\tscellpaddl108\tscellpaddfr3\tscellpaddr108\tsvertalt\cltxlrtb Table Simple 1;}}{\*\listoverridetable}{\info{\creatim\yr2018\mo1\dy10\hr10\min20}{\version1}}\nouicompat\splytwnine\htmautsp\sectd\trowd\irow0\irowband-1\lastrow\ts5\trbrdrt\brdrs\brdrw10\trbrdrl\brdrs\brdrw10\trbrdrb\brdrs\brdrw10\trbrdrr\brdrs\brdrw10\trbrdrh\brdrs\brdrw10\trbrdrv\brdrs\brdrw10\trleft-108\trautofit1\trpaddfl3\trpaddl108\trpaddfr3\trpaddr108\tbllkhdrcols\tbllkhdrrows\tbllknocolband\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx3810\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx7710\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx11610\pard\plain\ql\intbl\yts5{\b\f1\fs22\cf0 Job Number: All}\b\f1\fs22\cell\pard\plain\qc\intbl\yts5{\b\f1\fs22\cf0 Department: " + departmentComboBox2.Text + @"}\b\f1\fs22\cell\pard\plain\qr\intbl\yts5{\b\f1\fs22\cf0 Component: All}\b\f1\fs22\cell\trowd\irow0\irowband-1\lastrow\ts5\trbrdrt\brdrs\brdrw10\trbrdrl\brdrs\brdrw10\trbrdrb\brdrs\brdrw10\trbrdrr\brdrs\brdrw10\trbrdrh\brdrs\brdrw10\trbrdrv\brdrs\brdrw10\trleft-108\trautofit1\trpaddfl3\trpaddl108\trpaddfr3\trpaddr108\tbllkhdrcols\tbllkhdrrows\tbllknocolband\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx3810\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx7710\clvertalt\clbrdrt\brdrnone\brdrw10\clbrdrl\brdrnone\brdrw10\clbrdrb\brdrnone\brdrw10\clbrdrr\brdrnone\brdrw10\cltxlrtb\clftsWidth3\clwWidth3888\clpadfr3\clpadr108\clpadft3\clpadt108\cellx11610\row\pard\plain\ql\b\f1\fs22\par}";
@@ -1452,7 +1431,7 @@ namespace Toolroom_Project_Viewer
                 comboBoxEdit = gridView1.ActiveEditor as ComboBoxEdit;
             }
 
-            if (comboBoxEdit != null && gridView1.FocusedColumn.FieldName == "Resource")
+            if (comboBoxEdit != null && gridView1.FocusedColumn.FieldName == "Personnel")
             {
                 string task = (string)gridView1.GetRowCellValue(gridView1.GetSelectedRows()[0], "TaskName");
                 string role = "";
@@ -1835,7 +1814,6 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-                Database db = new Database();
                 GridView view = sender as GridView;
                 ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
 
@@ -1845,11 +1823,13 @@ namespace Toolroom_Project_Viewer
                 }
                 else
                 {
-                    if (e.Column.FieldName == "JobNumber" || e.Column.FieldName == "ProjectNumber")
-                    {
-                        //Database.UpdateTaskProjectInfo(project); // This isn't needed because the database is set to cascade changes made to the Project table.
-                        project.DateModified = DateTime.Now;
-                    }
+                    //if (e.Column.FieldName == "JobNumber" || e.Column.FieldName == "ProjectNumber" || e.Column.FieldName == "ToolMaker" )
+                    //{
+                    //    //Database.UpdateTaskProjectInfo(project); // This isn't needed because the database is set to cascade changes made to the Project table.
+                    //    project.DateModified = DateTime.Now;
+                    //}
+
+                    project.DateModified = DateTime.Now;
 
                     if (e.Column.FieldName.Contains("Programmer"))
                     {
@@ -1969,7 +1949,7 @@ namespace Toolroom_Project_Viewer
         }
         private void gridView4_CustomRowCellEditForEditing(object sender, CustomRowCellEditEventArgs e)
         {
-            if (e.Column.FieldName == "Pictures")
+            if (e.Column.FieldName == "Picture")
             {
                 e.RepositoryItem = repositoryItemImageEdit2;
             }
@@ -2804,7 +2784,7 @@ namespace Toolroom_Project_Viewer
             DataTable dt1 = new DataTable();
             DataTable dt2 = new DataTable();
 
-            Project = Database.GetProject(projectNumber);  // Formerly db.GetProject(projectNumber);
+            Project = Database.GetProject(projectNumber);
 
             ResourceMappingInfo resourceMappings = this.schedulerStorage2.Resources.Mappings;
 
@@ -2812,14 +2792,16 @@ namespace Toolroom_Project_Viewer
             resourceMappings.ParentId = "ParentID"; // Need this for hierarchy in resource tree.
             resourceMappings.Caption = "TaskName"; // In the Resource tree designer the field name has to match the field that is mapped to caption.
 
-            dt2 = GetProjectResourceData(Project);
+            //dt2 = GetProjectResourceData(Project);
 
             schedulerStorage2.Resources.Clear();
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            schedulerStorage2.Resources.DataSource = dt2; // Woohoo!! This finally works!
+            BindingList<AptResourceModel> aptResources = new BindingList<AptResourceModel>(AptResourceModel.GetProjectResourceData(Project));
+
+            schedulerStorage2.Resources.DataSource = aptResources; // Woohoo!! This finally works! // dt2
 
             //int i = 1;
 
@@ -2878,12 +2860,18 @@ namespace Toolroom_Project_Viewer
             appointmentMappings.Description = "Notes";
             appointmentMappings.PercentComplete = "PercentComplete";
             appointmentMappings.ResourceId = "AptID";
+
             Console.WriteLine(sw.Elapsed);
-            dt1 = Database.LoadProjectToDataTable(Project);
+
+            BindingList<TaskModel> taskList = new BindingList<TaskModel>(Project.GetTaskList());
+
+            //dt1 = Database.LoadProjectToDataTable(Project);
+
             Console.WriteLine(sw.Elapsed);
-            var result = from taskTable in dt1.AsEnumerable()
-                         where taskTable.IsNull("StartDate") || taskTable.IsNull("FinishDate")
-                         select taskTable;
+
+            var result = from task in taskList// dt1.AsEnumerable()
+                         where task.StartDate == null || task.FinishDate == null // taskTable.IsNull("FinishDate")
+                         select task;
 
             int count = result.ToList().Count;
 
@@ -2892,14 +2880,18 @@ namespace Toolroom_Project_Viewer
                 MessageBox.Show("Project contains " + count + " task(s) with missing date(s).");
             }
 
-            schedulerStorage2.Appointments.DataSource = dt1;
+
+
+            schedulerStorage2.Appointments.DataSource = taskList; // dt1
 
             AppointmentDependencyMappingInfo appointmentDependencyMappingInfo = schedulerStorage2.AppointmentDependencies.Mappings;
 
-            appointmentDependencyMappingInfo.DependentId = "DependentId";
-            appointmentDependencyMappingInfo.ParentId = "ParentId";
+            appointmentDependencyMappingInfo.DependentId = "DependentID";
+            appointmentDependencyMappingInfo.ParentId = "ParentID";
 
-            schedulerStorage2.AppointmentDependencies.DataSource = Database.GetDependencyData(dt1);
+            BindingList<AptDependencyModel> dependencyList = new BindingList<AptDependencyModel>(AptDependencyModel.GetDependencyData(Project));
+
+            schedulerStorage2.AppointmentDependencies.DataSource = dependencyList; // Database.GetDependencyData(dt1)
         }
 
         private List<int> GetCollapsedNodes()

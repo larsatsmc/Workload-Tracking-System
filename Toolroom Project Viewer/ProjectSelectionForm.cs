@@ -24,7 +24,11 @@ namespace Toolroom_Project_Viewer
         private void ProjectSelectionForm_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.WorkLoad' table. You can move, or remove it, as needed.
-            this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
+            //this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
+
+            BindingList<WorkLoadModel> workloads = new BindingList<WorkLoadModel>(Database.GetWorkloads());
+
+            gridControl1.DataSource = workloads;
         }
 
         private void UseSelectedProjectButton_Click(object sender, EventArgs e)
@@ -36,7 +40,7 @@ namespace Toolroom_Project_Viewer
                                             projectNumber: bandedGridView1.GetFocusedRowCellValue("ProjectNumber"),
                                             mwoNumber: bandedGridView1.GetFocusedRowCellValue("MWONumber"),
                                             customer: bandedGridView1.GetFocusedRowCellValue("Customer"),
-                                            project: bandedGridView1.GetFocusedRowCellValue("PartName"),
+                                            project: bandedGridView1.GetFocusedRowCellValue("Project"),
                                             dueDate: bandedGridView1.GetFocusedRowCellValue("FinishDate"),
                                             toolMaker: bandedGridView1.GetFocusedRowCellValue("ToolMaker"),
                                             designer: bandedGridView1.GetFocusedRowCellValue("Designer"),

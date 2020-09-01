@@ -74,6 +74,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AptDependencyModel.cs" />
+    <Compile Include="AptResourceModel.cs" />
     <Compile Include="ColorStruct.cs" />
     <Compile Include="ComponentModel.cs" />
     <Compile Include="Database.cs" />
