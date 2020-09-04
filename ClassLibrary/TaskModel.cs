@@ -11,7 +11,7 @@ namespace ClassLibrary
 {
 	public class TaskModel
 	{
-        public int ID { get; set; }
+        public int ID { get; set; } = 0;
         public int AptID { get; set; }
         public int TaskID { get; set; }
         public int ProjectNumber { get; set; }
@@ -42,11 +42,11 @@ namespace ClassLibrary
         public string Initials { get; private set; }
         public string DateCompleted { get; private set; }
         public bool DeleteTaskFromDB { get; private set; }
+        public bool TaskChanged { get; set; } = false;
 
         public string Location
         {
             get { return this.TaskName; }
-            //set { myVar = value; }
         }
         public string Subject { get { return $"{JobNumber} {ProjectNumber} {TaskName} {Hours}"; } }
         public int PercentComplete 
@@ -240,19 +240,22 @@ namespace ClassLibrary
             this.Notes = task.Notes;
         }
 
-        public TaskModel(TaskModel task)
+        public TaskModel(TaskModel task, string newComponentName)
         {
-            this.ID = task.ID;
-            this.TaskName = task.TaskName;
-            this.TaskID = task.TaskID;
+            this.JobNumber = task.JobNumber;
             this.ProjectNumber = task.ProjectNumber;
-            this.Component = task.Component;
-            this.StartDate = task.StartDate;
-            this.FinishDate = task.FinishDate;
-            this.Resources = task.Resources;
-            this.Machine = task.Machine;
-            this.Personnel = task.Personnel;
+            this.Component = newComponentName;
+            this.TaskID = task.TaskID;
+            this.TaskName = task.TaskName;
+            this.Duration = task.Duration;
+            //this.StartDate = task.StartDate;
+            //this.FinishDate = task.FinishDate;
             this.Predecessors = task.Predecessors;
+            this.Machine = task.Machine;
+            this.Resources = task.Resources;
+            this.Personnel = task.Personnel;
+            this.Hours = task.Hours;
+            this.Notes = task.Notes;
         }
 
         public void SetTaskID(int id)
@@ -396,6 +399,7 @@ namespace ClassLibrary
             this.Resources = GenerateResourceIDsString(schedulerStorage);
             this.Predecessors = predecessors;
             this.Notes = notes;
+            this.TaskChanged = true;
         }
 
         public string GenerateResourceIDsString(SchedulerStorage schedulerStorage)

@@ -46,8 +46,8 @@ namespace ClassLibrary
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Picture, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish)"; // 
 
-                    string queryString3 = "INSERT INTO Tasks (JobNumber, ProjectNumber, Component, TaskID, TaskName, Duration, StartDate, FinishDate, Predecessors, Machine, Resources, Personnel, Hours, Priority, DateAdded, Notes) " +
-                                          "VALUES (@JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Duration, @StartDate, @FinishDate, @Predecessors, @Machine, @Resources, @Personnel, @Hours, @Priority, GETDATE(), @Notes)";
+                    string queryString3 = "INSERT INTO Tasks (JobNumber, ProjectNumber, Component, TaskID, TaskName, Duration, StartDate, FinishDate, Predecessors, Machine, Resources, Personnel, Hours, Priority, Notes) " +
+                                          "VALUES (@JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Duration, @StartDate, @FinishDate, @Predecessors, @Machine, @Resources, @Personnel, @Hours, @Priority, @Notes)";
 
                     connection.Open();
 
@@ -392,7 +392,7 @@ namespace ClassLibrary
                                          where !project.Components.Exists(x => x.ID == component.ID)
                                          select component;
 
-                connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Pictures, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
+                connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
                 connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Picture, @Material, @Finish, @TaskIDCount, @ID", componentsToUpdate.ToList());
                 connection.Execute("DELETE FROM Components WHERE ID = @ID", componentsToRemove.ToList());
 
@@ -1758,19 +1758,19 @@ namespace ClassLibrary
 
                     if (ev.Column.FieldName == "TaskName")
                     {
-                        queryString = "UPDATE Tasks SET TaskName = @TaskName WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET TaskName = @TaskName, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@TaskName", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Notes")
                     {
-                        queryString = "UPDATE Tasks SET Notes = @Notes WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Notes = @Notes, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@Notes", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Hours")
                     {
-                        queryString = "UPDATE Tasks SET Hours = @Hours WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Hours = @Hours, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         if (ev.Value.ToString() != "")
                         {
@@ -1783,26 +1783,26 @@ namespace ClassLibrary
                     }
                     else if (ev.Column.FieldName == "Duration")
                     {
-                        queryString = "UPDATE Tasks SET Duration = @Duration WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Duration = @Duration, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@Duration", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Predecessors")
                     {
-                        queryString = "UPDATE Tasks SET Predecessors = @Predecessors WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Predecessors = @Predecessors, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@Predecessors", ev.Value.ToString());
                     }
                     else if (ev.Column.FieldName == "Machine")
                     {
-                        queryString = "UPDATE Tasks SET Machine = @Machine, Resources = @Resources WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Machine = @Machine, Resources = @Resources, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@Machine", ev.Value.ToString());
                         p.Add("@Resources", resources);
                     }
                     else if (ev.Column.FieldName == "Personnel")
                     {
-                        queryString = "UPDATE Tasks SET Personnel = @Personnel, Resources = @Resources WHERE (ID = @ID)";
+                        queryString = "UPDATE Tasks SET Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE() WHERE (ID = @ID)";
 
                         p.Add("@Personnel", ev.Value.ToString());
                         p.Add("@Resources", resources);

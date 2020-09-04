@@ -168,7 +168,6 @@
             this.MoldBuildTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.MoldBuildTreeView_BeforeSelect);
             this.MoldBuildTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.MoldBuildTreeView_AfterSelect);
             this.MoldBuildTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.MoldBuildTreeView_NodeMouseClick);
-            this.MoldBuildTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.MoldBuildTreeView_NodeMouseDoubleClick);
             this.MoldBuildTreeView.Leave += new System.EventHandler(this.MoldBuildTreeView_Leave);
             // 
             // toolTip1
@@ -465,7 +464,7 @@
             this.durationUnitsComboBox.Size = new System.Drawing.Size(84, 24);
             this.durationUnitsComboBox.TabIndex = 36;
             this.durationUnitsComboBox.Text = "Day(s)";
-            this.durationUnitsComboBox.SelectedIndexChanged += new System.EventHandler(this.durationUnitsComboBox_TextChanged);
+            this.durationUnitsComboBox.SelectedIndexChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // durationNumericUpDown
             // 
@@ -475,7 +474,7 @@
             this.durationNumericUpDown.Name = "durationNumericUpDown";
             this.durationNumericUpDown.Size = new System.Drawing.Size(49, 22);
             this.durationNumericUpDown.TabIndex = 35;
-            this.durationNumericUpDown.ValueChanged += new System.EventHandler(this.durationNumericUpDown_ValueChanged);
+            this.durationNumericUpDown.ValueChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // hoursNumericUpDown
             // 
@@ -491,6 +490,7 @@
             this.hoursNumericUpDown.Size = new System.Drawing.Size(49, 22);
             this.hoursNumericUpDown.TabIndex = 34;
             this.hoursNumericUpDown.ValueChanged += new System.EventHandler(this.hoursNumericUpDown_ValueChanged);
+            this.hoursNumericUpDown.ValueChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // machineComboBox
             // 
@@ -501,7 +501,7 @@
             this.machineComboBox.Name = "machineComboBox";
             this.machineComboBox.Size = new System.Drawing.Size(193, 24);
             this.machineComboBox.TabIndex = 33;
-            this.machineComboBox.TextChanged += new System.EventHandler(this.machineComboBox_TextChanged);
+            this.machineComboBox.TextChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // personnelComboBox
             // 
@@ -512,7 +512,7 @@
             this.personnelComboBox.Name = "personnelComboBox";
             this.personnelComboBox.Size = new System.Drawing.Size(193, 24);
             this.personnelComboBox.TabIndex = 32;
-            this.personnelComboBox.TextChanged += new System.EventHandler(this.personnelComboBox_TextChanged);
+            this.personnelComboBox.TextChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // predecessorsListBox
             // 
@@ -526,6 +526,7 @@
             this.predecessorsListBox.Size = new System.Drawing.Size(260, 228);
             this.predecessorsListBox.TabIndex = 31;
             this.predecessorsListBox.SelectedIndexChanged += new System.EventHandler(this.predecessorsListBox_SelectedIndexChanged);
+            this.predecessorsListBox.SelectedIndexChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // taskNotesTextBox
             // 
@@ -536,7 +537,7 @@
             this.taskNotesTextBox.Name = "taskNotesTextBox";
             this.taskNotesTextBox.Size = new System.Drawing.Size(385, 139);
             this.taskNotesTextBox.TabIndex = 30;
-            this.taskNotesTextBox.TextChanged += new System.EventHandler(this.taskNotesTextBox_TextChanged);
+            this.taskNotesTextBox.TextChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // tabPage1
             // 
@@ -746,7 +747,7 @@
             this.ElectrodeProgrammerComboBox.Name = "ElectrodeProgrammerComboBox";
             this.ElectrodeProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.ElectrodeProgrammerComboBox.TabIndex = 55;
-            this.ElectrodeProgrammerComboBox.DropDown += new System.EventHandler(this.ElectrodeProgrammerComboBox_DropDown);
+            this.ElectrodeProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // FinishProgrammerComboBox
             // 
@@ -757,7 +758,7 @@
             this.FinishProgrammerComboBox.Name = "FinishProgrammerComboBox";
             this.FinishProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.FinishProgrammerComboBox.TabIndex = 54;
-            this.FinishProgrammerComboBox.DropDown += new System.EventHandler(this.FinishProgrammerComboBox_DropDown);
+            this.FinishProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // RoughProgrammerComboBox
             // 
@@ -768,7 +769,7 @@
             this.RoughProgrammerComboBox.Name = "RoughProgrammerComboBox";
             this.RoughProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.RoughProgrammerComboBox.TabIndex = 53;
-            this.RoughProgrammerComboBox.DropDown += new System.EventHandler(this.RoughProgrammerComboBox_DropDown);
+            this.RoughProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // DesignerComboBox
             // 
@@ -779,7 +780,7 @@
             this.DesignerComboBox.Name = "DesignerComboBox";
             this.DesignerComboBox.Size = new System.Drawing.Size(170, 24);
             this.DesignerComboBox.TabIndex = 52;
-            this.DesignerComboBox.DropDown += new System.EventHandler(this.DesignerComboBox_DropDown);
+            this.DesignerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // ToolMakerComboBox
             // 
@@ -790,7 +791,7 @@
             this.ToolMakerComboBox.Name = "ToolMakerComboBox";
             this.ToolMakerComboBox.Size = new System.Drawing.Size(170, 24);
             this.ToolMakerComboBox.TabIndex = 51;
-            this.ToolMakerComboBox.DropDown += new System.EventHandler(this.ToolMakerComboBox_DropDown);
+            this.ToolMakerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             this.ToolMakerComboBox.TextChanged += new System.EventHandler(this.ToolMakerComboBox_TextChanged);
             // 
             // tabControl1
@@ -1032,7 +1033,6 @@
             this.TaskListBox.Size = new System.Drawing.Size(201, 388);
             this.TaskListBox.TabIndex = 28;
             this.TaskListBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TaskListBox_MouseClick);
-            this.TaskListBox.SelectedIndexChanged += new System.EventHandler(this.TaskListBox_SelectedIndexChanged);
             // 
             // panelControl1
             // 
@@ -1206,7 +1206,7 @@
             this.RoughCNCOperatorComboBox.Name = "RoughCNCOperatorComboBox";
             this.RoughCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
             this.RoughCNCOperatorComboBox.TabIndex = 78;
-            this.RoughCNCOperatorComboBox.DropDown += new System.EventHandler(this.RoughCNCOperatorComboBox_DropDown);
+            this.RoughCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // labelControl26
             // 
@@ -1237,7 +1237,7 @@
             this.ElectrodeCNCOperatorComboBox.Name = "ElectrodeCNCOperatorComboBox";
             this.ElectrodeCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
             this.ElectrodeCNCOperatorComboBox.TabIndex = 81;
-            this.ElectrodeCNCOperatorComboBox.DropDown += new System.EventHandler(this.ElectrodeCNCOperatorComboBox_DropDown);
+            this.ElectrodeCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // FinishCNCOperatorComboBox
             // 
@@ -1248,7 +1248,7 @@
             this.FinishCNCOperatorComboBox.Name = "FinishCNCOperatorComboBox";
             this.FinishCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
             this.FinishCNCOperatorComboBox.TabIndex = 82;
-            this.FinishCNCOperatorComboBox.DropDown += new System.EventHandler(this.FinishCNCOperatorComboBox_DropDown);
+            this.FinishCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // EDMSinkerOperatorComboBox
             // 
@@ -1259,7 +1259,7 @@
             this.EDMSinkerOperatorComboBox.Name = "EDMSinkerOperatorComboBox";
             this.EDMSinkerOperatorComboBox.Size = new System.Drawing.Size(170, 24);
             this.EDMSinkerOperatorComboBox.TabIndex = 84;
-            this.EDMSinkerOperatorComboBox.DropDown += new System.EventHandler(this.EDMSinkerOperatorComboBox_DropDown);
+            this.EDMSinkerOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // labelControl28
             // 
@@ -1280,7 +1280,7 @@
             this.EDMWireOperatorComboBox.Name = "EDMWireOperatorComboBox";
             this.EDMWireOperatorComboBox.Size = new System.Drawing.Size(170, 24);
             this.EDMWireOperatorComboBox.TabIndex = 86;
-            this.EDMWireOperatorComboBox.DropDown += new System.EventHandler(this.EDMWireOperatorComboBox_DropDown);
+            this.EDMWireOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
             // 
             // labelControl29
             // 

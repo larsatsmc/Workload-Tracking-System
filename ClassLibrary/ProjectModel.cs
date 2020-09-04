@@ -2,12 +2,14 @@
 using Microsoft.Vbe.Interop;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace ClassLibrary
 {
-    public class ProjectModel
+    public class ProjectModel : INotifyPropertyChanged
     {
         public int ID { get; set; }
         public int ProjectNumber { get; set; }
@@ -45,6 +47,7 @@ namespace ClassLibrary
         public bool OverlapAllowed { get; set; }
         public bool IncludeHours { get; set; }
         public bool IsOnTime { get; set; }
+        public bool IsChanged { get; set; } = false;
 
         private DateTime? latestFinishDate;
 
@@ -537,6 +540,23 @@ namespace ClassLibrary
             }
 
             return new DateTime(dueDate.Year, dueDate.Month, dueDate.Day);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+
+            if (propertyName == "ProjectNumber")
+            {
+                this.Components.ForEach(x => x.ProjectNumber = this.ProjectNumber);
+            }
+            else if (propertyName == "JobNumber")
+            {
+                this.Components.ForEach(x => x.JobNumber = this.JobNumber);
+            }
         }
     }
 }

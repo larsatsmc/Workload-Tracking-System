@@ -9,10 +9,11 @@ using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
 using DevExpress.XtraScheduler;
 using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 namespace ClassLibrary
 {
-    public class ComponentModel
+    public class ComponentModel : INotifyPropertyChanged
     {
         public int ID { get; set; } = 0;
         public string JobNumber { get; set; }
@@ -36,16 +37,14 @@ namespace ClassLibrary
         public int Position { get; set; }
         public int TaskIDCount { get; set; }
 
-        private DateTime? latestFinishDate;
-
         public DateTime? LatestFinishDate
         {
             get { return GetLatesFinishDate(); }
             //set { latestFinishDate = value; }
         }
 
-
         public static int ComponentCharacterLimit = 31;
+
         /// <summary>
         /// Creates instance of a component and sets TaskIDCount property to 0.
         /// </summary> 
@@ -72,6 +71,21 @@ namespace ClassLibrary
             this.Tasks = component.Tasks;
             this.Status = component.Status;
             this.PercentComplete = component.PercentComplete;
+        }
+        public ComponentModel(ComponentModel component, string name)
+        {
+            this.JobNumber = component.JobNumber;
+            this.ProjectNumber = component.ProjectNumber;
+            this.Component = name;
+            this.OldName = name;
+            this.Notes = component.Notes;
+            this.TaskIDCount = component.TaskIDCount;
+            this.Quantity = component.Quantity;
+            this.Spares = component.Spares;
+            this.Material = component.Material;
+            this.Finish = component.Finish;
+            this.Tasks = AddCopiedTaskList(component.Tasks, name);
+            this.Picture = component.Picture;
         }
         /// <summary>
         /// Creates instance of a component and sets properties for template.
@@ -211,6 +225,17 @@ namespace ClassLibrary
             this.Tasks = taskList;
         }
         /// <summary>
+        /// Adds a copied tasklist to a component. (Sets IDs to 0)
+        /// </summary>
+        public List<TaskModel> AddCopiedTaskList(List<TaskModel> taskList, string newComponentName)
+        {
+            List<TaskModel> tasks = new List<TaskModel>();
+
+            taskList.ForEach(task => tasks.Add(new TaskModel(task, newComponentName)));
+
+            return tasks;
+        }
+        /// <summary>
         /// Adds a picture to a component's picture list from a filepath.
         /// </summary>        
         //public void AddPicture(string filePath)
@@ -224,7 +249,7 @@ namespace ClassLibrary
         //    {
         //        MessageBox.Show("The chosen file is not an image.");
         //    }
-            
+
         //}
         /// <summary>
         /// Adds a picture to a component's picture list from the clipboard.
@@ -782,6 +807,24 @@ namespace ClassLibrary
             }
 
             return false;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (propertyName == "ProjectNumber")
+            {
+                Tasks.ForEach(x => x.ProjectNumber = this.ProjectNumber);
+            }
+            else if (propertyName == "JobNumber")
+            {
+                Tasks.ForEach(x => x.JobNumber = this.JobNumber);
+            }
+            else if (propertyName == "Component")
+            {
+                Tasks.ForEach(x => x.Component = this.Component);
+            }
         }
     }
 }
