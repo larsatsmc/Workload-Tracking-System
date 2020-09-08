@@ -20,12 +20,6 @@ namespace ClassLibrary
         static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
-        private static string UpdateProjectString = "dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID";
-
-        OleDbConnection Connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName));
-
-        DataTable TaskIDKey = new DataTable();
-
         #region Projects Table Operations
 
         #region Create
@@ -378,21 +372,24 @@ namespace ClassLibrary
                 List<TaskModel> databaseTaskList = new List<TaskModel>();
                 List<ComponentModel> deletedComponentList = new List<ComponentModel>();
 
-                connection.Execute(UpdateProjectString, project);
+                connection.Execute("dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, " +
+                    "@RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, " +
+                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID", project);
 
                 var componentsToAdd = from component in project.Components
                                       where component.ID == 0
                                       select component;
 
                 var componentsToUpdate = from component in project.Components
-                                            where component.ID != 0
-                                            select component;
+                                         where component.ID != 0
+                                         select component;
 
                 var componentsToRemove = from component in databaseProject.Components
                                          where !project.Components.Exists(x => x.ID == component.ID)
                                          select component;
 
-                connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
+                connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, " +
+                    "@Picture, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
                 connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Picture, @Material, @Finish, @TaskIDCount, @ID", componentsToUpdate.ToList());
                 connection.Execute("DELETE FROM Components WHERE ID = @ID", componentsToRemove.ToList());
 
@@ -448,7 +445,9 @@ namespace ClassLibrary
                         return false;
                     }
 
-                    connection.Execute(UpdateProjectString, project);
+                    string queryString = $"UPDATE Project SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE ID = @ID";
+                    
+                    connection.Execute(queryString, project);
 
                     return true;
                 }
@@ -573,367 +572,23 @@ namespace ClassLibrary
         #region Components Table Operations
 
         #region Create
-        private bool AddComponentDataTableToDatabase(DataTable dt)
-        {
-            var adapter = new OleDbDataAdapter();
 
-            //Console.WriteLine(cbr.GetInsertCommand().CommandText);
-
-            try
-            {
-                adapter.SelectCommand = new OleDbCommand("SELECT * FROM Components", Connection);
-
-                var cbr = new OleDbCommandBuilder(adapter);
-
-                cbr.QuotePrefix = "[";
-                cbr.QuoteSuffix = "]";
-                cbr.GetDeleteCommand();
-                cbr.GetInsertCommand();
-                adapter.UpdateCommand = cbr.GetUpdateCommand();
-
-                Connection.Open();
-                adapter.Update(dt);
-                Connection.Close();
-                Console.WriteLine("Components Loaded."); 
-                
-            }
-            catch (OleDbException ex)
-            {
-                Connection.Close();
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
-                return false;
-            }
-            catch (Exception x)
-            {
-                Connection.Close();
-                MessageBox.Show(x.Message + "\n\n" + x.StackTrace, "Exception Error");
-                return false;
-            }
-
-            return true;
-        }
 
         #endregion
 
         #region Read
-        public static List<ComponentModel> GetAllComponents()
-        {
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
-            {
-                List<ComponentModel> results = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
-
-                return results;
-            }
-        }
-        public bool ProjectHasComponents(int projectNumber)
-        {
-            string queryString = "SELECT COUNT(*) FROM Components WHERE ProjectNumber = @projectNumber";
-
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
-
-            cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-            Connection.Open();
-            var count = (int)cmd.ExecuteScalar();
-            Connection.Close();
-
-            if (count > 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public void GetComponents(ProjectModel project)
-        {
-            
-            ComponentModel component;
-
-            string queryString = "SELECT * FROM Components WHERE ProjectNumber = @projectNumber";
-
-            OleDbCommand cmd = new OleDbCommand(queryString, Connection);
-
-            cmd.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-
-            try
-            {
-                Connection.Open();
-
-                using (var rdr = cmd.ExecuteReader())
-                {
-                    if (rdr.HasRows)
-                    {
-                        while (rdr.Read())
-                        {
-                            component = new ComponentModel
-                            (
-                                      component: rdr["Component"],
-                                          notes: rdr["Notes"],
-                                       priority: rdr["Priority"],
-                                       position: rdr["Position"],
-                                       quantity: rdr["Quantity"],
-                                         spares: rdr["Spares"],
-                                        picture: rdr["Pictures"],
-                                       material: rdr["Material"],
-                                         finish: rdr["Finish"],
-                                    taskIDCount: rdr["TaskIDCount"]
-                            );
-
-                            project.AddComponent(component);
-                        }
-                    }
-                    else
-                    {
-                        project.AddComponentList(GetComponentListFromTasksTable(project.ProjectNumber));
-                    }
-                }
-            }
-            finally
-            {
-                Connection.Close();
-            }
-        }
-
-        public List<ComponentModel> GetComponentListFromTasksTable(int projectNumber)
-        {
-            List<ComponentModel> componentList = new List<ComponentModel>();
-
-            string queryString;
-
-            queryString = "SELECT DISTINCT Component FROM Tasks WHERE ProjectNumber = @projectNumber";
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-                {
-                    SqlCommand cmd = new SqlCommand(queryString, connection);
-                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-                    connection.Open();
-
-                    using (var rdr = cmd.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                componentList.Add(new ComponentModel
-                                (
-                                        name: rdr["Component"]
-                                ));
-                            }
-                        }
-                        else
-                        {
-
-                        }
-                    } 
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "getComponentListFromTaskTable");
-            }
-
-            return componentList;
-        }
 
         #endregion
 
         #region Update
 
-        private void UpdateComponentData(ProjectModel project, ComponentModel component)
+        public static void UpdateComponent(ComponentModel component, CellValueChangedEventArgs ev)
         {
             try
             {
-                OleDbDataAdapter adapter = new OleDbDataAdapter();
-                string queryString;
-
-                queryString = "UPDATE Components " +
-                        "SET Component = @name, Notes = @notes, Priority = @priority, [Position] = @position, Quantity = @quantity, Spares = @spares, Pictures = @picture, Material = @material, Finish = @finish, TaskIDCount = @taskIDCount " +
-                        "WHERE ID = @ID"; // JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @oldName
-
-                adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
-
-                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Component);
-                adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
-                adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
-                adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
-                adapter.UpdateCommand.Parameters.AddWithValue("@quantity", component.Quantity);
-                adapter.UpdateCommand.Parameters.AddWithValue("@spares", component.Spares);
-
-                if (component.Picture != null)
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", component.Picture);
-                }
-                else
-                {
-                    adapter.UpdateCommand.Parameters.AddWithValue("@picture", DBNull.Value);
-                }
-
-                //adapter.UpdateCommand.Parameters.AddWithValue("@pictures", component.PictureList);  // Add when database is ready to receive pictures.
-
-                adapter.UpdateCommand.Parameters.AddWithValue("@material", component.Material);
-                adapter.UpdateCommand.Parameters.AddWithValue("@finish", component.Finish);
-                adapter.UpdateCommand.Parameters.AddWithValue("@taskIDCount", component.TaskIDCount);
-
-                //adapter.UpdateCommand.Parameters.AddWithValue("@jobNumber", project.JobNumber);
-                //adapter.UpdateCommand.Parameters.AddWithValue("@projectNumber", project.ProjectNumber);
-                //adapter.UpdateCommand.Parameters.AddWithValue("@oldName", component.OldName);
-                adapter.UpdateCommand.Parameters.AddWithValue("@ID", component.ID);
-
-                Connection.Open();
-
-                adapter.UpdateCommand.ExecuteNonQuery();
-
-                Console.WriteLine($"{component.Component} Updated.");
-                //MessageBox.Show("Project Updated!"); 
-                
-            }
-            //catch (OleDbException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch (Exception x)
-            //{
-            //    throw x;
-            //}
-            finally
-            {
-                Connection.Close();
-            }
-        }
-
-        #endregion
-
-        #region Delete
-
-        private void RemoveComponent(ProjectModel project, ComponentModel component)
-        {
-            var adapter = new OleDbDataAdapter();
-
-            adapter.DeleteCommand = new OleDbCommand("DELETE FROM Components WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component", Connection);
-
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
-            adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, ComponentModel.ComponentCharacterLimit).Value = component.Component;
-
-            Connection.Open();
-            adapter.DeleteCommand.ExecuteNonQuery();
-            Connection.Close();
-        }
-
-        public static void UpdateComponentsTable(object s, CellValueChangedEventArgs ev)
-        {
-            try
-            {
-                var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
-
-                //queryString = "UPDATE Tasks SET JobNumber = @jobNumber, Component = @component, TaskID = @taskID, TaskName = @taskName, " +
-                //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
-                //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
-
-                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-                {
-                    var cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.CommandType = CommandType.Text;
-
-                    if (ev.Column.FieldName == "Component")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Component = @component WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@component", ev.Value);
-                    }
-                    else if (ev.Column.FieldName == "Pictures")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Pictures = @pictures WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@pictures", ev.Value);
-                    }
-                    //else if (ev.Column.FieldName == "ProjectNumber")
-                    //{
-                    //    cmd.CommandText = "UPDATE WorkLoad SET ProjectNumber = @projectNumber WHERE (ID = @tID)";
-
-                    //    if (ev.Value.ToString() != "")
-                    //    {
-                    //        cmd.Parameters.AddWithValue("@projectNumber", ev.Value.ToString());
-                    //    }
-                    //    else
-                    //    {
-                    //        cmd.Parameters.AddWithValue("@projectNumber", "");
-                    //    }
-                    //}
-                    else if (ev.Column.FieldName == "Material")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Material = @material WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@material", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Finish")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Finish = @finish WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@finish", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Notes")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Notes = @notes WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@notes", ev.Value.ToString());
-
-                    }
-                    else if (ev.Column.FieldName == "Priority")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Priority = @priority WHERE (ID = @tID)";
-
-                        if (ev.Value.ToString() != "")
-                        {
-                            cmd.Parameters.AddWithValue("@priority", ev.Value.ToString());
-                        }
-                        else
-                        {
-                            cmd.Parameters.AddWithValue("@priority", 0);
-                        }
-                    }
-                    else if (ev.Column.FieldName == "Quantity")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Quantity = @quantity WHERE (ID = @tID)";
-
-                        if (ev.Value.ToString() != "")
-                        {
-                            cmd.Parameters.AddWithValue("@quantity", ev.Value.ToString());
-                        }
-                        else
-                        {
-                            cmd.Parameters.AddWithValue("@quantity", 0);
-                        }
-                    }
-                    else if (ev.Column.FieldName == "Spares")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Spares = @spares WHERE (ID = @tID)";
-
-                        if (ev.Value.ToString() != "")
-                        {
-                            cmd.Parameters.AddWithValue("@spares", ev.Value.ToString());
-                        }
-                        else
-                        {
-                            cmd.Parameters.AddWithValue("@spares", 0);
-                        }
-                    }
-                    else if (ev.Column.FieldName == "Status")
-                    {
-                        cmd.CommandText = "UPDATE Components SET Status = @status WHERE (ID = @tID)";
-
-                        cmd.Parameters.AddWithValue("@status", ev.Value.ToString());
-                    }
-
-                    cmd.Parameters.AddWithValue("@tID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
-
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute($"Update Components SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE (ID = @ID)", component);
                 }
             }
             catch (Exception e)
@@ -944,47 +599,15 @@ namespace ClassLibrary
 
         #endregion
 
+        #region Delete
+
+        #endregion
+
         #endregion // Component operations.
 
         #region Tasks Table Operations
 
         #region Create
-
-        private bool AddTaskDataTableToDatabase(DataTable dt)
-        {
-            var adapter = new OleDbDataAdapter();
-
-            try
-            {
-                adapter.SelectCommand = new OleDbCommand("SELECT * FROM Tasks", Connection);
-
-                var cbr = new OleDbCommandBuilder(adapter);
-
-                cbr.GetDeleteCommand();
-                cbr.GetInsertCommand();
-                adapter.UpdateCommand = cbr.GetUpdateCommand();
-                //Console.WriteLine(cbr.GetInsertCommand().CommandText);
-
-                Connection.Open();
-                adapter.Update(dt);
-                Connection.Close();
-                Console.WriteLine("Tasks Loaded.");
-            }
-            catch (OleDbException ex)
-            {
-                Connection.Close();
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
-                return false;
-            }
-            catch (Exception x)
-            {
-                Connection.Close();
-                MessageBox.Show(x.Message + "\n\n" + x.StackTrace, "Exception Error");
-                return false;
-            }
-
-            return true;
-        }
 
         #endregion
 
@@ -1055,58 +678,6 @@ namespace ClassLibrary
             }
 
             return FinishDate;
-        }
-
-        public List<TaskModel> GetProjectTaskList(string jobNumber, int projectNumber)
-        {
-            List<TaskModel> taskList = new List<TaskModel>();
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-                {
-                    string queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
-
-                    SqlCommand cmd = new SqlCommand(queryString, connection);
-
-                    cmd.Parameters.AddWithValue("@jobNumber", jobNumber);
-                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-
-                    using (var rdr = cmd.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                taskList.Add(new TaskModel
-                                (
-                                        taskName: rdr["TaskName"],
-                                          taskID: rdr["TaskID"],
-                                              id: rdr["ID"],
-                                       component: rdr["Component"],
-                                           hours: rdr["Hours"],
-                                        duration: rdr["Duration"],
-                                       startDate: rdr["StartDate"],
-                                      finishDate: rdr["FinishDate"],
-                                          status: rdr["Status"],
-                                   dateCompleted: rdr["DateCompleted"],
-                                        initials: rdr["Initials"],
-                                         machine: rdr["Machine"],
-                                       personnel: rdr["Resource"],
-                                    predecessors: rdr["Predecessors"],
-                                           notes: rdr["Notes"]
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                Connection.Close();
-            }
-
-            return taskList;
         }
 
         private string FindTask(DataTable dataTable, string jobNumber, int projectNumber, string component, int taskID)
@@ -1609,6 +1180,29 @@ namespace ClassLibrary
                 connection.Execute(queryString, task);
             }
         }
+        public static void UpdateTask(TaskModel task, CellValueChangedEventArgs ev)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    string queryString, resourceQueryString = "";
+
+                    if (ev.Column.FieldName == "Machine" || ev.Column.FieldName == "Personnel")
+                    {
+                        resourceQueryString = ", Resources = @Resources";
+                    }
+
+                    queryString = $"UPDATE Tasks SET {ev.Column.FieldName} = @{ev.Column.FieldName}{resourceQueryString}, DateModified = GETDATE() WHERE (ID = @ID)";
+
+                    connection.Execute(queryString, task);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         // This means both machines and personnel.
         public static void SetTaskResources(object s, CellValueChangedEventArgs ev, SchedulerStorage schedulerStorage)
         {
@@ -1741,107 +1335,10 @@ namespace ClassLibrary
 
             UpdateTaskDates(tasksToUpdate);
         }
-        public static void UpdateTasksTable(object s, CellValueChangedEventArgs ev, string resources = "")
-        {
-            try
-            {
-                var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
-
-                //queryString = "UPDATE Tasks SET JobNumber = @jobNumber, Component = @component, TaskID = @taskID, TaskName = @taskName, " +
-                //    "Duration = @duration, StartDate = @startDate, FinishDate = @finishDate, Predecessor = @predecessor, Machines = @machines, " +
-                //    "Machine = @machine, Person = @person, Priority = @priority WHERE ID = @tID";
-
-                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-                {
-                    string queryString;
-                    var p = new DynamicParameters();
-
-                    if (ev.Column.FieldName == "TaskName")
-                    {
-                        queryString = "UPDATE Tasks SET TaskName = @TaskName, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@TaskName", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Notes")
-                    {
-                        queryString = "UPDATE Tasks SET Notes = @Notes, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@Notes", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Hours")
-                    {
-                        queryString = "UPDATE Tasks SET Hours = @Hours, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        if (ev.Value.ToString() != "")
-                        {
-                            p.Add("@Hours", ev.Value.ToString());
-                        }
-                        else
-                        {
-                            p.Add("@Hours", 0);
-                        }
-                    }
-                    else if (ev.Column.FieldName == "Duration")
-                    {
-                        queryString = "UPDATE Tasks SET Duration = @Duration, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@Duration", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Predecessors")
-                    {
-                        queryString = "UPDATE Tasks SET Predecessors = @Predecessors, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@Predecessors", ev.Value.ToString());
-                    }
-                    else if (ev.Column.FieldName == "Machine")
-                    {
-                        queryString = "UPDATE Tasks SET Machine = @Machine, Resources = @Resources, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@Machine", ev.Value.ToString());
-                        p.Add("@Resources", resources);
-                    }
-                    else if (ev.Column.FieldName == "Personnel")
-                    {
-                        queryString = "UPDATE Tasks SET Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE() WHERE (ID = @ID)";
-
-                        p.Add("@Personnel", ev.Value.ToString());
-                        p.Add("@Resources", resources);
-                    }
-                    else
-                    {
-                        MessageBox.Show(ev.Column.ToString() + " column is not editable.");
-                        return;
-                    }
-
-                    p.Add("@ID", (grid.GetRowCellValue(ev.RowHandle, grid.Columns["ID"])));
-
-                    connection.Execute(queryString, p);
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
 
         #endregion
 
         #region Delete
-
-        public void RemoveTasks(ProjectModel project, ComponentModel component)
-        {
-            var adapter = new OleDbDataAdapter();
-
-            adapter.DeleteCommand = new OleDbCommand("DELETE FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND Component = @component", Connection);
-
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
-            adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Component;
-
-            Connection.Open();
-            adapter.DeleteCommand.ExecuteNonQuery();
-            Connection.Close();
-        }
 
         #endregion
 

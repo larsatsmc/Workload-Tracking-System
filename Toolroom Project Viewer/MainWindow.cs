@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using DevExpress.Data.Filtering;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Toolroom_Project_Viewer
 {
@@ -302,13 +303,13 @@ namespace Toolroom_Project_Viewer
 
             schedulerStorage1.Appointments.DataSource = tasks;
 
-            for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
-            {
-                Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId} TaskName: {schedulerStorage1.Appointments[i].CustomFields["TaskName"]}");
-            }
+            //for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
+            //{
+            //    Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId} TaskName: {schedulerStorage1.Appointments[i].CustomFields["TaskName"]}");
+            //}
 
-            Console.WriteLine();
-            Console.WriteLine($"{departmentComboBox.Text} Appointments");
+            //Console.WriteLine();
+            //Console.WriteLine($"{departmentComboBox.Text} Appointments");
 
             //if (GroupByRadioGroup.SelectedIndex == 1)
             //{
@@ -394,6 +395,8 @@ namespace Toolroom_Project_Viewer
         }
         private void SetAppointmentDate(Appointment apt, string column, DateTime date)
         {
+            schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
+
             if (column == "StartDate")
             {
                 apt.Start = date;
@@ -402,11 +405,14 @@ namespace Toolroom_Project_Viewer
             {
                 apt.End = date;
             }
+
+            schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
         }
         private void SetAppointmentResources(Appointment apt, string machine, string resource)
         {
             Resource res;
 
+            schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
             apt.ResourceIds.Clear();
 
             int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
@@ -433,38 +439,8 @@ namespace Toolroom_Project_Viewer
                 res = schedulerStorage1.Resources.Items.GetResourceById(resource);
                 apt.ResourceIds.Add(res.Id);
             }
-        }
 
-        private void SetAppointmentResources(object sender, CellValueChangedEventArgs e)
-        {
-            var grid = (sender as DevExpress.XtraGrid.Views.Grid.GridView);
-            int projectNumber = (int)grid.GetRowCellValue(e.RowHandle, "ProjectNumber");
-            string taskName;
-            Database db = new Database();
-            DataTable dt = new DataTable();
-
-            taskName = "Program " + e.Column.FieldName.Remove(e.Column.FieldName.Length - 10, 10);
-
-            if (taskName.Contains("Electrode"))
-            {
-                taskName = taskName + "s";
-            }
-
-            dt = db.GetTasksWithChangedResources(projectNumber, taskName);
-
-            foreach (DataRow nrow in dt.Rows)
-            {
-                nrow["Resources"] = GenerateResourceIDsString(nrow["Machine"].ToString(), nrow["Resource"].ToString());
-            }
-
-            var apts = schedulerStorage1.Appointments.Items.Where(x => (int)x.CustomFields["ProjectNumber"] == projectNumber && x.CustomFields["TaskName"].ToString() == taskName);
-
-            foreach (Appointment apt in apts.ToList())
-            {
-                Console.WriteLine($"{apt.CustomFields["JobNumber"]} {apt.CustomFields["ProjectNumber"]} {apt.CustomFields["TaskName"]} {apt.CustomFields["Hours"]}");
-                DataRow nrow = dt.AsEnumerable().First(x => x.Field<int>("TaskID") == (int)apt.CustomFields["TaskID"]);
-                SetAppointmentResources(apt, nrow.Field<string>("Machine"), nrow.Field<string>("Resource"));
-            }
+            schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
         }
 
         /// <summary>
@@ -749,6 +725,22 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        private bool IsFormOpen(string formName)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                //iterate through
+                if (frm.Name == formName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void departmentComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //InitializeAppointments();
@@ -870,10 +862,12 @@ namespace Toolroom_Project_Viewer
         private void schedulerStorage1_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
             //LoadProjects();
+            if (!IsFormOpen("WaitForm1"))
+            {
+                SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-            SplashScreenManager.ShowForm(typeof(WaitForm1));
-
-            Thread.Sleep(250);
+                Thread.Sleep(250);
+            }
 
             TaskModel movedTask;
 
@@ -1328,23 +1322,20 @@ namespace Toolroom_Project_Viewer
                     }
 
                     DateTime? date = (DateTime?)e.Value;
-                    schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
+
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                     SetAppointmentDate(apt, e.Column.FieldName, date ?? new DateTime(0001, 1, 1));
-                    schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
                     component.ChangeTaskDate(e.Column.FieldName, task);
                 }
                 else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                 {
-                    schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                     SetAppointmentResources(apt, task.Machine, task.Personnel);
-                    schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
-                    Database.UpdateTasksTable(sender, e, GenerateResourceIDsString(apt.ResourceIds));
+                    Database.UpdateTask(task, e);
                 }
                 else
                 {
-                    Database.UpdateTasksTable(sender, e);
+                    Database.UpdateTask(task, e);
                 }
             }
             catch (Exception ex)
@@ -1895,7 +1886,10 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-                Database.UpdateComponentsTable(sender, e);
+                GridView view = sender as GridView;
+                ComponentModel component = view.GetFocusedRow() as ComponentModel;
+
+                Database.UpdateComponent(component, e);
             }
             catch (Exception ex)
             {
@@ -2063,7 +2057,7 @@ namespace Toolroom_Project_Viewer
                         SetAppointmentResources(apt, task.Machine, task.Personnel);
                     }
 
-                    Database.UpdateTasksTable(sender, e);  // Resources field is only updated when the Machine or Resource fields change., resources
+                    Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
                 }
 ;
                 LoadTaskView();
@@ -2074,7 +2068,8 @@ namespace Toolroom_Project_Viewer
             }
             finally
             {
-                SplashScreenManager.CloseForm();
+                if(IsFormOpen("WaitForm1"))
+                    SplashScreenManager.CloseForm();
             }
         }
 
