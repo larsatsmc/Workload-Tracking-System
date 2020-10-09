@@ -32,6 +32,7 @@ using DevExpress.Data.Filtering;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
 using System.Runtime.InteropServices.WindowsRuntime;
+using DevExpress.Utils.Extensions;
 
 namespace Toolroom_Project_Viewer
 {
@@ -260,6 +261,7 @@ namespace Toolroom_Project_Viewer
             schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
             schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Hours", "Hours"));
             schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Predecessors", "Predecessors"));
+            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("DueDate", "DueDate"));
 
             AppointmentMappingInfo appointmentMappings = schedulerStorage1.Appointments.Mappings;
 
@@ -846,6 +848,8 @@ namespace Toolroom_Project_Viewer
             task.Component = e.FlyoutData.Appointment.CustomFields["Component"].ToString();
             task.TaskName = e.FlyoutData.Appointment.CustomFields["TaskName"].ToString();
             task.Hours = (int)e.FlyoutData.Appointment.CustomFields["Hours"];
+            task.DueDate = ProjectsList.Find(x => x.ProjectNumber == task.ProjectNumber).DueDate;
+            task.ComponentPicture = ComponentsList.Find(x => x.ProjectNumber == task.ProjectNumber && x.Component == task.Component).picture;
             task.Notes = e.FlyoutData.Appointment.Description;
             
             e.Control = CreateLabel(task);
@@ -3219,7 +3223,7 @@ namespace Toolroom_Project_Viewer
                         bandedGridView1.SetFocusedRowCellValue("FinishDate", Convert.ToDateTime(e.Value).AddDays(Convert.ToDouble(bandedGridView1.GetFocusedRowCellValue("DeliveryInWeeks")) * 7));
                     }
                 }
-                else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer")
+                else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer" || e.Column.FieldName == "FinishDate")
                 {
 
                     Database.UpdateProjectField(wli, e);
@@ -3980,16 +3984,52 @@ namespace Toolroom_Project_Viewer
         }
         private Label CreateLabel(TaskModel task)
         {
+            int extraRow = 0, pictureWidth = 0, pictureHeight = 0, maxTextPixelWidth, remainingWidth;
             Label myControl = new Label();
+            List<string> textList = new List<string>();
             myControl.BackColor = Color.LightGreen;
-            myControl.Size = new Size(420, 135);
-            myControl.Text = $" Job#: {task.JobNumber}{Environment.NewLine}" +
-                             $"Proj#: {task.ProjectNumber}{Environment.NewLine}" +
-                             $" Comp: {task.Component}{Environment.NewLine}" +
-                             $" Task: {task.TaskName}{Environment.NewLine}" +
-                             $"  Hrs: {task.Hours}{Environment.NewLine}" +
-                             $"Notes: {task.Notes}{Environment.NewLine}";
+            myControl.Size = new Size(400, 155);
+
+            textList.Add(task.Component);
+            textList.Add(task.Notes);
+
+            myControl.Text = $"    Job#: {task.JobNumber}{Environment.NewLine}" +
+                             $"   Proj#: {task.ProjectNumber}{Environment.NewLine}" +
+                             $"    Comp: {task.Component}{Environment.NewLine}" +
+                             $"    Task: {task.TaskName}{Environment.NewLine}" +
+                             $"     Hrs: {task.Hours}{Environment.NewLine}" +
+                             $"   Notes: {task.Notes}{Environment.NewLine}" +
+                             $"Due Date: {task.DueDate:M-d-yy}{Environment.NewLine}";
+
             myControl.Font = new Font("Lucida Sans Typewriter", 12, FontStyle.Bold);
+
+            if (task.ComponentPicture != null)
+            {
+                pictureWidth = task.ComponentPicture.Width;
+                pictureHeight = task.ComponentPicture.Height;
+                myControl.Image = task.ComponentPicture;
+                myControl.ImageAlign = ContentAlignment.BottomLeft;
+            }
+
+            if (pictureWidth > myControl.Width)
+            {
+                myControl.Width = pictureWidth + 5;
+            }
+
+            maxTextPixelWidth = textList.Max(x => x.Length) * 10;
+
+            if (maxTextPixelWidth + 99 > myControl.Width)
+            {
+                remainingWidth = maxTextPixelWidth + 99 - myControl.Width;
+                extraRow = 19 * (remainingWidth / myControl.Width);
+
+                if (remainingWidth % myControl.Width > 0)
+                {
+                    extraRow += 19;
+                }
+            }
+
+            myControl.Height = (19 * 7) + extraRow + pictureHeight;
 
             return myControl;
         }

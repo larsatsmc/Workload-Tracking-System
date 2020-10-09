@@ -376,6 +376,29 @@ namespace ClassLibrary
                     "@RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, " +
                     "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID", project);
 
+                int idIndex;
+
+                // This ensures that all components and tasks have the correct JobNumber and ProjectNumbers.
+
+                foreach (ComponentModel component in project.Components)
+                {
+                    component.JobNumber = project.JobNumber;
+                    component.ProjectNumber = project.ProjectNumber;
+                    idIndex = 1;
+
+                    foreach (TaskModel task in component.Tasks)
+                    {
+                        task.JobNumber = project.JobNumber;
+                        task.ProjectNumber = project.ProjectNumber;
+                        task.Component = component.Component;
+                        task.TaskID = idIndex++;
+                    }
+                }
+
+
+                taskList.AddRange(project.GetTaskList());
+                //taskList.ForEach(x => { x.ProjectNumber = project.ProjectNumber; x.JobNumber = project.JobNumber; });
+
                 var componentsToAdd = from component in project.Components
                                       where component.ID == 0
                                       select component;
@@ -393,25 +416,7 @@ namespace ClassLibrary
                 connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Picture, @Material, @Finish, @TaskIDCount, @ID", componentsToUpdate.ToList());
                 connection.Execute("DELETE FROM Components WHERE ID = @ID", componentsToRemove.ToList());
 
-                int idIndex;
-
-                foreach (ComponentModel component in project.Components)
-                {
-                    idIndex = 1;
-
-                    foreach (TaskModel task in component.Tasks)
-                    {
-                        task.JobNumber = project.JobNumber;
-                        task.ProjectNumber = project.ProjectNumber;
-                        task.Component = component.Component;
-                        task.TaskID = idIndex++;
-                    }
-
-                    taskList.AddRange(component.Tasks);
-                }
-
                 databaseProject.Components.ForEach(x => databaseTaskList.AddRange(x.Tasks));
-                //taskList.ForEach(x => { x.ProjectNumber = project.ProjectNumber; x.JobNumber = project.JobNumber; });
                 
                 var tasksToAdd = from task in taskList
                                  where task.ID == 0
@@ -445,7 +450,7 @@ namespace ClassLibrary
                         return false;
                     }
 
-                    string queryString = $"UPDATE Project SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE ID = @ID";
+                    string queryString = $"UPDATE Projects SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE ID = @ID";
                     
                     connection.Execute(queryString, project);
 

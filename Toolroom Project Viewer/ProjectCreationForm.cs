@@ -1841,40 +1841,47 @@ namespace Toolroom_Project_Viewer
 
         private void SelectProjectButton_Click(object sender, EventArgs e)
         {
-            using (ProjectSelectionForm form = new ProjectSelectionForm())
+            try
             {
-                var result = form.ShowDialog();
-
-                if (result == DialogResult.OK)
+                using (ProjectSelectionForm form = new ProjectSelectionForm())
                 {
-                    if (form.Project.MWONumber != 0)
+                    var result = form.ShowDialog();
+
+                    if (result == DialogResult.OK)
                     {
-                        this.ProjectNumberTextBox.Text = form.Project.MWONumber.ToString();
-                    }
-                    else if(form.Project.ProjectNumber != 0)
-                    {
-                        this.ProjectNumberTextBox.Text = form.Project.ProjectNumber.ToString();
+                        if (form.Project.MWONumber != 0)
+                        {
+                            this.ProjectNumberTextBox.Text = form.Project.MWONumber.ToString();
+                        }
+                        else if (form.Project.ProjectNumber != 0)
+                        {
+                            this.ProjectNumberTextBox.Text = form.Project.ProjectNumber.ToString();
+                        }
+                        else
+                        {
+                            this.ProjectNumberTextBox.Text = "";
+                        }
+
+                        this.MoldBuildTreeView.Nodes[0].Text = form.Project.JobNumber;
+                        this.dueDateTimePicker.Value = form.Project.DueDate;
+                        this.ToolMakerComboBox.Text = form.Project.ToolMaker;
+                        this.DesignerComboBox.Text = form.Project.Designer;
+                        this.RoughProgrammerComboBox.Text = form.Project.RoughProgrammer;
+                        this.ElectrodeProgrammerComboBox.Text = form.Project.ElectrodeProgrammer;
+                        this.FinishProgrammerComboBox.Text = form.Project.FinishProgrammer;
+                        this.Project.Apprentice = form.Project.Apprentice;
+                        this.Project.Customer = form.Project.Customer;
+                        this.Project.Project = form.Project.Name;
                     }
                     else
                     {
-                        this.ProjectNumberTextBox.Text = "";
+
                     }
-
-                    this.MoldBuildTreeView.Nodes[0].Text = form.Project.JobNumber;
-                    this.dueDateTimePicker.Value = form.Project.DueDate;
-                    this.ToolMakerComboBox.Text = form.Project.ToolMaker;
-                    this.DesignerComboBox.Text = form.Project.Designer;
-                    this.RoughProgrammerComboBox.Text = form.Project.RoughProgrammer;
-                    this.ElectrodeProgrammerComboBox.Text = form.Project.ElectrodeProgrammer;
-                    this.FinishProgrammerComboBox.Text = form.Project.FinishProgrammer;
-                    this.Project.Apprentice = form.Project.Apprentice;
-                    this.Project.Customer = form.Project.Customer;
-                    this.Project.Project = form.Project.Name;
                 }
-                else
-                {
-
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
 
@@ -1885,26 +1892,33 @@ namespace Toolroom_Project_Viewer
             ProjectModel tempProject;
             Console.WriteLine("Load Template Button Click.");
 
-            if (fileName != "")
+            try
             {
-                // Project Info insertion removed per Mark's request 9/1/2020.  Reactivated upon consideration of request from Barry Black. 9/4/2020
-
-                DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
-                                                            "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
-
-                tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
-
-                if (dialogResult == DialogResult.Yes)
+                if (fileName != "")
                 {
-                    LoadProjectInfoToForm(tempProject);
+                    // Project Info insertion removed per Mark's request 9/1/2020.  Reactivated upon consideration of request from Barry Black. 9/4/2020
+
+                    DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
+                                                                "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
+
+                    tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
+
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        LoadProjectInfoToForm(tempProject);
+                    }
+
+                    Project.Components.AddRange(tempProject.Components);
+
+                    LoadComponentListToForm(tempProject.Components);
+
+                    MoldBuildTreeView.Nodes[0].Expand();
+                    //printObjectTree();
                 }
-
-                Project.Components.AddRange(tempProject.Components);
-
-                LoadComponentListToForm(tempProject.Components);
-
-                MoldBuildTreeView.Nodes[0].Expand();
-                //printObjectTree();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
 

@@ -490,13 +490,7 @@ namespace ClassLibrary
         {
             List<TaskModel> taskList = new List<TaskModel>();
 
-            foreach (var component in Components)
-            {
-                foreach (var task in component.Tasks)
-                {
-                    taskList.Add(task);
-                }
-            }
+            Components.ForEach(x => taskList.AddRange(x.Tasks));
 
             return taskList;
         }
@@ -529,7 +523,7 @@ namespace ClassLibrary
         {
             DateTime dueDate;
 
-            if (obj.ToString() == "")
+            if (obj == null || obj.ToString() == "")
             {
                 dueDate = DateTime.Today;
                 dueDate = new DateTime(dueDate.Year, dueDate.Month, dueDate.Day);

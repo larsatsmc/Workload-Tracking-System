@@ -223,6 +223,8 @@ namespace ClassLibrary
         {
             this.Tasks = new List<TaskModel>();
             this.Tasks = taskList;
+
+            this.Tasks.ForEach(x => x.TaskID = ++TaskIDCount);
         }
         /// <summary>
         /// Adds a copied tasklist to a component. (Sets IDs to 0)
