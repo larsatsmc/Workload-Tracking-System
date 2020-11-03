@@ -34,8 +34,8 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Customer, Project, DueDate, Priority, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, OverlapAllowed, IncludeHours, DateCreated, DateModified) " + // 
-                                          "VALUES (@JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Priority, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @OverlapAllowed, @IncludeHours, GETDATE(), GETDATE())"; // 
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateCreated, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE(), GETDATE())"; // 
 
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Picture, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish)"; // 
@@ -48,80 +48,23 @@ namespace ClassLibrary
                     using (var trans = connection.BeginTransaction())
                     {
                         // OleDBConnection doesn't like it when I feed the object directly into the DynamicParameters constructor.
-                        //var p1 = new DynamicParameters(project);
 
-                        var p1 = new
-                        {
-                            project.JobNumber,
-                            project.ProjectNumber,
-                            project.Customer,
-                            project.Project,
-                            project.DueDate,
-                            project.Priority,
-                            project.Designer,
-                            project.ToolMaker,
-                            project.RoughProgrammer,
-                            project.ElectrodeProgrammer,
-                            project.FinishProgrammer,
-                            project.EDMSinkerOperator,
-                            project.RoughCNCOperator,
-                            project.ElectrodeCNCOperator,
-                            project.FinishCNCOperator,
-                            project.EDMWireOperator,
-                            project.Apprentice,
-                            project.OverlapAllowed,
-                            project.IncludeHours
-                        };
-
-                        connection.Execute(queryString1, p1, trans);
+                        connection.Execute(queryString1, project, trans);
 
                         foreach (ComponentModel component in project.Components)
                         {
-                            var p2 = new
-                            {
-                                project.JobNumber,
-                                project.ProjectNumber,
-                                component.Component,
-                                component.Notes,
-                                component.Priority,
-                                component.Position,
-                                component.Material,
-                                component.TaskIDCount,
-                                component.Quantity,
-                                component.Spares,
-                                component.Picture,
-                                component.Finish,
-                                component.Status
-                            };
+                            component.JobNumber = project.JobNumber;
+                            component.ProjectNumber = project.ProjectNumber;
 
-                            Console.WriteLine($"{project.JobNumber} {project.ProjectNumber} {component.Component}");
-
-                            connection.Execute(queryString2, p2, trans);
+                            connection.Execute(queryString2, component, trans);
 
                             foreach (TaskModel task in component.Tasks)
                             {
-                                var p3 = new 
-                                { 
-                                    project.JobNumber,
-                                    project.ProjectNumber,
-                                    component.Component,
-                                    task.TaskID,
-                                    task.TaskName,
-                                    task.Duration,
-                                    task.StartDate,
-                                    task.FinishDate,
-                                    task.Predecessors,
-                                    task.Machine,
-                                    task.Resources,
-                                    task.Personnel,
-                                    task.Hours,
-                                    task.Priority,
-                                    task.Notes
-                                };
+                                task.JobNumber = project.JobNumber;
+                                task.ProjectNumber = project.ProjectNumber;
+                                task.Component = component.Component;
 
-                                connection.Execute(queryString3, p3, trans);
-
-                                //MessageBox.Show(connection.ExecuteScalar("SELECT @@IDENTITY", transaction: trans).ToString());
+                                connection.Execute(queryString3, task, trans);
 
                                 task.ID = int.Parse(connection.ExecuteScalar("SELECT @@IDENTITY", transaction: trans).ToString());
                             }
@@ -136,7 +79,16 @@ namespace ClassLibrary
 
             return false;
         }
+        public static void CreateProjectEntry(ProjectModel project)
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                string queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, OverlapAllowed, IncludeHours) " +
+                                     "VALUES (@jobNumber, @projectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @dueDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes, @overlapAllowed, @includeHours)";
 
+                connection.Execute(queryString, project);
+            }
+        }
         #endregion
 
         #region Read
@@ -541,21 +493,13 @@ namespace ClassLibrary
         #region Delete
 
         // Only need to delete the project from projects since the Database is set to cascade delete related records.
-        public static bool RemoveProject(string jobNumber, int projectNumber)
+        public static bool RemoveProject(int projectNumber)
         {
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                //var adapter = new OleDbDataAdapter();
-
-                //adapter.DeleteCommand = new OleDbCommand("DELETE FROM Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber", connection);
-                //adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = jobNumber;
-                //adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = projectNumber;
-
                 connection.Execute("DELETE FROM Projects WHERE ProjectNumber = @projectNumber", new { ProjectNumber = projectNumber });
-
-                //Connection.Open();
-                //adapter.DeleteCommand.ExecuteNonQuery();
-                //Connection.Close();
+                // TODO: Make foreign key relationship from WorkloadColors table to Projects table so that the deletion of projects cascades to WorkLoadColors table.
+                connection.Execute("DELETE FROM WorkloadColors WHERE ProjectNumber = @projectNumber", new { ProjectNumber = projectNumber });
 
                 if (!ProjectExists(projectNumber))
                 {
@@ -1894,6 +1838,29 @@ namespace ClassLibrary
             }
         }
 
+        public static void AddColorEntry2(int projectNumber, string column, int aRGBColor)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    SqlCommand cmd = new SqlCommand("INSERT INTO WorkLoadColors (ProjectNumber, ColumnFieldName, ARGBColor) VALUES (@projectNumber, @columnFieldName, @aRGBColor)", connection);
+
+                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
+                    cmd.Parameters.AddWithValue("@columnFieldName", column);
+                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+            }
+        }
+
         #endregion
 
         #region Read
@@ -1906,27 +1873,9 @@ namespace ClassLibrary
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM WorkLoadColors", connection);
+                    var result = connection.Query<ColorStruct>("SELECT * FROM WorkLoadColors");
 
-                    connection.Open();
-
-                    using (var rdr = cmd.ExecuteReader())
-                    {
-                        if (rdr.HasRows)
-                        {
-                            while (rdr.Read())
-                            {
-                                colorList.Add(new ColorStruct
-                                (
-                                       projectID: rdr["ProjectID"],
-                                          column: rdr["ColumnFieldName"],
-                                       aRGBColor: rdr["ARGBColor"]
-                                ));
-                            }
-                        }
-                    }
-
-                    return colorList; 
+                    return result.ToList(); 
                 }
             }
             catch (Exception e)
@@ -1965,7 +1914,31 @@ namespace ClassLibrary
                 MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
             }
         }
+        public static void UpdateColorEntry2(int projectNumber, string column, int aRGBColor)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = connection;
 
+                    cmd.CommandText = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectNumber = @projectNumber AND ColumnFieldName = @column)";
+
+                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
+                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
+                    cmd.Parameters.AddWithValue("@column", column);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+            }
+        }
         #endregion
 
         #region Delete

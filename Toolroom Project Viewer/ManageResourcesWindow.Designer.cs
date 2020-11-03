@@ -50,6 +50,7 @@
             this.RoleComboBox.Items.AddRange(new object[] {
             "Tool Makers",
             "Apprentices",
+            "Engineers",
             "Designers",
             "Rough Programmers",
             "Finish Programmers",

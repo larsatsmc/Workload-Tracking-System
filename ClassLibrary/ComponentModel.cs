@@ -320,6 +320,7 @@ namespace ClassLibrary
             this.ReloadTaskList = true;
             this.Tasks.Remove(Tasks.ElementAt(deletedTaskIndex));
             this.TaskIDCount = --TaskIDCount;
+            //this.RemovedMatchingPredecessors(deletedTaskIndex + 1);
         }
         /// <summary>
         /// Moves a task up the task list.
@@ -335,6 +336,7 @@ namespace ClassLibrary
 
                 this.Tasks.RemoveAt(promotedTaskIndex);
                 this.Tasks.Insert(promotedTaskIndex - 1, promotedTask);
+                //this.ModifyMatchingPredecessors(promotedTaskIndex, promotedTaskIndex - 1);
             }
             else
             {
@@ -355,6 +357,7 @@ namespace ClassLibrary
 
                 this.Tasks.RemoveAt(demotedTaskIndex);
                 this.Tasks.Insert(demotedTaskIndex + 1, demotedTask);
+                //this.ModifyMatchingPredecessors(demotedTaskIndex, demotedTaskIndex + 1);
             }
             else
             {
@@ -720,6 +723,55 @@ namespace ClassLibrary
             }
 
             return true;
+        }
+        public List<TaskModel> FindSelfReferencingTasks()
+        {
+            var result = from task in this.Tasks
+                         where task.HasMatchingPredecessor(this.Tasks.IndexOf(task) + 1)
+                         select task;
+
+            return result.ToList();
+        }
+        public List<TaskModel> FindTasksWithNullDates()
+        {
+            var result = from task in this.Tasks
+                         where task.HasNullDates()
+                         select task;
+
+            return result.ToList();
+        }
+        public List<TaskModel> FindIsolatedTasks()
+        {
+            var result = from task in this.Tasks
+                         where task.Predecessors.Length == 0 && 
+                               // !task.TaskName.Contains("Program") && 
+                               this.Tasks.Count(x => x.HasMatchingPredecessor(this.Tasks.IndexOf(task) + 1)) == 0 &&
+                               this.Tasks.Count > 1
+                         select task;
+
+            return result.ToList();
+        }
+        public void ModifyMatchingPredecessors(int id, int newID)
+        {
+            var result = from task in this.Tasks
+                         where task.HasMatchingPredecessor(id)
+                         select task;
+
+            foreach (var task in result.ToList())
+            {
+                task.ChangeMatchingPredecessor(id, newID);
+            }
+        }
+        public void RemovedMatchingPredecessors(int id)
+        {
+            var result = from task in this.Tasks
+                         where task.HasMatchingPredecessor(id)
+                         select task;
+
+            foreach (var task in result.ToList())
+            {
+                task.RemoveMatchingPredecessor(id);
+            }
         }
         public DateTime? GetLatesFinishDate()
         {

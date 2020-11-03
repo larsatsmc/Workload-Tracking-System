@@ -813,6 +813,16 @@ namespace ClassLibrary
                 sumWs.Cell(r, 2).FormulaA1 = "=Sum(" + sumWs.Cell(r - 1, 2).Address + ":" + sumWs.Cell(r - ps.HoursList.Count, 2).Address + ")";
                 sumWs.Cell(r, 2).Style.Font.Bold = true;
 
+                var notesWs = wb.Worksheets.Add("Notes");
+
+                notesWs.Range("A1").Style.Font.Bold = true;
+                notesWs.Range("A1").Value = "Notes";
+
+                RichTextBox rtBox = new RichTextBox();
+                rtBox.Rtf = pi.GeneralNotes;
+
+                notesWs.Cell("A2").Value = rtBox.Text;
+
                 wsBase.Delete();
 
                 wb.SaveAs(kanBanSavePath);

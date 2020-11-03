@@ -1,10 +1,10 @@
 ﻿using DevExpress.XtraScheduler;
-using Microsoft.Vbe.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ClassLibrary
@@ -20,11 +20,17 @@ namespace ClassLibrary
         public string Customer { get; set; } = "";
         public int MWONumber { get; set; }
         public string Name { get; set; } = "";
+        public double? DeliveryInWeeks { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime DueDate { get; set; }
+        public DateTime? AdjustedDeliveryDate { get; set; }
         public int Priority { get; private set; }
         public string Status { get; set; }
-        public string ToolMaker { get; set; }
+        public string Stage { get; set; }
+        public int? MoldCost { get; set; }
+        public string Engineer { get; set; }
         public string Designer { get; set; }
+        public string ToolMaker { get; set; }
         public string RoughProgrammer { get; set; }
         public string ElectrodeProgrammer { get; set; }
         public string FinishProgrammer { get; set; }
@@ -35,7 +41,9 @@ namespace ClassLibrary
         public string EDMWireOperator { get; set; }
         public double PercentComplete { get; private set; }
         public string Apprentice { get; set; } = "";
-        public string Engineer { get; private set; }
+        public string Manifold { get; set; }
+        public string Moldbase { get; set; }
+        public string GeneralNotes { get; set; } = "";
         public string KanBanWorkbookPath { get; private set; } = "";
         public DateTime? DateModified { get; set; }
         public DateTime? LastKanBanGenerationDate { get; set; }
@@ -336,7 +344,115 @@ namespace ClassLibrary
 
             //printComponentList();
         }
+        public bool HasSelfReferencingPredecessors()
+        {
+            List<ComponentModel> dirtyComponents = new List<ComponentModel>();
+            StringBuilder errorString = new StringBuilder();
 
+            var result = from component in this.Components
+                         where component.FindSelfReferencingTasks().Count > 0
+                         select component;
+
+            dirtyComponents = result.ToList();
+
+            if (dirtyComponents.Count > 0)
+            {
+                foreach (var component in dirtyComponents)
+                {
+                    errorString.AppendLine(component.Component);
+
+                    foreach (var task in component.FindSelfReferencingTasks())
+                    {
+                        errorString.AppendLine($"  {component.Tasks.IndexOf(task) + 1} {task.TaskName}");
+                    }
+                }
+
+                MessageBox.Show($"This project has components with self-referencing tasks.\n\n" +
+                                $"Please change the predecessor for these tasks:\n\n" +
+                                $"{errorString}");
+
+                return true;
+            }
+
+            return false;
+        }
+        public bool HasTasksWithNullDates()
+        {
+            List<ComponentModel> dirtyComponents = new List<ComponentModel>();
+            StringBuilder errorString = new StringBuilder();
+            int count = 0;
+
+            var result = from component in this.Components
+                         where component.FindTasksWithNullDates().Count > 0
+                         select component;
+
+            dirtyComponents = result.ToList();
+
+            if (dirtyComponents.Count > 0)
+            {
+                foreach (var component in dirtyComponents)
+                {
+                    errorString.AppendLine(component.Component);
+
+                    foreach (var task in component.FindTasksWithNullDates())
+                    {
+                        ++count;
+
+                        if (count < 20)
+                        {
+                            errorString.AppendLine($"  {component.Tasks.IndexOf(task) + 1} {task.TaskName}");
+                        }
+                    }
+                }
+
+                if (count >= 20)
+                {
+                    errorString.AppendLine($"..."); 
+                }
+
+                MessageBox.Show($"Project contains " + count + " task(s) with missing date(s).\n\n" +
+                                $"Please add dates for these tasks:\n\n" +
+                                $"{errorString}");
+
+                return true;
+            }
+
+            return false;
+        }
+        public bool HasIsolatedTasks()
+        {
+            List<ComponentModel> dirtyComponents = new List<ComponentModel>();
+            StringBuilder errorString = new StringBuilder();
+            int count = 0;
+
+            var result = from component in this.Components
+                         where component.FindIsolatedTasks().Count > 0
+                         select component;
+
+            dirtyComponents = result.ToList();
+
+            if (dirtyComponents.Count > 0)
+            {
+                foreach (var component in dirtyComponents)
+                {
+                    errorString.AppendLine(component.Component);
+
+                    foreach (var task in component.FindTasksWithNullDates())
+                    {
+                        ++count;
+                        errorString.AppendLine($"  {component.Tasks.IndexOf(task) + 1} {task.TaskName}");
+                    }
+                }
+
+                MessageBox.Show($"Project contains " + count + " isolated task(s).\n\n" +
+                                $"Please insure these tasks have predecessors or successors:\n\n" +
+                                $"{errorString}");
+
+                return true;
+            }
+
+            return false;
+        }
         public bool AddComponent(ComponentModel component)
         {
             if (!ComponentNameExists(component.Component))
@@ -352,14 +468,12 @@ namespace ClassLibrary
 
             //printComponentList();
         }
-
         public void AddComponentList(List<ComponentModel> componentList)
         {
             Components = new List<ComponentModel>();
 
             this.Components = componentList;
         }
-
         public void RemoveComponent(string name)
         {
             ComponentModel component = Components.Where(x => x.Component == name).First();

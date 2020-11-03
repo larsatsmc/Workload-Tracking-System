@@ -1621,7 +1621,7 @@ namespace Toolroom_Project_Viewer
                 }
                 catch (Exception er)
                 {
-                    MessageBox.Show(er.Message);
+                    MessageBox.Show($"{er.Message}\n\n{er.StackTrace}");
                 }
             }
         }
@@ -1669,12 +1669,10 @@ namespace Toolroom_Project_Viewer
         {
             AddSelectedTasksToSelectedComponent();
         }
-
         private void AddComponentButton_Click(object sender, EventArgs e)
         {
             AddComponentToTree(ComponentTextBox.Text);
         }
-
         private void saveTemplateButton_Click(object sender, EventArgs e)
         {
             int projectNumberResult;
@@ -1996,6 +1994,12 @@ namespace Toolroom_Project_Viewer
 
             if (missingTaskInfo == true)
             {
+                return;
+            }
+
+            if (Project.HasSelfReferencingPredecessors() || Project.HasIsolatedTasks())
+            {
+                // MessageBox is in the HasSelfReferencingPredecessors method.
                 return;
             }
 

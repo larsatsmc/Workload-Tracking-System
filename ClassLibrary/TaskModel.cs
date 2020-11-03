@@ -389,6 +389,57 @@ namespace ClassLibrary
 
             return false;
         }
+        public void RemoveMatchingPredecessor(int id)
+        {
+            if (this.Predecessors.Contains(','))
+            {
+                List<string> predecessors = this.Predecessors.Split(',').ToList();
+
+                predecessors.Remove(id.ToString());
+
+                ReconstructPredecessorString(predecessors);
+            }
+            else
+            {
+                this.Predecessors = "";
+            }
+            
+        }
+        public void ChangeMatchingPredecessor(int id, int newID)
+        {
+            List<string> predecessors = this.Predecessors.Split(',').ToList();
+
+            predecessors.Find(x => x == id.ToString()).Replace(id.ToString(), newID.ToString());
+
+            ReconstructPredecessorString(predecessors);
+        }
+        private void ReconstructPredecessorString(List<string> predecessors)
+        {
+            StringBuilder predecessorSBString = new StringBuilder();
+
+            foreach (var predecessor in predecessors)
+            {
+                if (predecessorSBString.Length == 0)
+                {
+                    predecessorSBString.Append(predecessor);
+                }
+                else
+                {
+                    predecessorSBString.Append($",{predecessor}");
+                }
+            }
+
+            this.Predecessors = predecessorSBString.ToString();
+        }
+        public bool HasNullDates()
+        {
+            if (this.StartDate == null || this.FinishDate == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
         /// <summary>
         /// Sets the task info for a given task from task info tab.
         /// </summary> 

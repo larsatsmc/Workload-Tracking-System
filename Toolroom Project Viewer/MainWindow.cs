@@ -31,8 +31,6 @@ using System.Text.RegularExpressions;
 using DevExpress.Data.Filtering;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
-using System.Runtime.InteropServices.WindowsRuntime;
-using DevExpress.Utils.Extensions;
 
 namespace Toolroom_Project_Viewer
 {
@@ -50,15 +48,16 @@ namespace Toolroom_Project_Viewer
         private string TimeUnits { get; set; }
         private string NoResourceName { get; set; }
         private ProjectModel Project { get; set; }
-        private List<ProjectModel> ProjectInfoList { get; set; } = new List<ProjectModel>();
         public List<ProjectModel> ProjectsList { get; set; }
         public List<ComponentModel> ComponentsList { get; set; }
         public List<TaskModel> TasksList { get; set; }
-        private List<WorkLoadModel> WorkloadList { get; set; }
+        //private List<WorkLoadModel> WorkloadList { get; set; }
+        public List<ProjectModel> DeletedProjects { get; set; } = new List<ProjectModel>();
 
         private List<int> gridView3ExpandedRowsList = new List<int>();
         private List<int> gridView4ExpandedRowsList = new List<int>();
         private List<ExpandedProjectRows> expandedProjectRowsList = new List<ExpandedProjectRows>();
+        private List<int> ProjectBandedGridViewExpandedGroupList = new List<int>();
         private List<int> gridView3SelectedRows = new List<int>();
         private List<int> gridView4SelectedRows = new List<int>();
         private List<int> gridView5SelectedRows = new List<int>();
@@ -83,6 +82,7 @@ namespace Toolroom_Project_Viewer
                 InitializeResources();
 
                 GroupByRadioGroup.SelectedIndex = 0;
+                changeViewRadioGroup.SelectedIndex = 1;
                 chartRadioGroup.SelectedIndex = 0;
                 InitializePrintOptions();
                 schedulerControl1.Start = DateTime.Today.AddDays(-7);
@@ -126,16 +126,14 @@ namespace Toolroom_Project_Viewer
                 LoadProjectView();
                 LoadTaskView();
                 InitializeAppointments();
-                LoadWorkloadView();
+                //LoadWorkloadView();
 
-                //gridControl2.DataSource = workLoadTableAdapter.GetData();
                 footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
                 refreshWorkloadLabelControl.Text = "Last Refresh: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss tt");
                 gridView5.SortInfo.Add(new GridColumnSortInfo(colTaskID1, DevExpress.Data.ColumnSortOrder.Ascending));
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
                 RoleTable = Database.GetRoleTable();
-                ProjectInfoList = Database.GetProjectInfoList();
                 PopulateEmployeeComboBox();
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
             }
@@ -176,12 +174,12 @@ namespace Toolroom_Project_Viewer
             gridControl3.DataSource = projects;
             refreshLabelControl.Text = "Last Refresh: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss tt");
         }
-        private void LoadWorkloadView()
-        {
-            WorkloadList = Database.GetWorkloads();
-            BindingList<WorkLoadModel> workLoads = new BindingList<WorkLoadModel>(WorkloadList);
-            gridControl2.DataSource = workLoads;
-        }
+        //private void LoadWorkloadView()
+        //{
+        //    WorkloadList = Database.GetWorkloads();
+        //    BindingList<WorkLoadModel> workLoads = new BindingList<WorkLoadModel>(WorkloadList);
+        //    gridControl2.DataSource = workLoads;
+        //}
         private void InitializeProjects()
         {
             foreach (var project in ProjectsList)
@@ -1146,11 +1144,6 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private DateTime GetDueDate(GridView view, int listSourceRowIndex)
-        {
-            return ProjectInfoList.Find(x => x.ProjectNumber == (int)view.GetListSourceRowCellValue(listSourceRowIndex, "ProjectNumber")).DueDate;
-        }
-
         public static void ChangeCellBorderColor(TableCell cell)
         {
             //Specify the border style and the background color for the header cells 
@@ -1168,7 +1161,6 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
-                ProjectInfoList = Database.GetProjectInfoList();
                 deptTaskViewHelper = new RefreshHelper(gridView1, "ProjectNumber");
                 RoleTable = Database.GetRoleTable();
                 deptTaskViewHelper.SaveViewInfo();
@@ -1361,7 +1353,7 @@ namespace Toolroom_Project_Viewer
         {
             GridView view = sender as GridView;
 
-            ProjectModel pi = ProjectInfoList.Find(x => x.ProjectNumber == (int)view.GetListSourceRowCellValue(e.ListSourceRowIndex, "ProjectNumber"));
+            ProjectModel pi = ProjectsList.Find(x => x.ProjectNumber == (int)view.GetListSourceRowCellValue(e.ListSourceRowIndex, "ProjectNumber"));
 
             if (e.IsGetData)
             {
@@ -1634,10 +1626,10 @@ namespace Toolroom_Project_Viewer
         {
             GetSelectedRows();
             DetermineExpandedRows();
-
+            ColorList = Database.GetColorEntries();
             LoadProjects();
             LoadProjectView();
-
+            CollapseGroups();
             RecursiveExpand();
             SelectRows();
         }
@@ -1696,7 +1688,7 @@ namespace Toolroom_Project_Viewer
                 {
                     if (form.DataValidated)
                     {
-                        if (gridView3.GetFocusedRowCellValue("KanBanWorkbookPath").ToString().Length > 0)
+                        if (project.KanBanWorkbookPath.ToString().Length > 0)
                         {
                             MessageBox.Show("A project has changed.  Need to regenerate and reprint Kan Ban.");
                             //gridView3.Appearance.FocusedRow.BackColor = Color.Red;
@@ -1711,7 +1703,45 @@ namespace Toolroom_Project_Viewer
                 }
             }
         }
+        private void DeleteProject(object sender, KeyEventArgs e)
+        {
+            if (MessageBox.Show("Delete Project?", "Confirmation", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                return;
 
+            GridView view = sender as GridView;
+            ProjectModel project = view.GetFocusedRow() as ProjectModel;
+
+            try
+            {
+                if (MessageBox.Show("Do you want to generate / update the Kan Ban for this project to preserve notes?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    GenerateKanBan();
+                }
+
+                if (Database.RemoveProject(project.ProjectNumber))
+                {
+                    DeletedProjects.Add(project);
+                    view.DeleteRow(view.FocusedRowHandle);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private GridView GetFocusedView()
+        {
+            if (gridView3.IsFocusedView)
+            {
+                return gridView3;
+            }
+            else if (projectBandedGridView.IsFocusedView)
+            {
+                return projectBandedGridView;
+            }
+
+            return null;
+        }
         // TODO: Wait and see how selecting rows from grid control work for this.
         //private List<string> GetComponentListFromUser(string textString = "")
         //{
@@ -1750,26 +1780,504 @@ namespace Toolroom_Project_Viewer
                 return false;
             }
         }
-        private void gridView3_KeyDown(object sender, KeyEventArgs e)
-        { 
-            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control)
+        private void CollapseGroups()
+        {
+            GridView view = projectBandedGridView;
+
+            int count = 0;
+            for (int i = 0; i < view.RowCount; i++)
             {
-                if (MessageBox.Show("Delete Project?", "Confirmation", MessageBoxButtons.YesNo) != DialogResult.Yes)
-                    return;
-
-                GridView view = sender as GridView;
-
-                try
+                int rowHandle = view.GetVisibleRowHandle(i);
+                if (view.IsGroupRow(rowHandle))
                 {
-                    if (Database.RemoveProject((string)view.GetFocusedRowCellValue("JobNumber"), (int)view.GetFocusedRowCellValue("ProjectNumber")))
+                    count++;
+                    //MessageBox.Show(count.ToString() + " " + rowHandle + " " + bandedGridView1.GetGroupRowDisplayText(rowHandle));
+                    if (view.GetGroupRowDisplayText(rowHandle).Contains("Completed") || view.GetGroupRowDisplayText(rowHandle).Contains("Quoted / Forecasted"))
                     {
-                        view.DeleteRow(view.FocusedRowHandle);
+                        view.CollapseGroupRow(rowHandle);
                     }
                 }
-                catch (Exception ex)
+            }
+        }
+        private void GenerateKanBan()
+        {
+            try
+            {
+                SplashScreenManager.ShowForm(typeof(WaitForm1));
+
+                GridView gridView = gridControl3.MainView as GridView;
+
+                if (gridView.SelectedRowsCount != 1)
                 {
-                    MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                    MessageBox.Show("Please select a project.");
+                    return;
                 }
+                else
+                {
+                    ProjectModel project = gridView.GetFocusedRow() as ProjectModel;
+                    string path;
+
+                    project = Database.GetProject(project.ProjectNumber);
+
+                    if (KanBanExists(project.KanBanWorkbookPath))
+                    {
+                        DialogResult result = XtraMessageBox.Show("A Kan Ban for this project already exists.\n\nDo you want to create a new one?\n\n" +
+                            "(Click 'Yes' to create new one (All info preserved).  Click 'No' to cancel.)", "Warning",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            path = ExcelInteractions.GenerateKanBanWorkbook2(project);
+
+                            if (path != "")
+                            {
+                                Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
+                            }
+                        }
+                        else if (result == DialogResult.No)
+                        {
+                            // This space was formerly occupied by the 'EditKanBan' method.
+
+                            return;
+                        }
+                        else if (result == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+
+                    }
+                    else
+                    {
+                        path = ExcelInteractions.GenerateKanBanWorkbook2(project);
+
+                        if (path != "")
+                        {
+                            Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
+                        }
+                    }
+
+                    RefreshProjectGrid();
+                }
+            }
+            catch (Exception ex1)
+            {
+                MessageBox.Show(ex1.Message + "\n\n" + ex1.StackTrace);
+            }
+            finally
+            {
+                SplashScreenManager.CloseForm();
+            }
+        }
+        private void gridControl3_Load(object sender, EventArgs e)
+        {
+            footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            ColorList = Database.GetColorEntries();
+            CollapseGroups();
+        }
+        private void projectBandedGridView_PrintInitialize(object sender, PrintInitializeEventArgs e)
+        {
+            PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
+
+            pb.PageSettings.TopMargin = 25;
+            pb.PageSettings.RightMargin = 25;
+            pb.PageSettings.BottomMargin = 25;
+            pb.PageSettings.LeftMargin = 25;
+            pb.Document.AutoFitToPagesWidth = 1;
+
+            if (PaperSize == "Tabloid")
+            {
+                pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Tabloid;
+                pb.PageSettings.PrinterName = @"\\S-PS1-SMDRV\P-1336 HP CP5225 - Color";
+            }
+            else if (PaperSize == "Letter")
+            {
+                pb.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Letter;
+            }
+
+            if (PrintOrientation == "Landscape")
+            {
+                pb.PageSettings.Landscape = true;
+            }
+            else if (PrintOrientation == "Portrait")
+            {
+                pb.PageSettings.Landscape = false;
+            }
+
+            projectBandedGridView.OptionsPrint.RtfPageFooter = @"{\rtf1\ansi {\fonttbl\f0\ Microsoft Sans Serif;} \f0\pard \fs18 \qr \b Report Date: " + footerDateTime + @"\b0 \par}";
+        }
+        private void workLoadViewPrintPreviewButton_Click(object sender, EventArgs e)
+        {
+            PrintOrientation = "Landscape";
+            PaperSize = "Tabloid";
+
+            GridView gridView = gridControl3.MainView as GridView;
+
+            gridView.ShowPrintPreview();
+        }
+        private void projectBandedGridView_ShownEditor(object sender, EventArgs e)
+        {
+            try
+            {
+                Console.WriteLine("projectBandedGridView_ShownEditor entered.");
+                BandedGridView bandedGridView = sender as BandedGridView;
+
+                Console.WriteLine(bandedGridView.ActiveEditor.EditorTypeName);
+
+                ColumnView columnView = sender as ColumnView;
+                PopupContainerEdit popupContainerEdit = null;
+                ComboBoxEdit comboBoxEdit = null;
+
+                if (bandedGridView != null)
+                {
+
+                    if (bandedGridView.ActiveEditor.EditorTypeName == "PopupContainerEdit")
+                    {
+                        popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
+                    }
+                    else if (bandedGridView.ActiveEditor.EditorTypeName == "ComboBoxEdit")
+                    {
+                        comboBoxEdit = bandedGridView.ActiveEditor as ComboBoxEdit;
+                    }
+
+                    if (popupContainerEdit != null)
+                    {
+                        RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
+
+                        richTextBox.Rtf = bandedGridView.GetFocusedRowCellValue("GeneralNotes").ToString();
+                    }
+
+                    if (comboBoxEdit != null)
+                    {
+                        string column = bandedGridView.FocusedColumn.FieldName;
+                        string role = "";
+
+                        if (column == "RoughProgrammer")
+                        {
+                            role = "Rough Programmer";
+                        }
+                        else if (column == "FinishProgrammer")
+                        {
+                            role = "Finish Programmer";
+                        }
+                        else if (column == "ElectrodeProgrammer")
+                        {
+                            role = "Electrode Programmer";
+                        }
+                        else if (column == "ToolMaker")
+                        {
+                            role = "Tool Maker";
+                        }
+                        else if (column == "Engineer")
+                        {
+                            role = "Engineer";
+                        }
+                        else if (column == "Designer")
+                        {
+                            role = "Designer";
+                        }
+                        else if (column == "Apprentice")
+                        {
+                            role = "Apprentice";
+                        }
+                        else if (column == "Stage")
+                        {
+                            return;
+                        }
+
+                        if (role != "")
+                        {
+                            comboBoxEdit.Properties.Items.Clear();
+                            comboBoxEdit.Properties.Items.AddRange(GetResourceList(role, "Person").ToArray());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private void projectBandedGridView_CustomRowCellEditForEditing(object sender, CustomRowCellEditEventArgs e)
+        {
+            if (e.Column.FieldName == "GeneralNotes")
+            {
+                e.RepositoryItem = repositoryItemPopupContainerEdit;
+            }
+        }
+        private void projectBandedGridView_ValidatingEditor(object sender, BaseContainerValidateEditorEventArgs e)
+        {
+            ColumnView view = sender as ColumnView;
+            GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
+
+            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            {
+                e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
+                e.Valid = false;
+            }
+            else if (column.FieldName == "ProjectNumber") // column.FieldName == "MWONumber" || 
+            {
+                if (e.Value.ToString() != "" && int.TryParse(e.Value.ToString(), out int result) == false)
+                {
+                    e.ErrorText = "Please enter a number.  Hit ESC to cancel editing.";
+                    e.Valid = false;
+                }
+                else if (Database.ProjectExists(int.Parse(e.Value.ToString())))
+                {
+                    e.ErrorText = "A project with that Project Number already exists.  Hit ESC to cancel editing.";
+                    e.Valid = false;
+                }
+            }
+            else if (column.FieldName == "DeliveryInWeeks")
+            {
+                if (e.Value.ToString() != "" && double.TryParse(e.Value.ToString(), out double result) == false)
+                {
+                    e.ErrorText = "Please enter a number.  Hit ESC to cancel editing.";
+                    e.Valid = false;
+                }
+            }
+        }
+        private void projectBandedGridView_CellValueChanged(object sender, CellValueChangedEventArgs e)
+        {
+            BandedGridView view = sender as BandedGridView;
+
+            ProjectModel project = view.GetFocusedRow() as ProjectModel;
+
+            try
+            {
+                if (view.IsNewItemRow(e.RowHandle))
+                {
+                    if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate.ToString() != "")
+                    {
+                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(view.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
+                    }
+                    else if (e.Column.FieldName == "StartDate" && view.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
+                    {
+                        if (double.TryParse(view.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out double result))
+                        {
+                            view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7)); // 
+                        }
+                    }
+
+                    return;
+                }
+
+                Console.WriteLine("projectBandedGridView Cell Value Changed Event");
+                //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
+
+                if (view.GetFocusedRowCellValue("ID").ToString() != "-1" && !Database.UpdateProjectRecord(project, e))
+                {
+                    LoadProjects();
+                    return;
+                }
+
+                if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate.ToString() != "")
+                {
+                    view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(view.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
+                }
+                else if (e.Column.FieldName == "StartDate" && view.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
+                {
+                    if (double.TryParse(view.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out double result))
+                    {
+                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7)); // 
+                    }
+                }
+                else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer" || e.Column.FieldName == "FinishDate")
+                {
+                    Database.SetTaskResources(sender, e, schedulerStorage1);
+                    RefreshProjectGrid();
+                    RefreshDepartmentScheduleView();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private void projectBandedGridView_RowUpdated(object sender, RowObjectEventArgs e)
+        {
+            GridView view = sender as GridView;
+            ProjectModel project = e.Row as ProjectModel;
+
+            try
+            {
+                if (view.IsNewItemRow(e.RowHandle))
+                {
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    {
+                        MessageBox.Show("This login is not authorized to make changes to project level data.");
+                        return;
+                    }
+
+                    Database.CreateProjectEntry(project);
+
+                    RefreshProjectGrid();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private void projectBandedGridView_ValidateRow(object sender, ValidateRowEventArgs e)
+        {
+            GridView view = sender as GridView;
+            ProjectModel project = e.Row as ProjectModel;
+
+            if (view.IsNewItemRow(e.RowHandle))
+            {
+                if (project.JobNumber == null || project.JobNumber.Length == 0)
+                {
+                    view.SetColumnError(colJobNumberBGV, "Please enter a Job Number");
+                    e.Valid = false;
+                }
+                else if (project.ProjectNumber == 0)
+                {
+                    view.SetColumnError(colProjectNumberBGV, "Please enter a Project Number");
+                    e.Valid = false;
+                }
+                else if (project.DueDate == new DateTime(0001, 1, 1))
+                {
+                    view.SetColumnError(colDueDateBGV, "Please enter a due date.");
+                    e.Valid = false;
+                }
+            }
+        }
+        private void projectBandedGridView_InvalidRowException(object sender, InvalidRowExceptionEventArgs e)
+        {
+            //Suppress displaying the error message box
+            e.ExceptionMode = ExceptionMode.NoAction;
+        }
+        private void projectBandedGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine("bandedGridView1 Mouse down event.");
+            BandedGridView bandedGridView = sender as BandedGridView;
+            List<string> PersonnelColumns = new List<string> { "Engineer", "Designer", "ToolMaker", "RoughProgrammer", "FinishProgrammer", "ElectrodeProgrammer" };
+            List<string> OtherColumns = new List<string> { "AdjustDeliveryDate", "StartDate", "FinishDate", "GeneralNotes" };
+            var hitInfo = bandedGridView.CalcHitInfo(e.Location);
+            Color? color;
+            Color rowColor;
+
+            if (hitInfo.InRowCell)
+            {
+                int rowHandle = hitInfo.RowHandle;
+                GridColumn column = hitInfo.Column;
+
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    {
+                        MessageBox.Show("This login is not authorized to make changes to work load tab.");
+                        return;
+                    }
+
+                    var cells = bandedGridView.GetSelectedCells();
+
+                    foreach (var cell in cells)
+                    {
+                        bandedGridView.UnselectCell(cell);
+                    }
+
+                    bandedGridView.SelectCell(rowHandle, column);
+
+                    if (rowHandle % 2 == 0)
+                    {
+                        rowColor = bandedGridView.Appearance.OddRow.BackColor;
+                    }
+                    else
+                    {
+                        rowColor = bandedGridView.Appearance.EvenRow.BackColor;
+                    }
+
+                    //MessageBox.Show("Row Handle: " + rowHandle + " Column: " + column);
+                    //MessageBox.Show("Left: " + e.Location.X + MainWindow.ActiveForm.Location.X + " Top: " + e.Location.Y + MainWindow.ActiveForm.Location.Y);
+
+                    if (PersonnelColumns.Exists(x => x == column.FieldName))
+                    {
+                        color = GetColorFromUser("Personnel", e.Location, rowColor);
+
+                        cells = bandedGridView.GetSelectedCells();
+
+                        SetSelectedCellColor2(color, cells, bandedGridView);
+                    }
+                    else if (OtherColumns.Exists(x => x == column.FieldName))
+                    {
+                        color = GetColorFromUser("Other", e.Location, rowColor);
+
+                        cells = bandedGridView.GetSelectedCells();
+
+                        SetSelectedCellColor2(color, cells, bandedGridView);
+                    }
+                    else if (column.FieldName == "JobFolderPath")
+                    {
+                        FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                        folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                        folderBrowserDialog.SelectedPath = @"X:\TOOLROOM\";
+                        var result = folderBrowserDialog.ShowDialog();
+
+                        if (result == DialogResult.OK)
+                        {
+                            Database.SetJobFolderPath((int)bandedGridView.GetRowCellValue(rowHandle, "ID"), folderBrowserDialog.SelectedPath);
+
+                        }
+                    }
+                }
+                else if (e.Button == MouseButtons.Left)
+                {
+
+
+                }
+
+            }
+        }
+        private void projectBandedGridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+            BandedGridView bandedGridView = sender as BandedGridView;
+            ProjectModel project = bandedGridView.GetRow(e.RowHandle) as ProjectModel;
+
+            if (e.RowHandle >= 0) //  && int.TryParse(bandedGridView.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID)
+            {
+                var data = ColorList.FirstOrDefault(p => p.ColumnFieldName == e.Column.FieldName && p.ProjectNumber == project.ProjectNumber);
+
+                if (data != null)
+                {
+                    //Console.WriteLine(e.Column + " " + e.RowHandle + " " + data.Color);
+
+                    e.Appearance.BackColor = data.Color;
+                }
+            }
+        }
+        private void projectBandedGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control)
+            {
+                DeleteProject(sender, e);
+            }
+        }
+        private void changeViewRadioGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RadioGroup edit = sender as RadioGroup;
+
+            if (edit.SelectedIndex == 0)
+            {
+                gridControl3.MainView = gridView3;
+                workLoadViewPrintButton.Visible = false;
+                workLoadViewPrint2Button.Visible = false;
+                printPreviewButton.Visible = false;
+            }
+            else
+            {
+                gridControl3.MainView = projectBandedGridView;
+                workLoadViewPrintButton.Visible = true;
+                workLoadViewPrint2Button.Visible = true;
+                printPreviewButton.Visible = true;
+            }
+        }
+        private void gridView3_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control)
+            {
+                DeleteProject(sender, e);
             }
         }
         private void GridView3_ValidatingEditor(object sender, BaseContainerValidateEditorEventArgs e)
@@ -1883,7 +2391,6 @@ namespace Toolroom_Project_Viewer
 
             //MessageBox.Show(gridView.Name + " row collapsed.");
         }
-
         private void gridView4_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             try
@@ -2076,7 +2583,6 @@ namespace Toolroom_Project_Viewer
                     SplashScreenManager.CloseForm();
             }
         }
-
         private void RefreshProjectsButton_Click(object sender, EventArgs e)
         {
             try
@@ -2099,6 +2605,12 @@ namespace Toolroom_Project_Viewer
         {
             try
             {
+                if (gridControl3.MainView != gridView3)
+                {
+                    MessageBox.Show("Only projects in the Project View can be copied.");
+                    return;
+                }
+
                 ProjectModel project = Database.GetProject((int)gridView3.GetFocusedRowCellValue("ProjectNumber")); // (string)gridView3.GetFocusedRowCellValue("JobNumber"),
                 ProjectModel copiedProject;
 
@@ -2140,79 +2652,7 @@ namespace Toolroom_Project_Viewer
 
         private void kanBanButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                SplashScreenManager.ShowForm(typeof(WaitForm1));
-
-                if (gridView3.SelectedRowsCount != 1)
-                {
-                    MessageBox.Show("Please select a project.");
-                    return;
-                }
-                else
-                {
-                    ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
-                    string path;
-
-                    project = Database.GetProject(project.ProjectNumber);
-
-                    if (KanBanExists(project.KanBanWorkbookPath))
-                    {
-                        DialogResult result = XtraMessageBox.Show("A Kan Ban for this project already exists.\n\nDo you want to create a new one?\n\n" +
-                            "(Click 'Yes' to create new one (All info preserved).  Click 'No' to cancel.)", "Warning",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                        if (result == DialogResult.Yes)
-                        {
-                            path = ExcelInteractions.GenerateKanBanWorkbook2(project);
-
-                            if (path != "")
-                            {
-                                Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
-                            }
-
-                        }
-                        else if (result == DialogResult.No)
-                        {
-                            //componentList = GetListOfSelectedComponents();
-
-                            //if (componentList.Count == 0)
-                            //{
-                            //    XtraMessageBox.Show("No components selected.");
-                            //    return;
-                            //}
-
-                            //ei.EditKanBanWorkbook(pi, db.GetKanBanWorkbookPath(jobNumber, projectNumber), componentList);
-
-                            return;
-                        }
-                        else if (result == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-
-                    }
-                    else
-                    {
-                        path = ExcelInteractions.GenerateKanBanWorkbook2(project);
-
-                        if (path != "")
-                        {
-                            Database.SetKanBanWorkbookPath(path, project.ProjectNumber);
-                        }
-                    }
-
-                    RefreshProjectGrid();
-                }
-            }
-            catch (Exception ex1)
-            {
-                MessageBox.Show(ex1.Message + "\n\n" + ex1.StackTrace);
-            }
-            finally
-            {
-                SplashScreenManager.CloseForm();
-            }
+            GenerateKanBan();
         }
 
         private void forwardDateButton_Click(object sender, EventArgs e)
@@ -2220,6 +2660,12 @@ namespace Toolroom_Project_Viewer
             if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
+                return;
+            }
+
+            if (gridControl3.MainView != gridView3)
+            {
+                MessageBox.Show("Projects can only be scheduled in Project View.");
                 return;
             }
 
@@ -2270,12 +2716,19 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
+            if (gridControl3.MainView != gridView3)
+            {
+                MessageBox.Show("Projects can only be scheduled in Project View.");
+                return;
+            }
+
             ProjectModel project = gridView3.GetFocusedRow() as ProjectModel;
             List<ComponentModel> selectedComponentList = GetListOfSelectedComponents();
 
             try
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
+
 
                 var compResult = from component in ComponentsList
                                  where selectedComponentList.Any(x => x.Component == component.Component && x.ProjectNumber == component.ProjectNumber)
@@ -2308,7 +2761,7 @@ namespace Toolroom_Project_Viewer
                 SplashScreenManager.CloseForm();
             }
         }
-
+        // Recreate Create Project button to reactivate.
         private void createProjectButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("click");
@@ -2335,14 +2788,14 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                int projectNumber = (int)gridView3.GetFocusedRowCellValue("ProjectNumber");
-                ProjectModel project = Database.GetProject(projectNumber);
+                GridView view = gridControl3.MainView as GridView;
+
+                ProjectModel selectedProject = view.GetFocusedRow() as ProjectModel;
+
+                ProjectModel project = Database.GetProject(selectedProject.ProjectNumber);
+
                 project.OldProjectNumber = project.ProjectNumber;
-                //ProjectModel project = db.GetProject(projectNumber);
-                sw.Stop();
-                //MessageBox.Show(sw.ElapsedMilliseconds.ToString());
+
                 EditProject(project);
             }
             catch (Exception ex)
@@ -2371,13 +2824,73 @@ namespace Toolroom_Project_Viewer
 
             return componentList;
         }
+        private void restoreProjectButton_Click(object sender, EventArgs e)
+        {
+            XtraInputBoxArgs args = new XtraInputBoxArgs();
+            args.Caption = "Select Project to Restore";
+            args.Prompt = $"{DeletedProjects.Count} Deleted Projects";
+            args.DefaultButtonIndex = 0;
 
+            LookUpEdit lookUpEdit = new LookUpEdit();
+            lookUpEdit.Properties.Columns.Add(new LookUpColumnInfo("JobNumber", "Job #"));
+            lookUpEdit.Properties.Columns.Add(new LookUpColumnInfo("ProjectNumber", "Project #"));
+            lookUpEdit.Properties.Columns.Add(new LookUpColumnInfo("Project", "Project"));
+            lookUpEdit.Properties.Columns.Add(new LookUpColumnInfo("Customer", "Customer"));
+            lookUpEdit.Properties.DataSource = DeletedProjects;
+            lookUpEdit.Properties.KeyMember = "ProjectNumber";
+            lookUpEdit.Properties.DisplayMember = "ProjectNumber";
+
+            args.Editor = lookUpEdit;
+
+            ProjectModel result = (ProjectModel)XtraInputBox.Show(args);
+
+            if (result != null)
+            {
+                Database.CreateProject(result);
+
+                RefreshProjectGrid();
+
+                DeletedProjects.Remove(result);
+            }
+        }
         private void resourceButton_Click(object sender, EventArgs e)
         {
             using (ManageResourcesForm form = new ManageResourcesForm())
             {
                 form.ShowDialog(); // Code execution stops until user does something with the window.
             }
+        }
+        private void workLoadViewPrintButton_Click(object sender, EventArgs e)
+        {
+            // Check whether the GridControl can be previewed.
+            if (!gridControl3.IsPrintingAvailable)
+            {
+                MessageBox.Show("The 'DevExpress.XtraPrinting' library is not found", "Error");
+                return;
+            }
+
+            PrintOrientation = "Landscape";
+            PaperSize = "Tabloid";
+            FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
+            fi.SetValue(projectBandedGridView.Columns.ColumnByFieldName("Stage"), 0);
+
+            projectBandedGridView.Print();
+        }
+        private void workLoadViewPrint2Button_Click(object sender, EventArgs e)
+        {
+            // Check whether the GridControl can be previewed.
+            if (!gridControl3.IsPrintingAvailable)
+            {
+                MessageBox.Show("The 'DevExpress.XtraPrinting' library is not found", "Error");
+                return;
+            }
+
+            PrintOrientation = "Portrait";
+            PaperSize = "Letter";
+            FieldInfo fi = typeof(GridColumn).GetField("minWidth", BindingFlags.NonPublic | BindingFlags.Instance);
+            fi.SetValue(projectBandedGridView.Columns.ColumnByFieldName("Stage"), 0);
+
+            projectBandedGridView.Print();
         }
         private void gridView3_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
@@ -2778,12 +3291,11 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void LoadProject(int projectNumber) // string jobNumber, 
+        private void LoadProject(int projectNumber)
         {
-            DataTable dt1 = new DataTable();
-            DataTable dt2 = new DataTable();
-
             Project = Database.GetProject(projectNumber);
+
+            Project.HasTasksWithNullDates();
 
             ResourceMappingInfo resourceMappings = this.schedulerStorage2.Resources.Mappings;
 
@@ -2791,48 +3303,11 @@ namespace Toolroom_Project_Viewer
             resourceMappings.ParentId = "ParentID"; // Need this for hierarchy in resource tree.
             resourceMappings.Caption = "TaskName"; // In the Resource tree designer the field name has to match the field that is mapped to caption.
 
-            //dt2 = GetProjectResourceData(Project);
-
             schedulerStorage2.Resources.Clear();
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
 
             BindingList<AptResourceModel> aptResources = new BindingList<AptResourceModel>(AptResourceModel.GetProjectResourceData(Project));
 
-            schedulerStorage2.Resources.DataSource = aptResources; // Woohoo!! This finally works! // dt2
-
-            //int i = 1;
-
-            //THIS WORKS FOR SOME REASON.
-
-            //foreach (DataRow nrow in dt2.Rows)
-            //{
-            //    Resource resource = schedulerStorage2.CreateResource(i, nrow["TaskName"].ToString());
-            //    resource.ParentId = nrow["ParentID"];
-
-            //    schedulerStorage2.Resources.Add(resource);
-            //    i++;
-            //}
-
-            //THIS DOES NOT.
-
-            //foreach (DataRow nrow in dt2.Rows)
-            //{
-            //    if (nrow["ParentID"] == DBNull.Value)
-            //    {
-            //        CustomResourceCollection.Add(CreateCustomResource(i++, -1, nrow["TaskName"].ToString()));
-            //    }
-            //    else
-            //    {
-            //        //Console.WriteLine($"{i}, {nrow["ParentID"]}, {nrow["TaskName"].ToString()}");
-            //        CustomResourceCollection.Add(CreateCustomResource(i++, Convert.ToInt32(nrow["ParentID"]), nrow["TaskName"].ToString()));
-            //    }
-            //}
-
-            //this.schedulerStorage2.Resources.DataSource = CustomResourceCollection;
-
-            Console.WriteLine(sw.Elapsed);
+            schedulerStorage2.Resources.DataSource = aptResources; // Woohoo!! This finally works!
 
             if (schedulerStorage2.Appointments.Count > 0)
             {
@@ -2860,28 +3335,9 @@ namespace Toolroom_Project_Viewer
             appointmentMappings.PercentComplete = "PercentComplete";
             appointmentMappings.ResourceId = "AptID";
 
-            Console.WriteLine(sw.Elapsed);
-
             BindingList<TaskModel> taskList = new BindingList<TaskModel>(Project.GetTaskList());
 
-            //dt1 = Database.LoadProjectToDataTable(Project);
-
-            Console.WriteLine(sw.Elapsed);
-
-            var result = from task in taskList// dt1.AsEnumerable()
-                         where task.StartDate == null || task.FinishDate == null // taskTable.IsNull("FinishDate")
-                         select task;
-
-            int count = result.ToList().Count;
-
-            if (count > 0)
-            {
-                MessageBox.Show("Project contains " + count + " task(s) with missing date(s).");
-            }
-
-
-
-            schedulerStorage2.Appointments.DataSource = taskList; // dt1
+            schedulerStorage2.Appointments.DataSource = taskList;
 
             AppointmentDependencyMappingInfo appointmentDependencyMappingInfo = schedulerStorage2.AppointmentDependencies.Mappings;
 
@@ -2890,7 +3346,7 @@ namespace Toolroom_Project_Viewer
 
             BindingList<AptDependencyModel> dependencyList = new BindingList<AptDependencyModel>(AptDependencyModel.GetDependencyData(Project));
 
-            schedulerStorage2.AppointmentDependencies.DataSource = dependencyList; // Database.GetDependencyData(dt1)
+            schedulerStorage2.AppointmentDependencies.DataSource = dependencyList;
         }
 
         private List<int> GetCollapsedNodes()
@@ -3146,23 +3602,7 @@ namespace Toolroom_Project_Viewer
 
         #region WorkLoad
 
-        private void CollapseGroups()
-        {
-            int count = 0;
-            for (int i = 0; i < bandedGridView1.RowCount; i++)
-            {
-                int rowHandle = bandedGridView1.GetVisibleRowHandle(i);
-                if (bandedGridView1.IsGroupRow(rowHandle))
-                {
-                    count++;
-                    //MessageBox.Show(count.ToString() + " " + rowHandle + " " + bandedGridView1.GetGroupRowDisplayText(rowHandle));
-                    if (bandedGridView1.GetGroupRowDisplayText(rowHandle).Contains("Completed") || bandedGridView1.GetGroupRowDisplayText(rowHandle).Contains("Quoted / Forecasted"))
-                    {
-                        bandedGridView1.CollapseGroupRow(rowHandle);
-                    }
-                }
-            }
-        }
+
 
         private void gridControl2_Load(object sender, EventArgs e)
         {
@@ -3398,8 +3838,8 @@ namespace Toolroom_Project_Viewer
         private void RefreshWorkloadGrid()
         {
             ColorList = Database.GetColorEntries();
-            WorkloadList = Database.GetWorkloads();
-            gridControl2.DataSource = new BindingList<WorkLoadModel>(WorkloadList);
+            //WorkloadList = Database.GetWorkloads();
+            //gridControl2.DataSource = new BindingList<WorkLoadModel>(WorkloadList);
             RoleTable = Database.GetRoleTable();
             CollapseGroups();
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
@@ -3478,9 +3918,10 @@ namespace Toolroom_Project_Viewer
         private void bandedGridView1_MouseDown(object sender, MouseEventArgs e)
         {
             Console.WriteLine("bandedGridView1 Mouse down event.");
+            BandedGridView bandedGridView = sender as BandedGridView;
             List<string> PersonnelColumns = new List<string> { "Engineer", "Designer", "ToolMaker", "RoughProgrammer", "FinishProgrammer", "ElectrodeProgrammer" };
             List<string> OtherColumns = new List<string> { "AdjustDeliveryDate", "StartDate", "FinishDate", "GeneralNotes"};
-            var hitInfo = bandedGridView1.CalcHitInfo(e.Location);
+            var hitInfo = bandedGridView.CalcHitInfo(e.Location);
             Color? color;
             Color rowColor;
 
@@ -3497,22 +3938,22 @@ namespace Toolroom_Project_Viewer
                         return;
                     }
 
-                    var cells = bandedGridView1.GetSelectedCells();
+                    var cells = bandedGridView.GetSelectedCells();
 
                     foreach (var cell in cells)
                     {
-                        bandedGridView1.UnselectCell(cell);
+                        bandedGridView.UnselectCell(cell);
                     }
 
-                    bandedGridView1.SelectCell(rowHandle, column);
+                    bandedGridView.SelectCell(rowHandle, column);
 
                     if (rowHandle % 2 == 0)
                     {
-                        rowColor = bandedGridView1.Appearance.OddRow.BackColor;
+                        rowColor = bandedGridView.Appearance.OddRow.BackColor;
                     }
                     else
                     {
-                        rowColor = bandedGridView1.Appearance.EvenRow.BackColor;
+                        rowColor = bandedGridView.Appearance.EvenRow.BackColor;
                     }
 
                     //MessageBox.Show("Row Handle: " + rowHandle + " Column: " + column);
@@ -3522,17 +3963,17 @@ namespace Toolroom_Project_Viewer
                     {
                         color = GetColorFromUser("Personnel", e.Location, rowColor);
 
-                        cells = bandedGridView1.GetSelectedCells();
+                        cells = bandedGridView.GetSelectedCells();
 
-                        SetSelectedCellColor(color, cells);
+                        SetSelectedCellColor(color, cells, bandedGridView);
                     }
                     else if (OtherColumns.Exists(x => x == column.FieldName))
                     {
                         color = GetColorFromUser("Other", e.Location, rowColor);
 
-                        cells = bandedGridView1.GetSelectedCells();
+                        cells = bandedGridView.GetSelectedCells();
 
-                        SetSelectedCellColor(color, cells);
+                        SetSelectedCellColor(color, cells, bandedGridView);
                     }
                     else if (column.FieldName == "JobFolderPath")
                     {
@@ -3543,7 +3984,7 @@ namespace Toolroom_Project_Viewer
 
                         if (result == DialogResult.OK)
                         {
-                            Database.SetJobFolderPath((int)bandedGridView1.GetRowCellValue(rowHandle, "ID"), folderBrowserDialog.SelectedPath);
+                            Database.SetJobFolderPath((int)bandedGridView.GetRowCellValue(rowHandle, "ID"), folderBrowserDialog.SelectedPath);
                             
                         }
                     }
@@ -3561,7 +4002,7 @@ namespace Toolroom_Project_Viewer
         {
             using (var ssw = new SelectStatusWindow(columnType, rowColor))
             {
-                Point windowLocation = new Point(clickLocation.X + ssw.Width, clickLocation.Y + (int)(ssw.Height * .5));
+                Point windowLocation = new Point(clickLocation.X, clickLocation.Y + (int)(ssw.Height * .5)); //  + ssw.Width ,  
 
                 ssw.Location = windowLocation;
 
@@ -3580,7 +4021,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void SetSelectedCellColor(Color? color, GridCell[] cells)
+        private void SetSelectedCellColor(Color? color, GridCell[] cells, BandedGridView bandedGridView)
         {
             if (color == null)
             {
@@ -3593,33 +4034,67 @@ namespace Toolroom_Project_Viewer
 
             foreach (var cell in cells)
             {
-                projectID = Convert.ToInt32(bandedGridView1.GetRowCellValue(cell.RowHandle, "ID"));
+                projectID = Convert.ToInt32(bandedGridView.GetRowCellValue(cell.RowHandle, "ID"));
 
-                ColorStruct colorItem = ColorList.Find(r => r.Column == cell.Column.FieldName && r.ProjectID == projectID); // Somehow the same color was added twice for the same roll for the same project.
+                ColorStruct colorItem = ColorList.Find(r => r.ColumnFieldName == cell.Column.FieldName && r.ProjectID == projectID); // Somehow the same color was added twice for the same role for the same project.
 
                 if (colorItem == null)
                 {
-                    ColorList.Add(new ColorStruct {ProjectID = projectID, Column = cell.Column.FieldName, Color = (Color)color, ColorARGB = ((Color)color).ToArgb() });
+                    ColorList.Add(new ColorStruct {ProjectID = projectID, ColumnFieldName = cell.Column.FieldName, ARGBColor = ((Color)color).ToArgb() });
                     Database.AddColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
-
                 }
                 else
                 {
-                    colorItem.Color = (Color)color;
-                    colorItem.ColorARGB = colorItem.Color.ToArgb();
+                    //colorItem.Color = (Color)color;
+                    colorItem.ARGBColor = colorItem.Color.ToArgb();
 
                     Database.UpdateColorEntry(projectID, cell.Column.FieldName, ((Color)color).ToArgb());
                 }
             }
 
-            bandedGridView1.LayoutChanged();
+            bandedGridView.LayoutChanged();
+        }
+        private void SetSelectedCellColor2(Color? color, GridCell[] cells, BandedGridView bandedGridView)
+        {
+            if (color == null)
+            {
+                return;
+            }
+
+            int projectNumber;
+
+            //ColorList.Clear();
+
+            foreach (var cell in cells)
+            {
+                projectNumber = Convert.ToInt32(bandedGridView.GetRowCellValue(cell.RowHandle, "ProjectNumber"));
+
+                ColorStruct colorItem = ColorList.Find(r => r.ColumnFieldName == cell.Column.FieldName && r.ProjectNumber == projectNumber); // Somehow the same color was added twice for the same role for the same project.
+
+                if (colorItem == null)
+                {
+                    ColorList.Add(new ColorStruct { ProjectNumber = projectNumber, ColumnFieldName = cell.Column.FieldName, ARGBColor = ((Color)color).ToArgb() });
+                    Database.AddColorEntry2(projectNumber, cell.Column.FieldName, ((Color)color).ToArgb());
+                }
+                else
+                {
+                    //colorItem.Color = (Color)color;
+                    colorItem.ARGBColor = ((Color)color).ToArgb();
+
+                    Database.UpdateColorEntry2(projectNumber, cell.Column.FieldName, ((Color)color).ToArgb());
+                }
+            }
+
+            bandedGridView.LayoutChanged();
         }
 
         private void bandedGridView1_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
-            if(e.RowHandle >= 0 && int.TryParse(bandedGridView1.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID))
+            BandedGridView bandedGridView = sender as BandedGridView;
+
+            if(e.RowHandle >= 0 && int.TryParse(bandedGridView.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID))
             {
-                var data = ColorList.FirstOrDefault(p => p.Column == e.Column.FieldName && p.ProjectID == projectID);
+                var data = ColorList.FirstOrDefault(p => p.ColumnFieldName == e.Column.FieldName && p.ProjectID == projectID);
 
                 if (data != null)
                 {
@@ -3634,13 +4109,13 @@ namespace Toolroom_Project_Viewer
         private void AddRepositoryItemToGrid()
         {
             RichTextBox richTextBox = new RichTextBox();
-            richTextBox.Dock = DockStyle.Top;
+            richTextBox.Dock = DockStyle.Fill;
 
             SimpleButton fontButton = new SimpleButton();
             fontButton.Appearance.Font = new Font(fontButton.Font.FontFamily, fontButton.Font.Size, FontStyle.Regular);
             fontButton.Text = "Font";
             fontButton.Left = 40;
-            fontButton.Top = 40;
+            fontButton.Top = 20;
             fontButton.Width = 50;
             fontButton.Height = 20;
             fontButton.Click += new EventHandler(fontButton_Clicked);
@@ -3684,7 +4159,7 @@ namespace Toolroom_Project_Viewer
             SimpleButton editorOKButton = new SimpleButton();
             editorOKButton.Text = "OK";
             editorOKButton.Left = 40;
-            editorOKButton.Top = 70;
+            editorOKButton.Top = 50;
             editorOKButton.Width = 50;
             editorOKButton.Height = 30;
             editorOKButton.Dock = DockStyle.None;
@@ -3693,17 +4168,19 @@ namespace Toolroom_Project_Viewer
             SimpleButton editorCancelButton = new SimpleButton();
             editorCancelButton.Text = "Cancel";
             editorCancelButton.Left = 110;
-            editorCancelButton.Top = 70;
+            editorCancelButton.Top = 50;
             editorCancelButton.Width = 50;
             editorCancelButton.Height = 30;
             editorCancelButton.Dock = DockStyle.None;
             editorCancelButton.Click += new EventHandler(editorCancelButton_Clicked);
 
             Panel panel = new Panel();
+            panel.Height = 80;
             panel.Dock = DockStyle.Bottom;
             panel.Controls.Add(editorOKButton);
             panel.Controls.Add(editorCancelButton);
             panel.Controls.Add(fontButton);
+
             //panel.Controls.Add(textColorPicker);
             //panel.Controls.Add(boldButton);
             //panel.Controls.Add(underlineButton);
@@ -3714,7 +4191,7 @@ namespace Toolroom_Project_Viewer
             PopupContainerControl popupContainerControl = new PopupContainerControl();
             popupContainerControl.Controls.Add(richTextBox);
             popupContainerControl.Controls.Add(panel);
-            popupContainerControl.Height = 170;
+            popupContainerControl.Height = 200;
 
             PopupContainerEdit popupContainerEdit = new PopupContainerEdit();
             popupContainerEdit.Properties.PopupControl = popupContainerControl;
@@ -3723,29 +4200,18 @@ namespace Toolroom_Project_Viewer
             repositoryItemPopupContainerEdit.PopupControl = popupContainerControl;
 
             gridControl2.RepositoryItems.Add(repositoryItemPopupContainerEdit);
+            gridControl3.RepositoryItems.Add(repositoryItemPopupContainerEdit);
             bandedGridView1.Columns["GeneralNotes"].ColumnEdit = repositoryItemRichTextEdit;
-        }
-
-        private void repositoryItemComboBox1_BeforePopup(object sender, EventArgs e)
-        {
-            Console.WriteLine("repositoryItemComboBox1_BeforePopup");
-        }
-
-        private void repositoryItemComboBox1_QueryPopUp(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void PersonnelRepositoryComboBox_BeforePopup(object sender, EventArgs e)
-        {
-            Console.WriteLine("PersonnelRepositoryComboBox_BeforePopup");
+            projectBandedGridView.Columns["GeneralNotes"].ColumnEdit = repositoryItemRichTextEdit;
         }
 
         private void editorOKButton_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("okButton_Clicked");
 
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            BandedGridView bandedGridView = GetFocusedView() as BandedGridView;
+
+            PopupContainerEdit popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
             RichTextBox richTextBox = popupContainerEdit.Properties.PopupControl.Controls[0] as RichTextBox;
 
 
@@ -3759,52 +4225,18 @@ namespace Toolroom_Project_Viewer
 
         private void editorCancelButton_Clicked(object sender, EventArgs e)
         {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            BandedGridView bandedGridView = GetFocusedView() as BandedGridView;
+
+            PopupContainerEdit popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
 
             popupContainerEdit.CancelPopup();
         }
 
-        private void editorColorPickerControl_ColorChanged(object sender, EventArgs e)
-        {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-
-            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-
-            ColorEdit colorEditControl = (ColorEdit)sender;
-
-            richTextBox.SelectionColor = colorEditControl.Color;
-        }
-
-        private void boldButton_Clicked(object sender, EventArgs e)
-        {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-
-            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-
-            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Bold);
-        }
-
-        private void underlineButton_Clicked(object sender, EventArgs e)
-        {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-
-            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-
-            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Underline);
-        }
-
-        private void plainButton_Clicked(object sender, EventArgs e)
-        {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-
-            RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
-
-            richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, richTextBox.Font.Size, FontStyle.Regular);
-        }
-
         private void fontButton_Clicked(object sender, EventArgs e)
         {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
+            BandedGridView bandedGridView = GetFocusedView() as BandedGridView;
+
+            PopupContainerEdit popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
 
             RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
 
@@ -3826,15 +4258,12 @@ namespace Toolroom_Project_Viewer
                 BandedGridView bandedGridView = sender as BandedGridView;
                 
                 Console.WriteLine(bandedGridView.ActiveEditor.EditorTypeName);
-                Database db = new Database();
 
-                ColumnView columnView = sender as ColumnView;
                 PopupContainerEdit popupContainerEdit = null;
                 ComboBoxEdit comboBoxEdit = null;
 
                 if (bandedGridView != null)
                 {
-
                     if (bandedGridView.ActiveEditor.EditorTypeName == "PopupContainerEdit")
                     {
                         popupContainerEdit = bandedGridView.ActiveEditor as PopupContainerEdit;
@@ -3846,19 +4275,9 @@ namespace Toolroom_Project_Viewer
 
                     if (popupContainerEdit != null)
                     {
-
-                        //RichEditControl richEditControl = (RichEditControl)activeEditor.Properties.PopupControl.Controls[0];
-
-                        //richEditControl.ActiveViewType = RichEditViewType.PrintLayout;
-                        //richEditControl.ActiveView.ZoomFactor = 2f;
-                        //richEditControl.Document.Sections[0].Margins.Left = 50;
-                        //richEditControl.Document.Sections[0].Margins.Top = 50;
-
                         RichTextBox richTextBox = (RichTextBox)popupContainerEdit.Properties.PopupControl.Controls[0];
 
                         richTextBox.Rtf = bandedGridView1.GetFocusedRowCellValue("GeneralNotes").ToString();
-
-                        //activeEditor.QueryResultValue += new QueryResultValueEventHandler(this.popupContainerEdit_QueryResultValue);
                     }
 
                     if (comboBoxEdit != null)
@@ -3892,15 +4311,6 @@ namespace Toolroom_Project_Viewer
                         }
                         else if (column == "Stage")
                         {
-                            //comboBoxEdit.Properties.Items.Add("1 - In-Design");
-                            //comboBoxEdit.Properties.Items.Add("2 - In-Programming");
-                            //comboBoxEdit.Properties.Items.Add("3 - In-Shop");
-                            //comboBoxEdit.Properties.Items.Add("4 - In-Mold Check-In or Outside Vendors");
-                            //comboBoxEdit.Properties.Items.Add("5 - Rework");
-                            //comboBoxEdit.Properties.Items.Add("6 - In-Repair / Development");
-                            //comboBoxEdit.Properties.Items.Add("7 - Completed");
-                            //comboBoxEdit.Properties.Items.Add("");
-
                             return;
                         }
 
@@ -3925,14 +4335,6 @@ namespace Toolroom_Project_Viewer
             {
                 e.RepositoryItem = repositoryItemPopupContainerEdit;
             }
-        }
-
-        private void popupContainerEdit_QueryResultValue(object sender, QueryResultValueEventArgs e)
-        {
-            PopupContainerEdit popupContainerEdit = bandedGridView1.ActiveEditor as PopupContainerEdit;
-            RichTextBox richTextBox = popupContainerEdit.Properties.PopupControl.Controls[0] as RichTextBox;
-            
-            popupContainerEdit.EditValue = richTextBox.Rtf;
         }
 
         #endregion
