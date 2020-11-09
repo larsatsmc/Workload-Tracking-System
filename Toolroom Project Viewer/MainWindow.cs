@@ -82,7 +82,7 @@ namespace Toolroom_Project_Viewer
                 InitializeResources();
 
                 GroupByRadioGroup.SelectedIndex = 0;
-                changeViewRadioGroup.SelectedIndex = 1;
+                changeViewRadioGroup.SelectedIndex = 0;
                 chartRadioGroup.SelectedIndex = 0;
                 InitializePrintOptions();
                 schedulerControl1.Start = DateTime.Today.AddDays(-7);
@@ -121,6 +121,10 @@ namespace Toolroom_Project_Viewer
             {
                 helper1 = new RefreshHelper(gridView3, "JobNumber");
                 helper2 = new RefreshHelper(gridView4, "Component");
+
+                gridControl3.LevelTree.Nodes.Add("DeptProgresses", DeptProgressGridView);
+                //GridFormatRule formatRule = new GridFormatRule();
+                //DeptProgressGridView.FormatRules["PercentCompleteFormatRule"].Rule.
 
                 LoadProjects();
                 LoadProjectView();
@@ -164,7 +168,7 @@ namespace Toolroom_Project_Viewer
 
             ProjectsList = data.projects;
             ComponentsList = data.components;
-            TasksList = data.tasks;
+            TasksList = data.tasks;            
 
             InitializeProjects();
         }
@@ -172,6 +176,7 @@ namespace Toolroom_Project_Viewer
         {
             BindingList<ProjectModel> projects = new BindingList<ProjectModel>(ProjectsList);
             gridControl3.DataSource = projects;
+
             refreshLabelControl.Text = "Last Refresh: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss tt");
         }
         //private void LoadWorkloadView()
@@ -182,13 +187,30 @@ namespace Toolroom_Project_Viewer
         //}
         private void InitializeProjects()
         {
+            List<TaskModel> projectTasks;
+
             foreach (var project in ProjectsList)
             {
                 project.Components = new List<ComponentModel>(ComponentsList.FindAll(x => x.ProjectNumber == project.ProjectNumber));
 
+                projectTasks = new List<TaskModel>(TasksList.FindAll(x => x.ProjectNumber == project.ProjectNumber));
+
                 foreach (var component in project.Components)
                 {
-                    component.Tasks = new List<TaskModel>(TasksList.FindAll(x => x.ProjectNumber == project.ProjectNumber && x.Component == component.Component));
+                    component.Tasks = new List<TaskModel>(projectTasks.FindAll(x => x.Component == component.Component));
+                }
+
+                var result = from task in projectTasks
+                             group task by task.TaskName into grp
+                             select 
+                             new { 
+                                 Department = grp.Key, 
+                                 PercentComplete = (double)grp.Count(x => x.Status == "Completed") / grp.Count()
+                                 };
+
+                foreach (var item in result.ToList())
+                {
+                    project.DeptProgresses.Add(new DeptProgress() { ProjectNumber = project.ProjectNumber, Department = item.Department, PercentComplete = item.PercentComplete }); 
                 }
             }
         }
@@ -900,7 +922,10 @@ namespace Toolroom_Project_Viewer
 
             //MessageBox.Show("AppointmentChanged");
         }
-
+        private void schedulerControl1_AppointmentDrop(object sender, AppointmentDragEventArgs e)
+        {
+            // Use this event to handle moving multiple selected tasks.
+        }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
             Appointment apt = (Appointment)e.Object;
@@ -1874,6 +1899,16 @@ namespace Toolroom_Project_Viewer
             ColorList = Database.GetColorEntries();
             CollapseGroups();
         }
+        private void gridView3_PrintInitialize(object sender, PrintInitializeEventArgs e)
+        {
+            PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
+
+            pb.PageSettings.TopMargin = 25;
+            pb.PageSettings.RightMargin = 25;
+            pb.PageSettings.BottomMargin = 25;
+            pb.PageSettings.LeftMargin = 25;
+            pb.Document.AutoFitToPagesWidth = 1;
+        }
         private void projectBandedGridView_PrintInitialize(object sender, PrintInitializeEventArgs e)
         {
             PrintingSystemBase pb = e.PrintingSystem as PrintingSystemBase;
@@ -1913,6 +1948,8 @@ namespace Toolroom_Project_Viewer
             GridView gridView = gridControl3.MainView as GridView;
 
             gridView.ShowPrintPreview();
+
+            //gridControl3.ShowPrintPreview();
         }
         private void projectBandedGridView_ShownEditor(object sender, EventArgs e)
         {
@@ -2263,14 +2300,31 @@ namespace Toolroom_Project_Viewer
                 gridControl3.MainView = gridView3;
                 workLoadViewPrintButton.Visible = false;
                 workLoadViewPrint2Button.Visible = false;
-                printPreviewButton.Visible = false;
+                gridView3.OptionsPrint.PrintDetails = true;
             }
-            else
+            else if (edit.SelectedIndex == 1)
             {
                 gridControl3.MainView = projectBandedGridView;
                 workLoadViewPrintButton.Visible = true;
                 workLoadViewPrint2Button.Visible = true;
-                printPreviewButton.Visible = true;
+                gridView3.OptionsPrint.PrintDetails = false;
+            }
+            else
+            {
+                gridControl3.MainView = gridView3;
+                GridLevelNode node = new GridLevelNode();
+                node.RelationName = "DeptProgresses";
+                node.LevelTemplate = DeptProgressGridView;
+                GridLevelNode deleteNode = gridControl3.LevelTree.Nodes["Components"];
+                BaseView oldView = deleteNode.LevelTemplate;
+                oldView.Dispose();
+                //gridControl3.LevelTree.Nodes.Remove(deleteNode);
+                //deleteNode = gridControl3.LevelTree.Nodes["Tasks"];
+                //deleteNode.Dispose();
+                //gridControl3.LevelTree.Nodes.Remove(deleteNode);
+                gridControl3.LevelTree.Nodes.Add(node);
+
+                gridView3.OptionsPrint.PrintDetails = true;
             }
         }
         private void gridView3_KeyDown(object sender, KeyEventArgs e)
@@ -2729,7 +2783,6 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-
                 var compResult = from component in ComponentsList
                                  where selectedComponentList.Any(x => x.Component == component.Component && x.ProjectNumber == component.ProjectNumber)
                                  select component;
@@ -2875,6 +2928,8 @@ namespace Toolroom_Project_Viewer
             fi.SetValue(projectBandedGridView.Columns.ColumnByFieldName("Stage"), 0);
 
             projectBandedGridView.Print();
+
+            gridControl3.Print();
         }
         private void workLoadViewPrint2Button_Click(object sender, EventArgs e)
         {
@@ -2985,23 +3040,6 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void LoadGraph(Week week)
-        {
-            chartControl2.Series.Clear();
-
-            //SideBySideBarSeries series = new SideBySideBarSeries();
-            Series series1 = new Series(week.Department + " Hours", ViewType.Bar);
-            //Series series2 = new Series("Program Finish Hours", ViewType.Bar);
-            //Series series3 = new Series("Program Electrode Hours", ViewType.Bar);
-
-            foreach (ClassLibrary.Day day in week.DayList)
-            {
-                series1.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
-            }
-
-            chartControl2.Series.Add(series1);
-        }
-
         private void PopulateTimeFrameComboBox()
         {
             DateTime weekStart = new DateTime();
@@ -3074,22 +3112,6 @@ namespace Toolroom_Project_Viewer
         {
             return chartRadioGroup.Properties.Items[chartRadioGroup.SelectedIndex].Description.ToString();
         }
-        private void GetDepartmentHours()
-        {
-            Week week;
-
-            if (timeFrameComboBoxEdit.Text != "" && departmentComboBox3.Text != "")
-            {
-                string weekStart, weekEnd;
-
-                weekStart = timeFrameComboBoxEdit.Text.Split(' ')[0];
-                weekEnd = timeFrameComboBoxEdit.Text.Split(' ')[2];
-
-                week = Database.GetDayHours(weekStart, weekEnd).Find(x => x.Department == departmentComboBox3.Text);
-
-                LoadGraph(week);
-            }
-        }
 
         private void RefreshChartButton_Click(object sender, EventArgs e)
         {
@@ -3102,11 +3124,6 @@ namespace Toolroom_Project_Viewer
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
-        }
-
-        private void departmentComboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            GetDepartmentHours();
         }
 
         private void timeFrameComboBoxEdit_SelectedIndexChanged(object sender, EventArgs e)

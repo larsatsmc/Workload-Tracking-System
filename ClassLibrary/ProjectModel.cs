@@ -48,6 +48,7 @@ namespace ClassLibrary
         public DateTime? DateModified { get; set; }
         public DateTime? LastKanBanGenerationDate { get; set; }
         public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
+        public List<DeptProgress> DeptProgresses { get; set; } = new List<DeptProgress>();
         //public System.ComponentModel.BindingList<ComponentModel> Components { get; set; }
         public QuoteModel QuoteInfo { get; private set; }
         public bool HasProjectInfo { get; set; }

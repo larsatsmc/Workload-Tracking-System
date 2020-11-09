@@ -34,8 +34,8 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateCreated, DateModified) " + // 
-                                          "VALUES (@JobNumber, @ProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE(), GETDATE())"; // 
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE())"; // 
 
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Picture, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish)"; // 
@@ -537,7 +537,7 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    connection.Execute($"Update Components SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE (ID = @ID)", component);
+                    connection.Execute($"Update Components SET {ev.Column.FieldName} = @{ev.Column.FieldName}, DateModified = GETDATE() WHERE (ID = @ID)", component);
                 }
             }
             catch (Exception e)
@@ -1123,7 +1123,7 @@ namespace ClassLibrary
             {
                 string queryString;
 
-                queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Personnel = @Personnel, Resources = @Resources " +
+                queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE() " +
                               "WHERE ID = @ID";
 
                 connection.Execute(queryString, task);
@@ -1221,7 +1221,7 @@ namespace ClassLibrary
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 string queryString = "UPDATE Tasks " +
-                                     "SET StartDate = @StartDate, FinishDate = @FinishDate " +
+                                     "SET StartDate = @StartDate, FinishDate = @FinishDate DateModified = GETDATE() " +
                                      "WHERE ID = @ID";
 
                 connection.Execute(queryString, tasks);

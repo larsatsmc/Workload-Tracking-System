@@ -33,6 +33,8 @@
             DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
             DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.SideBySideBarSeriesLabel sideBySideBarSeriesLabel1 = new DevExpress.XtraCharts.SideBySideBarSeriesLabel();
+            DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::Toolroom_Project_Viewer.MainSplashScreen), true, true);
+            DevExpress.XtraEditors.RangeControlRange rangeControlRange2 = new DevExpress.XtraEditors.RangeControlRange();
             DevExpress.XtraGrid.GridFormatRule gridFormatRule1 = new DevExpress.XtraGrid.GridFormatRule();
             DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar1 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
@@ -41,22 +43,20 @@
             DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar2 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
             DevExpress.XtraGrid.GridFormatRule gridFormatRule3 = new DevExpress.XtraGrid.GridFormatRule();
             DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression1 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
-            DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::Toolroom_Project_Viewer.MainSplashScreen), true, true);
-            DevExpress.XtraEditors.RangeControlRange rangeControlRange2 = new DevExpress.XtraEditors.RangeControlRange();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule4 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar3 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
             DevExpress.XtraScheduler.TimeRuler timeRuler1 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler2 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler3 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler5 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler6 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.SideBySideBarSeriesView sideBySideBarSeriesView1 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule4 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule5 = new DevExpress.XtraGrid.GridFormatRule();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
             this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
+            this.rangeControl2 = new DevExpress.XtraEditors.RangeControl();
             this.colPercentComplete = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID2 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -148,7 +148,9 @@
             this.colStatus3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colInitials = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDateCompleted = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.rangeControl2 = new DevExpress.XtraEditors.RangeControl();
+            this.DeptProgressGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.DepartmentColDPV = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.PercentCompleteColDPV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.projectsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ProjectsTableAdapter();
             this.tasksTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.TasksTableAdapter();
             this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
@@ -233,9 +235,6 @@
             this.projectComboBox = new DevExpress.XtraEditors.ComboBoxEdit();
             this.RefreshGanttButton = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage5 = new DevExpress.XtraTab.XtraTabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.departmentComboBox3 = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.chartControl2 = new DevExpress.XtraCharts.ChartControl();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
             this.refreshWorkloadLabelControl = new DevExpress.XtraEditors.LabelControl();
             this.printPreviewButton = new DevExpress.XtraEditors.SimpleButton();
@@ -302,6 +301,7 @@
             ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).BeginInit();
@@ -319,7 +319,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -359,12 +359,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectComboBox.Properties)).BeginInit();
-            this.xtraTabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox3.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView1)).BeginInit();
             this.xtraTabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).BeginInit();
@@ -446,6 +440,25 @@
             this.workload_Tracking_System_DBDataSet.DataSetName = "Workload_Tracking_System_DBDataSet";
             this.workload_Tracking_System_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // splashScreenManager1
+            // 
+            splashScreenManager1.ClosingDelay = 250;
+            // 
+            // rangeControl2
+            // 
+            this.rangeControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rangeControl2.Client = this.chartControl1;
+            this.rangeControl2.Location = new System.Drawing.Point(12, 742);
+            this.rangeControl2.Name = "rangeControl2";
+            rangeControlRange2.Maximum = 9.6D;
+            rangeControlRange2.Minimum = -0.6D;
+            rangeControlRange2.Owner = this.rangeControl2;
+            this.rangeControl2.SelectedRange = rangeControlRange2;
+            this.rangeControl2.Size = new System.Drawing.Size(1572, 46);
+            this.rangeControl2.TabIndex = 19;
+            this.rangeControl2.Text = "rangeControl2";
+            // 
             // colPercentComplete
             // 
             this.colPercentComplete.DisplayFormat.FormatString = "P0";
@@ -459,6 +472,8 @@
             // 
             // gridView4
             // 
+            this.gridView4.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
+            this.gridView4.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.gridView4.ChildGridLevelName = "Tasks";
             this.gridView4.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colID2,
@@ -489,6 +504,8 @@
             this.gridView4.GridControl = this.gridControl3;
             this.gridView4.Name = "gridView4";
             this.gridView4.OptionsBehavior.EditingMode = DevExpress.XtraGrid.Views.Grid.GridEditingMode.Inplace;
+            this.gridView4.OptionsPrint.AllowMultilineHeaders = true;
+            this.gridView4.OptionsPrint.AutoWidth = false;
             this.gridView4.OptionsSelection.MultiSelect = true;
             this.gridView4.OptionsView.ColumnAutoWidth = false;
             this.gridView4.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
@@ -556,6 +573,7 @@
             // 
             this.colFinish.FieldName = "Finish";
             this.colFinish.Name = "colFinish";
+            this.colFinish.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colFinish.Visible = true;
             this.colFinish.VisibleIndex = 3;
             this.colFinish.Width = 143;
@@ -576,6 +594,8 @@
             // 
             // colPriority1
             // 
+            this.colPriority1.AppearanceCell.Options.UseTextOptions = true;
+            this.colPriority1.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colPriority1.ColumnEdit = this.repositoryItemSpinEdit2;
             this.colPriority1.FieldName = "Priority";
             this.colPriority1.Name = "colPriority1";
@@ -594,6 +614,8 @@
             // 
             // colQuantity
             // 
+            this.colQuantity.AppearanceCell.Options.UseTextOptions = true;
+            this.colQuantity.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colQuantity.ColumnEdit = this.repositoryItemSpinEdit2;
             this.colQuantity.FieldName = "Quantity";
             this.colQuantity.Name = "colQuantity";
@@ -603,6 +625,8 @@
             // 
             // colSpares
             // 
+            this.colSpares.AppearanceCell.Options.UseTextOptions = true;
+            this.colSpares.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colSpares.ColumnEdit = this.repositoryItemSpinEdit2;
             this.colSpares.FieldName = "Spares";
             this.colSpares.Name = "colSpares";
@@ -614,6 +638,7 @@
             // 
             this.colStatus2.FieldName = "Status";
             this.colStatus2.Name = "colStatus2";
+            this.colStatus2.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colStatus2.Visible = true;
             this.colStatus2.VisibleIndex = 8;
             this.colStatus2.Width = 151;
@@ -655,6 +680,7 @@
             this.projectBandedGridView,
             this.gridView3,
             this.gridView5,
+            this.DeptProgressGridView,
             this.gridView4});
             this.gridControl3.Load += new System.EventHandler(this.gridControl3_Load);
             // 
@@ -1054,6 +1080,8 @@
             // 
             this.gridView3.Appearance.HeaderPanel.Options.UseTextOptions = true;
             this.gridView3.Appearance.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.gridView3.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
+            this.gridView3.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.gridView3.ChildGridLevelName = "Components";
             this.gridView3.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colID1,
@@ -1104,6 +1132,9 @@
             this.gridView3.OptionsBehavior.EditingMode = DevExpress.XtraGrid.Views.Grid.GridEditingMode.Inplace;
             this.gridView3.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.MouseDownFocused;
             this.gridView3.OptionsPrint.AllowMultilineHeaders = true;
+            this.gridView3.OptionsPrint.AutoWidth = false;
+            this.gridView3.OptionsPrint.PrintSelectedRowsOnly = true;
+            this.gridView3.OptionsSelection.MultiSelect = true;
             this.gridView3.OptionsView.AllowHtmlDrawHeaders = true;
             this.gridView3.OptionsView.ColumnAutoWidth = false;
             this.gridView3.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
@@ -1115,6 +1146,7 @@
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
+            this.gridView3.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.gridView3_PrintInitialize);
             this.gridView3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView3_KeyDown);
             this.gridView3.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.GridView3_ValidatingEditor);
             this.gridView3.InvalidValueException += new DevExpress.XtraEditors.Controls.InvalidValueExceptionEventHandler(this.GridView3_InvalidValueException);
@@ -1201,6 +1233,7 @@
             // 
             this.colRoughProgrammer1.FieldName = "RoughProgrammer";
             this.colRoughProgrammer1.Name = "colRoughProgrammer1";
+            this.colRoughProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colRoughProgrammer1.Visible = true;
             this.colRoughProgrammer1.VisibleIndex = 9;
             this.colRoughProgrammer1.Width = 105;
@@ -1209,6 +1242,7 @@
             // 
             this.colElectrodeProgrammer1.FieldName = "ElectrodeProgrammer";
             this.colElectrodeProgrammer1.Name = "colElectrodeProgrammer1";
+            this.colElectrodeProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colElectrodeProgrammer1.Visible = true;
             this.colElectrodeProgrammer1.VisibleIndex = 10;
             this.colElectrodeProgrammer1.Width = 105;
@@ -1217,6 +1251,7 @@
             // 
             this.colFinishProgrammer1.FieldName = "FinishProgrammer";
             this.colFinishProgrammer1.Name = "colFinishProgrammer1";
+            this.colFinishProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colFinishProgrammer1.Visible = true;
             this.colFinishProgrammer1.VisibleIndex = 11;
             this.colFinishProgrammer1.Width = 105;
@@ -1225,6 +1260,7 @@
             // 
             this.colApprentice.FieldName = "Apprentice";
             this.colApprentice.Name = "colApprentice";
+            this.colApprentice.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colApprentice.Visible = true;
             this.colApprentice.VisibleIndex = 12;
             this.colApprentice.Width = 116;
@@ -1239,6 +1275,7 @@
             // 
             this.colOverlapAllowed.FieldName = "OverlapAllowed";
             this.colOverlapAllowed.Name = "colOverlapAllowed";
+            this.colOverlapAllowed.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colOverlapAllowed.Visible = true;
             this.colOverlapAllowed.VisibleIndex = 13;
             this.colOverlapAllowed.Width = 61;
@@ -1247,6 +1284,7 @@
             // 
             this.colIncludeHours.FieldName = "IncludeHours";
             this.colIncludeHours.Name = "colIncludeHours";
+            this.colIncludeHours.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colIncludeHours.Visible = true;
             this.colIncludeHours.VisibleIndex = 14;
             // 
@@ -1255,6 +1293,7 @@
             this.colKanBanWorkbookPath.ColumnEdit = this.repositoryItemHyperLinkEdit2;
             this.colKanBanWorkbookPath.FieldName = "KanBanWorkbookPath";
             this.colKanBanWorkbookPath.Name = "colKanBanWorkbookPath";
+            this.colKanBanWorkbookPath.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
             this.colKanBanWorkbookPath.Visible = true;
             this.colKanBanWorkbookPath.VisibleIndex = 15;
             this.colKanBanWorkbookPath.Width = 357;
@@ -1428,24 +1467,45 @@
             this.colDateCompleted.VisibleIndex = 12;
             this.colDateCompleted.Width = 95;
             // 
-            // splashScreenManager1
+            // DeptProgressGridView
             // 
-            splashScreenManager1.ClosingDelay = 250;
+            this.DeptProgressGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.DepartmentColDPV,
+            this.PercentCompleteColDPV});
+            gridFormatRule4.Column = this.PercentCompleteColDPV;
+            gridFormatRule4.ColumnApplyTo = this.PercentCompleteColDPV;
+            gridFormatRule4.Name = "PercentCompleteFormat";
+            formatConditionRuleDataBar3.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            formatConditionRuleDataBar3.Appearance.ForeColor = System.Drawing.Color.White;
+            formatConditionRuleDataBar3.Appearance.Options.UseBackColor = true;
+            formatConditionRuleDataBar3.Appearance.Options.UseForeColor = true;
+            formatConditionRuleDataBar3.PredefinedName = null;
+            gridFormatRule4.Rule = formatConditionRuleDataBar3;
+            this.DeptProgressGridView.FormatRules.Add(gridFormatRule4);
+            this.DeptProgressGridView.GridControl = this.gridControl3;
+            this.DeptProgressGridView.Name = "DeptProgressGridView";
+            this.DeptProgressGridView.OptionsView.ColumnAutoWidth = false;
             // 
-            // rangeControl2
+            // DepartmentColDPV
             // 
-            this.rangeControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rangeControl2.Client = this.chartControl1;
-            this.rangeControl2.Location = new System.Drawing.Point(12, 742);
-            this.rangeControl2.Name = "rangeControl2";
-            rangeControlRange2.Maximum = 9.6D;
-            rangeControlRange2.Minimum = -0.6D;
-            rangeControlRange2.Owner = this.rangeControl2;
-            this.rangeControl2.SelectedRange = rangeControlRange2;
-            this.rangeControl2.Size = new System.Drawing.Size(1572, 46);
-            this.rangeControl2.TabIndex = 19;
-            this.rangeControl2.Text = "rangeControl2";
+            this.DepartmentColDPV.Caption = "Department";
+            this.DepartmentColDPV.FieldName = "Department";
+            this.DepartmentColDPV.Name = "DepartmentColDPV";
+            this.DepartmentColDPV.Visible = true;
+            this.DepartmentColDPV.VisibleIndex = 0;
+            this.DepartmentColDPV.Width = 125;
+            // 
+            // PercentCompleteColDPV
+            // 
+            this.PercentCompleteColDPV.Caption = "Percent Complete";
+            this.PercentCompleteColDPV.DisplayFormat.FormatString = "p0";
+            this.PercentCompleteColDPV.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.PercentCompleteColDPV.FieldName = "PercentComplete";
+            this.PercentCompleteColDPV.Name = "PercentCompleteColDPV";
+            this.PercentCompleteColDPV.OptionsColumn.AllowEdit = false;
+            this.PercentCompleteColDPV.Visible = true;
+            this.PercentCompleteColDPV.VisibleIndex = 1;
+            this.PercentCompleteColDPV.Width = 125;
             // 
             // projectsTableAdapter
             // 
@@ -1605,6 +1665,7 @@
             this.schedulerControl1.Views.TimelineView.ResourcesPerPage = 5;
             this.schedulerControl1.Views.WeekView.Enabled = false;
             this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler3);
+            this.schedulerControl1.AppointmentDrop += new DevExpress.XtraScheduler.AppointmentDragEventHandler(this.schedulerControl1_AppointmentDrop);
             this.schedulerControl1.AppointmentResized += new DevExpress.XtraScheduler.AppointmentResizeEventHandler(this.schedulerControl1_AppointmentResized);
             this.schedulerControl1.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl1_AppointmentFlyoutShowing);
             this.schedulerControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragDrop);
@@ -2124,12 +2185,12 @@
             // 
             // changeViewRadioGroup
             // 
-            this.changeViewRadioGroup.Location = new System.Drawing.Point(783, 6);
+            this.changeViewRadioGroup.Location = new System.Drawing.Point(783, 4);
             this.changeViewRadioGroup.Name = "changeViewRadioGroup";
             this.changeViewRadioGroup.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
             new DevExpress.XtraEditors.Controls.RadioGroupItem(true, "Project"),
             new DevExpress.XtraEditors.Controls.RadioGroupItem(false, "Workload")});
-            this.changeViewRadioGroup.Size = new System.Drawing.Size(148, 27);
+            this.changeViewRadioGroup.Size = new System.Drawing.Size(175, 27);
             this.changeViewRadioGroup.TabIndex = 14;
             this.changeViewRadioGroup.SelectedIndexChanged += new System.EventHandler(this.changeViewRadioGroup_SelectedIndexChanged);
             // 
@@ -2200,6 +2261,7 @@
             this.createProjectButton.Text = "Create Project";
             this.createProjectButton.ToolTip = "Creates a new project.";
             this.createProjectButton.ToolTipAnchor = DevExpress.Utils.ToolTipAnchor.Cursor;
+            this.createProjectButton.Visible = false;
             this.createProjectButton.Click += new System.EventHandler(this.createProjectButton_Click);
             // 
             // backDateButton
@@ -2497,68 +2559,11 @@
             // 
             // xtraTabPage5
             // 
-            this.xtraTabPage5.Controls.Add(this.label3);
-            this.xtraTabPage5.Controls.Add(this.departmentComboBox3);
-            this.xtraTabPage5.Controls.Add(this.chartControl2);
             this.xtraTabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage5.Name = "xtraTabPage5";
             this.xtraTabPage5.PageVisible = false;
             this.xtraTabPage5.Size = new System.Drawing.Size(1596, 799);
             this.xtraTabPage5.Text = "Other";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(68, 114);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Department:";
-            // 
-            // departmentComboBox3
-            // 
-            this.departmentComboBox3.Location = new System.Drawing.Point(141, 111);
-            this.departmentComboBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.departmentComboBox3.Name = "departmentComboBox3";
-            this.departmentComboBox3.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.departmentComboBox3.Properties.Items.AddRange(new object[] {
-            "Program Rough",
-            "Program Finish",
-            "Program Electrodes",
-            "CNC Rough",
-            "CNC Finish",
-            "CNC Electrodes",
-            "EDM Sinker",
-            "EDM Wire (In-House)",
-            "Polish (In-House)",
-            "Inspection",
-            "Grind",
-            ""});
-            this.departmentComboBox3.Size = new System.Drawing.Size(149, 20);
-            this.departmentComboBox3.TabIndex = 14;
-            // 
-            // chartControl2
-            // 
-            this.chartControl2.DataSource = this.workload_Tracking_System_DBDataSet.Machines;
-            xyDiagram2.AxisX.Tickmarks.MinorVisible = false;
-            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
-            this.chartControl2.Diagram = xyDiagram2;
-            this.chartControl2.Legend.Name = "Default Legend";
-            this.chartControl2.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            this.chartControl2.Location = new System.Drawing.Point(71, 171);
-            this.chartControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chartControl2.Name = "chartControl2";
-            series2.Name = "Hours";
-            sideBySideBarSeriesView1.FillStyle.FillMode = DevExpress.XtraCharts.FillMode.Hatch;
-            series2.View = sideBySideBarSeriesView1;
-            this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series2};
-            this.chartControl2.SeriesTemplate.SeriesColorizer = null;
-            this.chartControl2.Size = new System.Drawing.Size(1255, 606);
-            this.chartControl2.TabIndex = 13;
-            this.chartControl2.Visible = false;
             // 
             // xtraTabPage6
             // 
@@ -2768,9 +2773,9 @@
             this.colGeneralNotes,
             this.colGeneralNotesRTF,
             this.colJobFolderPath});
-            gridFormatRule4.Name = "Format0";
-            gridFormatRule4.Rule = null;
-            this.bandedGridView1.FormatRules.Add(gridFormatRule4);
+            gridFormatRule5.Name = "Format0";
+            gridFormatRule5.Rule = null;
+            this.bandedGridView1.FormatRules.Add(gridFormatRule5);
             this.bandedGridView1.GridControl = this.gridControl2;
             this.bandedGridView1.GroupCount = 1;
             this.bandedGridView1.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
@@ -3254,6 +3259,7 @@
             ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).EndInit();
@@ -3271,7 +3277,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
@@ -3316,13 +3322,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectComboBox.Properties)).EndInit();
-            this.xtraTabPage5.ResumeLayout(false);
-            this.xtraTabPage5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox3.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).EndInit();
             this.xtraTabPage6.ResumeLayout(false);
             this.xtraTabPage6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
@@ -3387,9 +3386,6 @@
         private DevExpress.XtraEditors.SimpleButton printTaskViewButton;
         private DevExpress.XtraEditors.ComboBoxEdit timeFrameComboBoxEdit;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage5;
-        private System.Windows.Forms.Label label3;
-        private DevExpress.XtraEditors.ComboBoxEdit departmentComboBox3;
-        private DevExpress.XtraCharts.ChartControl chartControl2;
         private DevExpress.XtraEditors.RangeControl rangeControl1;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage6;
         private DevExpress.XtraEditors.SimpleButton deleteButton;
@@ -3597,6 +3593,9 @@
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand generalInfoGridBand;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colIDBGV;
         private DevExpress.XtraEditors.SimpleButton restoreProjectButton;
+        private DevExpress.XtraGrid.Views.Grid.GridView DeptProgressGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn DepartmentColDPV;
+        private DevExpress.XtraGrid.Columns.GridColumn PercentCompleteColDPV;
     }
 }
 

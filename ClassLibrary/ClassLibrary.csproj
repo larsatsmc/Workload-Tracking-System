@@ -80,6 +80,7 @@
     <Compile Include="ComponentModel.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DepartmentModel.cs" />
+    <Compile Include="DeptProgress.cs" />
     <Compile Include="ExcelInteractions.cs" />
     <Compile Include="GeneralOperations.cs" />
     <Compile Include="Helper.cs" />
