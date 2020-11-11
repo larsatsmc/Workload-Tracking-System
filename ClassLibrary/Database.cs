@@ -1221,7 +1221,7 @@ namespace ClassLibrary
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 string queryString = "UPDATE Tasks " +
-                                     "SET StartDate = @StartDate, FinishDate = @FinishDate DateModified = GETDATE() " +
+                                     "SET StartDate = @StartDate, FinishDate = @FinishDate, DateModified = GETDATE() " +
                                      "WHERE ID = @ID";
 
                 connection.Execute(queryString, tasks);

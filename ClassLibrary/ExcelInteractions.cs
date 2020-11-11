@@ -818,6 +818,9 @@ namespace ClassLibrary
                 notesWs.Range("A1").Style.Font.Bold = true;
                 notesWs.Range("A1").Value = "Notes";
 
+                // TODO: Add code for adding richtextbox to a spreadsheet.
+                //Microsoft.Office.Tools.Excel.Controls.RichTextBox richTextBox = new Microsoft.Office.Tools.Excel.Controls.RichTextBox();
+
                 RichTextBox rtBox = new RichTextBox();
                 rtBox.Rtf = pi.GeneralNotes;
 

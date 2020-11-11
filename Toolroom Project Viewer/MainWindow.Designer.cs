@@ -114,6 +114,7 @@
             this.colID1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colJobNumber1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colProjectNumber2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStagePV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colCustomer1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colProject = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDueDate1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -1080,6 +1081,8 @@
             // 
             this.gridView3.Appearance.HeaderPanel.Options.UseTextOptions = true;
             this.gridView3.Appearance.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.gridView3.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.gridView3.Appearance.SelectedRow.Options.UseBackColor = true;
             this.gridView3.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
             this.gridView3.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.gridView3.ChildGridLevelName = "Components";
@@ -1087,6 +1090,7 @@
             this.colID1,
             this.colJobNumber1,
             this.colProjectNumber2,
+            this.colStagePV,
             this.colCustomer1,
             this.colProject,
             this.colDueDate1,
@@ -1135,6 +1139,7 @@
             this.gridView3.OptionsPrint.AutoWidth = false;
             this.gridView3.OptionsPrint.PrintSelectedRowsOnly = true;
             this.gridView3.OptionsSelection.MultiSelect = true;
+            this.gridView3.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect;
             this.gridView3.OptionsView.AllowHtmlDrawHeaders = true;
             this.gridView3.OptionsView.ColumnAutoWidth = false;
             this.gridView3.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
@@ -1171,6 +1176,12 @@
             this.colProjectNumber2.Visible = true;
             this.colProjectNumber2.VisibleIndex = 1;
             this.colProjectNumber2.Width = 60;
+            // 
+            // colStagePV
+            // 
+            this.colStagePV.Caption = "Stage";
+            this.colStagePV.FieldName = "Stage";
+            this.colStagePV.Name = "colStagePV";
             // 
             // colCustomer1
             // 
@@ -2137,7 +2148,7 @@
             this.restoreProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.restoreProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.restoreProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.restoreProjectButton.Location = new System.Drawing.Point(565, 7);
+            this.restoreProjectButton.Location = new System.Drawing.Point(646, 7);
             this.restoreProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.restoreProjectButton.Name = "restoreProjectButton";
             this.restoreProjectButton.Size = new System.Drawing.Size(85, 21);
@@ -2185,7 +2196,7 @@
             // 
             // changeViewRadioGroup
             // 
-            this.changeViewRadioGroup.Location = new System.Drawing.Point(783, 4);
+            this.changeViewRadioGroup.Location = new System.Drawing.Point(864, 4);
             this.changeViewRadioGroup.Name = "changeViewRadioGroup";
             this.changeViewRadioGroup.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
             new DevExpress.XtraEditors.Controls.RadioGroupItem(true, "Project"),
@@ -2219,7 +2230,7 @@
             this.resourceButton.AppearanceHovered.Options.UseBackColor = true;
             this.resourceButton.AppearanceHovered.Options.UseForeColor = true;
             this.resourceButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.resourceButton.Location = new System.Drawing.Point(680, 7);
+            this.resourceButton.Location = new System.Drawing.Point(761, 7);
             this.resourceButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.resourceButton.Name = "resourceButton";
             this.resourceButton.Size = new System.Drawing.Size(85, 21);
@@ -2236,7 +2247,7 @@
             this.editProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.editProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.editProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.editProjectButton.Location = new System.Drawing.Point(210, 7);
+            this.editProjectButton.Location = new System.Drawing.Point(291, 7);
             this.editProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.editProjectButton.Name = "editProjectButton";
             this.editProjectButton.Size = new System.Drawing.Size(85, 21);
@@ -2253,7 +2264,7 @@
             this.createProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.createProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.createProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.createProjectButton.Location = new System.Drawing.Point(1501, 9);
+            this.createProjectButton.Location = new System.Drawing.Point(115, 7);
             this.createProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createProjectButton.Name = "createProjectButton";
             this.createProjectButton.Size = new System.Drawing.Size(85, 21);
@@ -2261,7 +2272,6 @@
             this.createProjectButton.Text = "Create Project";
             this.createProjectButton.ToolTip = "Creates a new project.";
             this.createProjectButton.ToolTipAnchor = DevExpress.Utils.ToolTipAnchor.Cursor;
-            this.createProjectButton.Visible = false;
             this.createProjectButton.Click += new System.EventHandler(this.createProjectButton_Click);
             // 
             // backDateButton
@@ -2271,7 +2281,7 @@
             this.backDateButton.AppearanceHovered.Options.UseBackColor = true;
             this.backDateButton.AppearanceHovered.Options.UseForeColor = true;
             this.backDateButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.backDateButton.Location = new System.Drawing.Point(386, 7);
+            this.backDateButton.Location = new System.Drawing.Point(467, 7);
             this.backDateButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.backDateButton.Name = "backDateButton";
             this.backDateButton.Size = new System.Drawing.Size(85, 21);
@@ -2288,7 +2298,7 @@
             this.forwardDateButton.AppearanceHovered.Options.UseBackColor = true;
             this.forwardDateButton.AppearanceHovered.Options.UseForeColor = true;
             this.forwardDateButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.forwardDateButton.Location = new System.Drawing.Point(298, 7);
+            this.forwardDateButton.Location = new System.Drawing.Point(379, 7);
             this.forwardDateButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.forwardDateButton.Name = "forwardDateButton";
             this.forwardDateButton.Size = new System.Drawing.Size(85, 21);
@@ -2305,7 +2315,7 @@
             this.kanBanButton.AppearanceHovered.Options.UseBackColor = true;
             this.kanBanButton.AppearanceHovered.Options.UseForeColor = true;
             this.kanBanButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.kanBanButton.Location = new System.Drawing.Point(474, 7);
+            this.kanBanButton.Location = new System.Drawing.Point(555, 7);
             this.kanBanButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.kanBanButton.Name = "kanBanButton";
             this.kanBanButton.Size = new System.Drawing.Size(85, 21);
@@ -2322,7 +2332,7 @@
             this.copyButton.AppearanceHovered.Options.UseBackColor = true;
             this.copyButton.AppearanceHovered.Options.UseForeColor = true;
             this.copyButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.copyButton.Location = new System.Drawing.Point(122, 7);
+            this.copyButton.Location = new System.Drawing.Point(203, 7);
             this.copyButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.copyButton.Name = "copyButton";
             this.copyButton.Size = new System.Drawing.Size(85, 21);
@@ -3596,6 +3606,7 @@
         private DevExpress.XtraGrid.Views.Grid.GridView DeptProgressGridView;
         private DevExpress.XtraGrid.Columns.GridColumn DepartmentColDPV;
         private DevExpress.XtraGrid.Columns.GridColumn PercentCompleteColDPV;
+        private DevExpress.XtraGrid.Columns.GridColumn colStagePV;
     }
 }
 

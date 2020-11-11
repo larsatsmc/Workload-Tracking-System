@@ -600,6 +600,10 @@ namespace Toolroom_Project_Viewer
             {
                 personnelList = GetResourceList("Finish CNC Operator");
             }
+            else if (taskName.Contains("Grind"))  // I'm commenting this because the term tool maker has mingled with the term lead and there are a number of 'tool makers' that aren't capable of grinding.
+            {
+                personnelList = GetResourceList("Tool Maker");
+            }
             else if (taskName == "CNC Electrodes")
             {
                 personnelList = GetResourceList("Electrode CNC Operator");
@@ -666,7 +670,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (taskName.Contains("Grind"))
             {
-                ti = new TaskModel("", "1", "0");
+                ti = new TaskModel(ToolMakerComboBox.Text, "1", "0");
             }
             else if (taskName.Contains("EDM Sinker"))
             {

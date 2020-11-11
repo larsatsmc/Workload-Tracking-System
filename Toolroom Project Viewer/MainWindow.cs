@@ -100,8 +100,8 @@ namespace Toolroom_Project_Viewer
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
                 schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
                 //InitializeExample();
-                gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
                 AddRepositoryItemToGrid();
+
                 gridView3.DetailHeight = int.MaxValue;
                 gridView4.DetailHeight = int.MaxValue;
 
@@ -123,8 +123,6 @@ namespace Toolroom_Project_Viewer
                 helper2 = new RefreshHelper(gridView4, "Component");
 
                 gridControl3.LevelTree.Nodes.Add("DeptProgresses", DeptProgressGridView);
-                //GridFormatRule formatRule = new GridFormatRule();
-                //DeptProgressGridView.FormatRules["PercentCompleteFormatRule"].Rule.
 
                 LoadProjects();
                 LoadProjectView();
@@ -139,6 +137,8 @@ namespace Toolroom_Project_Viewer
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
                 RoleTable = Database.GetRoleTable();
                 PopulateEmployeeComboBox();
+                gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
+                gridView3.ActiveFilterCriteria = CriteriaOperator.And(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
             }
             catch (Exception ex)
@@ -1767,29 +1767,6 @@ namespace Toolroom_Project_Viewer
 
             return null;
         }
-        // TODO: Wait and see how selecting rows from grid control work for this.
-        //private List<string> GetComponentListFromUser(string textString = "")
-        //{
-        //    Database db = new Database();
-        //    var number = GetComboBoxInfo();
-        //    List<string> componentList = db.GetComponentList(number.jobNumber, number.projectNumber);
-
-        //    using (var form = new SelectComponentsWindow(componentList, textString))
-        //    {
-        //        var result = form.ShowDialog();
-
-        //        if (result == DialogResult.OK)
-        //        {
-        //            return form.ComponentList;
-        //        }
-        //        else if (result == DialogResult.Cancel)
-        //        {
-
-        //        }
-
-        //        return null;
-        //    }
-        //}
         private bool IsPastDate(DateTime? target, DateTime? actual)
         {
             if (target == null || actual == null)
@@ -1898,6 +1875,13 @@ namespace Toolroom_Project_Viewer
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
             ColorList = Database.GetColorEntries();
             CollapseGroups();
+        }
+        private CriteriaOperator FilterGridView3()
+        {
+            List<CriteriaOperator> criteriaOperators = new List<CriteriaOperator>();
+            criteriaOperators.Add(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
+
+            return GroupOperator.And(criteriaOperators);
         }
         private void gridView3_PrintInitialize(object sender, PrintInitializeEventArgs e)
         {
@@ -2107,16 +2091,16 @@ namespace Toolroom_Project_Viewer
                     LoadProjects();
                     return;
                 }
-
+                // TODO: Need to conduct more thorough testing after modifying to be more object oriented.
                 if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate.ToString() != "")
                 {
                     view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(view.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
                 }
-                else if (e.Column.FieldName == "StartDate" && view.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
+                else if (e.Column.FieldName == "StartDate" && (project.DeliveryInWeeks ?? 0).ToString() != "0")
                 {
                     if (double.TryParse(view.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out double result))
                     {
-                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7)); // 
+                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7));
                     }
                 }
                 else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer" || e.Column.FieldName == "FinishDate")
@@ -2801,7 +2785,7 @@ namespace Toolroom_Project_Viewer
                     {
                         gridView5.BeginUpdate();
                         Database.BackDateTasks(compResult.ToList(), form.ForwardDate);
-                        gridView5.EndUpdate();
+                        gridView5.EndUpdate();  // TODO: Understand why there is a delay in updating the gridview and deal with it. 
                     }
                 }
             }
