@@ -33,7 +33,7 @@ namespace ClassLibrary
         public string ToolMaker { get; set; }
         public string Operator { get; private set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } // Setting this to an empty string causes issues with Department Task View = "";
         public DateTime DateAdded { get; private set; }
         public string Notes { get; set; }
         public Image ComponentPicture { get; set; }

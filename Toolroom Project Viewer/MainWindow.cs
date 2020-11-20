@@ -136,6 +136,7 @@ namespace Toolroom_Project_Viewer
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
                 schedulerStorage2.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
                 RoleTable = Database.GetRoleTable();
+
                 PopulateEmployeeComboBox();
                 gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false);
                 gridView3.ActiveFilterCriteria = CriteriaOperator.And(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
@@ -201,12 +202,13 @@ namespace Toolroom_Project_Viewer
                 }
 
                 var result = from task in projectTasks
+                             //where task.ProjectNumber == 37242
                              group task by task.TaskName into grp
                              select 
                              new { 
                                  Department = grp.Key, 
-                                 PercentComplete = (double)grp.Count(x => x.Status == "Completed") / grp.Count()
-                                 };
+                                 PercentComplete = (double)grp.Where(x => x.Status == "Completed").Sum(x => x.Hours) / grp.Sum(x => x.Hours)
+                             };
 
                 foreach (var item in result.ToList())
                 {
@@ -1692,7 +1694,7 @@ namespace Toolroom_Project_Viewer
                     {
                         RefreshProjectGrid();
                         int rowHandle = gridView3.LocateByValue("ProjectNumber", form.Project.ProjectNumber);
-                        if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle)
+                        if (rowHandle != GridControl.InvalidRowHandle)
                             gridView3.FocusedRowHandle = rowHandle;
                         gridView3.SetMasterRowExpanded(gridView3.FocusedRowHandle, true);
                     }
@@ -1738,10 +1740,7 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                if (MessageBox.Show("Do you want to generate / update the Kan Ban for this project to preserve notes?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    GenerateKanBan();
-                }
+                PreserveNotes();
 
                 if (Database.RemoveProject(project.ProjectNumber))
                 {
@@ -1799,6 +1798,13 @@ namespace Toolroom_Project_Viewer
                         view.CollapseGroupRow(rowHandle);
                     }
                 }
+            }
+        }
+        private void PreserveNotes()
+        {
+            if (MessageBox.Show("Do you want to generate / update the Kan Ban for this project to preserve notes?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                GenerateKanBan();
             }
         }
         private void GenerateKanBan()
@@ -2029,9 +2035,10 @@ namespace Toolroom_Project_Viewer
         private void projectBandedGridView_ValidatingEditor(object sender, BaseContainerValidateEditorEventArgs e)
         {
             ColumnView view = sender as ColumnView;
+
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
 
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()) && column.FieldName != "GeneralNotes")
             {
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;
@@ -2061,53 +2068,48 @@ namespace Toolroom_Project_Viewer
         private void projectBandedGridView_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             BandedGridView view = sender as BandedGridView;
-
-            ProjectModel project = view.GetFocusedRow() as ProjectModel;
+            
+            ProjectModel project = view.GetRow(e.RowHandle) as ProjectModel;
 
             try
             {
+                if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate != null)
+                {
+                    project.DueDate = Convert.ToDateTime(project.StartDate).AddDays(Convert.ToDouble(e.Value) * 7);
+                }
+                else if (e.Column.FieldName == "StartDate" && project.DeliveryInWeeks != null)
+                {
+                    project.DueDate = Convert.ToDateTime(e.Value).AddDays(Convert.ToDouble(project.DeliveryInWeeks) * 7);
+                }
+                else if (e.Column.FieldName == "Stage")
+                {
+                    if (e.Value.ToString() == "7 - Completed")
+                    {
+                        PreserveNotes();
+                    }
+                }
+
                 if (view.IsNewItemRow(e.RowHandle))
                 {
-                    if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate.ToString() != "")
-                    {
-                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(view.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
-                    }
-                    else if (e.Column.FieldName == "StartDate" && view.GetFocusedRowCellValue("DeliveryInWeeks").ToString() != "0")
-                    {
-                        if (double.TryParse(view.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out double result))
-                        {
-                            view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7)); // 
-                        }
-                    }
-
                     return;
                 }
+                else
+                {
+                    Console.WriteLine("projectBandedGridView Cell Value Changed Event");
+                    //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
 
-                Console.WriteLine("projectBandedGridView Cell Value Changed Event");
-                //Console.WriteLine("Changed Cell Value: " + e.Value.ToString());
-
-                if (view.GetFocusedRowCellValue("ID").ToString() != "-1" && !Database.UpdateProjectRecord(project, e))
-                {
-                    LoadProjects();
-                    return;
-                }
-                // TODO: Need to conduct more thorough testing after modifying to be more object oriented.
-                if (e.Column.FieldName == "DeliveryInWeeks" && project.StartDate.ToString() != "")
-                {
-                    view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(view.GetFocusedRowCellValue("StartDate")).AddDays(Convert.ToDouble(e.Value) * 7));
-                }
-                else if (e.Column.FieldName == "StartDate" && (project.DeliveryInWeeks ?? 0).ToString() != "0")
-                {
-                    if (double.TryParse(view.GetFocusedRowCellValue("DeliveryInWeeks").ToString(), out double result))
+                    if (!Database.UpdateProjectRecord(project, e))
                     {
-                        view.SetFocusedRowCellValue("DueDate", Convert.ToDateTime(e.Value).AddDays(result * 7));
+                        LoadProjects();
+                        return;
                     }
-                }
-                else if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer" || e.Column.FieldName == "FinishDate")
-                {
-                    Database.SetTaskResources(sender, e, schedulerStorage1);
-                    RefreshProjectGrid();
-                    RefreshDepartmentScheduleView();
+
+                    if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer" || e.Column.FieldName == "FinishDate")
+                    {
+                        Database.SetTaskResources(sender, e, schedulerStorage1);
+                        RefreshProjectGrid();
+                        RefreshDepartmentScheduleView();
+                    } 
                 }
             }
             catch (Exception ex)
@@ -2118,6 +2120,7 @@ namespace Toolroom_Project_Viewer
         private void projectBandedGridView_RowUpdated(object sender, RowObjectEventArgs e)
         {
             GridView view = sender as GridView;
+
             ProjectModel project = e.Row as ProjectModel;
 
             try
@@ -2143,6 +2146,7 @@ namespace Toolroom_Project_Viewer
         private void projectBandedGridView_ValidateRow(object sender, ValidateRowEventArgs e)
         {
             GridView view = sender as GridView;
+
             ProjectModel project = e.Row as ProjectModel;
 
             if (view.IsNewItemRow(e.RowHandle))
@@ -2309,6 +2313,18 @@ namespace Toolroom_Project_Viewer
                 gridControl3.LevelTree.Nodes.Add(node);
 
                 gridView3.OptionsPrint.PrintDetails = true;
+            }
+        }
+        private void gridView3_CustomRowFilter(object sender, RowFilterEventArgs e)
+        {
+            ColumnView view = sender as ColumnView;
+            ProjectModel project = view.GetRow(e.ListSourceRow) as ProjectModel;
+
+            if (project.Components.Count == 0)
+            {
+                e.Visible = false;
+
+                e.Handled = true;
             }
         }
         private void gridView3_KeyDown(object sender, KeyEventArgs e)
@@ -2608,7 +2624,7 @@ namespace Toolroom_Project_Viewer
 
                     Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
                 }
-;
+
                 LoadTaskView();
             }
             catch (Exception ex)
@@ -2662,10 +2678,12 @@ namespace Toolroom_Project_Viewer
                         {
                             project.AvailableResources = schedulerStorage1;
                             copiedProject = new ProjectModel(project, projectNumber);
-                            //project.SetDefaultCopiedProjectInfo(projectNumber);
-                            //db.LoadProjectToDB(pi);
-                            Database.CreateProject(copiedProject);
-                            RefreshProjectGrid();
+
+                            if(Database.CreateProject(copiedProject))
+                            {
+                                RefreshProjectGrid();
+                            }
+
                             int rowHandle = gridView3.LocateByValue("ProjectNumber", projectNumber);
                             if (rowHandle != GridControl.InvalidRowHandle)
                                 gridView3.FocusedRowHandle = rowHandle;
@@ -2719,7 +2737,8 @@ namespace Toolroom_Project_Viewer
 
                 if (selectedComponentList.Count == 0)
                 {
-                    XtraMessageBox.Show("No components selected.");
+                    MessageBox.Show("No components selected.");
+
                     return;
                 }
 
@@ -2849,13 +2868,13 @@ namespace Toolroom_Project_Viewer
         {
             List<ComponentModel> componentList = new List<ComponentModel>();
 
-            if (gridView3.GetMasterRowExpanded(gridView3.GetSelectedRows()[0]))
+            if (gridView3.GetMasterRowExpanded(gridView3.FocusedRowHandle))
             {
-                var childView = gridView3.GetVisibleDetailView(gridView3.GetSelectedRows()[0]) as GridView;
+                var childView = gridView3.GetVisibleDetailView(gridView3.FocusedRowHandle) as GridView;
 
                 foreach (int rowHandle in childView.GetSelectedRows())
                 {
-                    componentList.Add(new ComponentModel {ProjectNumber = (int)gridView3.GetRowCellValue(gridView3.GetSelectedRows()[0], "ProjectNumber"), Component = (string)childView.GetRowCellValue(rowHandle, "Component") });
+                    componentList.Add(new ComponentModel {ProjectNumber = (int)gridView3.GetRowCellValue(gridView3.FocusedRowHandle, "ProjectNumber"), Component = (string)childView.GetRowCellValue(rowHandle, "Component") });
                 }
             }
 

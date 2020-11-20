@@ -473,6 +473,8 @@
             // 
             // gridView4
             // 
+            this.gridView4.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.gridView4.Appearance.SelectedRow.Options.UseBackColor = true;
             this.gridView4.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
             this.gridView4.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.gridView4.ChildGridLevelName = "Tasks";
@@ -508,6 +510,7 @@
             this.gridView4.OptionsPrint.AllowMultilineHeaders = true;
             this.gridView4.OptionsPrint.AutoWidth = false;
             this.gridView4.OptionsSelection.MultiSelect = true;
+            this.gridView4.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect;
             this.gridView4.OptionsView.ColumnAutoWidth = false;
             this.gridView4.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView4.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
@@ -1151,6 +1154,7 @@
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
+            this.gridView3.CustomRowFilter += new DevExpress.XtraGrid.Views.Base.RowFilterEventHandler(this.gridView3_CustomRowFilter);
             this.gridView3.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.gridView3_PrintInitialize);
             this.gridView3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView3_KeyDown);
             this.gridView3.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.GridView3_ValidatingEditor);
@@ -1340,6 +1344,8 @@
             // 
             // gridView5
             // 
+            this.gridView5.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.gridView5.Appearance.SelectedRow.Options.UseBackColor = true;
             this.gridView5.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colID4,
             this.colTaskName1,
@@ -1486,11 +1492,14 @@
             gridFormatRule4.Column = this.PercentCompleteColDPV;
             gridFormatRule4.ColumnApplyTo = this.PercentCompleteColDPV;
             gridFormatRule4.Name = "PercentCompleteFormat";
-            formatConditionRuleDataBar3.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            formatConditionRuleDataBar3.Appearance.ForeColor = System.Drawing.Color.White;
-            formatConditionRuleDataBar3.Appearance.Options.UseBackColor = true;
-            formatConditionRuleDataBar3.Appearance.Options.UseForeColor = true;
-            formatConditionRuleDataBar3.PredefinedName = null;
+            formatConditionRuleDataBar3.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            formatConditionRuleDataBar3.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar3.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar3.PredefinedName = "Blue";
             gridFormatRule4.Rule = formatConditionRuleDataBar3;
             this.DeptProgressGridView.FormatRules.Add(gridFormatRule4);
             this.DeptProgressGridView.GridControl = this.gridControl3;
