@@ -555,7 +555,11 @@ namespace Toolroom_Project_Viewer
         {
             string department = departmentComboBox.Text;
 
-            if (department == "Program Rough")
+            if (department == "Design")
+            {
+                Tasks = "Design";
+            }
+            else if (department == "Program Rough")
             {
                 Tasks = "Program Rough";
             }
@@ -624,7 +628,12 @@ namespace Toolroom_Project_Viewer
             string department = departmentComboBox.Text;
             schedulerControl1.ActiveView.ResourcesPerPage = 0;
 
-            if (department == "Program Rough")
+            if (department == "Design")
+            {
+                Role = "Design";
+                NoResourceName = "No Personnel";
+            }
+            else if (department == "Program Rough")
             {
                 Role = "Rough Programmer";
                 NoResourceName = "No Personnel";
@@ -1027,7 +1036,11 @@ namespace Toolroom_Project_Viewer
                 criteriaOperators.Add(new NullOperator("Status"));  // Excludes tasks with Status set to null. 
             }
 
-            if (department == "Program")
+            if (department == "Design")
+            {
+                criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
+            }
+            else if (department == "Program")
             {
                 criteriaOperators.Add(new FunctionOperator(FunctionOperatorType.StartsWith, new OperandProperty("TaskName"), department));
             }
@@ -4457,8 +4470,8 @@ namespace Toolroom_Project_Viewer
         }
         private void PopulateDepartmentComboBoxes()
         {
-            List<string> departmentList1 = new List<string> { "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
-            List<string> departmentList2 = new List<string> {"Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
+            List<string> departmentList1 = new List<string> { "Design", "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
+            List<string> departmentList2 = new List<string> { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
 
             departmentComboBox.Properties.Items.AddRange(departmentList1);
             departmentComboBox2.Properties.Items.AddRange(departmentList2);
