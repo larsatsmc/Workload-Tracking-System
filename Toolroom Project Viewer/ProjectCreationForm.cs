@@ -1333,12 +1333,14 @@ namespace Toolroom_Project_Viewer
             }
             else
             {
+                //fileName = @"X:\TOOLROOM\Workload Tracking System\Templates\Created Projects\" + Project.JobNumber + " - #" + Project.ProjectNumber + ".xml";
                 fileName = tmpt.SaveTemplateFile(Project.JobNumber + " - #" + Project.ProjectNumber);
             }
 
             if (fileName != "")
             {
-                tmpt.WriteProjectToTextFile(Project, fileName);
+                //tmpt.WriteProjectToTextFile(Project, fileName);
+                Template.WriteToXmlFile(fileName, Project);
             }
         }
         private void ProjectCreationForm_Shown(object sender, EventArgs e)
@@ -1681,32 +1683,39 @@ namespace Toolroom_Project_Viewer
         {
             int projectNumberResult;
 
-            if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
+            try
             {
-                MessageBox.Show("Please enter a tool number.");
-                MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
-                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
-                MoldBuildTreeView.Focus();
-                return;
-            }
+                if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
+                {
+                    MessageBox.Show("Please enter a tool number.");
+                    MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                    MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                    MoldBuildTreeView.Focus();
+                    return;
+                }
 
-            if (ProjectNumberTextBox.Text == "")
+                if (ProjectNumberTextBox.Text == "")
+                {
+                    MessageBox.Show("Please enter a project number.");
+                    ProjectNumberTextBox.BackColor = Color.Red;
+                    tabControl1.SelectedTab = tabPage1;
+                    return;
+                }
+
+                if (!int.TryParse(ProjectNumberTextBox.Text, out projectNumberResult))
+                {
+                    MessageBox.Show("Please enter a number for project number.");
+                    ProjectNumberTextBox.BackColor = Color.Red;
+                    tabControl1.SelectedTab = tabPage1;
+                    return;
+                }
+
+                SaveTemplate();
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("Please enter a project number.");
-                ProjectNumberTextBox.BackColor = Color.Red;
-                tabControl1.SelectedTab = tabPage1;
-                return;
+                MessageBox.Show(ex.ToString());
             }
-
-            if (!int.TryParse(ProjectNumberTextBox.Text, out projectNumberResult))
-            {
-                MessageBox.Show("Please enter a number for project number.");
-                ProjectNumberTextBox.BackColor = Color.Red;
-                tabControl1.SelectedTab = tabPage1;
-                return;
-            }
-
-            SaveTemplate();
         }
 
         private void TaskListBox_MouseClick(object sender, MouseEventArgs e)
@@ -1891,7 +1900,7 @@ namespace Toolroom_Project_Viewer
         {
             Template tmpt = new Template();
             string fileName = tmpt.OpenTemplateFile();
-            ProjectModel tempProject;
+            ProjectModel tempProject = new ProjectModel();
             Console.WriteLine("Load Template Button Click.");
 
             try
@@ -1903,7 +1912,14 @@ namespace Toolroom_Project_Viewer
                     DialogResult dialogResult = MessageBox.Show("Do you want to load project info from this template in addition to components? \n\n" +
                                                                 "Existing project info will be overwritten.", "Load Project Info?", MessageBoxButtons.YesNo);
 
-                    tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
+                    if (fileName.Split('.')[fileName.Count(x => x == '.')] == "txt")
+                    {
+                        tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
+                    }
+                    else if (fileName.Split('.')[fileName.Count(x => x == '.')] == "xml")
+                    {
+                        tempProject = Template.ReadFromXmlFile<ProjectModel>(fileName); 
+                    }
 
                     if (dialogResult == DialogResult.Yes)
                     {

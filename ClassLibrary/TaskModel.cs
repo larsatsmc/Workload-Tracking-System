@@ -19,7 +19,6 @@ namespace ClassLibrary
         public string JobNumber { get; set; }
         public string Component { get; set; }
         public string TaskName { get; set; }
-        public bool IsSummary { get; private set; }
         public string Duration { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? FinishDate { get; set; }
@@ -31,19 +30,13 @@ namespace ClassLibrary
         public string Resource { get; set; }
         public int Hours { get; set; }
         public string ToolMaker { get; set; }
-        public string Operator { get; private set; }
         public int Priority { get; set; }
         public string Status { get; set; } // Setting this to an empty string causes issues with Department Task View = "";
-        public DateTime DateAdded { get; private set; }
         public string Notes { get; set; }
         public Image ComponentPicture { get; set; }
-        public string Text { get; private set; }
-        public int Level { get; private set; }
-        public int Position { get; private set; }
         public bool HasInfo { get; set; }
-        public string Initials { get; private set; }
-        public string DateCompleted { get; private set; }
-        public bool DeleteTaskFromDB { get; private set; }
+        public string Initials { get; set; }
+        public string DateCompleted { get; set; }
         public bool TaskChanged { get; set; } = false;
 
         public string Location
@@ -72,112 +65,6 @@ namespace ClassLibrary
         public TaskModel()
         {
 
-        }
-
-        // This constructor is for checking up on completed tasks.
-
-        public TaskModel(string jobNumber, int projectNumber, string component, string taskName, int id, string status)
-        {
-            this.JobNumber = jobNumber;
-            this.ProjectNumber = projectNumber;
-            this.Component = component;
-            this.TaskName = taskName;
-            this.TaskID = id;
-            this.Status = status;
-        }
-
-        // This constructor is for reading tasks from the work project tree.
-
-        public TaskModel(int id, string taskName, string component, bool isSummary)
-		{
-            this.TaskID = id;
-			this.Component = component;
-			this.TaskName = taskName;
-			this.IsSummary = isSummary;
-		}
-
-        // This constructor is for reading tasks from the work project tree.
-
-        public TaskModel(int id, string taskName, string component, bool isSummary, string hours, string duration, string machine, string personnel, string predecessors, string notes)
-        {
-            string[] hoursArr;
-            string[] durationArr;
-
-            this.TaskID = id;
-            this.Component = component;
-            this.TaskName = taskName;
-            this.IsSummary = isSummary;
-
-            hoursArr = hours.Split(' ');
-            this.Hours = Convert.ToInt16(hoursArr[0]);
-
-            if(duration.Contains("Day"))
-            {
-                durationArr = duration.Split(' ');
-                this.Duration = durationArr[0].ToString() + " Day";
-            }
-            else if (duration.Contains("Hour"))
-            {
-                durationArr = duration.Split(' ');
-                this.Duration = durationArr[0].ToString() + " Hour";
-            }
-
-            this.Machine = machine;
-            this.Personnel = personnel;
-            if(predecessors == "0")
-            {
-                predecessors = "";
-            }
-            
-            this.Predecessors = predecessors;
-            this.Notes = notes;
-        }
-
-        // This constructor is for reading tasks from the work project tree.
-
-        public TaskModel(int id, string jobNumber, int projectNumber, string taskName, string component, bool isSummary, string hours, string duration, string machine, string personnel, string predecessors, string notes)
-        {
-            string[] hoursArr;
-            string[] durationArr;
-
-            this.TaskID = id;
-            this.JobNumber = jobNumber;
-            this.ProjectNumber = projectNumber;
-            this.Component = component;
-            this.TaskName = taskName;
-            this.IsSummary = isSummary;
-
-            hoursArr = hours.Split(' ');
-            this.Hours = Convert.ToInt16(hoursArr[0]);
-
-            if (duration.Contains("Day"))
-            {
-                durationArr = duration.Split(' ');
-                this.Duration = durationArr[0].ToString() + " Day";
-            }
-            else if (duration.Contains("Hour"))
-            {
-                durationArr = duration.Split(' ');
-                this.Duration = durationArr[0].ToString() + " Hour";
-            }
-
-            this.Machine = machine;
-            this.Personnel = personnel;
-            if (predecessors == "0")
-            {
-                predecessors = "";
-            }
-
-            this.Predecessors = predecessors;
-            this.Notes = notes;
-        }
-
-        // This constructor is for reading tasks from a template file.
-
-        public TaskModel(string text, int level)
-        {
-            this.Text = text;
-            this.Level = level;
         }
 
         public TaskModel(string name, string component)

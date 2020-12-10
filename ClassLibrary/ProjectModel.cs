@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace ClassLibrary
 {
@@ -24,7 +25,7 @@ namespace ClassLibrary
         public DateTime? StartDate { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime? AdjustedDeliveryDate { get; set; }
-        public int Priority { get; private set; }
+        public int Priority { get; set; }
         public string Status { get; set; }
         public string Stage { get; set; }
         public int? MoldCost { get; set; }
@@ -39,19 +40,21 @@ namespace ClassLibrary
         public string ElectrodeCNCOperator { get; set; }
         public string FinishCNCOperator { get; set; }
         public string EDMWireOperator { get; set; }
-        public double PercentComplete { get; private set; }
+        public double PercentComplete { get; set; }
         public string Apprentice { get; set; } = "";
         public string Manifold { get; set; }
         public string Moldbase { get; set; }
         public string GeneralNotes { get; set; } = "";
-        public string KanBanWorkbookPath { get; private set; } = "";
+        public string KanBanWorkbookPath { get; set; } = "";
         public DateTime? DateModified { get; set; }
         public DateTime? LastKanBanGenerationDate { get; set; }
         public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
         public List<DeptProgress> DeptProgresses { get; set; } = new List<DeptProgress>();
         //public System.ComponentModel.BindingList<ComponentModel> Components { get; set; }
-        public QuoteModel QuoteInfo { get; private set; }
+        [XmlIgnore]
+        public QuoteModel QuoteInfo { get; set; }
         public bool HasProjectInfo { get; set; }
+        [XmlIgnore]
         public SchedulerStorage AvailableResources { get; set; }
         public bool OverlapAllowed { get; set; }
         public bool IncludeHours { get; set; }
@@ -569,7 +572,6 @@ namespace ClassLibrary
 
             Database.UpdateTaskDates(tasksToUpdate);
         }
-
         public DateTime? GetLatestFinishDate()
         {
             return this.Components.Max(x => x.GetLatesFinishDate());

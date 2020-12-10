@@ -396,13 +396,19 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
+                    string updateDueDateString = "";
+
                     if (ev.Column.FieldName == "ProjectNumber" && connection.Execute("dbo.spGetProjectCount @ProjectNumber", project) > 0)
                     {
                         MessageBox.Show("There is a project with that same project number.");
                         return false;
                     }
+                    else if (ev.Column.FieldName == "DeliveryInWeeks" || ev.Column.FieldName == "StartDate")
+                    {
+                        updateDueDateString = ", DueDate = @DueDate";
+                    }
 
-                    string queryString = $"UPDATE Projects SET {ev.Column.FieldName} = @{ev.Column.FieldName} WHERE ID = @ID";
+                    string queryString = $"UPDATE Projects SET {ev.Column.FieldName} = @{ev.Column.FieldName}{updateDueDateString} WHERE ID = @ID";
                     
                     connection.Execute(queryString, project);
 

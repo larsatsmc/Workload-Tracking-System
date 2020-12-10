@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using DevExpress.XtraScheduler;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace ClassLibrary
 {
@@ -19,8 +20,10 @@ namespace ClassLibrary
         public string JobNumber { get; set; }
         public int ProjectNumber { get; set; }
         public string Component { get; set; }
+        [XmlIgnore]
         public string OldName { get; private set; }
         //public Image Picture { get; set; }
+        [XmlIgnore]
         public Image picture;
         public byte[] Picture { get { return ImageToByteArray(picture); } set { picture = NullByteArrayCheck(value); } }
         public string Material { get; set; }
@@ -30,7 +33,7 @@ namespace ClassLibrary
         public int Quantity { get; set; }
         public int Spares { get; set; }
         public string Status { get; set; }
-        public double PercentComplete { get; private set; }
+        public double PercentComplete { get; set; }
         public List<TaskModel> Tasks { get; set; } = new List<TaskModel>();
         //public System.ComponentModel.BindingList<TaskModel> Tasks { get; set; }
         public bool ReloadTaskList { get; set; }

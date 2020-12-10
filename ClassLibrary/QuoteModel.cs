@@ -22,6 +22,11 @@ namespace ClassLibrary
         public int EDMWireHours { get; private set; }
         public List<TaskModel> TaskList { get; private set; }
 
+        public QuoteModel()
+        {
+
+        }
+
         public QuoteModel(object customer, object partName, object designHours, object designElectrodeHours, object programRoughHours, object programFinishHours, object programElectrodeHours, object cncRoughHours, object cncFinishHours, object grindFittingHours, object cncElectrodeHours, object edmSinkerHours)
         {
             this.Customer = customer.ToString();
