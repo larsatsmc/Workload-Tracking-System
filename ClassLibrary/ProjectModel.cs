@@ -18,17 +18,26 @@ namespace ClassLibrary
         public int OldProjectNumber { get; set; }
         public string Project { get; set; } = "";
         public string JobNumber { get; set; }
+        [XmlIgnore]
         public string Customer { get; set; } = "";
         public int MWONumber { get; set; }
         public string Name { get; set; } = "";
+        [XmlIgnore]
         public double? DeliveryInWeeks { get; set; }
+        [XmlIgnore]
         public DateTime? StartDate { get; set; }
         public DateTime DueDate { get; set; }
+        [XmlIgnore]
         public DateTime? AdjustedDeliveryDate { get; set; }
+        [XmlIgnore]
         public int Priority { get; set; }
+        [XmlIgnore]
         public string Status { get; set; }
+        [XmlIgnore]
         public string Stage { get; set; }
+        [XmlIgnore]
         public int? MoldCost { get; set; }
+        [XmlIgnore]
         public string Engineer { get; set; }
         public string Designer { get; set; }
         public string ToolMaker { get; set; }
@@ -42,13 +51,20 @@ namespace ClassLibrary
         public string EDMWireOperator { get; set; }
         public double PercentComplete { get; set; }
         public string Apprentice { get; set; } = "";
+        [XmlIgnore]
         public string Manifold { get; set; }
+        [XmlIgnore]
         public string Moldbase { get; set; }
+        [XmlIgnore]
         public string GeneralNotes { get; set; } = "";
+        [XmlIgnore]
         public string KanBanWorkbookPath { get; set; } = "";
+        [XmlIgnore]
         public DateTime? DateModified { get; set; }
+        [XmlIgnore]
         public DateTime? LastKanBanGenerationDate { get; set; }
         public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
+        [XmlIgnore]
         public List<DeptProgress> DeptProgresses { get; set; } = new List<DeptProgress>();
         //public System.ComponentModel.BindingList<ComponentModel> Components { get; set; }
         [XmlIgnore]
@@ -56,13 +72,17 @@ namespace ClassLibrary
         public bool HasProjectInfo { get; set; }
         [XmlIgnore]
         public SchedulerStorage AvailableResources { get; set; }
+        [XmlIgnore]
         public bool OverlapAllowed { get; set; }
+        [XmlIgnore]
         public bool IncludeHours { get; set; }
+        [XmlIgnore]
         public bool IsOnTime { get; set; }
+        [XmlIgnore]
         public bool IsChanged { get; set; } = false;
 
         private DateTime? latestFinishDate;
-
+        [XmlIgnore]
         public DateTime? LatestFinishDate
         {
             get { return GetLatestFinishDate(); }

@@ -1056,47 +1056,34 @@ namespace ClassLibrary
 
                 if (fi.Exists)
                 {
-                    Excel.Application excelApp = new Excel.Application();
-                    Excel.Workbook workbook = excelApp.Workbooks.Open(fi.FullName);
 
                     try
                     {
-                        //var attributes = File.GetAttributes(fi.FullName);    
-
-                        foreach (Excel.Worksheet ws in workbook.Worksheets)
+                        using (var wb = new XLWorkbook(fi.FullName, XLEventTracking.Disabled))
                         {
-                            if (ws.Name.Trim() == component)
+                            foreach (var sheet in wb.Worksheets)
                             {
-                                workbook.Sheets[ws.Index].Select();
-                                workbook.Save();
+                                if (sheet.Name == component)
+                                {
+                                    sheet.SetTabActive(true);
+                                    sheet.SetTabSelected(true);
+                                }
+                                else
+                                {
+                                    sheet.SetTabSelected(false);
+                                }
                             }
+
+                            wb.Save();
                         }
-
-                        workbook.Close();
-                        excelApp.Quit();
-
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        Marshal.ReleaseComObject(workbook);
-
-                        //Marshal.ReleaseComObject(ws);
-                        Marshal.ReleaseComObject(excelApp);
-
-                        var res = Process.Start("EXCEL.EXE", "\"" + fi.FullName + "\"");
-
                     }
                     catch (Exception e)
                     {
                         MessageBox.Show(e.Message);
-
-                        //workbook.Close();
-                        excelApp.Quit();
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        Marshal.ReleaseComObject(workbook);
-
-                        //Marshal.ReleaseComObject(ws);
-                        Marshal.ReleaseComObject(excelApp);
+                    }
+                    finally
+                    {
+                        var res = Process.Start("EXCEL.EXE", "\"" + fi.FullName + "\"");
                     }
                 }
                 else

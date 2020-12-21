@@ -7,12 +7,14 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace ClassLibrary
 {
 	public class TaskModel
 	{
         public int ID { get; set; } = 0;
+        [XmlIgnore]
         public int AptID { get; set; }
         public int TaskID { get; set; }
         public int ProjectNumber { get; set; }
@@ -20,9 +22,12 @@ namespace ClassLibrary
         public string Component { get; set; }
         public string TaskName { get; set; }
         public string Duration { get; set; }
+        [XmlIgnore]
         public DateTime? StartDate { get; set; }
+        [XmlIgnore]
         public DateTime? FinishDate { get; set; }
         public string Predecessors { get; set; } = "";
+        [XmlIgnore]
         public string NewPredecessors { get; set; } = "";
         public string Machine { get; set; }
         public string Personnel { get; set; }
@@ -33,10 +38,12 @@ namespace ClassLibrary
         public int Priority { get; set; }
         public string Status { get; set; } // Setting this to an empty string causes issues with Department Task View = "";
         public string Notes { get; set; }
-        public Image ComponentPicture { get; set; }
+        [XmlIgnore]
+        public Image ComponentPicture { get; set; }  // This is for showing pictures in the flyout panel in the Dept Schedule View tab.
         public bool HasInfo { get; set; }
         public string Initials { get; set; }
         public string DateCompleted { get; set; }
+        [XmlIgnore]
         public bool TaskChanged { get; set; } = false;
 
         public string Location
@@ -58,6 +65,7 @@ namespace ClassLibrary
                 }
             } 
         }
+        [XmlIgnore]
         public DateTime DueDate { get; set; }  // This is only here for the task view grid.
         /// <summary>
         /// Initializes an empty instance of TaskInfo.

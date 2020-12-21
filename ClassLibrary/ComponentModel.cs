@@ -33,6 +33,7 @@ namespace ClassLibrary
         public int Quantity { get; set; }
         public int Spares { get; set; }
         public string Status { get; set; }
+        [XmlIgnore]
         public double PercentComplete { get; set; }
         public List<TaskModel> Tasks { get; set; } = new List<TaskModel>();
         //public System.ComponentModel.BindingList<TaskModel> Tasks { get; set; }
@@ -239,7 +240,7 @@ namespace ClassLibrary
             taskList.ForEach(task => tasks.Add(new TaskModel(task, newComponentName)));
 
             return tasks;
-        }
+        }        
         /// <summary>
         /// Adds a picture to a component's picture list from a filepath.
         /// </summary>        
@@ -645,6 +646,20 @@ namespace ClassLibrary
                 task.StartDate = null;
                 task.FinishDate = null;
             }
+        }
+        public void UpdateComponent(ComponentModel component) // Used when existing components are overwritten by components from template.
+        {
+            //this.JobNumber = component.JobNumber;
+            //this.ProjectNumber = component.ProjectNumber;
+            this.OldName = component.Component;
+            this.Notes = component.Notes;
+            this.TaskIDCount = component.TaskIDCount;
+            this.Quantity = component.Quantity;
+            this.Spares = component.Spares;
+            this.Material = component.Material;
+            this.Finish = component.Finish;
+            this.Tasks = component.Tasks;
+            this.Picture = component.Picture;
         }
         private string ConvertObjectToString(object obj)
         {

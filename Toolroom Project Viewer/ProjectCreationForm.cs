@@ -77,9 +77,6 @@ namespace Toolroom_Project_Viewer
 
             RoleTable = Database.GetRoleTable();
             prefix = "A-";
-            MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
-            this.ActiveControl = MoldBuildTreeView;
-            MoldBuildTreeView.Nodes[0].Expand();
         }
 
         [DllImport("gdi32.dll")]
@@ -285,7 +282,10 @@ namespace Toolroom_Project_Viewer
             }
 
         }
+        private void ReplaceComponentInTree(ComponentModel component)
+        {
 
+        }
         private void SetTaskInfoForSelectedTask()
         {
             TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
@@ -430,6 +430,10 @@ namespace Toolroom_Project_Viewer
             LoadProjectInfoToForm(project);
 
             LoadComponentListToForm(project.Components);
+
+            MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+            this.ActiveControl = MoldBuildTreeView;
+            MoldBuildTreeView.Nodes[0].Expand();
         }
 
         private void LoadComponentListToForm(List<ComponentModel> components)
@@ -1901,6 +1905,8 @@ namespace Toolroom_Project_Viewer
             Template tmpt = new Template();
             string fileName = tmpt.OpenTemplateFile();
             ProjectModel tempProject = new ProjectModel();
+            ComponentModel tempComponent = new ComponentModel();
+            List<ComponentModel> componentsToRemove = new List<ComponentModel>();
             Console.WriteLine("Load Template Button Click.");
 
             try
@@ -1926,11 +1932,32 @@ namespace Toolroom_Project_Viewer
                         LoadProjectInfoToForm(tempProject);
                     }
 
-                    Project.Components.AddRange(tempProject.Components);
+                    foreach (ComponentModel component in tempProject.Components)
+                    {
+                        if (Project.Components.Exists(x => x.Component == component.Component))
+                        {
+                            DialogResult dialogResult2 = MessageBox.Show($"There's already a component named {component.Component}.\n\n" +
+                                                                         $"Do you wish to overwrite it?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                    LoadComponentListToForm(tempProject.Components);
+                            if (dialogResult2 == DialogResult.Yes)
+                            {
+                                tempComponent = Project.Components.Find(x => x.Component == component.Component);
 
-                    MoldBuildTreeView.Nodes[0].Expand();
+                                tempComponent.UpdateComponent(component);
+                            }
+                        }
+                        else
+                        {
+                            Project.Components.Add(component);
+                        }
+                    }
+
+                    MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+
+                    MoldBuildTreeView.Nodes[0].Nodes.Clear();
+
+                    LoadProjectToForm(Project);
+
                     //printObjectTree();
                 }
             }

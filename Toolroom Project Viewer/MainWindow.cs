@@ -2967,10 +2967,11 @@ namespace Toolroom_Project_Viewer
         {
             GridView view = sender as GridView;
             ProjectModel project = view.GetRow(e.RowHandle) as ProjectModel;
-            bool pastDueDate = IsPastDate(project.DueDate, (DateTime?)view.GetRowCellValue(e.RowHandle, "LatestFinishDate"));
+            bool pastDueDate = IsPastDate(project.DueDate, project.LatestFinishDate);  //(DateTime?)view.GetRowCellValue(e.RowHandle, "LatestFinishDate")
+
             if (e.Column.FieldName == "DueDate")
             {
-                e.Appearance.BackColor = pastDueDate ? Color.Red : Color.White;
+                e.Appearance.BackColor = pastDueDate ? Color.Red : Color.Empty;
                 e.Appearance.ForeColor = pastDueDate ? Color.White : Color.Black;
             }
         }
