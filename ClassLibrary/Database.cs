@@ -275,7 +275,7 @@ namespace ClassLibrary
             return dt;
         }
 
-        public string GetKanBanWorkbookPath(string jobNumber, int projectNumber)
+        public static string GetKanBanWorkbookPath(string jobNumber, int projectNumber)
         {
             string kanBanWorkbookPath;
 
@@ -300,6 +300,14 @@ namespace ClassLibrary
             }
 
             return kanBanWorkbookPath;
+        }
+
+        public static List<string> GetPersonnel()
+        {
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                return connection.Query<string>("dbo.spGetPersonnel").ToList();
+            }
         }
 
         #endregion

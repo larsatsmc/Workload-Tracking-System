@@ -348,26 +348,6 @@ namespace ClassLibrary
                 this.IsOnTime = true;
             }
         }
-        public bool AddComponent(string name)
-        {
-            if(!ComponentNameExists(name))
-            {
-                if (name.Length > ComponentModel.ComponentCharacterLimit)
-                {
-                    MessageBox.Show($"Component: '{name}' is greater than {ComponentModel.ComponentCharacterLimit} characters. \n\nPlease shorten name.");
-                    return false;
-                }
-
-                Components.Add(new ComponentModel(name));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-            //printComponentList();
-        }
         public bool HasSelfReferencingPredecessors()
         {
             List<ComponentModel> dirtyComponents = new List<ComponentModel>();
@@ -477,10 +457,39 @@ namespace ClassLibrary
 
             return false;
         }
+        public bool AddComponent(string name)
+        {
+            if (!ComponentNameExists(name))
+            {
+                if (name.Length > ComponentModel.ComponentCharacterLimit)
+                {
+                    MessageBox.Show($"Component: '{name}' is greater than {ComponentModel.ComponentCharacterLimit} characters. \n\nPlease shorten name.");
+                    return false;
+                }
+
+                Components.Add(new ComponentModel(name));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            //printComponentList();
+        }
+        /// <summary>
+        /// Adds an existing component to a project's list of components.
+        /// </summary>
+        /// <param name="component"></param>
         public bool AddComponent(ComponentModel component)
         {
             if (!ComponentNameExists(component.Component))
             {
+
+                component.ID = 0;  // Important Step:  The new component will not be added to the database unless it's id is zero.
+
+                component.Tasks.ForEach(x => { x.ID = 0; x.ProjectNumber = ProjectNumber; x.JobNumber = JobNumber; });  // Important Step:  The new component will not be added to the database unless it's id is zero.  
+
                 Components.Add(component);
 
                 return true;

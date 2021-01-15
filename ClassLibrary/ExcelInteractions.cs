@@ -1048,7 +1048,7 @@ namespace ClassLibrary
             }
         }
 
-        public void OpenKanBanWorkbook(string filepath, string component)
+        public static void OpenKanBanWorkbook(string filepath, string component)
         {
             if (filepath != null && filepath != "")
             {

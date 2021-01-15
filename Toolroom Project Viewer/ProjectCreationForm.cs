@@ -21,8 +21,7 @@ namespace Toolroom_Project_Viewer
     public partial class ProjectCreationForm : DevExpress.XtraEditors.XtraForm
     {
         Excel.Application excelApp;
-        string prefix, component, taskName;
-        int ID, taskCount;
+        string prefix;
         bool formLoad = false;
         bool missingTaskInfo = false;
         bool quoteLoaded = false;
@@ -250,8 +249,6 @@ namespace Toolroom_Project_Viewer
             }
 
             MoldBuildTreeView.Nodes[0].Nodes.Add(newComponentNode);
-
-
 
             if (MoldBuildTreeView.Nodes[0].Nodes.Count == 1)
             {
@@ -1683,45 +1680,6 @@ namespace Toolroom_Project_Viewer
         {
             AddComponentToTree(ComponentTextBox.Text);
         }
-        private void saveTemplateButton_Click(object sender, EventArgs e)
-        {
-            int projectNumberResult;
-
-            try
-            {
-                if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
-                {
-                    MessageBox.Show("Please enter a tool number.");
-                    MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
-                    MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
-                    MoldBuildTreeView.Focus();
-                    return;
-                }
-
-                if (ProjectNumberTextBox.Text == "")
-                {
-                    MessageBox.Show("Please enter a project number.");
-                    ProjectNumberTextBox.BackColor = Color.Red;
-                    tabControl1.SelectedTab = tabPage1;
-                    return;
-                }
-
-                if (!int.TryParse(ProjectNumberTextBox.Text, out projectNumberResult))
-                {
-                    MessageBox.Show("Please enter a number for project number.");
-                    ProjectNumberTextBox.BackColor = Color.Red;
-                    tabControl1.SelectedTab = tabPage1;
-                    return;
-                }
-
-                SaveTemplate();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
         private void TaskListBox_MouseClick(object sender, MouseEventArgs e)
         {
             string selectedItemName = TaskListBox.Items[TaskListBox.IndexFromPoint(e.Location)].ToString();
@@ -1899,7 +1857,44 @@ namespace Toolroom_Project_Viewer
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
+        private void saveTemplateButton_Click(object sender, EventArgs e)
+        {
+            int projectNumberResult;
 
+            try
+            {
+                if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
+                {
+                    MessageBox.Show("Please enter a tool number.");
+                    MoldBuildTreeView.Nodes[0].BackColor = Color.Red;
+                    MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+                    MoldBuildTreeView.Focus();
+                    return;
+                }
+
+                if (ProjectNumberTextBox.Text == "")
+                {
+                    MessageBox.Show("Please enter a project number.");
+                    ProjectNumberTextBox.BackColor = Color.Red;
+                    tabControl1.SelectedTab = tabPage1;
+                    return;
+                }
+
+                if (!int.TryParse(ProjectNumberTextBox.Text, out projectNumberResult))
+                {
+                    MessageBox.Show("Please enter a number for project number.");
+                    ProjectNumberTextBox.BackColor = Color.Red;
+                    tabControl1.SelectedTab = tabPage1;
+                    return;
+                }
+
+                SaveTemplate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
         private void loadTemplateButton_Click(object sender, EventArgs e)
         {
             Template tmpt = new Template();
@@ -1948,7 +1943,7 @@ namespace Toolroom_Project_Viewer
                         }
                         else
                         {
-                            Project.Components.Add(component);
+                            Project.AddComponent(component);
                         }
                     }
 

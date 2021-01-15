@@ -51,7 +51,6 @@
             DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler5 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler6 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule5 = new DevExpress.XtraGrid.GridFormatRule();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
@@ -86,6 +85,7 @@
             this.colPriority = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colStatus1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDesigner1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.personnelComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.colToolMaker2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colRoughProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colElectrodeProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -106,7 +106,6 @@
             this.repositoryItemTextEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.stageComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.genericDateEdit = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.personnelComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.projectBandedGridView = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
             this.SegoeUI = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colJobNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
@@ -154,7 +153,6 @@
             this.PercentCompleteColDPV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.projectsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ProjectsTableAdapter();
             this.tasksTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.TasksTableAdapter();
-            this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
             this.schedulerStorage1 = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
@@ -170,6 +168,9 @@
             this.departmentComboBox = new DevExpress.XtraEditors.ComboBoxEdit();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.PrintEmployeeWorkCheckedComboBoxEdit = new DevExpress.XtraEditors.CheckedComboBoxEdit();
+            this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
+            this.daysAheadSpinEdit = new DevExpress.XtraEditors.SpinEdit();
+            this.filterTasksByDatesCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.printEmployeeWorkButton = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.PrintDeptsCheckedComboBoxEdit = new DevExpress.XtraEditors.CheckedComboBoxEdit();
@@ -177,7 +178,6 @@
             this.RefreshTasksButton = new DevExpress.XtraEditors.SimpleButton();
             this.departmentComboBox2 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.tasksBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colProjectStatus = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -235,61 +235,7 @@
             this.schedulerStorage2 = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
             this.projectComboBox = new DevExpress.XtraEditors.ComboBoxEdit();
             this.RefreshGanttButton = new DevExpress.XtraEditors.SimpleButton();
-            this.xtraTabPage5 = new DevExpress.XtraTab.XtraTabPage();
-            this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
-            this.refreshWorkloadLabelControl = new DevExpress.XtraEditors.LabelControl();
-            this.printPreviewButton = new DevExpress.XtraEditors.SimpleButton();
-            this.workLoadTabPrint2Button = new DevExpress.XtraEditors.SimpleButton();
-            this.workLoadRefreshButton = new DevExpress.XtraEditors.SimpleButton();
-            this.deleteButton = new DevExpress.XtraEditors.SimpleButton();
-            this.workLoadTabPrintButton = new DevExpress.XtraEditors.SimpleButton();
-            this.gridControl2 = new DevExpress.XtraGrid.GridControl();
-            this.workLoadBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.bandedGridView1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
-            this.ProjectBand2 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colToolNumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
-            this.colMWONumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colProjectNumber1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colStage = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.colCustomer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colPartName = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colMoldCost = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colDeliveryInWeeks = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.Milestones = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colStartDate1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemDateEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.colFinishDate1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemDateEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.colAdjustedDeliveryDate = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemDateEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.Personnel = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colEngineer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colDesigner = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colToolMaker1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colRoughProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colElectrodeProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colFinishProgrammer = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colApprentice1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.GeneralInfo = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colManifold = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colMoldBase = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colGeneralNotes = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colJobFolderPath = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.JobFolderHyperLinkEdit = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
-            this.colID = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colPartPicture = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
-            this.colGeneralNotesRTF = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemComboBox2 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.repositoryItemPopupContainerEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit();
-            this.repositoryItemRichTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemRichTextEdit();
-            this.repositoryItemMemoExEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoExEdit();
-            this.repositoryItemRadioGroup1 = new DevExpress.XtraEditors.Repository.RepositoryItemRadioGroup();
-            this.repositoryItemSearchLookUpEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSearchLookUpEdit();
-            this.repositoryItemSearchLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tasksBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.resourcesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.resourcesTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ResourcesTableAdapter();
@@ -309,6 +255,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).BeginInit();
@@ -317,7 +264,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).BeginInit();
@@ -333,10 +279,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox.Properties)).BeginInit();
             this.xtraTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PrintEmployeeWorkCheckedComboBoxEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daysAheadSpinEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterTasksByDatesCheckEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PrintDeptsCheckedComboBoxEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tasksBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).BeginInit();
@@ -360,28 +307,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectComboBox.Properties)).BeginInit();
-            this.xtraTabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bandedGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit2.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.JobFolderHyperLinkEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRichTextEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoExEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRadioGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSearchLookUpEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSearchLookUpEdit1View)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tasksBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resourcesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).BeginInit();
@@ -664,7 +590,7 @@
             this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode1});
             this.gridControl3.Location = new System.Drawing.Point(13, 41);
-            this.gridControl3.MainView = this.gridView3;
+            this.gridControl3.MainView = this.projectBandedGridView;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl3.Name = "gridControl3";
             this.gridControl3.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
@@ -768,6 +694,7 @@
             this.gridView3.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.gridView3_RowStyle);
             this.gridView3.MasterRowExpanded += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowExpanded);
             this.gridView3.MasterRowCollapsed += new DevExpress.XtraGrid.Views.Grid.CustomMasterRowEventHandler(this.gridView_MasterRowCollapsed);
+            this.gridView3.ShownEditor += new System.EventHandler(this.gridView3_ShownEditor);
             this.gridView3.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView3_CellValueChanged);
             this.gridView3.CustomRowFilter += new DevExpress.XtraGrid.Views.Base.RowFilterEventHandler(this.gridView3_CustomRowFilter);
             this.gridView3.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.gridView3_PrintInitialize);
@@ -845,14 +772,23 @@
             // 
             // colDesigner1
             // 
+            this.colDesigner1.ColumnEdit = this.personnelComboBoxEdit;
             this.colDesigner1.FieldName = "Designer";
             this.colDesigner1.Name = "colDesigner1";
             this.colDesigner1.Visible = true;
             this.colDesigner1.VisibleIndex = 7;
             this.colDesigner1.Width = 105;
             // 
+            // personnelComboBoxEdit
+            // 
+            this.personnelComboBoxEdit.AutoHeight = false;
+            this.personnelComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.personnelComboBoxEdit.Name = "personnelComboBoxEdit";
+            // 
             // colToolMaker2
             // 
+            this.colToolMaker2.ColumnEdit = this.personnelComboBoxEdit;
             this.colToolMaker2.FieldName = "ToolMaker";
             this.colToolMaker2.Name = "colToolMaker2";
             this.colToolMaker2.Visible = true;
@@ -861,6 +797,7 @@
             // 
             // colRoughProgrammer1
             // 
+            this.colRoughProgrammer1.ColumnEdit = this.personnelComboBoxEdit;
             this.colRoughProgrammer1.FieldName = "RoughProgrammer";
             this.colRoughProgrammer1.Name = "colRoughProgrammer1";
             this.colRoughProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
@@ -870,6 +807,7 @@
             // 
             // colElectrodeProgrammer1
             // 
+            this.colElectrodeProgrammer1.ColumnEdit = this.personnelComboBoxEdit;
             this.colElectrodeProgrammer1.FieldName = "ElectrodeProgrammer";
             this.colElectrodeProgrammer1.Name = "colElectrodeProgrammer1";
             this.colElectrodeProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
@@ -879,6 +817,7 @@
             // 
             // colFinishProgrammer1
             // 
+            this.colFinishProgrammer1.ColumnEdit = this.personnelComboBoxEdit;
             this.colFinishProgrammer1.FieldName = "FinishProgrammer";
             this.colFinishProgrammer1.Name = "colFinishProgrammer1";
             this.colFinishProgrammer1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
@@ -888,6 +827,7 @@
             // 
             // colApprentice
             // 
+            this.colApprentice.ColumnEdit = this.personnelComboBoxEdit;
             this.colApprentice.FieldName = "Apprentice";
             this.colApprentice.Name = "colApprentice";
             this.colApprentice.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
@@ -972,8 +912,6 @@
             this.repositoryItemImageEdit2.Name = "repositoryItemImageEdit2";
             this.repositoryItemImageEdit2.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
             this.repositoryItemImageEdit2.PopupFormSize = new System.Drawing.Size(600, 599);
-            this.repositoryItemImageEdit2.ImageChanged += new System.EventHandler(this.repositoryItemImageEdit2_ImageChanged);
-            this.repositoryItemImageEdit2.Popup += new System.EventHandler(this.repositoryItemImageEdit2_Popup);
             this.repositoryItemImageEdit2.Validating += new System.ComponentModel.CancelEventHandler(this.RepositoryItemImageEdit2_Validating);
             // 
             // repositoryItemPictureEdit1
@@ -1017,13 +955,6 @@
             this.genericDateEdit.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.genericDateEdit.Name = "genericDateEdit";
-            // 
-            // personnelComboBoxEdit
-            // 
-            this.personnelComboBoxEdit.AutoHeight = false;
-            this.personnelComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.personnelComboBoxEdit.Name = "personnelComboBoxEdit";
             // 
             // projectBandedGridView
             // 
@@ -1537,10 +1468,6 @@
             // 
             this.tasksTableAdapter.ClearBeforeFill = true;
             // 
-            // workLoadTableAdapter
-            // 
-            this.workLoadTableAdapter.ClearBeforeFill = true;
-            // 
             // schedulerStorage1
             // 
             this.schedulerStorage1.Appointments.ResourceSharing = true;
@@ -1567,9 +1494,7 @@
             this.xtraTabPage2,
             this.xtraTabPage7,
             this.xtraTabPage3,
-            this.xtraTabPage4,
-            this.xtraTabPage5,
-            this.xtraTabPage6});
+            this.xtraTabPage4});
             // 
             // xtraTabPage1
             // 
@@ -1707,6 +1632,9 @@
             // xtraTabPage2
             // 
             this.xtraTabPage2.Controls.Add(this.PrintEmployeeWorkCheckedComboBoxEdit);
+            this.xtraTabPage2.Controls.Add(this.labelControl8);
+            this.xtraTabPage2.Controls.Add(this.daysAheadSpinEdit);
+            this.xtraTabPage2.Controls.Add(this.filterTasksByDatesCheckEdit);
             this.xtraTabPage2.Controls.Add(this.printEmployeeWorkButton);
             this.xtraTabPage2.Controls.Add(this.labelControl2);
             this.xtraTabPage2.Controls.Add(this.PrintDeptsCheckedComboBoxEdit);
@@ -1722,18 +1650,50 @@
             // PrintEmployeeWorkCheckedComboBoxEdit
             // 
             this.PrintEmployeeWorkCheckedComboBoxEdit.EditValue = "";
-            this.PrintEmployeeWorkCheckedComboBoxEdit.Location = new System.Drawing.Point(514, 7);
-            this.PrintEmployeeWorkCheckedComboBoxEdit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PrintEmployeeWorkCheckedComboBoxEdit.Location = new System.Drawing.Point(652, 7);
             this.PrintEmployeeWorkCheckedComboBoxEdit.Name = "PrintEmployeeWorkCheckedComboBoxEdit";
             this.PrintEmployeeWorkCheckedComboBoxEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.PrintEmployeeWorkCheckedComboBoxEdit.Size = new System.Drawing.Size(127, 20);
-            this.PrintEmployeeWorkCheckedComboBoxEdit.TabIndex = 12;
+            this.PrintEmployeeWorkCheckedComboBoxEdit.Size = new System.Drawing.Size(114, 20);
+            this.PrintEmployeeWorkCheckedComboBoxEdit.TabIndex = 16;
+            // 
+            // labelControl8
+            // 
+            this.labelControl8.Location = new System.Drawing.Point(289, 10);
+            this.labelControl8.Name = "labelControl8";
+            this.labelControl8.Size = new System.Drawing.Size(60, 13);
+            this.labelControl8.TabIndex = 15;
+            this.labelControl8.Text = "Days Ahead";
+            // 
+            // daysAheadSpinEdit
+            // 
+            this.daysAheadSpinEdit.EditValue = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.daysAheadSpinEdit.Location = new System.Drawing.Point(244, 7);
+            this.daysAheadSpinEdit.Name = "daysAheadSpinEdit";
+            this.daysAheadSpinEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.daysAheadSpinEdit.Size = new System.Drawing.Size(39, 20);
+            this.daysAheadSpinEdit.TabIndex = 14;
+            this.daysAheadSpinEdit.ValueChanged += new System.EventHandler(this.daysAheadSpinEdit_ValueChanged);
+            // 
+            // filterTasksByDatesCheckEdit
+            // 
+            this.filterTasksByDatesCheckEdit.EditValue = true;
+            this.filterTasksByDatesCheckEdit.Location = new System.Drawing.Point(225, 7);
+            this.filterTasksByDatesCheckEdit.Name = "filterTasksByDatesCheckEdit";
+            this.filterTasksByDatesCheckEdit.Properties.Caption = "";
+            this.filterTasksByDatesCheckEdit.Size = new System.Drawing.Size(20, 19);
+            this.filterTasksByDatesCheckEdit.TabIndex = 13;
+            this.filterTasksByDatesCheckEdit.CheckedChanged += new System.EventHandler(this.filterTasksByDatesCheckEdit_CheckedChanged);
             // 
             // printEmployeeWorkButton
             // 
             this.printEmployeeWorkButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.printEmployeeWorkButton.Location = new System.Drawing.Point(647, 6);
+            this.printEmployeeWorkButton.Location = new System.Drawing.Point(772, 6);
             this.printEmployeeWorkButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.printEmployeeWorkButton.Name = "printEmployeeWorkButton";
             this.printEmployeeWorkButton.Size = new System.Drawing.Size(69, 21);
@@ -1753,7 +1713,7 @@
             // PrintDeptsCheckedComboBoxEdit
             // 
             this.PrintDeptsCheckedComboBoxEdit.EditValue = "";
-            this.PrintDeptsCheckedComboBoxEdit.Location = new System.Drawing.Point(307, 7);
+            this.PrintDeptsCheckedComboBoxEdit.Location = new System.Drawing.Point(437, 7);
             this.PrintDeptsCheckedComboBoxEdit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PrintDeptsCheckedComboBoxEdit.Name = "PrintDeptsCheckedComboBoxEdit";
             this.PrintDeptsCheckedComboBoxEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -1764,7 +1724,7 @@
             // printTaskViewButton
             // 
             this.printTaskViewButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.printTaskViewButton.Location = new System.Drawing.Point(439, 6);
+            this.printTaskViewButton.Location = new System.Drawing.Point(569, 6);
             this.printTaskViewButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.printTaskViewButton.Name = "printTaskViewButton";
             this.printTaskViewButton.Size = new System.Drawing.Size(69, 21);
@@ -1775,7 +1735,7 @@
             // RefreshTasksButton
             // 
             this.RefreshTasksButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.RefreshTasksButton.Location = new System.Drawing.Point(226, 6);
+            this.RefreshTasksButton.Location = new System.Drawing.Point(362, 6);
             this.RefreshTasksButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RefreshTasksButton.Name = "RefreshTasksButton";
             this.RefreshTasksButton.Size = new System.Drawing.Size(69, 21);
@@ -1800,7 +1760,6 @@
             this.gridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridControl1.DataSource = this.tasksBindingSource;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridControl1.Location = new System.Drawing.Point(12, 36);
@@ -1819,11 +1778,6 @@
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
             this.gridControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControl1_MouseDown);
-            // 
-            // tasksBindingSource
-            // 
-            this.tasksBindingSource.DataMember = "Tasks";
-            this.tasksBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
             // 
             // gridView1
             // 
@@ -2578,668 +2532,10 @@
             this.RefreshGanttButton.Text = "Refresh";
             this.RefreshGanttButton.Click += new System.EventHandler(this.RefreshGanttButton_Click);
             // 
-            // xtraTabPage5
+            // tasksBindingSource
             // 
-            this.xtraTabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.PageVisible = false;
-            this.xtraTabPage5.Size = new System.Drawing.Size(1596, 799);
-            this.xtraTabPage5.Text = "Other";
-            // 
-            // xtraTabPage6
-            // 
-            this.xtraTabPage6.Controls.Add(this.refreshWorkloadLabelControl);
-            this.xtraTabPage6.Controls.Add(this.printPreviewButton);
-            this.xtraTabPage6.Controls.Add(this.workLoadTabPrint2Button);
-            this.xtraTabPage6.Controls.Add(this.workLoadRefreshButton);
-            this.xtraTabPage6.Controls.Add(this.deleteButton);
-            this.xtraTabPage6.Controls.Add(this.workLoadTabPrintButton);
-            this.xtraTabPage6.Controls.Add(this.gridControl2);
-            this.xtraTabPage6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.xtraTabPage6.Name = "xtraTabPage6";
-            this.xtraTabPage6.PageVisible = false;
-            this.xtraTabPage6.Size = new System.Drawing.Size(1596, 799);
-            this.xtraTabPage6.Text = "Work Load";
-            // 
-            // refreshWorkloadLabelControl
-            // 
-            this.refreshWorkloadLabelControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.refreshWorkloadLabelControl.Appearance.Options.UseTextOptions = true;
-            this.refreshWorkloadLabelControl.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.refreshWorkloadLabelControl.Location = new System.Drawing.Point(1296, 10);
-            this.refreshWorkloadLabelControl.Name = "refreshWorkloadLabelControl";
-            this.refreshWorkloadLabelControl.Size = new System.Drawing.Size(65, 13);
-            this.refreshWorkloadLabelControl.TabIndex = 7;
-            this.refreshWorkloadLabelControl.Text = "Last Refresh:";
-            this.refreshWorkloadLabelControl.Visible = false;
-            // 
-            // printPreviewButton
-            // 
-            this.printPreviewButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.printPreviewButton.Location = new System.Drawing.Point(298, 7);
-            this.printPreviewButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.printPreviewButton.Name = "printPreviewButton";
-            this.printPreviewButton.Size = new System.Drawing.Size(75, 23);
-            this.printPreviewButton.TabIndex = 6;
-            this.printPreviewButton.Text = "Print Preview";
-            this.printPreviewButton.ToolTip = "Prints the grid onto an 8.5 x 11 sheet of paper.";
-            this.printPreviewButton.Click += new System.EventHandler(this.printPreviewButton_Click);
-            // 
-            // workLoadTabPrint2Button
-            // 
-            this.workLoadTabPrint2Button.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.workLoadTabPrint2Button.Location = new System.Drawing.Point(228, 7);
-            this.workLoadTabPrint2Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.workLoadTabPrint2Button.Name = "workLoadTabPrint2Button";
-            this.workLoadTabPrint2Button.Size = new System.Drawing.Size(64, 23);
-            this.workLoadTabPrint2Button.TabIndex = 5;
-            this.workLoadTabPrint2Button.Text = "Print Part";
-            this.workLoadTabPrint2Button.ToolTip = "Prints the grid onto an 8.5 x 11 sheet of paper.";
-            this.workLoadTabPrint2Button.Click += new System.EventHandler(this.workLoadTabPrint2Button_Click);
-            // 
-            // workLoadRefreshButton
-            // 
-            this.workLoadRefreshButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.workLoadRefreshButton.Location = new System.Drawing.Point(88, 7);
-            this.workLoadRefreshButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.workLoadRefreshButton.Name = "workLoadRefreshButton";
-            this.workLoadRefreshButton.Size = new System.Drawing.Size(64, 23);
-            this.workLoadRefreshButton.TabIndex = 3;
-            this.workLoadRefreshButton.Text = "Refresh";
-            this.workLoadRefreshButton.ToolTip = "Refreshes the data grid to what\'s in the database.";
-            this.workLoadRefreshButton.Click += new System.EventHandler(this.workLoadRefreshButton_Click);
-            // 
-            // deleteButton
-            // 
-            this.deleteButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.deleteButton.Location = new System.Drawing.Point(17, 7);
-            this.deleteButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(65, 23);
-            this.deleteButton.TabIndex = 2;
-            this.deleteButton.Text = "Delete";
-            this.deleteButton.ToolTip = "Deletes a selected project.";
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
-            // 
-            // workLoadTabPrintButton
-            // 
-            this.workLoadTabPrintButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.workLoadTabPrintButton.Location = new System.Drawing.Point(158, 7);
-            this.workLoadTabPrintButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.workLoadTabPrintButton.Name = "workLoadTabPrintButton";
-            this.workLoadTabPrintButton.Size = new System.Drawing.Size(64, 23);
-            this.workLoadTabPrintButton.TabIndex = 1;
-            this.workLoadTabPrintButton.Text = "Print Full";
-            this.workLoadTabPrintButton.ToolTip = "Prints the full grid onto an 11 x 17 sheet of paper.";
-            this.workLoadTabPrintButton.Click += new System.EventHandler(this.workLoadTabPrintButton_Click);
-            // 
-            // gridControl2
-            // 
-            this.gridControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridControl2.DataSource = this.workLoadBindingSource;
-            this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gridControl2.Location = new System.Drawing.Point(12, 36);
-            this.gridControl2.MainView = this.bandedGridView1;
-            this.gridControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gridControl2.Name = "gridControl2";
-            this.gridControl2.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.repositoryItemDateEdit1,
-            this.repositoryItemDateEdit2,
-            this.repositoryItemDateEdit3,
-            this.repositoryItemImageEdit1,
-            this.repositoryItemTextEdit1,
-            this.repositoryItemComboBox1,
-            this.repositoryItemComboBox2,
-            this.repositoryItemPopupContainerEdit1,
-            this.repositoryItemRichTextEdit1,
-            this.repositoryItemMemoExEdit1,
-            this.repositoryItemRadioGroup1,
-            this.repositoryItemSearchLookUpEdit1,
-            this.JobFolderHyperLinkEdit});
-            this.gridControl2.Size = new System.Drawing.Size(1572, 752);
-            this.gridControl2.TabIndex = 0;
-            this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.bandedGridView1,
-            this.gridView2});
-            this.gridControl2.Load += new System.EventHandler(this.gridControl2_Load);
-            // 
-            // workLoadBindingSource
-            // 
-            this.workLoadBindingSource.DataMember = "WorkLoad";
-            // 
-            // bandedGridView1
-            // 
-            this.bandedGridView1.Appearance.BandPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.bandedGridView1.Appearance.BandPanel.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.BandPanelBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.bandedGridView1.Appearance.BandPanelBackground.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.EvenRow.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.bandedGridView1.Appearance.EvenRow.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.FooterPanel.BackColor = System.Drawing.Color.Silver;
-            this.bandedGridView1.Appearance.FooterPanel.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.GroupFooter.BackColor = System.Drawing.Color.Gray;
-            this.bandedGridView1.Appearance.GroupFooter.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.GroupRow.BackColor = System.Drawing.Color.LightBlue;
-            this.bandedGridView1.Appearance.GroupRow.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            this.bandedGridView1.Appearance.GroupRow.ForeColor = System.Drawing.Color.Black;
-            this.bandedGridView1.Appearance.GroupRow.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.GroupRow.Options.UseFont = true;
-            this.bandedGridView1.Appearance.GroupRow.Options.UseForeColor = true;
-            this.bandedGridView1.Appearance.HeaderPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.bandedGridView1.Appearance.HeaderPanel.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.HeaderPanel.Options.UseTextOptions = true;
-            this.bandedGridView1.Appearance.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.bandedGridView1.Appearance.HeaderPanelBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.bandedGridView1.Appearance.HeaderPanelBackground.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.HeaderPanelBackground.Options.UseTextOptions = true;
-            this.bandedGridView1.Appearance.OddRow.BackColor = System.Drawing.Color.White;
-            this.bandedGridView1.Appearance.OddRow.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.Row.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.bandedGridView1.Appearance.Row.Options.UseBackColor = true;
-            this.bandedGridView1.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.bandedGridView1.Appearance.SelectedRow.Options.UseBackColor = true;
-            this.bandedGridView1.AppearancePrint.BandPanel.BackColor = System.Drawing.Color.LightBlue;
-            this.bandedGridView1.AppearancePrint.BandPanel.FontStyleDelta = System.Drawing.FontStyle.Bold;
-            this.bandedGridView1.AppearancePrint.BandPanel.ForeColor = System.Drawing.Color.Black;
-            this.bandedGridView1.AppearancePrint.BandPanel.Options.UseBackColor = true;
-            this.bandedGridView1.AppearancePrint.BandPanel.Options.UseFont = true;
-            this.bandedGridView1.AppearancePrint.BandPanel.Options.UseForeColor = true;
-            this.bandedGridView1.AppearancePrint.EvenRow.BackColor = System.Drawing.Color.Gainsboro;
-            this.bandedGridView1.AppearancePrint.EvenRow.Options.UseBackColor = true;
-            this.bandedGridView1.AppearancePrint.GroupRow.BackColor = System.Drawing.Color.LightBlue;
-            this.bandedGridView1.AppearancePrint.GroupRow.FontStyleDelta = System.Drawing.FontStyle.Bold;
-            this.bandedGridView1.AppearancePrint.GroupRow.ForeColor = System.Drawing.Color.Black;
-            this.bandedGridView1.AppearancePrint.GroupRow.Options.UseBackColor = true;
-            this.bandedGridView1.AppearancePrint.GroupRow.Options.UseFont = true;
-            this.bandedGridView1.AppearancePrint.GroupRow.Options.UseForeColor = true;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.BackColor = System.Drawing.Color.LightBlue;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.FontStyleDelta = System.Drawing.FontStyle.Bold;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.ForeColor = System.Drawing.Color.Black;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.Options.UseBackColor = true;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.Options.UseFont = true;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.Options.UseForeColor = true;
-            this.bandedGridView1.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.bandedGridView1.BandPanelRowHeight = 2;
-            this.bandedGridView1.Bands.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.GridBand[] {
-            this.ProjectBand2,
-            this.Milestones,
-            this.Personnel,
-            this.GeneralInfo});
-            this.bandedGridView1.ColumnPanelRowHeight = 2;
-            this.bandedGridView1.Columns.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn[] {
-            this.colID,
-            this.colPartPicture,
-            this.colToolNumber,
-            this.colMWONumber,
-            this.colProjectNumber1,
-            this.colStage,
-            this.colCustomer,
-            this.colPartName,
-            this.colMoldCost,
-            this.colDeliveryInWeeks,
-            this.colStartDate1,
-            this.colFinishDate1,
-            this.colAdjustedDeliveryDate,
-            this.colEngineer,
-            this.colDesigner,
-            this.colToolMaker1,
-            this.colRoughProgrammer,
-            this.colElectrodeProgrammer,
-            this.colFinishProgrammer,
-            this.colApprentice1,
-            this.colManifold,
-            this.colMoldBase,
-            this.colGeneralNotes,
-            this.colGeneralNotesRTF,
-            this.colJobFolderPath});
-            gridFormatRule5.Name = "Format0";
-            gridFormatRule5.Rule = null;
-            this.bandedGridView1.FormatRules.Add(gridFormatRule5);
-            this.bandedGridView1.GridControl = this.gridControl2;
-            this.bandedGridView1.GroupCount = 1;
-            this.bandedGridView1.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "PartName", null, ", Count = {0}"),
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Sum, "MoldCost", this.colMoldCost, "{0:c0}")});
-            this.bandedGridView1.Name = "bandedGridView1";
-            this.bandedGridView1.OptionsBehavior.AutoExpandAllGroups = true;
-            this.bandedGridView1.OptionsPrint.AllowMultilineHeaders = true;
-            this.bandedGridView1.OptionsPrint.AutoWidth = false;
-            this.bandedGridView1.OptionsPrint.EnableAppearanceEvenRow = true;
-            this.bandedGridView1.OptionsPrint.ExpandAllDetails = true;
-            this.bandedGridView1.OptionsPrint.PrintDetails = true;
-            this.bandedGridView1.OptionsPrint.PrintSelectedRowsOnly = true;
-            this.bandedGridView1.OptionsSelection.EnableAppearanceFocusedCell = false;
-            this.bandedGridView1.OptionsSelection.MultiSelect = true;
-            this.bandedGridView1.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect;
-            this.bandedGridView1.OptionsSelection.ShowCheckBoxSelectorInGroupRow = DevExpress.Utils.DefaultBoolean.True;
-            this.bandedGridView1.OptionsView.ColumnAutoWidth = false;
-            this.bandedGridView1.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
-            this.bandedGridView1.OptionsView.EnableAppearanceEvenRow = true;
-            this.bandedGridView1.OptionsView.EnableAppearanceOddRow = true;
-            this.bandedGridView1.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
-            this.bandedGridView1.OptionsView.RowAutoHeight = true;
-            this.bandedGridView1.OptionsView.ShowFooter = true;
-            this.bandedGridView1.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
-            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colStage, DevExpress.Data.ColumnSortOrder.Ascending),
-            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colToolNumber, DevExpress.Data.ColumnSortOrder.Ascending)});
-            this.bandedGridView1.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.bandedGridView1_CustomDrawCell);
-            this.bandedGridView1.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.bandedGridView1_RowCellStyle);
-            this.bandedGridView1.CustomRowCellEditForEditing += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.bandedGridView1_CustomRowCellEditForEditing);
-            this.bandedGridView1.InitNewRow += new DevExpress.XtraGrid.Views.Grid.InitNewRowEventHandler(this.bandedGridView1_InitNewRow);
-            this.bandedGridView1.ShownEditor += new System.EventHandler(this.bandedGridView1_ShownEditor);
-            this.bandedGridView1.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.bandedGridView1_FocusedRowChanged);
-            this.bandedGridView1.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.bandedGridView1_CellValueChanged);
-            this.bandedGridView1.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.bandedGridView1_RowUpdated);
-            this.bandedGridView1.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.bandedGridView1_PrintInitialize);
-            this.bandedGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bandedGridView1_MouseDown);
-            this.bandedGridView1.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.bandedGridView1_ValidatingEditor);
-            // 
-            // ProjectBand2
-            // 
-            this.ProjectBand2.Caption = "Project";
-            this.ProjectBand2.Columns.Add(this.colToolNumber);
-            this.ProjectBand2.Columns.Add(this.colMWONumber);
-            this.ProjectBand2.Columns.Add(this.colProjectNumber1);
-            this.ProjectBand2.Columns.Add(this.colStage);
-            this.ProjectBand2.Columns.Add(this.colCustomer);
-            this.ProjectBand2.Columns.Add(this.colPartName);
-            this.ProjectBand2.Columns.Add(this.colMoldCost);
-            this.ProjectBand2.Columns.Add(this.colDeliveryInWeeks);
-            this.ProjectBand2.MinWidth = 13;
-            this.ProjectBand2.Name = "ProjectBand2";
-            this.ProjectBand2.VisibleIndex = 0;
-            this.ProjectBand2.Width = 634;
-            // 
-            // colToolNumber
-            // 
-            this.colToolNumber.Caption = "Tool #";
-            this.colToolNumber.ColumnEdit = this.repositoryItemTextEdit1;
-            this.colToolNumber.FieldName = "ToolNumber";
-            this.colToolNumber.Name = "colToolNumber";
-            this.colToolNumber.Visible = true;
-            this.colToolNumber.Width = 99;
-            // 
-            // repositoryItemTextEdit1
-            // 
-            this.repositoryItemTextEdit1.AutoHeight = false;
-            this.repositoryItemTextEdit1.Name = "repositoryItemTextEdit1";
-            // 
-            // colMWONumber
-            // 
-            this.colMWONumber.Caption = "MWO #";
-            this.colMWONumber.FieldName = "MWONumber";
-            this.colMWONumber.Name = "colMWONumber";
-            this.colMWONumber.Visible = true;
-            this.colMWONumber.Width = 69;
-            // 
-            // colProjectNumber1
-            // 
-            this.colProjectNumber1.Caption = "Project #";
-            this.colProjectNumber1.FieldName = "ProjectNumber";
-            this.colProjectNumber1.Name = "colProjectNumber1";
-            this.colProjectNumber1.Visible = true;
-            this.colProjectNumber1.Width = 69;
-            // 
-            // colStage
-            // 
-            this.colStage.ColumnEdit = this.repositoryItemComboBox1;
-            this.colStage.FieldName = "Stage";
-            this.colStage.Name = "colStage";
-            this.colStage.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
-            this.colStage.Visible = true;
-            this.colStage.Width = 65;
-            // 
-            // repositoryItemComboBox1
-            // 
-            this.repositoryItemComboBox1.AllowDropDownWhenReadOnly = DevExpress.Utils.DefaultBoolean.False;
-            this.repositoryItemComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemComboBox1.Items.AddRange(new object[] {
-            "1 - In-Design",
-            "2 - In-Programming",
-            "3 - In-Shop",
-            "4 - In-Mold Check-In or Outside Vendors",
-            "5 - Rework",
-            "6 - In-Repair / Development",
-            "7 - Completed",
-            "8 - Quoted / Forecasted"});
-            this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
-            // 
-            // colCustomer
-            // 
-            this.colCustomer.FieldName = "Customer";
-            this.colCustomer.Name = "colCustomer";
-            this.colCustomer.Visible = true;
-            this.colCustomer.Width = 99;
-            // 
-            // colPartName
-            // 
-            this.colPartName.FieldName = "Project";
-            this.colPartName.Name = "colPartName";
-            this.colPartName.Visible = true;
-            this.colPartName.Width = 99;
-            // 
-            // colMoldCost
-            // 
-            this.colMoldCost.DisplayFormat.FormatString = "c0";
-            this.colMoldCost.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colMoldCost.FieldName = "MoldCost";
-            this.colMoldCost.Name = "colMoldCost";
-            this.colMoldCost.Visible = true;
-            this.colMoldCost.Width = 69;
-            // 
-            // colDeliveryInWeeks
-            // 
-            this.colDeliveryInWeeks.DisplayFormat.FormatString = "n1";
-            this.colDeliveryInWeeks.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colDeliveryInWeeks.FieldName = "DeliveryInWeeks";
-            this.colDeliveryInWeeks.Name = "colDeliveryInWeeks";
-            this.colDeliveryInWeeks.Visible = true;
-            this.colDeliveryInWeeks.Width = 65;
-            // 
-            // Milestones
-            // 
-            this.Milestones.Caption = "Milestones";
-            this.Milestones.Columns.Add(this.colStartDate1);
-            this.Milestones.Columns.Add(this.colFinishDate1);
-            this.Milestones.Columns.Add(this.colAdjustedDeliveryDate);
-            this.Milestones.MinWidth = 13;
-            this.Milestones.Name = "Milestones";
-            this.Milestones.VisibleIndex = 1;
-            this.Milestones.Width = 207;
-            // 
-            // colStartDate1
-            // 
-            this.colStartDate1.AppearanceCell.Options.UseTextOptions = true;
-            this.colStartDate1.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.colStartDate1.ColumnEdit = this.repositoryItemDateEdit1;
-            this.colStartDate1.FieldName = "StartDate";
-            this.colStartDate1.Name = "colStartDate1";
-            this.colStartDate1.Visible = true;
-            this.colStartDate1.Width = 69;
-            // 
-            // repositoryItemDateEdit1
-            // 
-            this.repositoryItemDateEdit1.AutoHeight = false;
-            this.repositoryItemDateEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit1.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit1.Name = "repositoryItemDateEdit1";
-            // 
-            // colFinishDate1
-            // 
-            this.colFinishDate1.AppearanceCell.Options.UseTextOptions = true;
-            this.colFinishDate1.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.colFinishDate1.ColumnEdit = this.repositoryItemDateEdit2;
-            this.colFinishDate1.FieldName = "FinishDate";
-            this.colFinishDate1.Name = "colFinishDate1";
-            this.colFinishDate1.Visible = true;
-            this.colFinishDate1.Width = 69;
-            // 
-            // repositoryItemDateEdit2
-            // 
-            this.repositoryItemDateEdit2.AutoHeight = false;
-            this.repositoryItemDateEdit2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit2.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit2.Name = "repositoryItemDateEdit2";
-            // 
-            // colAdjustedDeliveryDate
-            // 
-            this.colAdjustedDeliveryDate.AppearanceCell.Options.UseTextOptions = true;
-            this.colAdjustedDeliveryDate.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.colAdjustedDeliveryDate.AppearanceHeader.Options.UseTextOptions = true;
-            this.colAdjustedDeliveryDate.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            this.colAdjustedDeliveryDate.Caption = "Adj. Delivery Date";
-            this.colAdjustedDeliveryDate.ColumnEdit = this.repositoryItemDateEdit3;
-            this.colAdjustedDeliveryDate.FieldName = "AdjustedDeliveryDate";
-            this.colAdjustedDeliveryDate.Name = "colAdjustedDeliveryDate";
-            this.colAdjustedDeliveryDate.Visible = true;
-            this.colAdjustedDeliveryDate.Width = 69;
-            // 
-            // repositoryItemDateEdit3
-            // 
-            this.repositoryItemDateEdit3.AutoHeight = false;
-            this.repositoryItemDateEdit3.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit3.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemDateEdit3.Name = "repositoryItemDateEdit3";
-            // 
-            // Personnel
-            // 
-            this.Personnel.Caption = "Personnel";
-            this.Personnel.Columns.Add(this.colEngineer);
-            this.Personnel.Columns.Add(this.colDesigner);
-            this.Personnel.Columns.Add(this.colToolMaker1);
-            this.Personnel.Columns.Add(this.colRoughProgrammer);
-            this.Personnel.Columns.Add(this.colElectrodeProgrammer);
-            this.Personnel.Columns.Add(this.colFinishProgrammer);
-            this.Personnel.Columns.Add(this.colApprentice1);
-            this.Personnel.MinWidth = 13;
-            this.Personnel.Name = "Personnel";
-            this.Personnel.VisibleIndex = 2;
-            this.Personnel.Width = 442;
-            // 
-            // colEngineer
-            // 
-            this.colEngineer.FieldName = "Engineer";
-            this.colEngineer.Name = "colEngineer";
-            this.colEngineer.Visible = true;
-            this.colEngineer.Width = 64;
-            // 
-            // colDesigner
-            // 
-            this.colDesigner.ColumnEdit = this.repositoryItemComboBox1;
-            this.colDesigner.FieldName = "Designer";
-            this.colDesigner.Name = "colDesigner";
-            this.colDesigner.Visible = true;
-            this.colDesigner.Width = 65;
-            // 
-            // colToolMaker1
-            // 
-            this.colToolMaker1.ColumnEdit = this.repositoryItemComboBox1;
-            this.colToolMaker1.FieldName = "ToolMaker";
-            this.colToolMaker1.Name = "colToolMaker1";
-            this.colToolMaker1.Visible = true;
-            this.colToolMaker1.Width = 65;
-            // 
-            // colRoughProgrammer
-            // 
-            this.colRoughProgrammer.Caption = "Rough Programmer";
-            this.colRoughProgrammer.ColumnEdit = this.repositoryItemComboBox1;
-            this.colRoughProgrammer.FieldName = "RoughProgrammer";
-            this.colRoughProgrammer.Name = "colRoughProgrammer";
-            this.colRoughProgrammer.Visible = true;
-            this.colRoughProgrammer.Width = 62;
-            // 
-            // colElectrodeProgrammer
-            // 
-            this.colElectrodeProgrammer.Caption = "Electrode Programmer";
-            this.colElectrodeProgrammer.ColumnEdit = this.repositoryItemComboBox1;
-            this.colElectrodeProgrammer.FieldName = "ElectrodeProgrammer";
-            this.colElectrodeProgrammer.Name = "colElectrodeProgrammer";
-            this.colElectrodeProgrammer.Visible = true;
-            this.colElectrodeProgrammer.Width = 63;
-            // 
-            // colFinishProgrammer
-            // 
-            this.colFinishProgrammer.Caption = "Finish Programmer";
-            this.colFinishProgrammer.ColumnEdit = this.repositoryItemComboBox1;
-            this.colFinishProgrammer.FieldName = "FinishProgrammer";
-            this.colFinishProgrammer.Name = "colFinishProgrammer";
-            this.colFinishProgrammer.Visible = true;
-            this.colFinishProgrammer.Width = 63;
-            // 
-            // colApprentice1
-            // 
-            this.colApprentice1.ColumnEdit = this.repositoryItemComboBox1;
-            this.colApprentice1.FieldName = "Apprentice";
-            this.colApprentice1.MinWidth = 25;
-            this.colApprentice1.Name = "colApprentice1";
-            this.colApprentice1.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.True;
-            this.colApprentice1.Visible = true;
-            this.colApprentice1.Width = 60;
-            // 
-            // GeneralInfo
-            // 
-            this.GeneralInfo.Caption = "General Info";
-            this.GeneralInfo.Columns.Add(this.colManifold);
-            this.GeneralInfo.Columns.Add(this.colMoldBase);
-            this.GeneralInfo.Columns.Add(this.colGeneralNotes);
-            this.GeneralInfo.Columns.Add(this.colJobFolderPath);
-            this.GeneralInfo.MinWidth = 13;
-            this.GeneralInfo.Name = "GeneralInfo";
-            this.GeneralInfo.VisibleIndex = 3;
-            this.GeneralInfo.Width = 946;
-            // 
-            // colManifold
-            // 
-            this.colManifold.Caption = "Manifold";
-            this.colManifold.FieldName = "Manifold";
-            this.colManifold.Name = "colManifold";
-            this.colManifold.Visible = true;
-            // 
-            // colMoldBase
-            // 
-            this.colMoldBase.FieldName = "MoldBase";
-            this.colMoldBase.Name = "colMoldBase";
-            this.colMoldBase.Visible = true;
-            this.colMoldBase.Width = 71;
-            // 
-            // colGeneralNotes
-            // 
-            this.colGeneralNotes.AppearanceCell.Options.UseTextOptions = true;
-            this.colGeneralNotes.AppearanceCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.colGeneralNotes.FieldName = "GeneralNotes";
-            this.colGeneralNotes.Name = "colGeneralNotes";
-            this.colGeneralNotes.Visible = true;
-            this.colGeneralNotes.Width = 725;
-            // 
-            // colJobFolderPath
-            // 
-            this.colJobFolderPath.Caption = "Job Folder Path";
-            this.colJobFolderPath.ColumnEdit = this.JobFolderHyperLinkEdit;
-            this.colJobFolderPath.FieldName = "JobFolderPath";
-            this.colJobFolderPath.Name = "colJobFolderPath";
-            this.colJobFolderPath.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
-            this.colJobFolderPath.Visible = true;
-            // 
-            // JobFolderHyperLinkEdit
-            // 
-            this.JobFolderHyperLinkEdit.AutoHeight = false;
-            this.JobFolderHyperLinkEdit.Name = "JobFolderHyperLinkEdit";
-            this.JobFolderHyperLinkEdit.SingleClick = true;
-            // 
-            // colID
-            // 
-            this.colID.FieldName = "ID";
-            this.colID.Name = "colID";
-            this.colID.Width = 71;
-            // 
-            // colPartPicture
-            // 
-            this.colPartPicture.ColumnEdit = this.repositoryItemImageEdit1;
-            this.colPartPicture.FieldName = "PartPicture";
-            this.colPartPicture.Name = "colPartPicture";
-            this.colPartPicture.Width = 71;
-            // 
-            // repositoryItemImageEdit1
-            // 
-            this.repositoryItemImageEdit1.AutoHeight = false;
-            this.repositoryItemImageEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemImageEdit1.Name = "repositoryItemImageEdit1";
-            this.repositoryItemImageEdit1.ImageChanged += new System.EventHandler(this.gridControl2_ImageChanged);
-            // 
-            // colGeneralNotesRTF
-            // 
-            this.colGeneralNotesRTF.Caption = "General Notes RTF";
-            this.colGeneralNotesRTF.FieldName = "GeneralNotesRTF";
-            this.colGeneralNotesRTF.Name = "colGeneralNotesRTF";
-            this.colGeneralNotesRTF.Visible = true;
-            // 
-            // repositoryItemComboBox2
-            // 
-            this.repositoryItemComboBox2.AutoHeight = false;
-            this.repositoryItemComboBox2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemComboBox2.Items.AddRange(new object[] {
-            "Boston Scientific",
-            "Fisher & Paykel",
-            "Smith & Nephew"});
-            this.repositoryItemComboBox2.Name = "repositoryItemComboBox2";
-            // 
-            // repositoryItemPopupContainerEdit1
-            // 
-            this.repositoryItemPopupContainerEdit1.AutoHeight = false;
-            this.repositoryItemPopupContainerEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemPopupContainerEdit1.Name = "repositoryItemPopupContainerEdit1";
-            // 
-            // repositoryItemRichTextEdit1
-            // 
-            this.repositoryItemRichTextEdit1.Name = "repositoryItemRichTextEdit1";
-            this.repositoryItemRichTextEdit1.ShowCaretInReadOnly = false;
-            // 
-            // repositoryItemMemoExEdit1
-            // 
-            this.repositoryItemMemoExEdit1.AutoHeight = false;
-            this.repositoryItemMemoExEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemMemoExEdit1.Name = "repositoryItemMemoExEdit1";
-            // 
-            // repositoryItemRadioGroup1
-            // 
-            this.repositoryItemRadioGroup1.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "On Hold"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "In Progress"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Waiting"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Completed")});
-            this.repositoryItemRadioGroup1.ItemsLayout = DevExpress.XtraEditors.RadioGroupItemsLayout.Column;
-            this.repositoryItemRadioGroup1.Name = "repositoryItemRadioGroup1";
-            // 
-            // repositoryItemSearchLookUpEdit1
-            // 
-            this.repositoryItemSearchLookUpEdit1.AutoHeight = false;
-            this.repositoryItemSearchLookUpEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemSearchLookUpEdit1.Name = "repositoryItemSearchLookUpEdit1";
-            this.repositoryItemSearchLookUpEdit1.PopupView = this.repositoryItemSearchLookUpEdit1View;
-            // 
-            // repositoryItemSearchLookUpEdit1View
-            // 
-            this.repositoryItemSearchLookUpEdit1View.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
-            this.repositoryItemSearchLookUpEdit1View.Name = "repositoryItemSearchLookUpEdit1View";
-            this.repositoryItemSearchLookUpEdit1View.OptionsSelection.EnableAppearanceFocusedCell = false;
-            this.repositoryItemSearchLookUpEdit1View.OptionsView.ShowGroupPanel = false;
-            // 
-            // gridView2
-            // 
-            this.gridView2.Appearance.GroupRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.gridView2.Appearance.GroupRow.Options.UseBackColor = true;
-            this.gridView2.AppearancePrint.EvenRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.gridView2.AppearancePrint.EvenRow.Options.UseBackColor = true;
-            this.gridView2.AppearancePrint.GroupRow.BackColor = System.Drawing.Color.Lime;
-            this.gridView2.AppearancePrint.GroupRow.Options.UseBackColor = true;
-            this.gridView2.AppearancePrint.HeaderPanel.BackColor = System.Drawing.Color.Lime;
-            this.gridView2.AppearancePrint.HeaderPanel.Options.UseBackColor = true;
-            this.gridView2.ColumnPanelRowHeight = 2;
-            this.gridView2.GridControl = this.gridControl2;
-            this.gridView2.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "PartName", null, ""),
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Sum, "MoldCost", null, "")});
-            this.gridView2.Name = "gridView2";
-            this.gridView2.OptionsPrint.EnableAppearanceEvenRow = true;
-            this.gridView2.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
-            this.gridView2.OptionsView.ShowFooter = true;
-            this.gridView2.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView2_CellValueChanged);
-            this.gridView2.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.gridView2_RowUpdated);
-            this.gridView2.Click += new System.EventHandler(this.gridView2_Click);
+            this.tasksBindingSource.DataMember = "Tasks";
+            this.tasksBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
             // 
             // resourcesBindingSource
             // 
@@ -3287,6 +2583,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).EndInit();
@@ -3295,7 +2592,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).EndInit();
@@ -3313,10 +2609,11 @@
             this.xtraTabPage2.ResumeLayout(false);
             this.xtraTabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PrintEmployeeWorkCheckedComboBoxEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daysAheadSpinEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterTasksByDatesCheckEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PrintDeptsCheckedComboBoxEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.departmentComboBox2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tasksBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).EndInit();
@@ -3343,29 +2640,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectComboBox.Properties)).EndInit();
-            this.xtraTabPage6.ResumeLayout(false);
-            this.xtraTabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bandedGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit2.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.JobFolderHyperLinkEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRichTextEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoExEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemRadioGroup1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSearchLookUpEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSearchLookUpEdit1View)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tasksBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.resourcesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.componentsBindingSource)).EndInit();
@@ -3406,52 +2681,8 @@
         private DevExpress.XtraEditors.ComboBoxEdit TimeUnitsComboBox;
         private DevExpress.XtraEditors.SimpleButton printTaskViewButton;
         private DevExpress.XtraEditors.ComboBoxEdit timeFrameComboBoxEdit;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage5;
         private DevExpress.XtraEditors.RangeControl rangeControl1;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage6;
-        private DevExpress.XtraEditors.SimpleButton deleteButton;
-        private DevExpress.XtraEditors.SimpleButton workLoadTabPrintButton;
-        private DevExpress.XtraGrid.GridControl gridControl2;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
-        private Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter workLoadTableAdapter;
-        private System.Windows.Forms.BindingSource workLoadBindingSource;
-        private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit2;
-        private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit3;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridView bandedGridView1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colID;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colPartPicture;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colToolNumber;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colMWONumber;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colProjectNumber1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colStage;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colCustomer;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colPartName;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colDeliveryInWeeks;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colFinishDate1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colStartDate1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colAdjustedDeliveryDate;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colEngineer;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colDesigner;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colToolMaker1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colRoughProgrammer;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colFinishProgrammer;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colElectrodeProgrammer;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colMoldCost;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colMoldBase;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotes;
-        private DevExpress.XtraEditors.Repository.RepositoryItemImageEdit repositoryItemImageEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
         private DevExpress.Utils.Behaviors.BehaviorManager behaviorManager1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox2;
-        private DevExpress.XtraEditors.SimpleButton workLoadRefreshButton;
-        private DevExpress.XtraEditors.SimpleButton workLoadTabPrint2Button;
-        private DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemRichTextEdit repositoryItemRichTextEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemMemoExEdit repositoryItemMemoExEdit1;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotesRTF;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colApprentice1;
         private Workload_Tracking_System_DBDataSetTableAdapters.TasksTableAdapter tasksTableAdapter;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage7;
         private DevExpress.XtraGrid.GridControl gridControl3;
@@ -3540,9 +2771,7 @@
         private DevExpress.XtraEditors.SimpleButton editProjectButton;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckedComboBoxEdit repositoryItemCheckedComboBoxEdit1;
         private DevExpress.XtraEditors.SimpleButton resourceButton;
-        private DevExpress.XtraEditors.Repository.RepositoryItemRadioGroup repositoryItemRadioGroup1;
         private DevExpress.XtraEditors.CheckedComboBoxEdit PrintDeptsCheckedComboBoxEdit;
-        private DevExpress.XtraEditors.SimpleButton printPreviewButton;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl5;
@@ -3550,8 +2779,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl6;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.RadioGroup GroupByRadioGroup;
-        private DevExpress.XtraEditors.Repository.RepositoryItemSearchLookUpEdit repositoryItemSearchLookUpEdit1;
-        private DevExpress.XtraGrid.Views.Grid.GridView repositoryItemSearchLookUpEdit1View;
         private DevExpress.XtraGrid.Columns.GridColumn colOverlapAllowed;
         private DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit repositoryItemHyperLinkEdit2;
         private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit2;
@@ -3559,26 +2786,17 @@
         private DevExpress.XtraEditors.LabelControl labelControl7;
         private DevExpress.XtraEditors.CheckedComboBoxEdit projectCheckedComboBoxEdit;
         private DevExpress.XtraEditors.RangeControl rangeControl2;
-        private DevExpress.XtraEditors.CheckedComboBoxEdit PrintEmployeeWorkCheckedComboBoxEdit;
         private DevExpress.XtraEditors.SimpleButton printEmployeeWorkButton;
         private DevExpress.XtraEditors.CheckEdit includeCompletesCheckEdit;
         private DevExpress.XtraEditors.CheckEdit includeQuotesCheckEdit;
         private DevExpress.XtraEditors.RadioGroup chartRadioGroup;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox resourceRepositoryItemComboBox;
         private DevExpress.XtraGrid.Columns.GridColumn colApprentice;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colManifold;
         private DevExpress.XtraGrid.Columns.GridColumn colDateModified;
         private DevExpress.XtraGrid.Columns.GridColumn colLastKanBanGenerationDate;
-        private DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit JobFolderHyperLinkEdit;
-        private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colJobFolderPath;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand ProjectBand2;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand Milestones;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand Personnel;
-        private DevExpress.XtraGrid.Views.BandedGrid.GridBand GeneralInfo;
         private DevExpress.XtraGrid.Columns.GridColumn colProjectNumber3;
         private DevExpress.XtraGrid.Columns.GridColumn colLatestFinishDate;
         private DevExpress.XtraEditors.LabelControl refreshLabelControl;
-        private DevExpress.XtraEditors.LabelControl refreshWorkloadLabelControl;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridView projectBandedGridView;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colJobNumberBGV;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colProjectNumberBGV;
@@ -3618,6 +2836,10 @@
         private DevExpress.XtraGrid.Columns.GridColumn DepartmentColDPV;
         private DevExpress.XtraGrid.Columns.GridColumn PercentCompleteColDPV;
         private DevExpress.XtraGrid.Columns.GridColumn colStagePV;
+        private DevExpress.XtraEditors.SpinEdit daysAheadSpinEdit;
+        private DevExpress.XtraEditors.CheckEdit filterTasksByDatesCheckEdit;
+        private DevExpress.XtraEditors.LabelControl labelControl8;
+        private DevExpress.XtraEditors.CheckedComboBoxEdit PrintEmployeeWorkCheckedComboBoxEdit;
     }
 }
 

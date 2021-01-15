@@ -454,7 +454,6 @@ namespace ClassLibrary
         {
             bool batchUpdateTasks = false;
 
-
             if (task.StartDate == new DateTime(0001, 1, 1))
             {
                 task.StartDate = null;
