@@ -1,5 +1,6 @@
 ﻿using DevExpress.XtraScheduler;
 using DevExpress.XtraScheduler.Xml;
+using DevExpress.XtraScheduler.Printing;
 using DevExpress.XtraGrid.Views.Base;
 using System;
 using System.ComponentModel;
@@ -11,11 +12,12 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraCharts;
 using System.Text;
-using DevExpress.XtraRichEdit.API.Native;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using ClassLibrary;
+using DevExpress.XtraRichEdit.API.Native;
 using DevExpress.XtraGrid.Views.BandedGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Columns;
@@ -31,6 +33,8 @@ using System.Text.RegularExpressions;
 using DevExpress.Data.Filtering;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
+using DevExpress.XtraReports.UI;
+using DevExpress.XtraScheduler.Reporting;
 
 namespace Toolroom_Project_Viewer
 {
@@ -44,10 +48,13 @@ namespace Toolroom_Project_Viewer
         private RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
         private string PrintOrientation, PaperSize;
         private string[] departmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish" };
+
+        object DraggedResourceId = null;
         public DataTable RoleTable { get; set; }
         private string TimeUnits { get; set; }
         private string NoResourceName { get; set; }
         private ProjectModel Project { get; set; }
+        private ProjectModel CalendarProject { get; set; }
         public List<ProjectModel> ProjectsList { get; set; }
         public List<ComponentModel> ComponentsList { get; set; }
         public List<TaskModel> TasksList { get; set; }
@@ -91,6 +98,7 @@ namespace Toolroom_Project_Viewer
 
                 PopulateDepartmentComboBoxes();
                 PopulateProjectComboBox();
+                PopulateProjectComboBox2();
                 PopulateTimeFrameComboBox();               
 
                 schedulerStorage2.Appointments.CommitIdToDataSource = false;
@@ -99,6 +107,9 @@ namespace Toolroom_Project_Viewer
                 schedulerControl2.Views.GanttView.ResourcesPerPage = 15;
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
                 schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
+
+                schedulerControl3.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
                 //InitializeExample();
                 AddRepositoryItemToGrid();
 
@@ -358,9 +369,11 @@ namespace Toolroom_Project_Viewer
             gridView1.BeginUpdate();
             gridView5.BeginUpdate();
 
+            
+
             movedTask.Resources = GenerateResourceIDsString(apt.ResourceIds);
-            movedTask.Machine = GetMachineFromResourceIDs(apt.ResourceIds);
-            movedTask.Personnel = GetResourceFromResourceIDs(apt.ResourceIds);
+            movedTask.Machine = GetResourceFromResourceIDs(apt.ResourceIds, "Machine");
+            movedTask.Personnel = GetResourceFromResourceIDs(apt.ResourceIds, "Person");
             movedTask.StartDate = apt.Start;
             movedTask.FinishDate = apt.End;
 
@@ -471,33 +484,24 @@ namespace Toolroom_Project_Viewer
         /// <summary>
         /// Gets the last selected machine in resource list.
         /// </summary>
-        private string GetMachineFromResourceIDs(AppointmentResourceIdCollection appointmentResourceIdCollection)
+        private string GetResourceFromResourceIDs(AppointmentResourceIdCollection appointmentResourceIdCollection, string resourceType)
         {
             string id = "";
             foreach (var item in appointmentResourceIdCollection)
             {
-                Console.WriteLine($"Resource: {item.ToString()}");
                 // This just validates that the selected resource is a machine and not a person.  It assumes that the resource list is comprised of both people and machines.
-                if (ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == item.ToString() && x.Field<string>("ResourceType") == "Machine").Count() >= 1)
+                if (ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == item.ToString() && x.Field<string>("ResourceType") == resourceType).Count() >= 1)
                 {
-                    id = item.ToString(); 
-                }
-            }
+                    if (item.ToString() == "No Machine" || item.ToString() == "No Personnel")
+                    {
+                        id = "";
+                    }
+                    else
+                    {
+                        id = item.ToString();
+                    }
 
-            return id;
-        }
-        /// <summary>
-        /// Gets the last selected person in resource list.
-        /// </summary>
-        private string GetResourceFromResourceIDs(AppointmentResourceIdCollection appointmentResourceIdCollection)
-        {
-            string id = "";
-            foreach (var item in appointmentResourceIdCollection)
-            {
-                // This just validates that the selected resource is a person and not a machine.  It assumes that the resource list is comprised of both people and machines.
-                if (ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == item.ToString() && x.Field<string>("ResourceType") == "Person").Count() >= 1)
-                {
-                    id = item.ToString();
+                    Console.WriteLine($"Machine: {id}");
                 }
             }
 
@@ -616,6 +620,10 @@ namespace Toolroom_Project_Viewer
             {
                 Tasks = @"^Inspection\w*";
             }
+            else if (department == "Mold Service")
+            {
+                Tasks = @"Mold Service";
+            }
             else if (department == "All")
             {
                 Tasks = "All";
@@ -706,6 +714,11 @@ namespace Toolroom_Project_Viewer
             else if (department == "Inspection")
             {
                 Role = "CMM Operator";
+                NoResourceName = "No Personnel";
+            }
+            else if (department == "Mold Service")
+            {
+                Role = "Tool Maker";
                 NoResourceName = "No Personnel";
             }
             else if (department == "All")
@@ -856,20 +869,20 @@ namespace Toolroom_Project_Viewer
         {
             schedulerControl1.ActiveView.LayoutChanged();
         }
-
-        private void schedulerControl1_DragDrop(object sender, DragEventArgs e)
-        {
-            //MessageBox.Show("DragDrop");
-        }
-
-        private void schedulerControl1_AppointmentResized(object sender, AppointmentResizeEventArgs e)
-        {
-            //MessageBox.Show("Resize");
-        }
-
         private void schedulerControl1_AllowAppointmentDelete(object sender, AppointmentOperationEventArgs e)
         {
             e.Allow = false;
+        }        
+        private void schedulerControl1_AppointmentDrop(object sender, AppointmentDragEventArgs e)
+        {
+            // Use this event to handle moving multiple selected tasks.
+
+            // Gets rid of the resource that the task originally placed on before it was moved while preserving the other resources.
+            foreach (var id in e.SourceAppointment.ResourceIds)
+            {
+                if (!Equals(id, DraggedResourceId))
+                    e.EditedAppointment.ResourceIds.Add(id);
+            }
         }
         private void schedulerControl1_AppointmentFlyoutShowing(object sender, AppointmentFlyoutShowingEventArgs e)
         {
@@ -883,10 +896,27 @@ namespace Toolroom_Project_Viewer
             task.DueDate = ProjectsList.Find(x => x.ProjectNumber == task.ProjectNumber).DueDate;
             task.ComponentPicture = ComponentsList.Find(x => x.ProjectNumber == task.ProjectNumber && x.Component == task.Component).picture;
             task.Notes = e.FlyoutData.Appointment.Description;
-            
+
             e.Control = CreateLabel(task);
         }
+        private void schedulerControl1_AppointmentResized(object sender, AppointmentResizeEventArgs e)
+        {
+            //MessageBox.Show("Resize");
+        }
+        private void schedulerControl1_DragDrop(object sender, DragEventArgs e)
+        {
+            //MessageBox.Show("DragDrop");
+        }
+        private void schedulerControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            var scheduler = sender as DevExpress.XtraScheduler.SchedulerControl;
 
+            var hitInfo = scheduler.ActiveView.CalcHitInfo(e.Location, false);
+            if (hitInfo.HitTest != DevExpress.XtraScheduler.Drawing.SchedulerHitTest.AppointmentContent)
+                return;
+
+            DraggedResourceId = ((DevExpress.XtraScheduler.Internal.Implementations.ResourceBase)hitInfo.ViewInfo.Resource).Id;
+        }
         private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
             if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
@@ -933,10 +963,6 @@ namespace Toolroom_Project_Viewer
             }
 
             //MessageBox.Show("AppointmentChanged");
-        }
-        private void schedulerControl1_AppointmentDrop(object sender, AppointmentDragEventArgs e)
-        {
-            // Use this event to handle moving multiple selected tasks.
         }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
@@ -1136,6 +1162,10 @@ namespace Toolroom_Project_Viewer
             {
                 //gridView1.ActiveFilterString = "[TaskName] LIKE 'Inspection%' AND [Status] = NULL";
                 criteriaOperators.Add(new FunctionOperator(FunctionOperatorType.StartsWith, new OperandProperty("TaskName"), department));
+            }
+            else if (department == "Mold Service")
+            {
+                criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
             }
             else if (department == "All")
             {
@@ -1371,7 +1401,21 @@ namespace Toolroom_Project_Viewer
             pb.Document.AutoFitToPagesWidth = 1;
             pb.PageSettings.Landscape = true;
         }
+        private void gridView1_ValidatingEditor(object sender, BaseContainerValidateEditorEventArgs e)
+        {
+            ColumnView view = sender as ColumnView;
 
+            GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
+
+            if (column.FieldName == "StartDate" || column.FieldName == "FinishDate")
+            {
+                if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                {
+                    MessageBox.Show("This login is not authorized to make changes to dates.  Hit ESC to cancel editing.");
+                    e.Valid = false;
+                } 
+            }
+        }
         private void gridView1_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             try
@@ -1384,13 +1428,6 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate")
                 {
-                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
-                    {
-                        MessageBox.Show("This login is not authorized to make changes to dates.");
-                        LoadTaskView();
-                        return;
-                    }
-
                     DateTime? date = (DateTime?)e.Value;
 
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
@@ -3187,6 +3224,7 @@ namespace Toolroom_Project_Viewer
             using (ManageResourcesForm form = new ManageResourcesForm())
             {
                 form.ShowDialog(); // Code execution stops until user does something with the window.
+                RoleTable = Database.GetRoleTable();
             }
         }
         private void workLoadViewPrintButton_Click(object sender, EventArgs e)
@@ -3680,7 +3718,7 @@ namespace Toolroom_Project_Viewer
         }
         private void LoadProjectGantt()
         {
-            var number = GetComboBoxInfo();
+            var number = GetProjectComboBoxInfo(projectComboBox);
             SplashScreenManager.ShowForm(typeof(WaitForm1));
             //LoadProject();
             LoadProject(number.projectNumber);
@@ -3693,7 +3731,7 @@ namespace Toolroom_Project_Viewer
             TaskModel movedTask, globalTask;
             ProjectModel globalProject = null;
 
-            var number = GetComboBoxInfo();
+            var number = GetProjectComboBoxInfo(projectComboBox);
 
             //Resource resource = schedulerStorage2.Resources[Convert.ToInt16(apt.ResourceId) - 1];
 
@@ -3813,7 +3851,7 @@ namespace Toolroom_Project_Viewer
                 {
                     if (UpdateTaskStorage2(apt))
                     {
-                        var number = GetComboBoxInfo();
+                        var number = GetProjectComboBoxInfo(projectComboBox);
                         collapsedNodes = GetCollapsedNodes();
                         LoadProject(number.projectNumber);
                         schedulerControl2.RefreshData();
@@ -3821,7 +3859,7 @@ namespace Toolroom_Project_Viewer
                     }
                     else
                     {
-                        var number = GetComboBoxInfo();
+                        var number = GetProjectComboBoxInfo(projectComboBox);
                         collapsedNodes = GetCollapsedNodes();
                         LoadProject(number.projectNumber);
                         schedulerControl2.RefreshData();
@@ -3868,6 +3906,171 @@ namespace Toolroom_Project_Viewer
 
         #endregion
 
+        #region Calender
+
+        private void PopulateProjectComboBox2()
+        {
+            projectComboBox2.Properties.Items.Clear();
+
+            projectComboBox2.Properties.Items.AddRange(Database.GetJobNumberComboList());
+        }
+
+        private void PopulateComponentComboBox()
+        {
+            if (componentComboBox.Properties.Items.Count != 0 && componentComboBox.Properties.Items != null)
+            {
+                componentComboBox.Properties.Items.Clear();
+            }
+
+            componentComboBox.Properties.Items.AddRange(CalendarProject.Components.Select(x => x.Component).ToArray());
+
+            componentComboBox.Properties.Items.Add("");
+        }
+        private void LoadProjectCalendar(string comboBoxName)
+        {
+            SplashScreenManager.ShowForm(typeof(WaitForm1));
+
+            calendarDataStorage.Appointments.CustomFieldMappings.Clear();
+
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("JobNumber", "JobNumber"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("ProjectNumber", "ProjectNumber"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskName", "TaskName"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Hours", "Hours"));
+            calendarDataStorage.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Predecessors", "Predecessors"));
+
+            // This sets the AptID for all the tasks in a project.
+            AptResourceModel.GetProjectResourceData(CalendarProject);
+
+            AppointmentMappingInfo appointmentMappings = calendarDataStorage.Appointments.Mappings;
+
+            appointmentMappings.AppointmentId = "AptID";
+            appointmentMappings.Start = "StartDate";
+            appointmentMappings.End = "FinishDate";
+            appointmentMappings.Subject = "Component";
+            appointmentMappings.Location = "Location";
+            appointmentMappings.Description = "Notes";
+            appointmentMappings.PercentComplete = "PercentComplete";
+            //appointmentMappings.ResourceId = "AptID";
+
+            List<TaskModel> rawTaskList;
+
+            if (comboBoxName == "projectComboBox2" || componentComboBox.Text == "")
+            {
+                rawTaskList = CalendarProject.GetTaskList();
+            }
+            else
+            {
+                rawTaskList = CalendarProject.Components.Find(x => x.Component == componentComboBox.Text).Tasks;
+            }
+
+            BindingList<TaskModel> taskList = new BindingList<TaskModel>(rawTaskList);
+
+            calendarDataStorage.Appointments.DataSource = taskList;
+
+            SplashScreenManager.CloseForm();
+        }
+        private void projectComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var number = GetProjectComboBoxInfo(projectComboBox2);
+            var control = sender as ComboBoxEdit;
+
+            CalendarProject = Database.GetProject(number.projectNumber);
+
+            PopulateComponentComboBox();
+
+            LoadProjectCalendar(control.Name);
+        }
+        private void componentComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var control = sender as ComboBoxEdit;
+
+            if (projectComboBox2.Text != "")
+            {
+                LoadProjectCalendar(control.Name);
+            }
+        }
+        private void RefreshCalendarButton_Click(object sender, EventArgs e)
+        {
+            PopulateProjectComboBox2();
+
+            try
+            {
+                if (projectComboBox2.Text != "")
+                {
+                    LoadProjectCalendar(sender.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private void PrintCalendarButton_Click(object sender, EventArgs e)
+        {
+            ShowSchedulerPreview(schedulerControl3);
+        }
+        private void schedulerControl3_AppointmentFlyoutShowing(object sender, AppointmentFlyoutShowingEventArgs e)
+        {
+            TaskModel hoveredTask = new TaskModel();
+
+            hoveredTask.JobNumber = e.FlyoutData.Appointment.CustomFields["JobNumber"].ToString();
+            hoveredTask.ProjectNumber = (int)e.FlyoutData.Appointment.CustomFields["ProjectNumber"];
+            hoveredTask.Component = e.FlyoutData.Appointment.CustomFields["Component"].ToString();
+            hoveredTask.TaskName = e.FlyoutData.Appointment.CustomFields["TaskName"].ToString();
+            hoveredTask.Hours = (int)e.FlyoutData.Appointment.CustomFields["Hours"];
+            hoveredTask.Notes = e.FlyoutData.Appointment.Description;
+            hoveredTask.ComponentPicture = ComponentsList.Find(x => x.ProjectNumber == hoveredTask.ProjectNumber && x.Component == hoveredTask.Component).picture;
+
+            e.Control = CreateLabel(hoveredTask);
+        }
+
+        private void calendarDataStorage_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
+        {
+            MessageBox.Show("Calendar View is read-only.  No changes permitted.");
+
+            e.Cancel = true;
+        }
+
+        private void ShowSchedulerPreview(SchedulerControl scheduler)
+        {
+            // 
+            // Check whether the SchedulerControl can be previewed.
+            if (!scheduler.IsPrintingAvailable)
+            {
+                MessageBox.Show("The 'DevExpress.XtraPrinting.vX.Y.dll' is not found", "Error");
+                return;
+            }
+
+            //MonthlyPrintStyle style = scheduler.PrintStyles[SchedulerPrintStyleKind.Monthly] as MonthlyPrintStyle;
+
+            //style.CalendarHeaderVisible = false;
+            //style.PageSettings.Landscape = true;
+            //style.PageSettings.Margins.Top = 25;
+            //style.PageSettings.Margins.Bottom = 25;
+            //style.PageSettings.Margins.Right = 25;
+            //style.PageSettings.Margins.Left = 25;
+            //style.CompressWeekend = false;
+
+            // Open the Preview window.
+            //scheduler.ShowPrintPreview();
+
+            MonthlyXtraSchedulerReport monthlyXtraSchedulerReport = new MonthlyXtraSchedulerReport(CalendarProject, componentComboBox.Text);
+
+            SchedulerControlPrintAdapter scPrintAdapter =
+                new SchedulerControlPrintAdapter(this.schedulerControl3);
+            monthlyXtraSchedulerReport.SchedulerAdapter = scPrintAdapter;
+
+            monthlyXtraSchedulerReport.CreateDocument(true);
+
+            ReportPrintTool printTool = new ReportPrintTool(monthlyXtraSchedulerReport);
+            printTool.Report.CreateDocument(true);
+            printTool.ShowPreviewDialog();
+        }
+
+        #endregion
+
         private List<string> GetResourceList(string role, string resourceType)
         {
             List<string> resourceList = new List<string>();
@@ -3904,12 +4107,12 @@ namespace Toolroom_Project_Viewer
 
             return resourceList;
         }
-        private (string jobNumber, int projectNumber) GetComboBoxInfo()
+        private (string jobNumber, int projectNumber) GetProjectComboBoxInfo(ComboBoxEdit comboBox)
         {
             string[] jobNumberComboBoxText, jobNumberComboBoxText2;
 
-            jobNumberComboBoxText = projectComboBox.Text.Split(' ');
-            jobNumberComboBoxText2 = projectComboBox.Text.Split('#');
+            jobNumberComboBoxText = comboBox.Text.Split(' ');
+            jobNumberComboBoxText2 = comboBox.Text.Split('#');
 
             return (jobNumberComboBoxText[0], Convert.ToInt32(jobNumberComboBoxText2[1]));
         }
@@ -3966,8 +4169,8 @@ namespace Toolroom_Project_Viewer
         }
         private void PopulateDepartmentComboBoxes()
         {
-            List<string> departmentList1 = new List<string> { "Design", "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
-            List<string> departmentList2 = new List<string> { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish", "All" };
+            List<string> departmentList1 = new List<string> { "Design", "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "All" };
+            List<string> departmentList2 = new List<string> { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "All" };
 
             departmentComboBox.Properties.Items.AddRange(departmentList1);
             departmentComboBox2.Properties.Items.AddRange(departmentList2);

@@ -96,7 +96,7 @@ namespace ClassLibrary
                    "End Sub\r\n"
                    ;
 
-        public QuoteModel GetQuoteInfo(string filePath = @"X:\TOOLROOM\Josh Meservey\Workload Tracking System\Simple Quote  Template - 2018-05-25.xlsx")
+        public static QuoteModel GetQuoteInfo(string filePath = @"X:\TOOLROOM\Josh Meservey\Workload Tracking System\Simple Quote  Template - 2018-05-25.xlsx")
         {
             QuoteModel quote;            
             Excel.Application excelApp;

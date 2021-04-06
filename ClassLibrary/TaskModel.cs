@@ -51,6 +51,8 @@ namespace ClassLibrary
             get { return this.TaskName; }
         }
         public string Subject { get { return $"{JobNumber} {ProjectNumber} {TaskName} {Hours}"; } }
+
+        public string Subject2 { get { return $"{Component}"; } }
         public int PercentComplete 
         { 
             get 

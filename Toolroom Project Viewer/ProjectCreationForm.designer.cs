@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Tool Number*");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tool Number*");
             this.MoldBuildTreeView = new System.Windows.Forms.TreeView();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
@@ -65,6 +65,16 @@
             this.taskNotesTextBox = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
+            this.EDMWireOperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
+            this.EDMSinkerOperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
+            this.FinishCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.ElectrodeCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
+            this.RoughCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
             this.SelectProjectButton = new DevExpress.XtraEditors.SimpleButton();
             this.overLapAllowedCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
@@ -111,16 +121,6 @@
             this.DeleteButton = new DevExpress.XtraEditors.SimpleButton();
             this.RenameButton = new DevExpress.XtraEditors.SimpleButton();
             this.GetQuoteButton = new DevExpress.XtraEditors.SimpleButton();
-            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
-            this.RoughCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
-            this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
-            this.ElectrodeCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
-            this.FinishCNCOperatorComboBox = new System.Windows.Forms.ComboBox();
-            this.EDMSinkerOperatorComboBox = new System.Windows.Forms.ComboBox();
-            this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
-            this.EDMWireOperatorComboBox = new System.Windows.Forms.ComboBox();
-            this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).BeginInit();
@@ -159,10 +159,10 @@
             this.MoldBuildTreeView.Location = new System.Drawing.Point(15, 32);
             this.MoldBuildTreeView.Margin = new System.Windows.Forms.Padding(4);
             this.MoldBuildTreeView.Name = "MoldBuildTreeView";
-            treeNode6.Name = "Node0";
-            treeNode6.Text = "Tool Number*";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Tool Number*";
             this.MoldBuildTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode6});
+            treeNode1});
             this.MoldBuildTreeView.Size = new System.Drawing.Size(300, 736);
             this.MoldBuildTreeView.TabIndex = 0;
             this.MoldBuildTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.MoldBuildTreeView_BeforeSelect);
@@ -489,7 +489,6 @@
             this.hoursNumericUpDown.Name = "hoursNumericUpDown";
             this.hoursNumericUpDown.Size = new System.Drawing.Size(49, 22);
             this.hoursNumericUpDown.TabIndex = 34;
-            this.hoursNumericUpDown.ValueChanged += new System.EventHandler(this.hoursNumericUpDown_ValueChanged);
             this.hoursNumericUpDown.ValueChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // machineComboBox
@@ -525,7 +524,6 @@
             this.predecessorsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.predecessorsListBox.Size = new System.Drawing.Size(260, 228);
             this.predecessorsListBox.TabIndex = 31;
-            this.predecessorsListBox.SelectedIndexChanged += new System.EventHandler(this.predecessorsListBox_SelectedIndexChanged);
             this.predecessorsListBox.SelectedIndexChanged += new System.EventHandler(this.TaskInfo_Changed);
             // 
             // taskNotesTextBox
@@ -592,6 +590,116 @@
             this.panelControl2.Name = "panelControl2";
             this.panelControl2.Size = new System.Drawing.Size(411, 728);
             this.panelControl2.TabIndex = 65;
+            // 
+            // EDMWireOperatorComboBox
+            // 
+            this.EDMWireOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EDMWireOperatorComboBox.FormattingEnabled = true;
+            this.EDMWireOperatorComboBox.Location = new System.Drawing.Point(216, 332);
+            this.EDMWireOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EDMWireOperatorComboBox.Name = "EDMWireOperatorComboBox";
+            this.EDMWireOperatorComboBox.Size = new System.Drawing.Size(170, 24);
+            this.EDMWireOperatorComboBox.TabIndex = 86;
+            this.EDMWireOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.EDMWireOperatorComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
+            // 
+            // labelControl29
+            // 
+            this.labelControl29.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl29.Appearance.Options.UseFont = true;
+            this.labelControl29.Location = new System.Drawing.Point(219, 312);
+            this.labelControl29.Name = "labelControl29";
+            this.labelControl29.Size = new System.Drawing.Size(136, 19);
+            this.labelControl29.TabIndex = 85;
+            this.labelControl29.Text = "EDM Wire Operator:";
+            // 
+            // EDMSinkerOperatorComboBox
+            // 
+            this.EDMSinkerOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EDMSinkerOperatorComboBox.FormattingEnabled = true;
+            this.EDMSinkerOperatorComboBox.Location = new System.Drawing.Point(13, 332);
+            this.EDMSinkerOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EDMSinkerOperatorComboBox.Name = "EDMSinkerOperatorComboBox";
+            this.EDMSinkerOperatorComboBox.Size = new System.Drawing.Size(170, 24);
+            this.EDMSinkerOperatorComboBox.TabIndex = 84;
+            this.EDMSinkerOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.EDMSinkerOperatorComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
+            // 
+            // labelControl28
+            // 
+            this.labelControl28.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl28.Appearance.Options.UseFont = true;
+            this.labelControl28.Location = new System.Drawing.Point(16, 312);
+            this.labelControl28.Name = "labelControl28";
+            this.labelControl28.Size = new System.Drawing.Size(146, 19);
+            this.labelControl28.TabIndex = 83;
+            this.labelControl28.Text = "EDM Sinker Operator:";
+            // 
+            // FinishCNCOperatorComboBox
+            // 
+            this.FinishCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FinishCNCOperatorComboBox.FormattingEnabled = true;
+            this.FinishCNCOperatorComboBox.Location = new System.Drawing.Point(216, 283);
+            this.FinishCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.FinishCNCOperatorComboBox.Name = "FinishCNCOperatorComboBox";
+            this.FinishCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
+            this.FinishCNCOperatorComboBox.TabIndex = 82;
+            this.FinishCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.FinishCNCOperatorComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
+            // 
+            // ElectrodeCNCOperatorComboBox
+            // 
+            this.ElectrodeCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ElectrodeCNCOperatorComboBox.FormattingEnabled = true;
+            this.ElectrodeCNCOperatorComboBox.Location = new System.Drawing.Point(216, 233);
+            this.ElectrodeCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ElectrodeCNCOperatorComboBox.Name = "ElectrodeCNCOperatorComboBox";
+            this.ElectrodeCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
+            this.ElectrodeCNCOperatorComboBox.TabIndex = 81;
+            this.ElectrodeCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.ElectrodeCNCOperatorComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
+            // 
+            // labelControl27
+            // 
+            this.labelControl27.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl27.Appearance.Options.UseFont = true;
+            this.labelControl27.Location = new System.Drawing.Point(219, 263);
+            this.labelControl27.Name = "labelControl27";
+            this.labelControl27.Size = new System.Drawing.Size(140, 19);
+            this.labelControl27.TabIndex = 80;
+            this.labelControl27.Text = "Finish CNC Operator:";
+            // 
+            // labelControl26
+            // 
+            this.labelControl26.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl26.Appearance.Options.UseFont = true;
+            this.labelControl26.Location = new System.Drawing.Point(219, 213);
+            this.labelControl26.Name = "labelControl26";
+            this.labelControl26.Size = new System.Drawing.Size(166, 19);
+            this.labelControl26.TabIndex = 79;
+            this.labelControl26.Text = "Electrode CNC Operator:";
+            // 
+            // RoughCNCOperatorComboBox
+            // 
+            this.RoughCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RoughCNCOperatorComboBox.FormattingEnabled = true;
+            this.RoughCNCOperatorComboBox.Location = new System.Drawing.Point(216, 183);
+            this.RoughCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.RoughCNCOperatorComboBox.Name = "RoughCNCOperatorComboBox";
+            this.RoughCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
+            this.RoughCNCOperatorComboBox.TabIndex = 78;
+            this.RoughCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.RoughCNCOperatorComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
+            // 
+            // labelControl25
+            // 
+            this.labelControl25.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl25.Appearance.Options.UseFont = true;
+            this.labelControl25.Location = new System.Drawing.Point(219, 163);
+            this.labelControl25.Name = "labelControl25";
+            this.labelControl25.Size = new System.Drawing.Size(146, 19);
+            this.labelControl25.TabIndex = 77;
+            this.labelControl25.Text = "Rough CNC Operator:";
             // 
             // SelectProjectButton
             // 
@@ -748,6 +856,7 @@
             this.ElectrodeProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.ElectrodeProgrammerComboBox.TabIndex = 55;
             this.ElectrodeProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.ElectrodeProgrammerComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
             // 
             // FinishProgrammerComboBox
             // 
@@ -759,6 +868,7 @@
             this.FinishProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.FinishProgrammerComboBox.TabIndex = 54;
             this.FinishProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.FinishProgrammerComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
             // 
             // RoughProgrammerComboBox
             // 
@@ -770,6 +880,7 @@
             this.RoughProgrammerComboBox.Size = new System.Drawing.Size(170, 24);
             this.RoughProgrammerComboBox.TabIndex = 53;
             this.RoughProgrammerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.RoughProgrammerComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
             // 
             // DesignerComboBox
             // 
@@ -1025,12 +1136,13 @@
             "Polish (Outsource)",
             "Inspection Post Polish",
             "Texturing",
-            "Hole Pop"});
+            "Hole Pop",
+            "Mold Service"});
             this.TaskListBox.Location = new System.Drawing.Point(13, 34);
             this.TaskListBox.Margin = new System.Windows.Forms.Padding(4);
             this.TaskListBox.Name = "TaskListBox";
             this.TaskListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.TaskListBox.Size = new System.Drawing.Size(201, 388);
+            this.TaskListBox.Size = new System.Drawing.Size(201, 404);
             this.TaskListBox.TabIndex = 28;
             this.TaskListBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TaskListBox_MouseClick);
             // 
@@ -1186,111 +1298,6 @@
             this.GetQuoteButton.TabIndex = 41;
             this.GetQuoteButton.Text = "Get Quote";
             this.GetQuoteButton.Click += new System.EventHandler(this.GetQuoteButton_Click);
-            // 
-            // labelControl25
-            // 
-            this.labelControl25.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl25.Appearance.Options.UseFont = true;
-            this.labelControl25.Location = new System.Drawing.Point(219, 163);
-            this.labelControl25.Name = "labelControl25";
-            this.labelControl25.Size = new System.Drawing.Size(146, 19);
-            this.labelControl25.TabIndex = 77;
-            this.labelControl25.Text = "Rough CNC Operator:";
-            // 
-            // RoughCNCOperatorComboBox
-            // 
-            this.RoughCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RoughCNCOperatorComboBox.FormattingEnabled = true;
-            this.RoughCNCOperatorComboBox.Location = new System.Drawing.Point(216, 183);
-            this.RoughCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.RoughCNCOperatorComboBox.Name = "RoughCNCOperatorComboBox";
-            this.RoughCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
-            this.RoughCNCOperatorComboBox.TabIndex = 78;
-            this.RoughCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
-            // 
-            // labelControl26
-            // 
-            this.labelControl26.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl26.Appearance.Options.UseFont = true;
-            this.labelControl26.Location = new System.Drawing.Point(219, 213);
-            this.labelControl26.Name = "labelControl26";
-            this.labelControl26.Size = new System.Drawing.Size(166, 19);
-            this.labelControl26.TabIndex = 79;
-            this.labelControl26.Text = "Electrode CNC Operator:";
-            // 
-            // labelControl27
-            // 
-            this.labelControl27.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl27.Appearance.Options.UseFont = true;
-            this.labelControl27.Location = new System.Drawing.Point(219, 263);
-            this.labelControl27.Name = "labelControl27";
-            this.labelControl27.Size = new System.Drawing.Size(140, 19);
-            this.labelControl27.TabIndex = 80;
-            this.labelControl27.Text = "Finish CNC Operator:";
-            // 
-            // ElectrodeCNCOperatorComboBox
-            // 
-            this.ElectrodeCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ElectrodeCNCOperatorComboBox.FormattingEnabled = true;
-            this.ElectrodeCNCOperatorComboBox.Location = new System.Drawing.Point(216, 233);
-            this.ElectrodeCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.ElectrodeCNCOperatorComboBox.Name = "ElectrodeCNCOperatorComboBox";
-            this.ElectrodeCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
-            this.ElectrodeCNCOperatorComboBox.TabIndex = 81;
-            this.ElectrodeCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
-            // 
-            // FinishCNCOperatorComboBox
-            // 
-            this.FinishCNCOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FinishCNCOperatorComboBox.FormattingEnabled = true;
-            this.FinishCNCOperatorComboBox.Location = new System.Drawing.Point(216, 283);
-            this.FinishCNCOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.FinishCNCOperatorComboBox.Name = "FinishCNCOperatorComboBox";
-            this.FinishCNCOperatorComboBox.Size = new System.Drawing.Size(170, 24);
-            this.FinishCNCOperatorComboBox.TabIndex = 82;
-            this.FinishCNCOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
-            // 
-            // EDMSinkerOperatorComboBox
-            // 
-            this.EDMSinkerOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EDMSinkerOperatorComboBox.FormattingEnabled = true;
-            this.EDMSinkerOperatorComboBox.Location = new System.Drawing.Point(13, 332);
-            this.EDMSinkerOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.EDMSinkerOperatorComboBox.Name = "EDMSinkerOperatorComboBox";
-            this.EDMSinkerOperatorComboBox.Size = new System.Drawing.Size(170, 24);
-            this.EDMSinkerOperatorComboBox.TabIndex = 84;
-            this.EDMSinkerOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
-            // 
-            // labelControl28
-            // 
-            this.labelControl28.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl28.Appearance.Options.UseFont = true;
-            this.labelControl28.Location = new System.Drawing.Point(16, 312);
-            this.labelControl28.Name = "labelControl28";
-            this.labelControl28.Size = new System.Drawing.Size(146, 19);
-            this.labelControl28.TabIndex = 83;
-            this.labelControl28.Text = "EDM Sinker Operator:";
-            // 
-            // EDMWireOperatorComboBox
-            // 
-            this.EDMWireOperatorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EDMWireOperatorComboBox.FormattingEnabled = true;
-            this.EDMWireOperatorComboBox.Location = new System.Drawing.Point(216, 332);
-            this.EDMWireOperatorComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.EDMWireOperatorComboBox.Name = "EDMWireOperatorComboBox";
-            this.EDMWireOperatorComboBox.Size = new System.Drawing.Size(170, 24);
-            this.EDMWireOperatorComboBox.TabIndex = 86;
-            this.EDMWireOperatorComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
-            // 
-            // labelControl29
-            // 
-            this.labelControl29.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl29.Appearance.Options.UseFont = true;
-            this.labelControl29.Location = new System.Drawing.Point(219, 312);
-            this.labelControl29.Name = "labelControl29";
-            this.labelControl29.Size = new System.Drawing.Size(136, 19);
-            this.labelControl29.TabIndex = 85;
-            this.labelControl29.Text = "EDM Wire Operator:";
             // 
             // ProjectCreationForm
             // 

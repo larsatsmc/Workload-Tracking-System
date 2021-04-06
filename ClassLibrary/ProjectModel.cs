@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
@@ -62,6 +63,8 @@ namespace ClassLibrary
         [XmlIgnore]
         public DateTime? DateModified { get; set; }
         [XmlIgnore]
+        public DateTime? DatePulled { get; set; }
+        [XmlIgnore]
         public DateTime? LastKanBanGenerationDate { get; set; }
         public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
         [XmlIgnore]
@@ -87,6 +90,20 @@ namespace ClassLibrary
         {
             get { return GetLatestFinishDate(); }
             set { latestFinishDate = value; }
+        }
+
+        public object this[string propertyName]
+        {
+            get
+            {
+                PropertyInfo property = GetType().GetProperty(propertyName);
+                return property.GetValue(this, null);
+            }
+            set
+            {
+                PropertyInfo property = GetType().GetProperty(propertyName);
+                property.SetValue(this, value, null);
+            }
         }
 
         public ProjectModel()
@@ -261,9 +278,7 @@ namespace ClassLibrary
             {
                 MessageBox.Show("Project Number needs to be a whole number.");
                 return false;
-            }
-
-            
+            }            
         }
 
         public void SetOldProjectNumber(int oldProjectNumber)

@@ -817,3 +817,5 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Scheduler.pdb
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.CoreCompileInputs.cache
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.TaskMovedForm.resources
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.KanBanXtraReport.resources
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.MonthlyXtraSchedulerReport.resources

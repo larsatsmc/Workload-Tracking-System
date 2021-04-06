@@ -27,12 +27,17 @@ namespace Toolroom_Project_Viewer
         bool quoteLoaded = false;
 
         private DataTable RoleTable { get; set; }
+        private DataTable DeptRoleTable { get; set; }
         public ProjectModel Project { get; private set; }
         private ComponentModel SelectedComponent { get; set; }
         private TaskModel SelectedTask { get; set; }
         public SchedulerStorage SchedulerStorageProp { get; private set; }
         public bool DataValidated { get; private set; }
 
+        public ProjectCreationForm()
+        {
+
+        }
         /// <summary>
         /// Initializes a new Project Form.
         /// </summary> 
@@ -43,7 +48,8 @@ namespace Toolroom_Project_Viewer
             formLoad = true;
             Project = new ProjectModel();
             SchedulerStorageProp = schedulerStorage;
-
+            RoleTable = Database.GetRoleTable();
+            DeptRoleTable = Database.GetDepartmentRoles();
             InitializeComponent();
 
             if (GetDPI() == 120)
@@ -62,7 +68,8 @@ namespace Toolroom_Project_Viewer
             formLoad = true;
             this.Project = project;
             SchedulerStorageProp = schedulerStorage;
-
+            RoleTable = Database.GetRoleTable();
+            DeptRoleTable = Database.GetDepartmentRoles();
             InitializeComponent();
         }
         private void ProjectCreationForm_Load(object sender, EventArgs e)
@@ -74,7 +81,7 @@ namespace Toolroom_Project_Viewer
                 this.CreateProjectButton.Text = "Change";
             }
 
-            RoleTable = Database.GetRoleTable();
+            
             prefix = "A-";
         }
 
@@ -153,6 +160,58 @@ namespace Toolroom_Project_Viewer
             else if (cb.Name == "EDMWireOperatorComboBox")
             {
                 cb.DataSource = GetResourceList("EDM Wire Operator");
+            }
+        }
+        public string FindMatchingDepartment(string comboBoxName)
+        {
+            List<string> searchWords = new List<string>();
+
+            foreach (var item in DeptRoleTable.AsEnumerable())
+            {
+                searchWords = item.Field<string>("Role").Split(' ').ToList();
+
+                Console.WriteLine($"Word Count: {searchWords.Count}");
+
+                if (searchWords.All(x => comboBoxName.Contains(x)))
+                {
+                    return item.Field<string>("Department");
+                }
+            }
+
+            return $"";
+        }
+        public void SetPersonnnel(object sender)
+        {
+            var combo = sender as System.Windows.Forms.ComboBox;            
+
+            List<string> searchWords = new List<string>();
+
+            string taskName = "";
+
+            taskName = FindMatchingDepartment(combo.Name);
+
+            Project[combo.Name.Replace("ComboBox", "")] = combo.Text;
+
+            foreach (var component in Project.Components)
+            {
+                List<TaskModel> result = component.Tasks.FindAll(x => x.TaskName == taskName);
+
+                foreach (TaskModel task in result)
+                {
+                    if (task.Personnel != null && task.Personnel.Length > 0)
+                    {
+                        DialogResult result2 = MessageBox.Show($"{task.TaskName} for {component.Component} already has personnel assigned to it. Do wish to overwrite?", "Overwrite?", MessageBoxButtons.YesNo);
+
+                        if (result2 == DialogResult.Yes)
+                        {
+                            task.Personnel = combo.Text;
+                        }
+                    }
+                    else
+                    {
+                        task.Personnel = combo.Text;
+                    }
+                }
             }
         }
         private List<string> GetResourceList(string role)
@@ -399,11 +458,34 @@ namespace Toolroom_Project_Viewer
 
             SelectNextTask();
         }
-
+        private void DeactivatePersonnelValueChangedEvent()
+        {
+            RoughProgrammerComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            RoughCNCOperatorComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            ElectrodeProgrammerComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            ElectrodeCNCOperatorComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            FinishProgrammerComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            FinishCNCOperatorComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            EDMSinkerOperatorComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+            EDMWireOperatorComboBox.SelectedValueChanged -= Personnel_ValueChanged;
+        }
+        private void ActivatePersonnelValueChangedEvent()
+        {
+            RoughProgrammerComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            RoughCNCOperatorComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            ElectrodeProgrammerComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            ElectrodeCNCOperatorComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            FinishProgrammerComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            FinishCNCOperatorComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            EDMSinkerOperatorComboBox.SelectedValueChanged += Personnel_ValueChanged;
+            EDMWireOperatorComboBox.SelectedValueChanged += Personnel_ValueChanged;
+        }
         private void LoadProjectInfoToForm(ProjectModel project)
         {
             if (project.HasProjectInfo)
             {
+                DeactivatePersonnelValueChangedEvent();
+
                 MoldBuildTreeView.Nodes[0].Text = project.JobNumber;
                 overLapAllowedCheckEdit.Checked = project.OverlapAllowed;
                 ProjectNumberTextBox.Text = project.ProjectNumber.ToString();
@@ -418,6 +500,8 @@ namespace Toolroom_Project_Viewer
                 ElectrodeCNCOperatorComboBox.Text = project.ElectrodeCNCOperator;
                 FinishCNCOperatorComboBox.Text = project.FinishCNCOperator;
                 EDMWireOperatorComboBox.Text = project.EDMWireOperator;
+
+                ActivatePersonnelValueChangedEvent();
             }
         }
         private void LoadProjectToForm(ProjectModel project)
@@ -624,6 +708,10 @@ namespace Toolroom_Project_Viewer
             else if (taskName.Contains("Inspection"))
             {
                 personnelList = GetResourceList("CMM Operator");
+            }
+            else if (taskName == "Mold Service")
+            {
+                personnelList = GetResourceList("Tool Maker");
             }
             else
             {
@@ -1442,7 +1530,10 @@ namespace Toolroom_Project_Viewer
 
         private void ResourceComboBox_DropDown(object sender, EventArgs e)
         {
-            PopulateComboBox((System.Windows.Forms.ComboBox)sender);
+            System.Windows.Forms.ComboBox combo = sender as System.Windows.Forms.ComboBox;
+            combo.SelectedValueChanged -= Personnel_ValueChanged;
+            PopulateComboBox(combo);
+            combo.SelectedValueChanged += Personnel_ValueChanged;
         }
 
         private void TaskInfo_Changed(object sender, EventArgs e)
@@ -1693,7 +1784,6 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                ExcelInteractions ei = new ExcelInteractions();
                 string filename;
 
                 OpenFileDialog snapshotOpenFileDialog = new OpenFileDialog
@@ -1713,7 +1803,7 @@ namespace Toolroom_Project_Viewer
                         return;
                     }
 
-                    Project.SetQuoteInfo(ei.GetQuoteInfo(filename));
+                    Project.SetQuoteInfo(ExcelInteractions.GetQuoteInfo(filename));
 
                     LoadProjectToForm(ConvertQuoteToProject(Project));
                     quoteLoaded = true;
@@ -1728,6 +1818,25 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+        private void Personnel_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //SetProjectInfo();
+
+                SetPersonnnel(sender);
+
+                MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
+
+                MoldBuildTreeView.Nodes[0].Nodes.Clear();
+
+                LoadProjectToForm(Project);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 

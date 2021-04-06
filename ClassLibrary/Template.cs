@@ -11,6 +11,10 @@ namespace ClassLibrary
 {
     public class Template
     {
+        public Template()
+        {
+
+        }
         public void WriteExample()
         {
             // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.

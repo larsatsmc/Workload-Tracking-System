@@ -140,6 +140,8 @@ namespace ClassLibrary
                 List<ComponentModel> components = connection.Query<ComponentModel>("dbo.spGetProjectComponents @ProjectNumber", p).ToList();
                 List<TaskModel> tasks = connection.Query<TaskModel>("dbo.spGetProjectTasks @ProjectNumber", p).ToList();
 
+                project.DatePulled = DateTime.Now;
+
                 project.Components = components;
 
                 foreach (var component in project.Components)
@@ -861,7 +863,7 @@ namespace ClassLibrary
 
         public static List<string> GetDepartments()
         {
-            return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
+            return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind", "Mold Service" };
         }
 
         public static List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
@@ -1395,6 +1397,22 @@ namespace ClassLibrary
         #endregion
 
         #region Read
+
+        public static DataTable GetDepartmentRoles()
+        {
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                DataTable dt = new DataTable();
+
+                string queryString = "SELECT DISTINCT [Role], Departments.Department FROM Roles INNER JOIN Departments ON Roles.DepartmentID = Departments.ID";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
+
+                adapter.Fill(dt);
+
+                return dt;
+            }
+        }
 
         public List<string> GetResourceList(string role) // This method gets a resource list 25% faster than using DataAdapter.Fill();
         {
