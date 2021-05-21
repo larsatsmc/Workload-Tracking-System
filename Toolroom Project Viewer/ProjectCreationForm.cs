@@ -205,11 +205,13 @@ namespace Toolroom_Project_Viewer
                         if (result2 == DialogResult.Yes)
                         {
                             task.Personnel = combo.Text;
+                            task.Resources = GeneralOperations.GenerateResourceIDsString(SchedulerStorageProp, task.Machine, task.Personnel);
                         }
                     }
                     else
                     {
                         task.Personnel = combo.Text;
+                        task.Resources = GeneralOperations.GenerateResourceIDsString(SchedulerStorageProp, task.Machine, task.Personnel);
                     }
                 }
             }
@@ -367,7 +369,7 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            string predecessorString = GetSelectedPredecessorIndices(predecessorsListBox, 0); // countTasks(MoldBuildTreeView, selectedNode.Parent.Text)
+            string predecessorString = GetSelectedPredecessorIndices(predecessorsListBox); // countTasks(MoldBuildTreeView, selectedNode.Parent.Text)
 
             // Check if selected task is set as its own predecessor.
             foreach (int index in predecessorsListBox.SelectedIndices)
@@ -826,7 +828,7 @@ namespace Toolroom_Project_Viewer
             return predecessorString.ToString();
         }
 
-        private string GetSelectedPredecessorIndices(ListBox listBox, int baseCount)
+        private string GetSelectedPredecessorIndices(ListBox listBox)
         {
             StringBuilder predecessorString = new StringBuilder();
             int index;
@@ -835,12 +837,12 @@ namespace Toolroom_Project_Viewer
             {
                 if (predecessorString.Length == 0)
                 {
-                    index = n + baseCount + 1;
+                    index = n + 1;
                     predecessorString.Append(index);
                 }
                 else
                 {
-                    index = n + baseCount + 1;
+                    index = n + 1;
                     predecessorString.Append("," + index);
                 }
 
@@ -2148,7 +2150,7 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            if (Project.HasSelfReferencingPredecessors() || Project.HasIsolatedTasks())
+            if (Project.HasSelfReferencingPredecessors() || Project.HasIsolatedTasks()) // || Project.HasIsolatedTasks()
             {
                 // MessageBox is in the HasSelfReferencingPredecessors method.
                 return;

@@ -108,6 +108,7 @@ namespace ClassLibrary
 
         public ProjectModel()
         {
+            IncludeHours = true;
             Components = new List<ComponentModel>();
             OverlapAllowed = true;
         }
@@ -618,7 +619,7 @@ namespace ClassLibrary
         }
         public DateTime? GetLatestFinishDate()
         {
-            return this.Components.Max(x => x.GetLatesFinishDate());
+            return this.Components.Max(x => x.GetLatestFinishDate());
         }
         public void SetDefaultCopiedProjectInfo(int projectNumber)
         {

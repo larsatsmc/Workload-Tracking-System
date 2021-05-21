@@ -1,6 +1,5 @@
 ﻿using DevExpress.XtraScheduler;
 using DevExpress.XtraScheduler.Xml;
-using DevExpress.XtraScheduler.Printing;
 using DevExpress.XtraGrid.Views.Base;
 using System;
 using System.ComponentModel;
@@ -446,7 +445,7 @@ namespace Toolroom_Project_Viewer
 
             schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
         }
-        private void SetAppointmentResources(Appointment apt, string machine, string resource)
+        private void SetAppointmentResources(Appointment apt, string machine, string personnel)
         {
             Resource res;
 
@@ -454,7 +453,7 @@ namespace Toolroom_Project_Viewer
             apt.ResourceIds.Clear();
 
             int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
-            int resourceCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
+            int personnelCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == personnel).Count();
 
             if (machineCount == 0)
             {
@@ -467,14 +466,14 @@ namespace Toolroom_Project_Viewer
                 apt.ResourceIds.Add(res.Id);
             }
 
-            if (resourceCount == 0)
+            if (personnelCount == 0)
             {
                 res = schedulerStorage1.Resources.Items.GetResourceById("No Personnel");
                 apt.ResourceIds.Add(res.Id);
             }
-            else if (resource != "" && resourceCount == 1)
+            else if (personnel != "" && personnelCount == 1)
             {
-                res = schedulerStorage1.Resources.Items.GetResourceById(resource);
+                res = schedulerStorage1.Resources.Items.GetResourceById(personnel);
                 apt.ResourceIds.Add(res.Id);
             }
 
@@ -506,39 +505,6 @@ namespace Toolroom_Project_Viewer
             }
 
             return id;
-        }
-
-        private string GenerateResourceIDsString(string machine, string resource)
-        {
-            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
-            Resource res;
-            int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
-            int resourceCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == resource).Count();
-
-            if (machineCount == 0)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById("No Machine");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (machine != "" && machineCount == 1)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById(machine);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-
-            if (resourceCount == 0)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById("No Personnel");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (resource != "" && resourceCount == 1)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById(resource);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            
-            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
-            return helper.ToXml();
         }
 
         private string GenerateResourceIDsString(AppointmentResourceIdCollection appointmentResourceIdCollection)
@@ -596,9 +562,13 @@ namespace Toolroom_Project_Viewer
             {
                 Tasks = @"^(CNC Electrodes)";
             }
-            else if (department == "CNC")
+            else if (department == "CNCs")
             {
                 Tasks = @"^CNC\w*";
+            }
+            else if (department == "CNC People")
+            {
+                Tasks = "All";
             }
             else if (department == "EDM Sinker")
             {
@@ -610,7 +580,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (department == "Grind")
             {
-                Tasks = @"\w*Grind\w*";
+                Tasks = @"^*Grind\w*";
             }
             else if (department == "Polish")
             {
@@ -690,6 +660,7 @@ namespace Toolroom_Project_Viewer
             {
                 Role = "CNC Operator";
                 NoResourceName = "No Personnel";
+                schedulerControl1.ActiveView.ResourcesPerPage = 8;
             }
             else if (department == "EDM Sinker")
             {
@@ -705,11 +676,13 @@ namespace Toolroom_Project_Viewer
             {
                 Role = "Tool Maker";
                 NoResourceName = "No Personnel";
+                schedulerControl1.ActiveView.ResourcesPerPage = 8;
             }
             else if (department == "Polish")
             {
                 Role = "Tool Maker";
                 NoResourceName = "No Personnel";
+                schedulerControl1.ActiveView.ResourcesPerPage = 8;
             }
             else if (department == "Inspection")
             {
@@ -720,12 +693,12 @@ namespace Toolroom_Project_Viewer
             {
                 Role = "Tool Maker";
                 NoResourceName = "No Personnel";
+                schedulerControl1.ActiveView.ResourcesPerPage = 8;
             }
             else if (department == "All")
             {
                 Role = "All";
                 schedulerControl1.ActiveView.ResourcesPerPage = 8;
-                //return;
             }
 
             RoleRegExpression = new Regex(Role);
@@ -980,25 +953,25 @@ namespace Toolroom_Project_Viewer
                     {
                         e.Cancel = !TaskRegExpression.IsMatch(apt.Location);
                     }
+                }
 
-                    if (includeCompletesCheckEdit.Checked == false)
+                if (includeCompletesCheckEdit.Checked == false)
+                {
+                    if (apt.PercentComplete == 100)
                     {
-                        if (apt.PercentComplete == 100)
-                        {
-                            e.Cancel = true;
-                        }
+                        e.Cancel = true;
                     }
+                }
 
-                    if (includeQuotesCheckEdit.Checked == false)
+                if (includeQuotesCheckEdit.Checked == false)
+                {
+                    if (apt.CustomFields["JobNumber"].ToString().Contains("quote") || apt.CustomFields["JobNumber"].ToString().Contains("Quote"))
                     {
-                        if (apt.CustomFields["JobNumber"].ToString().Contains("quote") || apt.CustomFields["JobNumber"].ToString().Contains("Quote"))
-                        {
-                            e.Cancel = true;
-                        }
+                        e.Cancel = true;
                     }
+                }
 
                     //e.Cancel = !apt.Location.Contains(Tasks);
-                }
             }
             catch (Exception ex)
             {
@@ -1438,6 +1411,7 @@ namespace Toolroom_Project_Viewer
                 {
                     Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                     SetAppointmentResources(apt, task.Machine, task.Personnel);
+                    task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
                     Database.UpdateTask(task, e);
                 }
                 else
@@ -1951,14 +1925,34 @@ namespace Toolroom_Project_Viewer
                     RefreshProjectGrid();
                 }
             }
-            catch (Exception ex1)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex1.Message + "\n\n" + ex1.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
                 SplashScreenManager.CloseForm();
             }
+        }
+        private void GenerateKanBanReport()
+        {
+            SplashScreenManager.ShowForm(typeof(WaitForm1));
+
+            GridView gridView = gridControl3.MainView as GridView;
+
+            ProjectModel project = gridView.GetFocusedRow() as ProjectModel;
+
+            project = Database.GetProject(project.ProjectNumber);
+
+            KanBanXtraReport kanBan = new KanBanXtraReport(project);
+
+            ReportPrintTool printTool = new ReportPrintTool(kanBan);
+
+            printTool.Report.CreateDocument(true);
+            printTool.ShowPreviewDialog();
+
+            SplashScreenManager.CloseForm();
         }
         private Color? GetColorFromUser(string columnType, Point clickLocation, Color rowColor)
         {
@@ -2730,7 +2724,6 @@ namespace Toolroom_Project_Viewer
             GridView gridView = sender as GridView;
             ExpandedProjectRows epr = new ExpandedProjectRows();
             
-
             if (gridView.Name == "gridView3")
             {
                 //epr.RowHandle = e.RowHandle;
@@ -2743,7 +2736,6 @@ namespace Toolroom_Project_Viewer
                 //epr.ExpandedComponentRows.Add(e.RowHandle);
                 //gridView4ExpandedRowsList.Add(e.RowHandle);
             }
-            
 
             //MessageBox.Show(gridView.Name + " row expanded.");
         }
@@ -2930,6 +2922,7 @@ namespace Toolroom_Project_Viewer
                         Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
                         // TODO: Determine why when I change a resource and the dates are blank the dates get set to 1/1/2001.
                         SetAppointmentResources(apt, task.Machine, task.Personnel);
+                        task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
                     }
 
                     Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
@@ -3019,6 +3012,7 @@ namespace Toolroom_Project_Viewer
         private void kanBanButton_Click(object sender, EventArgs e)
         {
             GenerateKanBan();
+            //GenerateKanBanReport();
         }
 
         private void forwardDateButton_Click(object sender, EventArgs e)

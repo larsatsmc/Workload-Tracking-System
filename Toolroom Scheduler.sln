@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskViewer", "TaskViewer\TaskViewer.csproj", "{ED6612A2-4F4E-4418-8076-3202DE469559}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolroom Scheduler", "Toolroom Scheduler\Toolroom Scheduler.csproj", "{2B54F404-BB32-4A7C-8391-630FBDCE112B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXApplicationTest", "DXApplication1\DXApplicationTest\DXApplicationTest.csproj", "{79C90DA8-4DC2-494D-9AC2-EB18A8C66682}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary.Tests", "DemoLibrary.Tests\ClassLibrary.Tests.csproj", "{346C3DB0-7198-4626-9FFE-F462265568BC}"
@@ -18,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolRoomProjectViewer.Tests", "MainWindow.Tests\ToolRoomProjectViewer.Tests.csproj", "{532812AD-9DA7-4327-8A4A-37096A1120DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseBackupApp", "DXApplication3\SchedulerDatabaseBackupApp\DatabaseBackupApp.csproj", "{BD8B70B7-BC57-411C-9DDE-EB0E29D1C97A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportClassLibrary", "ReportClassLibrary\ReportClassLibrary.csproj", "{E0AF6EFB-371A-44F7-82E9-498EA469ED33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +37,6 @@ Global
 		{ED6612A2-4F4E-4418-8076-3202DE469559}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED6612A2-4F4E-4418-8076-3202DE469559}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED6612A2-4F4E-4418-8076-3202DE469559}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B54F404-BB32-4A7C-8391-630FBDCE112B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B54F404-BB32-4A7C-8391-630FBDCE112B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B54F404-BB32-4A7C-8391-630FBDCE112B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B54F404-BB32-4A7C-8391-630FBDCE112B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79C90DA8-4DC2-494D-9AC2-EB18A8C66682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79C90DA8-4DC2-494D-9AC2-EB18A8C66682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79C90DA8-4DC2-494D-9AC2-EB18A8C66682}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{BD8B70B7-BC57-411C-9DDE-EB0E29D1C97A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD8B70B7-BC57-411C-9DDE-EB0E29D1C97A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD8B70B7-BC57-411C-9DDE-EB0E29D1C97A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0AF6EFB-371A-44F7-82E9-498EA469ED33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0AF6EFB-371A-44F7-82E9-498EA469ED33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0AF6EFB-371A-44F7-82E9-498EA469ED33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0AF6EFB-371A-44F7-82E9-498EA469ED33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

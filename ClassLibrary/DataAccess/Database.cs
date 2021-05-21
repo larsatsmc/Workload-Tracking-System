@@ -336,7 +336,7 @@ namespace ClassLibrary
 
                 connection.Execute("dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, " +
                     "@RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, " +
-                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID", project);
+                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID", project);                
 
                 int idIndex;
 
@@ -393,9 +393,12 @@ namespace ClassLibrary
                                     select task;
 
                 // TODO: Verify Task object properties will map to stored procedure.
-                connection.Execute("dbo.spCreateTask @JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Resource, @Predecessors, @Priority, @Notes", tasksToAdd.ToList());
+                connection.Execute("dbo.spCreateTask @JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Personnel, @Predecessors, @Priority, @Notes", tasksToAdd.ToList());
                 connection.Execute("dbo.spUpdateTask @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Personnel, @Predecessors, @Priority, @Notes, @ID", tasksToUpdate.ToList());
                 connection.Execute("DELETE FROM Tasks WHERE ID = @ID", tasksToDelete.ToList());
+
+                connection.Execute("dbo.spSetComponentPercentComplete @ProjectNumber, @Component", componentsToUpdate.ToList());
+                connection.Execute("dbo.spSetProjectPercentComplete @ProjectNumber", project);
             }
 
             return true;
@@ -1226,7 +1229,7 @@ namespace ClassLibrary
                 foreach (DataRow nrow in dt.Rows)
                 {
                     nrow["Personnel"] = ev.Value.ToString();
-                    nrow["Resources"] = TaskModel.GenerateResourceIDsString(nrow["Machine"].ToString(), nrow["Personnel"].ToString(), schedulerStorage);
+                    nrow["Resources"] = GeneralOperations.GenerateResourceIDsString(schedulerStorage, nrow["Machine"].ToString(), nrow["Personnel"].ToString());
                 }
 
                 adapter.Update(dt);
@@ -1568,14 +1571,14 @@ namespace ClassLibrary
 
                 dt.Rows.Add(row2);
 
-                DataRow row3 = dt.NewRow();
+                //DataRow row3 = dt.NewRow();
 
-                row3["ResourceName"] = "None";
-                row3["Role"] = "None";
-                row3["Department"] = "None";
-                row3["ResourceType"] = "None";
+                //row3["ResourceName"] = "None";
+                //row3["Role"] = "None";
+                //row3["Department"] = "None";
+                //row3["ResourceType"] = "None";
 
-                dt.Rows.Add(row3);
+                //dt.Rows.Add(row3);
 
                 //foreach (DataRow nrow in dt.Rows)
                 //{

@@ -1,6 +1,5 @@
 ﻿
 using DevExpress.XtraScheduler;
-using DevExpress.XtraScheduler.Xml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace ClassLibrary
 {
-	public class TaskModel
+    public class TaskModel
 	{
         public int ID { get; set; } = 0;
         [XmlIgnore]
@@ -124,7 +123,7 @@ namespace ClassLibrary
             this.TaskID = id;
             this.TaskName = name;
             this.Component = component;
-            this.Resources = GenerateResourceIDsString(schedulerStorage);
+            this.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage, this.Machine, this.Personnel);
         }
 
         public TaskModel(int id, TaskModel task)
@@ -346,76 +345,10 @@ namespace ClassLibrary
             this.Duration = duration;
             this.Machine = machine;
             this.Personnel = personnel;
-            this.Resources = GenerateResourceIDsString(schedulerStorage);
+            this.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage, machine, personnel);
             this.Predecessors = predecessors;
             this.Notes = notes;
             this.TaskChanged = true;
-        }
-
-        public string GenerateResourceIDsString(SchedulerStorage schedulerStorage)
-        {
-            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
-            Resource res;
-            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == this.Machine).Count();
-            int personnelCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == this.Personnel).Count();
-
-            if (machineCount == 0)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById("No Machine");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (this.Machine != "" && machineCount == 1)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById(this.Machine);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-
-            if (personnelCount == 0)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById("No Personnel");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (this.Personnel != "" && personnelCount == 1)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById(this.Personnel);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-
-            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
-            return helper.ToXml();
-        }
-
-        public static string GenerateResourceIDsString(string machine, string personnel, SchedulerStorage schedulerStorage)
-        {
-            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
-            Resource res;
-            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
-            int personnelCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == personnel).Count();
-
-            if (machineCount == 0)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById("No Machine");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (machine != "" && machineCount == 1)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById(machine);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-
-            if (personnelCount == 0)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById("No Personnel");
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-            else if (personnel != "" && personnelCount == 1)
-            {
-                res = schedulerStorage.Resources.Items.GetResourceById(personnel);
-                appointmentResourceIdCollection.Add(res.Id);
-            }
-
-            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
-            return helper.ToXml();
         }
 
         public void SetComponent(string component)
@@ -471,7 +404,7 @@ namespace ClassLibrary
 
         public void SetResources(SchedulerStorage schedulerStorage)
         {
-            this.Resources = GenerateResourceIDsString(schedulerStorage);
+            this.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage, this.Machine, this.Personnel);
         }
 
         private string ConvertObjectToString(object obj)

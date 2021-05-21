@@ -1,4 +1,5 @@
-﻿using DevExpress.XtraReports.UI;
+﻿using ClassLibrary;
+using DevExpress.XtraReports.UI;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -13,5 +14,11 @@ namespace Toolroom_Project_Viewer
             InitializeComponent();
         }
 
+        public KanBanXtraReport(ProjectModel project)
+        {
+            InitializeComponent();
+
+            objectDataSource1.DataSource = project;
+        }
     }
 }

@@ -1,18 +1,13 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Packaging;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using VBIDE = Microsoft.Vbe.Interop;
@@ -656,6 +651,12 @@ namespace ClassLibrary
         {
             //try
             //{
+
+            if (!CheckIfTrustAccessToVBAObjectModelIsEnabled())
+            {
+                return "";
+            }
+
             string kanBanSavePath = ChooseKanBanSavePath(pi);
 
             if (kanBanSavePath == "")
@@ -677,6 +678,8 @@ namespace ClassLibrary
                 wsBase.PageSetup.Header.Left.AddText("Project #: " + pi.ProjectNumber).SetBold().SetFontSize(18);
                 wsBase.PageSetup.Header.Center.AddText("Lead: " + pi.ToolMaker).SetBold().SetFontSize(18);
                 wsBase.PageSetup.Header.Right.AddText("Due Date: " + pi.DueDate.ToString("M/d/yyyy")).SetBold().SetFontSize(18);
+
+                wsBase.PageSetup.Footer.Right.AddText("Generated: " + DateTime.Now.ToString("M/d/yyyy h:mm tt")).SetBold().SetFontSize(18);
 
                 //wsBase.Range("A1:G1").Merge();
                 //wsBase.Range("A2:G2").Merge();
@@ -758,20 +761,23 @@ namespace ClassLibrary
                     }
 
                     //ws.Range(ws.Cell(6, 1), ws.Cell(taskRowCount + 5, 8));
-                    componentWs.Cell(taskRowCount + 7, 1).Value = "Notes: " + component.Notes;
+                    componentWs.Cell(taskRowCount + 7, 1).Value = "Notes";
                     componentWs.Cell(taskRowCount + 7, 1).Style.Font.Bold = true;
+                    componentWs.Cell(taskRowCount + 7, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    componentWs.Cell(taskRowCount + 8, 1).Value = component.Notes;
+                    componentWs.Cell(taskRowCount + 8, 1).Style.Font.Bold = true;
 
-                    var noteArea = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 10));
+                    var noteArea = componentWs.Range(componentWs.Cell(taskRowCount + 8, 1), componentWs.Cell(taskRowCount + 11, 10));
                     noteArea.Style.Fill.BackgroundColor = XLColor.White;
                     noteArea.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                     noteArea.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                     noteArea.Style.Alignment.WrapText = true;
-                    noteArea.Merge();
+                    noteArea.Merge();                    
 
-                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 1)).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                    componentWs.Range(componentWs.Cell(taskRowCount + 10, 1), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 7, 10)).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                    componentWs.Range(componentWs.Cell(taskRowCount + 7, 10), componentWs.Cell(taskRowCount + 10, 10)).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 8, 1), componentWs.Cell(taskRowCount + 11, 1)).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 11, 1), componentWs.Cell(taskRowCount + 11, 10)).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 8, 1), componentWs.Cell(taskRowCount + 8, 10)).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    componentWs.Range(componentWs.Cell(taskRowCount + 8, 10), componentWs.Cell(taskRowCount + 11, 10)).Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
                     //var noteContentsRange = componentWs.Range(componentWs.Cell(taskRowCount + 7, 1), componentWs.Cell(taskRowCount + 10, 10));
                     //noteContentsRange.Style.Fill.BackgroundColor = XLColor.White;
@@ -783,7 +789,7 @@ namespace ClassLibrary
                     if (component.picture != null)
                     {
                         var image = componentWs.AddPicture((Bitmap)component.picture);
-                        image.MoveTo(componentWs.Cell(taskRowCount + 12, 2));
+                        image.MoveTo(componentWs.Cell(taskRowCount + 13, 2));
                     }
 
                     componentWs.PageSetup.PrintAreas.Clear();
@@ -829,13 +835,17 @@ namespace ClassLibrary
                 wsBase.Delete();
 
                 wb.SaveAs(kanBanSavePath);
-                InsertVbaCode(kanBanSavePath); // Printer set to color here.
+                // Printer set to color here.
 
+                if (InsertVbaCode(kanBanSavePath))
+                {
+                    Process.Start(kanBanSavePath); // Opens up generated Kan Ban.
+                }
 
                 //sw.Stop();
                 //MessageBox.Show($"Kan Ban Generated: {sw.ElapsedMilliseconds}");
 
-                Process.Start(kanBanSavePath); // Opens up generated Kan Ban.
+                
 
                 return kanBanSavePath;
             }
@@ -872,12 +882,31 @@ namespace ClassLibrary
                 return "";
             }
         }
-        public static void InsertVbaCode(string destinationFilePath)
+        private static bool CheckIfTrustAccessToVBAObjectModelIsEnabled()
+        {
+            Excel.Application excelApp = new Excel.Application();
+
+            try
+            {
+                _ = excelApp.VBE;
+                return true;
+            }
+            catch (COMException comEx)
+            {
+                MessageBox.Show(comEx.Message + "\n" + "To fix go to File --> Options --> Trust Center --> Trust Center Settings --> Macro Settings in Excel \nand check \'Trust Access to Vba Project Object Model\'");
+                return false;
+            }
+            finally
+            {
+                excelApp.Quit();
+                Marshal.ReleaseComObject(excelApp);
+            }
+        }
+        public static bool InsertVbaCode(string destinationFilePath)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbooks workbooks = excelApp.Workbooks;
             Excel.Workbook workbook = workbooks.Open(destinationFilePath);
-            VBIDE.VBComponents vBComponents = workbook.VBProject.VBComponents;
 
             // Set to color printer.
             if (DeviceExists(ColorPrinterString))
@@ -887,6 +916,8 @@ namespace ClassLibrary
 
             try
             {
+                VBIDE.VBComponents vBComponents = workbook.VBProject.VBComponents;
+
                 foreach (Excel.Worksheet ws in workbook.Worksheets)
                 {
                     if (ws.Name != "Summary")
@@ -903,6 +934,13 @@ namespace ClassLibrary
                 }
 
                 workbook.Save();
+                return true;
+            }
+            catch (COMException comEx)
+            {
+                MessageBox.Show(comEx.Message + "\n\n" + "To fix go to File --> Options --> Trust Center --> Trust Center Settings --> Macro Settings in Excel \n\n and check \'Trust Access to Vba Project Object Model\'");
+                Console.WriteLine(comEx.ToString());
+                return false;
             }
             catch (Exception ex)
             {
@@ -914,6 +952,7 @@ namespace ClassLibrary
             {
                 if (workbook != null)
                 {
+                    excelApp.DisplayAlerts = false;
                     workbook.Close();
                     Marshal.ReleaseComObject(workbook);
                 }

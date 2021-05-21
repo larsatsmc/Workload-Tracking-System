@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using DevExpress.XtraScheduler;
+using DevExpress.XtraScheduler.Xml;
+using System;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ClassLibrary
@@ -91,6 +90,39 @@ namespace ClassLibrary
             }
 
             return finishDate.AddDays(-extraDays);
+        }
+        // Seems like there would be a way of doing this without passing in a SchedulerStorage object.
+        public static string GenerateResourceIDsString(SchedulerStorage schedulerStorage, string machine, string personnel)
+        {
+            AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
+            Resource res;
+            int machineCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
+            int personnelCount = schedulerStorage.Resources.Items.Where(x => x.Id.ToString() == personnel).Count();
+
+            if (machineCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Machine");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (machine != "" && machineCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(machine);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            if (personnelCount == 0)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById("No Personnel");
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+            else if (personnel != "" && personnelCount == 1)
+            {
+                res = schedulerStorage.Resources.Items.GetResourceById(personnel);
+                appointmentResourceIdCollection.Add(res.Id);
+            }
+
+            AppointmentResourceIdCollectionXmlPersistenceHelper helper = new AppointmentResourceIdCollectionXmlPersistenceHelper(appointmentResourceIdCollection);
+            return helper.ToXml();
         }
     }
 }

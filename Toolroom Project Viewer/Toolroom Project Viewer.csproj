@@ -103,6 +103,8 @@
     <Reference Include="DevExpress.Spreadsheet.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Utils.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v19.1.UI, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpf.Core.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpf.Printing.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpo.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraBars.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraCharts.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
@@ -141,6 +143,7 @@
     <Reference Include="NuGet.Squirrel, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\squirrel.windows.1.9.0\lib\Net45\NuGet.Squirrel.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
     </Reference>
@@ -207,6 +210,7 @@
     <Compile Include="MonthlyXtraSchedulerReport.Designer.cs">
       <DependentUpon>MonthlyXtraSchedulerReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyPrintHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectCreationForm.cs">
       <SubType>Form</SubType>
@@ -238,6 +242,12 @@
     </Compile>
     <Compile Include="TaskMovedForm.Designer.cs">
       <DependentUpon>TaskMovedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TasksXtraReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TasksXtraReport.Designer.cs">
+      <DependentUpon>TasksXtraReport.cs</DependentUpon>
     </Compile>
     <Compile Include="WaitForm1.cs">
       <SubType>Form</SubType>
@@ -297,6 +307,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TaskMovedForm.resx">
       <DependentUpon>TaskMovedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TasksXtraReport.resx">
+      <DependentUpon>TasksXtraReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WaitForm1.resx">
       <DependentUpon>WaitForm1.cs</DependentUpon>

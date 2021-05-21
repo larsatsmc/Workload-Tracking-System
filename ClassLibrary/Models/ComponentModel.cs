@@ -39,7 +39,7 @@ namespace ClassLibrary
 
         public DateTime? LatestFinishDate
         {
-            get { return GetLatesFinishDate(); }
+            get { return GetLatestFinishDate(); }
             //set { latestFinishDate = value; }
         }
 
@@ -345,7 +345,7 @@ namespace ClassLibrary
         }
         /// <summary>
         /// Moves a task down the task list.
-        /// </summary> 
+        /// </summary>
         public void MoveTaskDown(int demotedTaskIndex)
         {
             TaskModel demotedTask;
@@ -725,6 +725,8 @@ namespace ClassLibrary
         {
             int maxWidth = 865, maxHeight = 795;
 
+            MessageBox.Show($"Width: {image.Width} Height: {image.Height}");
+
             if (image != null && (image.Width > maxWidth || image.Height > maxHeight))
             {
                 MessageBox.Show($"The picture you inserted is too wide or too tall to put in a Kan Ban and print correctly. " +
@@ -757,10 +759,18 @@ namespace ClassLibrary
         {
             var result = from task in this.Tasks
                          where task.Predecessors.Length == 0 && 
-                               // !task.TaskName.Contains("Program") && 
+                               // !task.TaskName.Contains("Program") && // Why was this commented out?
                                this.Tasks.Count(x => x.HasMatchingPredecessor(this.Tasks.IndexOf(task) + 1)) == 0 &&
                                this.Tasks.Count > 1
                          select task;
+
+            //foreach (var item in this.Tasks)
+            //{
+            //    if (item.Predecessors.Length == 0 && Tasks.Count(x => x.HasMatchingPredecessor(Tasks.IndexOf(item) + 1)) == 0 && Tasks.Count > 1)
+            //    {
+            //        Console.WriteLine($"{item.TaskName} {item.TaskID} {item.Predecessors}");
+            //    }
+            //}
 
             return result.ToList();
         }
@@ -786,7 +796,7 @@ namespace ClassLibrary
                 task.RemoveMatchingPredecessor(id);
             }
         }
-        public DateTime? GetLatesFinishDate()
+        public DateTime? GetLatestFinishDate()
         {
             return this.Tasks.Max(x => x.FinishDate);
         }
