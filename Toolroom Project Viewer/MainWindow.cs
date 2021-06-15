@@ -24,6 +24,7 @@ using System.Drawing;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraEditors.Mask;
 using System.Reflection;
 using System.IO;
 using System.Threading.Tasks;
@@ -70,8 +71,8 @@ namespace Toolroom_Project_Viewer
         private DataTable ResourceDataTable;
         private string Role, Tasks;
         Regex TaskRegExpression, RoleRegExpression;
-        private bool AllProjectItemsChecked;
-        private string[] ValidEditorArr = { "michell.willey", "mikeh", "Mikeh", "marks", "Marks", "joshua.meservey" };
+        private bool AllProjectItemsChecked, MoveSelectedAppointments;
+        private List<string> ValidEditorList = new List<string>();
 
         private RefreshHelper helper1, helper2, deptTaskViewHelper;
 
@@ -81,6 +82,7 @@ namespace Toolroom_Project_Viewer
             {
                 this.TimeUnits = "Days";
                 ResourceDataTable = Database.GetResourceData();
+                ValidEditorList = Database.GetEditLogins();
                 InitializeComponent();
                 SetRole();
                 SetTasks();
@@ -359,16 +361,13 @@ namespace Toolroom_Project_Viewer
             //}
         }
         private bool UpdateTaskStorage1(TaskModel movedTask, Appointment apt)
-        {
-            
+        {            
             bool retryHit = false;
             ComponentModel tempComponent = null;
             TaskModel globalTask, tempTask = null;
 
             gridView1.BeginUpdate();
             gridView5.BeginUpdate();
-
-            
 
             movedTask.Resources = GenerateResourceIDsString(apt.ResourceIds);
             movedTask.Machine = GetResourceFromResourceIDs(apt.ResourceIds, "Machine");
@@ -880,6 +879,15 @@ namespace Toolroom_Project_Viewer
         {
             //MessageBox.Show("DragDrop");
         }
+        private void schedulerControl1_AllowAppointmentDrag(object sender, AppointmentOperationEventArgs e)
+        {
+            // Prevents user from dragging multiple tasks since doing so causes undesirable results.
+            if (schedulerControl1.SelectedAppointments.Count > 1)
+            {
+                //MessageBox.Show("Cannot drag multiple tasks.");
+                e.Allow = false;
+            }
+        }
         private void schedulerControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var scheduler = sender as DevExpress.XtraScheduler.SchedulerControl;
@@ -892,7 +900,7 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 e.Cancel = true;
@@ -901,7 +909,7 @@ namespace Toolroom_Project_Viewer
         private void schedulerStorage1_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
             //LoadProjects();
-            if (!IsFormOpen("WaitForm1"))
+            if (!IsFormOpen("WaitForm1") && !MoveSelectedAppointments)
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
@@ -932,10 +940,58 @@ namespace Toolroom_Project_Viewer
             }
             finally
             {
-                SplashScreenManager.CloseForm();
+                if (IsFormOpen("WaitForm1") && !MoveSelectedAppointments)
+                {
+                    SplashScreenManager.CloseForm();
+                }
             }
 
             //MessageBox.Show("AppointmentChanged");
+        }
+        private void schedulerControl1_PopupMenuShowing(object sender, DevExpress.XtraScheduler.PopupMenuShowingEventArgs e)
+        {
+            e.Menu = null;
+
+            if (schedulerControl1.SelectedAppointments.Count > 1)
+            {
+                //MessageBox.Show(schedulerControl1.SelectedAppointments.Count.ToString());
+
+                XtraInputBoxArgs args = new XtraInputBoxArgs();
+
+                args.Caption = "Number of Days Delta";
+                args.Prompt = "Number of Days";
+                args.DefaultButtonIndex = 0;
+                //args.Showing += Args_Showing;
+                SpinEdit editor = new SpinEdit();
+                editor.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+                editor.Properties.Mask.EditMask = "N0";
+                editor.Properties.Mask.UseMaskAsDisplayFormat = true;
+
+                args.Editor = editor;
+
+                var result = XtraInputBox.Show(args)?.ToString();
+
+                if (result.Length > 0)
+                {
+                    if (int.TryParse(result, out int numOfDays))
+                    {
+                        MoveSelectedAppointments = true;
+
+                        List<int> selectedAptIDs = new List<int>();
+
+                        selectedAptIDs = schedulerControl1.SelectedAppointments.Select(x => int.Parse(x.Id.ToString())).ToList();
+
+                        foreach (int apt in selectedAptIDs)
+                        {
+                            Appointment appointment = schedulerStorage1.Appointments.Items.Where(x => int.Parse(x.Id.ToString()) == apt).First();
+
+                            appointment.Start = appointment.Start.AddDays(numOfDays);
+                        }
+
+                        MoveSelectedAppointments = false;
+                    }
+                }
+            }
         }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
@@ -1382,7 +1438,7 @@ namespace Toolroom_Project_Viewer
 
             if (column.FieldName == "StartDate" || column.FieldName == "FinishDate")
             {
-                if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
                 {
                     MessageBox.Show("This login is not authorized to make changes to dates.  Hit ESC to cancel editing.");
                     e.Valid = false;
@@ -2313,7 +2369,7 @@ namespace Toolroom_Project_Viewer
 
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
 
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()) && column.FieldName != "GeneralNotes")
+            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()) && column.FieldName != "GeneralNotes")
             {
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;
@@ -2402,7 +2458,7 @@ namespace Toolroom_Project_Viewer
             {
                 if (view.IsNewItemRow(e.RowHandle))
                 {
-                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
                     {
                         MessageBox.Show("This login is not authorized to make changes to project level data.");
                         return;
@@ -2465,7 +2521,7 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Button == MouseButtons.Right)
                 {
-                    if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                    if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
                     {
                         MessageBox.Show("This login is not authorized to make changes to work load tab.");
                         return;
@@ -2879,7 +2935,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (column.FieldName == "StartDate" || column.FieldName == "FinishDate")
             {
-                if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+                if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
                 {
                     e.ErrorText = "This login is not authorized to make changes to dates.";
                     e.Valid = false;
@@ -3017,7 +3073,7 @@ namespace Toolroom_Project_Viewer
 
         private void forwardDateButton_Click(object sender, EventArgs e)
         {
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 return;
@@ -3071,7 +3127,7 @@ namespace Toolroom_Project_Viewer
 
         private void backDateButton_Click(object sender, EventArgs e)
         {
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 return;
@@ -3820,7 +3876,7 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerStorage2_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
-            if (!ValidEditorArr.ToList<string>().Exists(x => x == Environment.UserName.ToString()))
+            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 e.Cancel = true;

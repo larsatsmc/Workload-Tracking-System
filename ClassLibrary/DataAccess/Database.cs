@@ -2082,7 +2082,19 @@ namespace ClassLibrary
         #endregion
 
         #endregion // Departments Table Operations
-        
+
+        #region User Table Operations
+
+        public static List<string> GetEditLogins()
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                return connection.Query<string>("SELECT LoginName FROM Users").ToList();
+            }
+        }
+
+        #endregion 
+
         public static double GetBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
