@@ -798,7 +798,6 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\es\DevExpress.XtraPivotGrid.v19.1.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ja\DevExpress.XtraPivotGrid.v19.1.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ru\DevExpress.XtraPivotGrid.v19.1.resources.dll
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csprojAssemblyReference.cache
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.ResolveComReference.cache
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.ForwardDateWindow.resources
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.GeneralNotesEditor.resources
@@ -868,3 +867,4 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ja\DevExpress.Xpf.Grid.v19.1.Core.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ru\DevExpress.Xpf.Grid.v19.1.Core.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.TasksXtraReport.resources
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.AssemblyReference.cache

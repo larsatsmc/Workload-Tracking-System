@@ -153,6 +153,10 @@ namespace Toolroom_Project_Viewer
                 //PopulateEmployeeComboBox();
                 gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false, filterTasksByDatesCheckEdit.Checked);
                 gridView3.ActiveFilterCriteria = CriteriaOperator.And(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
+                //MessageBox.Show($"{schedulerControl1.TimelineView.GetBaseTimeScale().Width}"); 
+                schedulerControl1.GanttView.GetBaseTimeScale().Width = 60;
+                schedulerControl1.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl1.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
             }
             catch (Exception ex)
@@ -950,10 +954,9 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerControl1_PopupMenuShowing(object sender, DevExpress.XtraScheduler.PopupMenuShowingEventArgs e)
         {
-            e.Menu = null;
-
             if (schedulerControl1.SelectedAppointments.Count > 1)
             {
+                e.Menu = null;
                 //MessageBox.Show(schedulerControl1.SelectedAppointments.Count.ToString());
 
                 XtraInputBoxArgs args = new XtraInputBoxArgs();
@@ -971,7 +974,7 @@ namespace Toolroom_Project_Viewer
 
                 var result = XtraInputBox.Show(args)?.ToString();
 
-                if (result.Length > 0)
+                if (result != null && result.Length > 0)
                 {
                     if (int.TryParse(result, out int numOfDays))
                     {
