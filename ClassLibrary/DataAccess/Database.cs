@@ -392,7 +392,6 @@ namespace ClassLibrary
                                     where !taskList.Exists(x => x.ID == task.ID)
                                     select task;
 
-                // TODO: Verify Task object properties will map to stored procedure.
                 connection.Execute("dbo.spCreateTask @JobNumber, @ProjectNumber, @Component, @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Personnel, @Predecessors, @Priority, @Notes", tasksToAdd.ToList());
                 connection.Execute("dbo.spUpdateTask @TaskID, @TaskName, @Hours, @Duration, @Machine, @Resources, @Personnel, @Predecessors, @Priority, @Notes, @ID", tasksToUpdate.ToList());
                 connection.Execute("DELETE FROM Tasks WHERE ID = @ID", tasksToDelete.ToList());
@@ -512,15 +511,15 @@ namespace ClassLibrary
         #region Delete
 
         // Only need to delete the project from projects since the Database is set to cascade delete related records.
-        public static bool RemoveProject(int projectNumber)
+        public static bool RemoveProject(ProjectModel project)
         {
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                connection.Execute("DELETE FROM Projects WHERE ProjectNumber = @projectNumber", new { ProjectNumber = projectNumber });
+                connection.Execute("DELETE FROM Projects WHERE ProjectNumber = @projectNumber", project);
                 // TODO: Make foreign key relationship from WorkloadColors table to Projects table so that the deletion of projects cascades to WorkLoadColors table.
-                connection.Execute("DELETE FROM WorkloadColors WHERE ProjectNumber = @projectNumber", new { ProjectNumber = projectNumber });
+                DeleteColorEntries(project.ID);
 
-                if (!ProjectExists(projectNumber))
+                if (!ProjectExists(project.ProjectNumber))
                 {
                     MessageBox.Show("Project Deleted.");
                     return true;
@@ -1850,13 +1849,15 @@ namespace ClassLibrary
 
         #region Create
 
+        private static string CreateColorEntryString = "INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)";
+
         public static void AddColorEntry(int projectID, string column, int aRGBColor)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    SqlCommand cmd = new SqlCommand("INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)", connection);
+                    SqlCommand cmd = new SqlCommand(CreateColorEntryString, connection);
 
                     cmd.Parameters.AddWithValue("@projectID", projectID);
                     cmd.Parameters.AddWithValue("@columnFieldName", column);
@@ -1873,26 +1874,19 @@ namespace ClassLibrary
             }
         }
 
-        public static void AddColorEntry2(int projectNumber, string column, int aRGBColor)
+        public static void AddColorEntry(ColorStruct colorItem)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    SqlCommand cmd = new SqlCommand("INSERT INTO WorkLoadColors (ProjectNumber, ColumnFieldName, ARGBColor) VALUES (@projectNumber, @columnFieldName, @aRGBColor)", connection);
-
-                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    cmd.Parameters.AddWithValue("@columnFieldName", column);
-                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
-
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute(CreateColorEntryString, colorItem);
                 }
-
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+                MessageBox.Show(e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -1902,20 +1896,17 @@ namespace ClassLibrary
 
         public static List<ColorStruct> GetColorEntries()
         {
-            List<ColorStruct> colorList = new List<ColorStruct>();
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    var result = connection.Query<ColorStruct>("SELECT * FROM WorkLoadColors");
-
-                    return result.ToList(); 
+                    return connection.Query<ColorStruct>("SELECT * FROM WorkLoadColors").ToList(); 
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+                MessageBox.Show(e.Message);
+                Console.WriteLine(e.ToString());
                 return null;
             }
         }
@@ -1923,6 +1914,8 @@ namespace ClassLibrary
         #endregion
 
         #region Update
+
+        private static string UpdateWorkColorsString = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectID = @projectID AND ColumnFieldName = @columnFieldName)";
 
         public static void UpdateColorEntry(int projectID, string column, int aRGBColor)
         {
@@ -1934,11 +1927,11 @@ namespace ClassLibrary
                     cmd.CommandType = CommandType.Text;
                     cmd.Connection = connection;
 
-                    cmd.CommandText = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectID = @projectID AND ColumnFieldName = @column)";
+                    cmd.CommandText = UpdateWorkColorsString;
 
                     cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
                     cmd.Parameters.AddWithValue("@projectID", projectID);
-                    cmd.Parameters.AddWithValue("@column", column);
+                    cmd.Parameters.AddWithValue("@columnFieldName", column);
 
                     connection.Open();
                     cmd.ExecuteNonQuery();
@@ -1946,43 +1939,44 @@ namespace ClassLibrary
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+                MessageBox.Show(e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
-        public static void UpdateColorEntry2(int projectNumber, string column, int aRGBColor)
+
+        public static void UpdateColorEntry(ColorStruct colorItem)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Connection = connection;
-
-                    cmd.CommandText = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectNumber = @projectNumber AND ColumnFieldName = @column)";
-
-                    cmd.Parameters.AddWithValue("@aRGBColor", aRGBColor);
-                    cmd.Parameters.AddWithValue("@projectNumber", projectNumber);
-                    cmd.Parameters.AddWithValue("@column", column);
-
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute(UpdateWorkColorsString, colorItem);
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+                MessageBox.Show(e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
+
         #endregion
 
-        #region Delete
+        #region Delete        
 
         public static void DeleteColorEntries(int projectID)
         {
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 connection.Execute("DELETE FROM WorkLoadColors WHERE ProjectID = @projectID", new { ProjectID = projectID });
+            }
+        }
+
+        public static void DeleteColorEntry(ColorStruct colorItem)
+        {
+            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                connection.Execute("DELETE FROM WorkLoadColors WHERE ProjectID = @projectID AND ColumnFieldName = @columnFieldName", colorItem);
             }
         }
 

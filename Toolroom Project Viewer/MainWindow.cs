@@ -1859,9 +1859,10 @@ namespace Toolroom_Project_Viewer
             {
                 PreserveNotes();
 
-                if (Database.RemoveProject(project.ProjectNumber))
+                if (Database.RemoveProject(project))
                 {
                     DeletedProjects.Add(project);
+
                     view.DeleteRow(view.FocusedRowHandle);
                 }
             }
@@ -2013,11 +2014,22 @@ namespace Toolroom_Project_Viewer
 
             SplashScreenManager.CloseForm();
         }
-        private Color? GetColorFromUser(string columnType, Point clickLocation, Color rowColor)
+        private Color GetRowColor(int rowHandle, BandedGridView bandedGridView)
+        {
+            if (rowHandle % 2 == 0)
+            {
+                return bandedGridView.Appearance.OddRow.BackColor;
+            }
+            else
+            {
+                return bandedGridView.Appearance.EvenRow.BackColor;
+            }
+        }
+        private Color? GetColorFromUser(string columnType, Color rowColor)
         {
             using (var ssw = new SelectStatusWindow(columnType, rowColor))
             {
-                Point windowLocation = new Point(clickLocation.X, clickLocation.Y + (int)(ssw.Height * .5)); //  + ssw.Width ,  
+                Point windowLocation = new Point(Cursor.Position.X - (int)(ssw.Width * .3), Cursor.Position.Y - (int)(ssw.Height * .5));
 
                 ssw.Location = windowLocation;
 
@@ -2036,34 +2048,46 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void SetSelectedCellColor2(Color? color, GridCell[] cells, BandedGridView bandedGridView)
+        private void SetSelectedCellColor(Color? color, GridCell[] cells, BandedGridView bandedGridView)
         {
             if (color == null)
             {
                 return;
             }
 
-            int projectNumber;
+            ColorStruct colorItem;
+            ProjectModel project;
+            Color rowColor;
 
             //ColorList.Clear();
 
             foreach (var cell in cells)
             {
-                projectNumber = Convert.ToInt32(bandedGridView.GetRowCellValue(cell.RowHandle, "ProjectNumber"));
+                project = bandedGridView.GetRow(cell.RowHandle) as ProjectModel;
 
-                ColorStruct colorItem = ColorList.Find(r => r.ColumnFieldName == cell.Column.FieldName && r.ProjectNumber == projectNumber); // Somehow the same color was added twice for the same role for the same project.
+                rowColor = GetRowColor(cell.RowHandle, bandedGridView);
 
-                if (colorItem == null)
+                colorItem = ColorList.Find(r => r.ColumnFieldName == cell.Column.FieldName && r.ProjectID == project.ID); // Somehow the same color was added twice for the same role for the same project.
+
+                if (colorItem == null && rowColor != ((Color)color))
                 {
-                    ColorList.Add(new ColorStruct { ProjectNumber = projectNumber, ColumnFieldName = cell.Column.FieldName, ARGBColor = ((Color)color).ToArgb() });
-                    Database.AddColorEntry2(projectNumber, cell.Column.FieldName, ((Color)color).ToArgb());
+                    colorItem = new ColorStruct { ProjectID = project.ID, ColumnFieldName = cell.Column.FieldName, ARGBColor = ((Color)color).ToArgb() };
+
+                    ColorList.Add(colorItem);
+
+                    Database.AddColorEntry(colorItem);
+                }
+                else if (colorItem != null && rowColor == ((Color)color))
+                {
+                    ColorList.Remove(colorItem);
+
+                    Database.DeleteColorEntry(colorItem);
                 }
                 else
                 {
-                    //colorItem.Color = (Color)color;
                     colorItem.ARGBColor = ((Color)color).ToArgb();
 
-                    Database.UpdateColorEntry2(projectNumber, cell.Column.FieldName, ((Color)color).ToArgb());
+                    Database.UpdateColorEntry(colorItem);
                 }
             }
 
@@ -2539,33 +2563,23 @@ namespace Toolroom_Project_Viewer
 
                     bandedGridView.SelectCell(rowHandle, column);
 
-                    if (rowHandle % 2 == 0)
-                    {
-                        rowColor = bandedGridView.Appearance.OddRow.BackColor;
-                    }
-                    else
-                    {
-                        rowColor = bandedGridView.Appearance.EvenRow.BackColor;
-                    }
-
-                    //MessageBox.Show("Row Handle: " + rowHandle + " Column: " + column);
-                    //MessageBox.Show("Left: " + e.Location.X + MainWindow.ActiveForm.Location.X + " Top: " + e.Location.Y + MainWindow.ActiveForm.Location.Y);
+                    rowColor = GetRowColor(rowHandle, bandedGridView);
 
                     if (PersonnelColumns.Exists(x => x == column.FieldName))
                     {
-                        color = GetColorFromUser("Personnel", e.Location, rowColor);
-
+                        color = GetColorFromUser("Personnel", rowColor);
+                        
                         cells = bandedGridView.GetSelectedCells();
 
-                        SetSelectedCellColor2(color, cells, bandedGridView);
+                        SetSelectedCellColor(color, cells, bandedGridView);
                     }
                     else if (OtherColumns.Exists(x => x == column.FieldName))
                     {
-                        color = GetColorFromUser("Other", e.Location, rowColor);
+                        color = GetColorFromUser("Other", rowColor);
 
                         cells = bandedGridView.GetSelectedCells();
 
-                        SetSelectedCellColor2(color, cells, bandedGridView);
+                        SetSelectedCellColor(color, cells, bandedGridView);
                     }
                     else if (column.FieldName == "JobFolderPath")
                     {
@@ -2594,9 +2608,9 @@ namespace Toolroom_Project_Viewer
             BandedGridView bandedGridView = sender as BandedGridView;
             ProjectModel project = bandedGridView.GetRow(e.RowHandle) as ProjectModel;
 
-            if (e.RowHandle >= 0) //  && int.TryParse(bandedGridView.GetRowCellValue(e.RowHandle, "ID").ToString(), out int projectID)
+            if (e.RowHandle >= 0)
             {
-                var data = ColorList.FirstOrDefault(p => p.ColumnFieldName == e.Column.FieldName && p.ProjectNumber == project.ProjectNumber);
+                var data = ColorList.FirstOrDefault(p => p.ColumnFieldName == e.Column.FieldName && p.ProjectID == project.ID);
 
                 if (data != null)
                 {

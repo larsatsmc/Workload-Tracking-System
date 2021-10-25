@@ -1420,7 +1420,7 @@ namespace Toolroom_Project_Viewer
 
             if (autosaved == true)
             {
-                fileName = @"X:\TOOLROOM\Workload Tracking System\Templates\Created Projects\" + Project.JobNumber + " - #" + Project.ProjectNumber + ".txt";
+                fileName = @"X:\TOOLROOM\Workload Tracking System\Templates\Created Projects\" + Project.JobNumber + " - #" + Project.ProjectNumber + ".xml";
             }
             else
             {
@@ -2175,12 +2175,19 @@ namespace Toolroom_Project_Viewer
                     }
                 }
 
-                DialogResult result = MessageBox.Show("Would you like to save a template?", "Template", MessageBoxButtons.YesNo);
+                // Automatically save project when created or changed.
+                // See what happens when a matching template is overwritten.
 
-                if (result == DialogResult.Yes)
-                {
-                    SaveTemplate(true);
-                }
+                SaveTemplate(true);
+
+                // Save this in case I get a request to go back to asking to save a template.
+
+                //DialogResult result = MessageBox.Show("Would you like to save a template?", "Template", MessageBoxButtons.YesNo);
+
+                //if (result == DialogResult.Yes)
+                //{
+                //    SaveTemplate(true);
+                //}
             }
             catch (Exception ex)
             {
