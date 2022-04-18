@@ -43,6 +43,21 @@ namespace ClassLibrary
             //set { latestFinishDate = value; }
         }
 
+        public bool AllTasksDated 
+        { 
+            get 
+            {
+                if (Tasks.Count(x => x.StartDate == null || x.FinishDate == null) > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }                                    
+            } 
+        }
+
         public static int ComponentCharacterLimit = 31;
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB
+        static readonly string SQLClientConnectionName = "LocalSqlServerDB";  // LocalSqlServerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -83,8 +83,8 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string queryString = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, OverlapAllowed, IncludeHours) " +
-                                     "VALUES (@jobNumber, @projectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @dueDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes, @overlapAllowed, @includeHours)";
+                string queryString = "INSERT INTO Projects (WorkType, JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, OverlapAllowed, IncludeHours) " +
+                                     "VALUES (@workType, @jobNumber, @projectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @dueDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes, @overlapAllowed, @includeHours)";
 
                 connection.Execute(queryString, project);
             }
@@ -97,8 +97,8 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                List<ProjectModel> projects = connection.Query<ProjectModel>("SELECT * FROM Projects").ToList();
-                List<ComponentModel> components = connection.Query<ComponentModel>("SELECT * FROM Components").ToList();
+                List<ProjectModel> projects = connection.Query<ProjectModel>("dbo.spGetProjects").ToList();
+                List<ComponentModel> components = connection.Query<ComponentModel>("dbo.spGetComponents").ToList();
                 List<TaskModel> tasks = connection.Query<TaskModel>("dbo.spGetAllTasks").ToList();
 
                 return (projects, components, tasks);
@@ -429,7 +429,7 @@ namespace ClassLibrary
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + "\n\n" + e.StackTrace);
+                Console.WriteLine(e.ToString());
                 throw e;
             }
         }
@@ -703,7 +703,7 @@ namespace ClassLibrary
             string queryString = null;
             string selectStatment = "Projects.JobNumber, Projects.ProjectNumber, TaskName, Duration, Tasks.StartDate, FinishDate, Personnel, Hours";
             //string fromStatement = "Tasks";
-            string whereStatement = "(Tasks.StartDate BETWEEN '" + weekStart + "' AND '" + weekEnd + "') AND Projects.IncludeHours = 1";
+            string whereStatement = "(Tasks.StartDate BETWEEN '" + weekStart + "' AND '" + weekEnd + "') AND Projects.IncludeHours = 1 AND (Tasks.Status IS NULL OR NOT Tasks.Status = 'Completed')";
             string orderByStatement = "ORDER BY Tasks.StartDate ASC";
             //string groupByStatement = "GROUP BY ";
 
@@ -767,11 +767,14 @@ namespace ClassLibrary
         {
             List<Week> weeks = new List<Week>();
 
-            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
-
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                SqlCommand cmd = new SqlCommand(queryString, connection);
+                SqlCommand cmd = new SqlCommand("dbo.spGetWeekHours", connection);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@WeekStart", SqlDbType.VarChar).Value = weekStart;
+                cmd.Parameters.Add("@WeekEnd", SqlDbType.VarChar).Value = weekEnd;
 
                 string[] departmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
 
@@ -867,22 +870,32 @@ namespace ClassLibrary
         {
             return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind", "Mold Service" };
         }
+        public static List<TaskModel> GetTasks(string weekStart, string weekEnd)
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                List<TaskModel> tasks = connection.Query<TaskModel>("dbo.spGetWeekHours @WeekStart @Weekend", new { WeekStart = weekStart, WeekEnd = weekEnd }).ToList();
 
+                return tasks;
+            }
+        }
         public static List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
         {
             List<Week> weekList = new List<Week>();
             List<Week> deptWeekList = new List<Week>();
-            //List<string> departmentList = new List<string>();
             Week weekTemp;
             DateTime wsDate = Convert.ToDateTime(weekStart);
             int weekNum;
             Stopwatch stopwatch = new Stopwatch();
 
-            string queryString = SetWeeklyHoursQueryString(weekStart, weekEnd);
-
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                SqlCommand cmd = new SqlCommand(queryString, connection);
+                SqlCommand cmd = new SqlCommand("dbo.spGetWeekHours", connection);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@WeekStart", SqlDbType.VarChar).Value = weekStart;
+                cmd.Parameters.Add("@WeekEnd", SqlDbType.VarChar).Value = weekEnd;
 
                 weekList = InitializeDeptWeeksList(wsDate, departmentList);
 
@@ -918,8 +931,6 @@ namespace ClassLibrary
 
                                 deptWeekList = weeks.ToList();
                             }
-
-
 
                             if (deptWeekList.Any())
                             {
@@ -968,8 +979,8 @@ namespace ClassLibrary
                                         else
                                         {
                                             weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                            if (weekTemp.Department == "Design")
-                                                Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
+                                            //if (weekTemp.Department == "CNC Finish")
+                                            //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
                                             days -= 1;
                                         }
 
@@ -980,8 +991,8 @@ namespace ClassLibrary
                                 else
                                 {
                                     weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
-                                    if (weekTemp.Department == "Design")
-                                        Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                                    //if (weekTemp.Department == "CNC Finish")
+                                    //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
                                 }
                             }
                         }
@@ -1000,7 +1011,7 @@ namespace ClassLibrary
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
 
-            Console.WriteLine("RunTime " + elapsedTime);
+            Console.WriteLine("RunTime " + elapsedTime);  // Stored procedure took .1 seconds vs over 2 seconds using in code query.
 
             stopwatch.Stop();
 
@@ -1141,7 +1152,8 @@ namespace ClassLibrary
             {
                 string queryString;
 
-                queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE() " +
+                queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE(), " +
+                              "Notes = @Notes " +
                               "WHERE ID = @ID";
 
                 connection.Execute(queryString, task);
@@ -2108,9 +2120,6 @@ namespace ClassLibrary
 
             for (int i = 1; i <= 20; i++)
             {
-                //wsDate = wsDate.AddDays((i - 1) * 7);
-                //weDate = wsDate.AddDays(6);
-
                 foreach (string department in departmentArr)
                 {
                     weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));

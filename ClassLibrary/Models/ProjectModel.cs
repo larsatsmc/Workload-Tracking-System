@@ -20,6 +20,10 @@ namespace ClassLibrary
         public string Project { get; set; } = "";
         public string JobNumber { get; set; }
         [XmlIgnore]
+        public string EngineeringProjectNumber { get; set; }
+        [XmlIgnore]
+        public string WorkType { get; set; }
+        [XmlIgnore]
         public string Customer { get; set; } = "";
         public int MWONumber { get; set; }
         public string Name { get; set; } = "";

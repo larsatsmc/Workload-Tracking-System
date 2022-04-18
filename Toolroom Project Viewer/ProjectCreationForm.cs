@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using ClassLibrary;
 using DevExpress.XtraScheduler;
 using DevExpress.XtraEditors;
+using System.Diagnostics;
 
 namespace Toolroom_Project_Viewer
 {
@@ -2160,6 +2161,10 @@ namespace Toolroom_Project_Viewer
             {
                 SetProjectInfo();
 
+                //Stopwatch sw = new Stopwatch();
+
+                //sw.Start();
+
                 if (CreateProjectButton.Text == "Create")
                 {
                     if (Database.CreateProject(Project))
@@ -2174,6 +2179,10 @@ namespace Toolroom_Project_Viewer
                         this.DialogResult = DialogResult.OK;
                     }
                 }
+
+                //sw.Stop();
+
+                //MessageBox.Show(sw.ElapsedMilliseconds.ToString() + " ms");
 
                 // Automatically save project when created or changed.
                 // See what happens when a matching template is overwritten.

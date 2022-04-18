@@ -109,8 +109,17 @@ namespace Toolroom_Project_Viewer
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
                 schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
 
+                string forecastedHoursSheetPath = AppDomain.CurrentDomain.BaseDirectory + @"\Resources\Forecasted_Hours.xlsx";
+
+                spreadsheetControl1.LoadDocument(forecastedHoursSheetPath);
+
                 schedulerControl3.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl3.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+
+                if (ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                {
+                    projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = true; 
+                }
                 //InitializeExample();
                 AddRepositoryItemToGrid();
 
@@ -416,6 +425,7 @@ namespace Toolroom_Project_Viewer
 
                     globalTask.StartDate = currentTask.StartDate;
                     globalTask.FinishDate = currentTask.FinishDate;
+                    globalTask.Notes = currentTask.Notes;
                 }
 
                 schedulerControl1.EndUpdate();
@@ -2498,7 +2508,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
         private void projectBandedGridView_ValidateRow(object sender, ValidateRowEventArgs e)
@@ -2828,6 +2839,21 @@ namespace Toolroom_Project_Viewer
 
             //MessageBox.Show(gridView.Name + " row collapsed.");
         }
+        private void gridView4_RowStyle(object sender, RowStyleEventArgs e)
+        {
+            GridView View = sender as GridView;
+            ComponentModel component = View.GetRow(e.RowHandle) as ComponentModel;
+
+            if (e.RowHandle >= 0)
+            {
+                if (!component.AllTasksDated)
+                {
+                    e.Appearance.BackColor = Color.Salmon;
+                    e.Appearance.BackColor2 = Color.SeaShell;
+                    e.HighPriority = true;
+                }
+            }
+        }
         private void gridView4_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             try
@@ -3134,6 +3160,7 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                Console.WriteLine(ex.ToString());
                 RefreshProjectGrid();
             }
             finally
@@ -3188,6 +3215,7 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
@@ -3332,7 +3360,115 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Chart View
+        public static List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
+        {
+            List<Week> weekList = new List<Week>();
 
+            for (int i = 1; i <= 20; i++)
+            {
+                foreach (string department in departmentArr)
+                {
+                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));
+                }
+            }
+
+            return weekList;
+        }
+        private List<Week> GetWeeks(List<TaskModel> tasks, string resourceType = "Department")
+        {
+            List<Week> weekList = InitializeDeptWeeksList(DateTime.Today, Database.GetDepartments());
+            List<Week> deptWeekList = new List<Week>();
+            Week weekTemp;
+            int weekNum;
+
+            foreach (TaskModel task in tasks)
+            {
+                if (resourceType == "Department")
+                {
+                    var results = from wk in weekList
+                                  where (task.TaskName.StartsWith(wk.Department) || (task.TaskName.Contains("Grind") && task.TaskName.Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                  orderby wk.WeekNum ascending
+                                  select wk;
+
+                    deptWeekList = results.ToList();
+                }
+                else if (resourceType == "Personnel")
+                {
+                    var results = from wk in weekList
+                                  where (task.Resource.Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                  orderby wk.WeekNum ascending
+                                  select wk;
+
+                    deptWeekList = results.ToList();
+                }
+
+                if (deptWeekList.Any())
+                {
+                    weekTemp = deptWeekList.Find(x => x.WeekStart <= task.StartDate && x.WeekEnd >= task.StartDate);
+                    weekNum = weekTemp.WeekNum;
+                    //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
+
+                    //Console.WriteLine(rdr["Duration"].ToString());
+
+                    //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
+
+                    double hours = task.Hours;
+                    double days = (int)Database.GetBusinessDays(task.StartDate, task.FinishDate);
+                    DateTime date = task.StartDate;
+                    decimal dailyAVG;
+
+                    if (days == 0)
+                    {
+                        dailyAVG = (decimal)hours;
+                    }
+                    else
+                    {
+                        dailyAVG = (decimal)(hours / days);
+                    }
+
+                    if (days >= 1)
+                    {
+                        while (days > 0)
+                        {
+                            if (date.DayOfWeek == DayOfWeek.Saturday)
+                            {
+                                date = date.AddDays(1);
+
+                                weekNum++;
+
+                                if (weekNum > 20)
+                                {
+                                    goto MyEnd;
+                                }
+
+                                //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
+                                weekTemp = deptWeekList[weekNum - 1];
+                                //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
+                            }
+                            else
+                            {
+                                weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
+                                //if (weekTemp.Department == "CNC Finish")
+                                //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
+                                days -= 1;
+                            }
+
+
+                            date = date.AddDays(1);
+                        }
+                    }
+                    else
+                    {
+                        weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
+                        //if (weekTemp.Department == "CNC Finish")
+                        //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                    }
+                }
+            }
+
+            return weekList;
+        }
         private void LoadGraph(List<Week> weekList, List<string> departmentList)
         {
             Series tempSeries;
@@ -3343,7 +3479,7 @@ namespace Toolroom_Project_Viewer
 
             List<string> weekTitleArr = new List<string>();
             DataTable dailyDeptCapacities = Database.GetDailyDepartmentCapacities();
-            int dailyCapacity;
+            //int dailyCapacity;
 
             for (int n = 0; n < 20; n++)
             {
@@ -3357,9 +3493,9 @@ namespace Toolroom_Project_Viewer
 
             if (TimeUnits == "Days")
             {
-                foreach(Week week in weekList)
+                foreach (Week week in weekList)
                 {
-                    dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(week.Department)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
+                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(week.Department)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
                     tempSeries = new Series(week.Department, ViewType.Bar); //  + " Hours (Cap. " + dailyCapacity + ")"
 
                     foreach (ClassLibrary.Day day in week.DayList)
@@ -3369,22 +3505,53 @@ namespace Toolroom_Project_Viewer
 
                     chartControl1.Series.Add(tempSeries);
                 }
-            }
-            else if(TimeUnits == "Weeks")
-            {
+
                 foreach (string dept in departmentList)
                 {
-                    dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
+                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
+
+                    // Creates a new series for the current department.
                     tempSeries = new Series(dept, ViewType.Bar); //  + " Hours (Cap." + dailyCapacity * 5 + ")"
 
+                    // Selects all weeks corresponding to the current dept.
                     var deptWeeks = from wks in weekList
                                     where wks.Department == dept
                                     orderby wks.WeekStart
                                     select wks;
 
+                    // Cycles through each of a departments weeks.
                     foreach (Week week in deptWeeks)
                     {
                         // weekTitleArr[i++]
+                        // Adds a point for each week using the sum of the weeks hours as a data point.
+                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString(), (int)week.GetWeekHours()));
+                    }
+
+                    chartControl1.Series.Add(tempSeries);
+
+                    i = 0;
+                }
+            }
+            else if(TimeUnits == "Weeks")
+            {
+                foreach (string dept in departmentList)
+                {
+                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
+
+                    // Creates a new series for the current department.
+                    tempSeries = new Series(dept, ViewType.Bar); //  + " Hours (Cap." + dailyCapacity * 5 + ")"
+
+                    // Selects all weeks corresponding to the current dept.
+                    var deptWeeks = from wks in weekList
+                                    where wks.Department == dept
+                                    orderby wks.WeekStart
+                                    select wks;
+
+                    // Cycles through each of a departments weeks.
+                    foreach (Week week in deptWeeks)
+                    {
+                        // weekTitleArr[i++]
+                        // Adds a point for each week using the sum of the weeks hours as a data point.
                         tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , (int)week.GetWeekHours()));
                     }
 
@@ -3393,6 +3560,11 @@ namespace Toolroom_Project_Viewer
                     i = 0;
                 }
             }
+        }
+
+        private void PopulateForecastHoursSpreadsheetControl()
+        {
+
         }
 
         private void PopulateTimeFrameComboBox()
@@ -3433,16 +3605,18 @@ namespace Toolroom_Project_Viewer
         {
             List<Week> weeksList = new List<Week>();
             List<string> departmentList = new List<string>();
-            string resourceType = GetResourceType();
+            string resourceType = "Department";
 
-            if (resourceType == "Department")
-            {
-                departmentList = Database.GetDepartments();
-            }
-            else if (resourceType == "Personnel")
-            {
-                departmentList = Database.GetAllResourcesOfType("Person");
-            }
+            //if (resourceType == "Department")
+            //{
+
+            //}
+            //else if (resourceType == "Personnel")
+            //{
+            //    departmentList = Database.GetAllResourcesOfType("Person");
+            //}
+
+            departmentList = Database.GetDepartments();
 
             if (timeFrameComboBoxEdit.Text != "")
             {
@@ -3515,6 +3689,11 @@ namespace Toolroom_Project_Viewer
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
+        }
+
+        private void chartRadioGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            chartViewNavigationFrame.SelectedPageIndex = chartRadioGroup.SelectedIndex;
         }
 
         #endregion

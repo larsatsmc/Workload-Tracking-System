@@ -868,3 +868,11 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ru\DevExpress.Xpf.Grid.v19.1.Core.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom_Project_Viewer.TasksXtraReport.resources
 C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraSpreadsheet.v19.1.dll
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\DevExpress.XtraSpreadsheet.v19.1.xml
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\de\DevExpress.XtraSpreadsheet.v19.1.resources.dll
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\es\DevExpress.XtraSpreadsheet.v19.1.resources.dll
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ja\DevExpress.XtraSpreadsheet.v19.1.resources.dll
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\ru\DevExpress.XtraSpreadsheet.v19.1.resources.dll
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\bin\Debug\Resources\Forecasted_Hours.xlsx
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\Toolroom Project Viewer\obj\Debug\Toolroom Project Viewer.csproj.SuggestedBindingRedirects.cache

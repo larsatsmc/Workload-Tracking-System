@@ -27,7 +27,7 @@ namespace ClassLibrary
 
         }
 
-        public QuoteModel(object customer, object partName, object designHours, object designElectrodeHours, object programRoughHours, object programFinishHours, object programElectrodeHours, object cncRoughHours, object cncFinishHours, object grindFittingHours, object cncElectrodeHours, object edmSinkerHours)
+        public QuoteModel(object customer, object partName, object designHours, object designElectrodeHours, object programRoughHours, object programFinishHours, object programElectrodeHours, object cncRoughHours, object cncFinishHours, object grindFittingHours, object cncElectrodeHours, object edmSinkerHours, object edmWireHours)
         {
             this.Customer = customer.ToString();
             this.PartName = partName.ToString();
@@ -40,6 +40,7 @@ namespace ClassLibrary
             this.GrindFittingHours = Convert.ToInt16(grindFittingHours);
             this.CNCElectrodeHours = Convert.ToInt16(cncElectrodeHours);
             this.EDMSinkerHours = Convert.ToInt16(edmSinkerHours);
+            this.EDMWireHours = Convert.ToInt16(edmWireHours);
 
             CreateTaskList();
         }
@@ -78,9 +79,9 @@ namespace ClassLibrary
             {
                 return this.EDMSinkerHours;
             }
-            else if (taskName == "EDM Wire")
+            else if (taskName == "EDM Wire (In-House)")
             {
-                return this.EDMSinkerHours;
+                return this.EDMWireHours;
             }
             else if (taskName == "Grind-Fitting")
             {
@@ -92,7 +93,7 @@ namespace ClassLibrary
 
         private void CreateTaskList()
         {
-            List<string> taskNameList = new List<string> {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "Grind-Fitting", "CNC Electrodes", "EDM Sinker"};
+            List<string> taskNameList = new List<string> {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "Grind-Fitting", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)"};
             TaskList = new List<TaskModel>();
 
             foreach (string taskName in taskNameList)

@@ -307,10 +307,10 @@ C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Schedule
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Office.v19.1.Core.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Office.v19.1.Core.resources.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
-C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.dll
 C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.xml
 C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete

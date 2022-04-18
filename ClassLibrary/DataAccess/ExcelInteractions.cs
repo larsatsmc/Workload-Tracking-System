@@ -131,8 +131,8 @@ namespace ClassLibrary
                     cncFinishHours: quoteWorksheetCells[26, 8].value,
                     grindFittingHours: quoteWorksheetCells[28, 8].value,
                     cncElectrodeHours: quoteWorksheetCells[27, 8].value,
-                    edmSinkerHours: quoteWorksheetCells[29, 8].value
-
+                    edmSinkerHours: quoteWorksheetCells[29, 8].value,
+                    edmWireHours: quoteWorksheetCells[30, 8].value
                     );
 
             }

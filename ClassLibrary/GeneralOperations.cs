@@ -2,27 +2,25 @@
 using DevExpress.XtraScheduler.Xml;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace ClassLibrary
 {
     public class GeneralOperations
     {
-        public static DateTime AddBusinessDays(DateTime date, string durationSt)
+        public static DateTime AddBusinessDays(DateTime date, string durationStr)
         {
-            int days;
-            string[] duration = null;
+            int days = 0;
 
-            if (durationSt != null)
+            Regex rgx = GetDurationPatternToMatch();
+
+            if (IsValidDuration(durationStr))
             {
-                duration = durationSt.Split(' ');
-            }
-            else
-            {
-                MessageBox.Show("Duration cannot be null.");
+                days = int.Parse(rgx.Match(durationStr).Groups[1].Value);
             }
 
-            days = Convert.ToInt16(duration[0]);
+            // Return will not be reached if IsValidDuration check fails.
 
             return AddBusinessDays(date, days);
         }
@@ -56,33 +54,44 @@ namespace ClassLibrary
 
             return date.AddDays(extraDays);
         }
-        public static DateTime SubtractBusinessDays(DateTime finishDate, string durationSt)
+        public static DateTime SubtractBusinessDays(DateTime date, string durationStr)
         {
-            int days;
-            string[] duration = durationSt.Split(' ');
-            days = Convert.ToInt16(duration[0]);
+            int days = 0;
 
-            if (days < 0)
+            Regex rgx = GetDurationPatternToMatch();
+
+            if (IsValidDuration(durationStr))
+            {
+                days = int.Parse(rgx.Match(durationStr).Groups[1].Value);
+            }
+
+            // Return will not be reached if IsValidDuration check fails.
+
+            return SubtractBusinessDays(date, days);
+        }
+        public static DateTime SubtractBusinessDays(DateTime finishDate, int workingDays)
+        {
+            if (workingDays < 0)
             {
                 throw new ArgumentException("Days cannot be negative.", "days");
             }
 
-            if (days == 0) return finishDate;
+            if (workingDays == 0) return finishDate;
 
             if (finishDate.DayOfWeek == DayOfWeek.Saturday)
             {
                 finishDate = finishDate.AddDays(-1);
-                days -= 1;
+                workingDays -= 1;
             }
             else if (finishDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 finishDate = finishDate.AddDays(-2);
-                days -= 1;
+                workingDays -= 1;
             }
 
-            finishDate = finishDate.AddDays(-days / 5 * 7);
+            finishDate = finishDate.AddDays(-workingDays / 5 * 7);
 
-            int extraDays = days % 5;
+            int extraDays = workingDays % 5;
 
             if ((int)finishDate.DayOfWeek - extraDays < 1)
             {
@@ -90,6 +99,32 @@ namespace ClassLibrary
             }
 
             return finishDate.AddDays(-extraDays);
+        }
+        private static bool IsValidDuration(string durationStr)
+        {
+            // Throwing an exception terminates forward dating or back dating process.
+            Regex rgx = GetDurationPatternToMatch();
+
+            if (durationStr == null)
+            {
+                throw new Exception("A duration cannot be null.");
+            }
+            else if (durationStr.Length == 0)
+            {
+                throw new Exception("A duration cannot be empty.");
+            }
+            else if (rgx.Match(durationStr).Success == false)
+            {
+                throw new Exception("A duration must match the pattern of a whole number followed by a space and Day(s).");
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public static Regex GetDurationPatternToMatch()
+        {
+            return new Regex(@"^\s*(\d+)\sDay\(s\)\s*$");
         }
         // Seems like there would be a way of doing this without passing in a SchedulerStorage object.
         public static string GenerateResourceIDsString(SchedulerStorage schedulerStorage, string machine, string personnel)
