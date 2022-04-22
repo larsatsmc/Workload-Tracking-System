@@ -751,7 +751,7 @@ namespace Toolroom_Project_Viewer
                 Console.WriteLine("");
                 Console.WriteLine(week.Department);
 
-                foreach (Day day in week.DayList)
+                foreach (ClassLibrary.Day day in week.DayList)
                 {
                     Console.WriteLine($"{day.DayName} {(int)day.Hours}");
                 }
@@ -946,9 +946,9 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public ProjectInfo GetProject(string jobNumber, int projectNumber)
+        public ProjectModel GetProject(string jobNumber, int projectNumber)
         {
-            ProjectInfo project = GetProjectInfo(jobNumber, projectNumber);
+            ProjectModel project = GetProjectInfo(jobNumber, projectNumber);
 
             AddComponents(project);
 
@@ -957,10 +957,10 @@ namespace Toolroom_Project_Viewer
             return project;
         }
 
-        public ProjectInfo GetProjectInfo(string jobNumber, int projectNumber)
+        public ProjectModel GetProjectInfo(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
-            ProjectInfo pi = null;
+            ProjectModel pi = null;
             string queryString;
 
             queryString = "SELECT * FROM Projects WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
@@ -979,7 +979,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            pi = new ProjectInfo
+                            pi = new ProjectModel
                             (
                                         jobNumber: Convert.ToString(rdr["JobNumber"]),
                                     projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
@@ -1008,12 +1008,12 @@ namespace Toolroom_Project_Viewer
             return pi;
         }
 
-        public List<ProjectInfo> GetProjectInfoList()
+        public List<ProjectModel> GetProjectInfoList()
         {
             string queryString = "SELECT * FROM Projects";
             OleDbCommand cmd;
-            ProjectInfo pi;
-            List<ProjectInfo> piList = new List<ProjectInfo>();
+            ProjectModel pi;
+            List<ProjectModel> piList = new List<ProjectModel>();
 
             cmd = new OleDbCommand(queryString, Connection);
 
@@ -1027,7 +1027,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            pi = new ProjectInfo
+                            pi = new ProjectModel
                             (
                                         jobNumber: Convert.ToString(rdr["JobNumber"]),
                                     projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
@@ -1058,10 +1058,10 @@ namespace Toolroom_Project_Viewer
             return piList;
         }
 
-        public void AddComponents(ProjectInfo project)
+        public void AddComponents(ProjectModel project)
         {
             OleDbCommand cmd;
-            Component component;
+            ComponentModel component;
 
             string queryString;
 
@@ -1081,7 +1081,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            component = new Component
+                            component = new ComponentModel
                             (
                                            name: rdr["Component"],
                                           notes: rdr["Notes"],
@@ -1110,10 +1110,10 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public List<Component> GetComponentListFromTasksTable(string jobNumber, int projectNumber)
+        public List<ComponentModel> GetComponentListFromTasksTable(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
-            List<Component> componentList = new List<Component>();
+            List<ComponentModel> componentList = new List<ComponentModel>();
 
             string queryString;
 
@@ -1133,7 +1133,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            componentList.Add(new Component
+                            componentList.Add(new ComponentModel
                             (
                                     name: rdr["Component"]
                             ));
@@ -1156,25 +1156,25 @@ namespace Toolroom_Project_Viewer
             return componentList;
         }
 
-        private void AddTasks(ProjectInfo project)
+        private void AddTasks(ProjectModel project)
         {
-            List<TaskInfo> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
+            List<TaskModel> projectTaskList = GetProjectTaskList(project.JobNumber, project.ProjectNumber);
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 var tasks = from t in projectTaskList
-                            where t.Component == component.Name
+                            where t.Component == component.Component
                             orderby t.ID ascending
                             select t;
 
                 component.AddTaskList(tasks.ToList());
             }
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
-                Console.WriteLine(component.Name);
+                Console.WriteLine(component.Component);
 
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     Console.WriteLine($"   {task.ID} {task.TaskName}");
                     task.HasInfo = true;
@@ -1182,10 +1182,10 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public List<TaskInfo> GetProjectTaskList(string jobNumber, int projectNumber)
+        public List<TaskModel> GetProjectTaskList(string jobNumber, int projectNumber)
         {
             OleDbCommand cmd;
-            List<TaskInfo> taskList = new List<TaskInfo>();
+            List<TaskModel> taskList = new List<TaskModel>();
 
             string queryString;
             queryString = "SELECT * FROM Tasks WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber";
@@ -1204,7 +1204,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            taskList.Add(new TaskInfo
+                            taskList.Add(new TaskModel
                             (
                                     taskName: rdr["TaskName"],
                                           id: rdr["TaskID"],
@@ -1239,7 +1239,7 @@ namespace Toolroom_Project_Viewer
             string queryString = "SELECT COUNT(*) As CompletedTaskCount, MAX(Tasks.TaskID) AS LastCompletedTask, Components.TaskIDCount, Projects.JobNumber, Projects.ProjectNumber, Projects.ToolMaker, Components.Component FROM (Tasks INNER JOIN Components ON Components.Component = Tasks.Component) INNER JOIN Projects ON Projects.ProjectNumber = Components.ProjectNumber WHERE Tasks.Status = 'Completed' GROUP BY Projects.JobNumber, Projects.ProjectNumber, Projects.ToolMaker, Components.Component, Components.TaskIDCount";
             OleDbConnection Connection = new OleDbConnection(ConnString);
             OleDbCommand cmd = new OleDbCommand(queryString, Connection);
-            List<ProjectInfo> projects = new List<ProjectInfo>();
+            List<ProjectModel> projects = new List<ProjectModel>();
             string project = "", jobNumber = "";
             int lastTaskID = 0, taskIDCount;
             DataTable dt = new DataTable();
@@ -1790,7 +1790,7 @@ namespace Toolroom_Project_Viewer
             return task["TaskName"].ToString();
         }
 
-        public bool LoadProjectToDB(ProjectInfo project)
+        public bool LoadProjectToDB(ProjectModel project)
         {
 
             //if(result == DialogResult.Yes)
@@ -1799,7 +1799,7 @@ namespace Toolroom_Project_Viewer
             //    //updateProjectData(pi);
             //    //foreach (Component component in project.ComponentList)
             //    //{
-            //    //    foreach (TaskInfo task in component.TaskList)
+            //    //    foreach (TaskInfo task in component.Tasks)
             //    //    {
             //    //        task.ChangeIDs(baseIDNumber);
             //    //    }
@@ -1834,7 +1834,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private bool AddProjectDataToDatabase(ProjectInfo project)
+        private bool AddProjectDataToDatabase(ProjectModel project)
         {
             var adapter = new OleDbDataAdapter();
             string queryString;
@@ -1947,7 +1947,7 @@ namespace Toolroom_Project_Viewer
         }
 
 
-        private DataTable CreateDataTableFromComponentList(ProjectInfo project)
+        private DataTable CreateDataTableFromComponentList(ProjectModel project)
         {
             DataTable dt = new DataTable();
             int position = 0;
@@ -1967,13 +1967,13 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("Status", typeof(string));
             dt.Columns.Add("PercentComplete", typeof(int));
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 DataRow row = dt.NewRow();
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Quantity"] = component.Quantity;
                 row["Spares"] = component.Spares;
                 row["Material"] = component.Material;
@@ -2004,7 +2004,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private DataTable CreateDataTableFromTaskList(ProjectInfo project)
+        private DataTable CreateDataTableFromTaskList(ProjectModel project)
         {
             DataTable dt = new DataTable();
             int i;
@@ -2033,11 +2033,11 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("Initials", typeof(string));
             dt.Columns.Add("DateCompleted", typeof(string));
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 i = 1;
 
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow row = dt.NewRow();
 
@@ -2053,7 +2053,6 @@ namespace Toolroom_Project_Viewer
                     row["Resource"] = task.Resource;
                     row["Machine"] = task.Machine;
                     row["Priority"] = task.Priority;
-                    row["DateAdded"] = task.DateAdded;
                     row["Notes"] = task.Notes;
 
                     dt.Rows.Add(row);
@@ -2070,7 +2069,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public DataTable LoadProjectToDataTable(ProjectInfo project)
+        public DataTable LoadProjectToDataTable(ProjectModel project)
         {
             DataTable dt = new DataTable();
             int count = 0;
@@ -2089,16 +2088,16 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("TaskID", typeof(int));
             dt.Columns.Add("NewTaskID", typeof(int));
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 count++;
                 baseCount = count;
 
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow row = dt.NewRow();
 
-                    row["Component"] = component.Name;
+                    row["Component"] = component.Component;
                     row["TaskID"] = ++count;
                     //row["TaskID"] = task.ID;
                     row["TaskName"] = task.TaskName;
@@ -2118,15 +2117,15 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public bool EditProjectInDB(ProjectInfo project)
+        public bool EditProjectInDB(ProjectModel project)
         {
             try
             {
-                ProjectInfo databaseProject = GetProject(project.JobNumber, project.ProjectNumber);
-                List<Component> newComponentList = new List<Component>();
-                //List<Component> updatedComponentList = new List<Component>();
-                List<TaskInfo> newTaskList = new List<TaskInfo>();
-                List<Component> deletedComponentList = new List<Component>();
+                ProjectModel databaseProject = GetProject(project.JobNumber, project.ProjectNumber);
+                List<ComponentModel> newComponentList = new List<ComponentModel>();
+                //List<ComponentModel> updatedComponentList = new List<ComponentModel>();
+                List<TaskModel> newTaskList = new List<TaskModel>();
+                List<ComponentModel> deletedComponentList = new List<ComponentModel>();
 
                 if (project.ProjectNumberChanged && ProjectExists(project.ProjectNumber))
                 {
@@ -2139,11 +2138,11 @@ namespace Toolroom_Project_Viewer
                 if (ProjectHasComponents(project.ProjectNumber))
                 {
                     // Check modified project for added components.
-                    foreach (Component component in project.ComponentList)
+                    foreach (ComponentModel component in project.Components)
                     {
-                        component.SetPosition(project.ComponentList.IndexOf(component));
+                        component.SetPosition(project.Components.IndexOf(component));
 
-                        bool componentExists = databaseProject.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = databaseProject.Components.Exists(x => x.Component == component.Component);
 
                         if (componentExists)
                         {
@@ -2152,24 +2151,24 @@ namespace Toolroom_Project_Viewer
                             if (component.ReloadTaskList)
                             {
                                 RemoveTasks(project, component);
-                                newTaskList.AddRange(component.TaskList);
+                                newTaskList.AddRange(component.Tasks);
                             }
                             else
                             {
-                                UpdateTasks(project.JobNumber, project.ProjectNumber, component.Name, component.TaskList);
+                                UpdateTasks(project.JobNumber, project.ProjectNumber, component.Component, component.Tasks);
                             }
                         }
                         else
                         {
                             newComponentList.Add(component);
-                            newTaskList.AddRange(component.TaskList);
+                            newTaskList.AddRange(component.Tasks);
                         }
                     }
 
                     // Check modified project for deleted components.
-                    foreach (Component component in databaseProject.ComponentList)
+                    foreach (ComponentModel component in databaseProject.Components)
                     {
-                        bool componentExists = project.ComponentList.Exists(x => x.Name == component.Name);
+                        bool componentExists = project.Components.Exists(x => x.Component == component.Component);
 
                         if (!componentExists)
                         {
@@ -2191,7 +2190,7 @@ namespace Toolroom_Project_Viewer
 
                     if (deletedComponentList.Count > 0)
                     {
-                        foreach (Component component in deletedComponentList)
+                        foreach (ComponentModel component in deletedComponentList)
                         {
                             RemoveComponent(project, component);
                         }
@@ -2211,9 +2210,9 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public ProjectInfo GetProject(int projectNumber)
+        public ProjectModel GetProject(int projectNumber)
         {
-            ProjectInfo project = GetProjectInfo(projectNumber);
+            ProjectModel project = GetProjectInfo(projectNumber);
 
             AddComponents(project);
 
@@ -2222,10 +2221,10 @@ namespace Toolroom_Project_Viewer
             return project;
         }
 
-        public ProjectInfo GetProjectInfo(int projectNumber)
+        public ProjectModel GetProjectInfo(int projectNumber)
         {
             OleDbCommand cmd;
-            ProjectInfo pi = null;
+            ProjectModel pi = null;
             string queryString;
 
             queryString = "SELECT * FROM Projects WHERE ProjectNumber = @projectNumber";
@@ -2243,7 +2242,7 @@ namespace Toolroom_Project_Viewer
                     {
                         while (rdr.Read())
                         {
-                            pi = new ProjectInfo
+                            pi = new ProjectModel
                             (
                                         jobNumber: Convert.ToString(rdr["JobNumber"]),
                                     projectNumber: Convert.ToInt32(rdr["ProjectNumber"]),
@@ -2271,7 +2270,7 @@ namespace Toolroom_Project_Viewer
             return pi;
         }
 
-        private void UpdateProjectData(ProjectInfo project)
+        private void UpdateProjectData(ProjectModel project)
         {
             try
             {
@@ -2316,7 +2315,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void UpdateTasks(string jobNumber, int projectNumber, string component, List<TaskInfo> taskList)
+        private void UpdateTasks(string jobNumber, int projectNumber, string component, List<TaskModel> taskList)
         {
             try
             {
@@ -2371,7 +2370,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private DataTable UpdateTaskDataTable(List<TaskInfo> taskList, DataTable taskDataTable)
+        private DataTable UpdateTaskDataTable(List<TaskModel> taskList, DataTable taskDataTable)
         {
             int i = 0;
 
@@ -2411,7 +2410,7 @@ namespace Toolroom_Project_Viewer
             return false;
         }
 
-        private void UpdateComponentData(ProjectInfo project, Component component)
+        private void UpdateComponentData(ProjectModel project, ComponentModel component)
         {
             try
             {
@@ -2424,7 +2423,7 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand = new OleDbCommand(queryString, Connection);
 
-                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Name);
+                adapter.UpdateCommand.Parameters.AddWithValue("@name", component.Component);
                 adapter.UpdateCommand.Parameters.AddWithValue("@notes", component.Notes);
                 adapter.UpdateCommand.Parameters.AddWithValue("@priority", component.Priority);
                 adapter.UpdateCommand.Parameters.AddWithValue("@position", component.Position);
@@ -2454,7 +2453,7 @@ namespace Toolroom_Project_Viewer
 
                 adapter.UpdateCommand.ExecuteNonQuery();
 
-                Console.WriteLine($"{component.Name} Updated.");
+                Console.WriteLine($"{component.Component} Updated.");
                 //MessageBox.Show("Project Updated!");
             }
             catch (OleDbException ex)
@@ -2471,7 +2470,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private DataTable CreateDataTableFromComponentList(ProjectInfo project, List<Component> componentList)
+        private DataTable CreateDataTableFromComponentList(ProjectModel project, List<ComponentModel> componentList)
         {
             DataTable dt = new DataTable();
             int position = 0;
@@ -2491,13 +2490,13 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("Status", typeof(string));
             dt.Columns.Add("PercentComplete", typeof(int));
 
-            foreach (Component component in componentList)
+            foreach (ComponentModel component in componentList)
             {
                 DataRow row = dt.NewRow();
 
                 row["JobNumber"] = project.JobNumber;
                 row["ProjectNumber"] = project.ProjectNumber;
-                row["Component"] = component.Name;
+                row["Component"] = component.Component;
                 row["Notes"] = component.Notes;
                 row["Priority"] = component.Priority;
                 row["Position"] = component.Position;
@@ -2520,7 +2519,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        private DataTable CreateDataTableFromTaskList(ProjectInfo project, List<TaskInfo> taskList)
+        private DataTable CreateDataTableFromTaskList(ProjectModel project, List<TaskModel> taskList)
         {
             DataTable dt = new DataTable();
             string component = "";
@@ -2550,7 +2549,7 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("Initials", typeof(string));
             dt.Columns.Add("DateCompleted", typeof(string));
 
-            foreach (TaskInfo task in taskList)
+            foreach (TaskModel task in taskList)
             {
                 DataRow row = dt.NewRow();
 
@@ -2572,7 +2571,6 @@ namespace Toolroom_Project_Viewer
                 row["Resource"] = task.Resource;
                 row["Machine"] = task.Machine;
                 row["Priority"] = task.Priority;
-                row["DateAdded"] = task.DateAdded;
                 row["Notes"] = task.Notes;
 
                 dt.Rows.Add(row);
@@ -2588,7 +2586,7 @@ namespace Toolroom_Project_Viewer
             return dt;
         }
 
-        public void RemoveTasks(ProjectInfo project, Component component)
+        public void RemoveTasks(ProjectModel project, ComponentModel component)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -2596,14 +2594,14 @@ namespace Toolroom_Project_Viewer
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 35).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
             Connection.Close();
         }
 
-        private void RemoveComponent(ProjectInfo project, Component component)
+        private void RemoveComponent(ProjectModel project, ComponentModel component)
         {
             var adapter = new OleDbDataAdapter();
 
@@ -2611,7 +2609,7 @@ namespace Toolroom_Project_Viewer
 
             adapter.DeleteCommand.Parameters.Add("@jobNumber", OleDbType.VarChar, 25).Value = project.JobNumber;
             adapter.DeleteCommand.Parameters.Add("@projectNumber", OleDbType.VarChar, 12).Value = project.ProjectNumber;
-            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, 35).Value = component.Name;
+            adapter.DeleteCommand.Parameters.Add("@component", OleDbType.VarChar, 35).Value = component.Component;
 
             Connection.Open();
             adapter.DeleteCommand.ExecuteNonQuery();
@@ -2630,7 +2628,7 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public DataTable GetProjectResourceData(ProjectInfo project)
+        public DataTable GetProjectResourceData(ProjectModel project)
         {
             DataTable dt = new DataTable();
             int i = 1;
@@ -2640,17 +2638,17 @@ namespace Toolroom_Project_Viewer
             dt.Columns.Add("TaskName", typeof(string));
             dt.Columns.Add("ParentID", typeof(int));
 
-            foreach (Component component in project.ComponentList)
+            foreach (ComponentModel component in project.Components)
             {
                 DataRow newRow1 = dt.NewRow();
 
                 newRow1["NewTaskID"] = i;
-                newRow1["TaskName"] = component.Name;
+                newRow1["TaskName"] = component.Component;
                 parentID = i++;
 
                 dt.Rows.Add(newRow1);
 
-                foreach (TaskInfo task in component.TaskList)
+                foreach (TaskModel task in component.Tasks)
                 {
                     DataRow newRow2 = dt.NewRow();
                     
@@ -3615,19 +3613,19 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        public void AddWorkLoadEntry(WorkLoadInfo wli)
+        public void AddWorkLoadEntry(WorkLoadModel wli)
         {
             try
             {
-                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, PartName, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes) VALUES " + 
-                                                                       "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @partName, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @manifold, @moldBase, @generalNotes)", Connection);
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO WorkLoad (ToolNumber, MWONumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, FinishDate, AdjustedDeliveryDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Manifold, MoldBase, GeneralNotes) VALUES " + 
+                                                                       "(@toolNumber, @mwoNumber, @projectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @finishDate, @adjustedDeliveryDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @manifold, @moldBase, @generalNotes)", Connection);
 
                 cmd.Parameters.AddWithValue("@toolNumber", wli.ToolNumber);
                 cmd.Parameters.AddWithValue("@mwoNumber", wli.MWONumber);
                 cmd.Parameters.AddWithValue("@projectNumber", wli.ProjectNumber);
                 cmd.Parameters.AddWithValue("@stage", wli.Stage);
                 cmd.Parameters.AddWithValue("@customer", wli.Customer);
-                cmd.Parameters.AddWithValue("@partName", wli.PartName);
+                cmd.Parameters.AddWithValue("@project", wli.Project);
                 cmd.Parameters.AddWithValue("@deliveryInWeeks", wli.DeliveryInWeeks);
 
                 if(wli.StartDate != null)
@@ -3662,7 +3660,7 @@ namespace Toolroom_Project_Viewer
                 cmd.Parameters.AddWithValue("@designer", wli.Designer);
                 cmd.Parameters.AddWithValue("@toolMaker", wli.ToolMaker);
                 cmd.Parameters.AddWithValue("@roughProgrammer", wli.RoughProgrammer);
-                cmd.Parameters.AddWithValue("@finishProgrammer", wli.FinisherProgrammer);
+                cmd.Parameters.AddWithValue("@finishProgrammer", wli.FinishProgrammer);
                 cmd.Parameters.AddWithValue("@electrodeProgrammer", wli.ElectrodeProgrammer);
                 cmd.Parameters.AddWithValue("@manifold", wli.Manifold);
                 cmd.Parameters.AddWithValue("@moldBase", wli.MoldBase);
