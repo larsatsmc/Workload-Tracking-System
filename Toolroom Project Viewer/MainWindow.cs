@@ -35,6 +35,7 @@ using DevExpress.XtraSplashScreen;
 using System.Threading;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraScheduler.Reporting;
+using DevExpress.Spreadsheet;
 
 namespace Toolroom_Project_Viewer
 {
@@ -167,6 +168,11 @@ namespace Toolroom_Project_Viewer
                 schedulerControl1.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl1.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
+
+                schedulerControl3.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.TimelineView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.TimelineView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
             }
             catch (Exception ex)
             {
@@ -950,7 +956,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message} \n\n {ex.StackTrace}");
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
@@ -3360,9 +3367,11 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Chart View
-        public static List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
+        public List<Week> InitializeDeptWeeksList(List<string> departmentArr)
         {
             List<Week> weekList = new List<Week>();
+            DateTime wsDate, weDate;
+            wsDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
             for (int i = 1; i <= 20; i++)
             {
@@ -3376,13 +3385,18 @@ namespace Toolroom_Project_Viewer
         }
         private List<Week> GetWeeks(List<TaskModel> tasks, string resourceType = "Department")
         {
-            List<Week> weekList = InitializeDeptWeeksList(DateTime.Today, Database.GetDepartments());
+            List<Week> weekList = InitializeDeptWeeksList(Database.GetDepartments());
             List<Week> deptWeekList = new List<Week>();
             Week weekTemp;
             int weekNum;
 
             foreach (TaskModel task in tasks)
             {
+                if (task.StartDate == null || task.FinishDate == null)
+                {
+                    goto Skip;
+                }
+
                 if (resourceType == "Department")
                 {
                     var results = from wk in weekList
@@ -3404,17 +3418,15 @@ namespace Toolroom_Project_Viewer
 
                 if (deptWeekList.Any())
                 {
-                    weekTemp = deptWeekList.Find(x => x.WeekStart <= task.StartDate && x.WeekEnd >= task.StartDate);
+                    weekTemp = deptWeekList.Find(x => (x.WeekStart <= task.StartDate && x.WeekEnd >= task.StartDate) || (x.WeekStart > task.StartDate && x.WeekNum == 1));
                     weekNum = weekTemp.WeekNum;
                     //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
 
-                    //Console.WriteLine(rdr["Duration"].ToString());
-
-                    //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
-
                     double hours = task.Hours;
-                    double days = (int)Database.GetBusinessDays(task.StartDate, task.FinishDate);
-                    DateTime date = task.StartDate;
+                    double days = (int)Database.GetBusinessDays(task.StartDate ?? new DateTime(1, 1, 0001), task.FinishDate ?? new DateTime(1, 1, 0001));
+                    //double days = Database.BusinessDaysUntil(task.StartDate ?? new DateTime(1, 1, 0001), task.FinishDate ?? new DateTime(1, 1, 0001));
+                    //double days = int.Parse(task.Duration.Split(' ')[0]);
+
                     decimal dailyAVG;
 
                     if (days == 0)
@@ -3424,6 +3436,18 @@ namespace Toolroom_Project_Viewer
                     else
                     {
                         dailyAVG = (decimal)(hours / days);
+                    }
+
+                    DateTime date;
+
+                    if (weekTemp.WeekStart > task.StartDate && weekNum == 1)
+                    {
+                        date = weekTemp.WeekStart.AddDays(1);
+                        days = days - Database.GetBusinessDays(task.StartDate ?? new DateTime(1, 1, 0001), date);
+                    }
+                    else
+                    {
+                        date = task.StartDate ?? new DateTime(1, 1, 0001);
                     }
 
                     if (days >= 1)
@@ -3465,7 +3489,11 @@ namespace Toolroom_Project_Viewer
                         //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
                     }
                 }
+
+            Skip:;
             }
+
+        MyEnd:;
 
             return weekList;
         }
@@ -3479,67 +3507,37 @@ namespace Toolroom_Project_Viewer
 
             List<string> weekTitleArr = new List<string>();
             DataTable dailyDeptCapacities = Database.GetDailyDepartmentCapacities();
-            //int dailyCapacity;
 
             for (int n = 0; n < 20; n++)
             {
                 weekTitleArr.Add(n.ToString());
             }
 
-            //SideBySideBarSeries series = new SideBySideBarSeries();
-            //Series series1 = new Series("Program Rough Hours", ViewType.Bar);
-            //Series series2 = new Series("Program Finish Hours", ViewType.Bar);
-            //Series series3 = new Series("Program Electrode Hours", ViewType.Bar);
-
             if (TimeUnits == "Days")
             {
-                foreach (Week week in weekList)
-                {
-                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(week.Department)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
-                    tempSeries = new Series(week.Department, ViewType.Bar); //  + " Hours (Cap. " + dailyCapacity + ")"
+                var results = from wks in weekList
+                                where wks.WeekStart == DateTime.Parse(timeFrameComboBoxEdit.Text.Split(' ')[0])
+                                orderby wks.WeekStart
+                                select wks;
+
+                foreach (Week week in results.ToList())
+                {                    
+                    tempSeries = new Series(week.Department, ViewType.Bar);
 
                     foreach (ClassLibrary.Day day in week.DayList)
                     {
-                        tempSeries.Points.Add(new SeriesPoint(day.DayName, (int)day.Hours));
+                        tempSeries.Points.Add(new SeriesPoint(day.DayName, Decimal.Round(day.Hours, 1)));
                     }
 
                     chartControl1.Series.Add(tempSeries);
-                }
-
-                foreach (string dept in departmentList)
-                {
-                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
-
-                    // Creates a new series for the current department.
-                    tempSeries = new Series(dept, ViewType.Bar); //  + " Hours (Cap." + dailyCapacity * 5 + ")"
-
-                    // Selects all weeks corresponding to the current dept.
-                    var deptWeeks = from wks in weekList
-                                    where wks.Department == dept
-                                    orderby wks.WeekStart
-                                    select wks;
-
-                    // Cycles through each of a departments weeks.
-                    foreach (Week week in deptWeeks)
-                    {
-                        // weekTitleArr[i++]
-                        // Adds a point for each week using the sum of the weeks hours as a data point.
-                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString(), (int)week.GetWeekHours()));
-                    }
-
-                    chartControl1.Series.Add(tempSeries);
-
-                    i = 0;
                 }
             }
             else if(TimeUnits == "Weeks")
             {
                 foreach (string dept in departmentList)
                 {
-                    //dailyCapacity = dailyDeptCapacities.AsEnumerable().Where(p => p.Field<string>("Department").ToString().Contains(dept)).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
-
                     // Creates a new series for the current department.
-                    tempSeries = new Series(dept, ViewType.Bar); //  + " Hours (Cap." + dailyCapacity * 5 + ")"
+                    tempSeries = new Series(dept, ViewType.Bar);
 
                     // Selects all weeks corresponding to the current dept.
                     var deptWeeks = from wks in weekList
@@ -3550,9 +3548,8 @@ namespace Toolroom_Project_Viewer
                     // Cycles through each of a departments weeks.
                     foreach (Week week in deptWeeks)
                     {
-                        // weekTitleArr[i++]
                         // Adds a point for each week using the sum of the weeks hours as a data point.
-                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , (int)week.GetWeekHours()));
+                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , Decimal.Round(week.GetWeekHours(),1)));
                     }
 
                     chartControl1.Series.Add(tempSeries);
@@ -3562,9 +3559,59 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void PopulateForecastHoursSpreadsheetControl()
+        private void PopulateForecastHoursSpreadsheetControl(List<Week> weekList)
         {
+            IWorkbook workbook = spreadsheetControl1.Document;
+            Worksheet worksheet1 = workbook.Worksheets["Weekly Hrs"];
+            Worksheet worksheet2 = workbook.Worksheets["Daily Hrs"];
+            List<Week> currentWeekList1, currentWeekList2;
+            DateTime currentDate1, currentDate2;
+            DateTime wsDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            DateTime date = DateTime.Today;
 
+            spreadsheetControl1.BeginUpdate();
+
+            for (int c = 2; c <= 20; c++)
+            {
+                worksheet1.Cells[2, c].Value = wsDate.AddDays((c - 2) * 7);
+                currentDate1 = DateTime.Parse(worksheet1.Cells[2, c].Value.ToString());
+                currentWeekList1 = weekList.FindAll(x => x.WeekStart == currentDate1);
+
+                worksheet2.Cells[2, c].Value = GeneralOperations.AddBusinessDays(date, c - 2);
+                currentDate2 = DateTime.Parse(worksheet2.Cells[2, c].Value.ToString());
+                currentWeekList2 = weekList.FindAll(x => x.WeekStart <= currentDate2 && x.WeekEnd >= currentDate2);
+
+                for (int r = 3; r <= 15; r++)
+                {
+                    worksheet1.Cells[r, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r, 1].Value.ToString())).GetWeekHours(),1);
+
+                    worksheet2.Cells[r, c].Value = Decimal.Round(currentWeekList2.Find(x => x.Department.Contains(worksheet2.Cells[r, 1].Value.ToString())).DayList.Find(x => x.Date == currentDate2).Hours,1);
+                }
+            }
+
+            spreadsheetControl1.EndUpdate();
+        }
+
+        public string SaveExcelFile(string fileName)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = @"C:\Users\" + Environment.UserName + @"\Desktop";
+            saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx"; // Text files (*.txt)|*.txt|
+            saveFileDialog.FilterIndex = 0;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.CreatePrompt = false;
+            saveFileDialog.FileName = fileName;
+            saveFileDialog.Title = "Save Chart Data";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Save. The selected path can be got with saveFileDialog.FileName.ToString()
+                return saveFileDialog.FileName.ToString();
+            }
+            else
+            {
+                return "";
+            }
         }
 
         private void PopulateTimeFrameComboBox()
@@ -3600,21 +3647,11 @@ namespace Toolroom_Project_Viewer
 
             return deptCapacityDT.AsEnumerable().Where(p => p.Field<string>("Department") == department).Select(p => p.Field<int>("DailyCapacity")).FirstOrDefault();
         }
-
         private void GetOverallToolRoomHours()
         {
+            List<TaskModel> taskList = new List<TaskModel>();
             List<Week> weeksList = new List<Week>();
             List<string> departmentList = new List<string>();
-            string resourceType = "Department";
-
-            //if (resourceType == "Department")
-            //{
-
-            //}
-            //else if (resourceType == "Personnel")
-            //{
-            //    departmentList = Database.GetAllResourcesOfType("Person");
-            //}
 
             departmentList = Database.GetDepartments();
 
@@ -3622,19 +3659,16 @@ namespace Toolroom_Project_Viewer
             {
                 string weekStart, weekEnd;
 
-                weekStart = timeFrameComboBoxEdit.Text.Split(' ')[0];
-                weekEnd = timeFrameComboBoxEdit.Text.Split(' ')[2];
+                weekStart = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).ToShortDateString();
+                weekEnd = DateTime.Parse(weekStart).AddDays((19 * 7 + 6)).ToShortDateString();
 
-                if (TimeUnits == "Days")
-                {
-                    weeksList = Database.GetDayHours(weekStart, weekEnd);
-                }
-                else if (TimeUnits == "Weeks")
-                {
-                    weeksList = Database.GetWeekHours(weekStart, weekEnd, departmentList, resourceType);
-                }
+                taskList = Database.GetTasks(weekStart, weekEnd);
+
+                weeksList = GetWeeks(taskList);
 
                 LoadGraph(weeksList, departmentList);
+
+                PopulateForecastHoursSpreadsheetControl(weeksList);
             }
         }
         private string GetResourceType()
@@ -3664,7 +3698,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -3694,6 +3729,26 @@ namespace Toolroom_Project_Viewer
         private void chartRadioGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
             chartViewNavigationFrame.SelectedPageIndex = chartRadioGroup.SelectedIndex;
+
+            if (chartRadioGroup.SelectedIndex == 1)
+            {
+                exportButton.Visible = true;
+            }
+            else
+            {
+                exportButton.Visible = false;
+            }
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            DateTime date = DateTime.Today;
+            string fileName = SaveExcelFile($"Forecast Hours {date.Month}-{date.Day}-{date.Year}");
+
+            if (fileName.Length > 0)
+            {
+                spreadsheetControl1.Document.SaveDocument(fileName);
+            }            
         }
 
         #endregion
