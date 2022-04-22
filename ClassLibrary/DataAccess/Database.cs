@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "LocalSqlServerDB";  // LocalSqlServerDB
+        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -697,175 +697,6 @@ namespace ClassLibrary
             return jobNumberList;
         }
 
-        private static string SetWeeklyHoursQueryString(string weekStart, string weekEnd)
-        {
-            string department = "All";
-            string queryString = null;
-            string selectStatment = "Projects.JobNumber, Projects.ProjectNumber, TaskName, Duration, Tasks.StartDate, FinishDate, Personnel, Hours";
-            //string fromStatement = "Tasks";
-            string whereStatement = "(Tasks.StartDate BETWEEN '" + weekStart + "' AND '" + weekEnd + "') AND Projects.IncludeHours = 1 AND (Tasks.Status IS NULL OR NOT Tasks.Status = 'Completed')";
-            string orderByStatement = "ORDER BY Tasks.StartDate ASC";
-            //string groupByStatement = "GROUP BY ";
-
-            if (department == "All") // This if statement will always be true until method is changed.
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks INNER JOIN Projects ON Tasks.ProjectNumber = Projects.ProjectNumber WHERE  " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Design")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Design%' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Rough")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Rough' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Finish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Finish' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Program Electrodes")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'Program Electrodes' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Rough")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Rough' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Finish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Finish' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "CNC Electrodes")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'CNC Electrodes' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "EDM Sinker")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName = 'EDM Sinker' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Inspection")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE 'Inspection%' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Grind")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Grind%' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "Polish")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks WHERE TaskName LIKE '%Polish%' AND " + whereStatement + " " + orderByStatement;
-            }
-            else if (department == "All")
-            {
-                queryString = "SELECT " + selectStatment + " FROM Tasks INNER JOIN Projects ON Tasks.ProjectNumber = Projects.ProjectNumber WHERE  " + whereStatement + " " + orderByStatement;
-            }
-
-            return queryString;
-        }
-
-        public static List<Week> GetDayHours(string weekStart, string weekEnd)
-        {
-            List<Week> weeks = new List<Week>();
-
-            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-            {
-                SqlCommand cmd = new SqlCommand("dbo.spGetWeekHours", connection);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@WeekStart", SqlDbType.VarChar).Value = weekStart;
-                cmd.Parameters.Add("@WeekEnd", SqlDbType.VarChar).Value = weekEnd;
-
-                string[] departmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind" };
-
-                foreach (string item in departmentArr)
-                {
-                    weeks.Add(new Week(item));
-                }
-
-                connection.Open();
-
-                using (var rdr = cmd.ExecuteReader())
-                {
-                    if (rdr.HasRows)
-                    {
-                        while (rdr.Read())
-                        {
-                            if (rdr["TaskName"].ToString() == "Design")
-                            {
-                                weeks[0].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "Program Rough")
-                            {
-                                weeks[1].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "Program Finish")
-                            {
-                                weeks[2].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "Program Electrodes")
-                            {
-                                weeks[3].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "CNC Rough")
-                            {
-                                weeks[4].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "CNC Finish")
-                            {
-                                weeks[5].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "CNC Electrodes")
-                            {
-                                weeks[6].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "EDM Sinker")
-                            {
-                                weeks[7].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "EDM Wire (In-House)")
-                            {
-                                weeks[8].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString() == "Polish (In-House)")
-                            {
-                                weeks[9].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString().Contains("Inspection"))
-                            {
-                                weeks[10].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-                            else if (rdr["TaskName"].ToString().Contains("Grind"))
-                            {
-                                weeks[11].AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-                            }
-
-                            //Console.WriteLine($"{rdr["TaskName"]} {rdr["StartDate"]} {rdr["Hours"]}");
-                        }
-                    }
-                    else
-                    {
-
-                    }
-
-
-                } 
-            }
-
-            foreach (Week week in weeks)
-            {
-                Console.WriteLine("");
-                Console.WriteLine(week.Department);
-
-                foreach (Day day in week.DayList)
-                {
-                    Console.WriteLine($"{day.DayName} {(int)day.Hours}");
-                }
-            }
-
-            return weeks;
-        }
-
         public static List<string> GetDepartments()
         {
             return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind", "Mold Service" };
@@ -874,157 +705,10 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                List<TaskModel> tasks = connection.Query<TaskModel>("dbo.spGetWeekHours @WeekStart @Weekend", new { WeekStart = weekStart, WeekEnd = weekEnd }).ToList();
+                List<TaskModel> tasks = connection.Query<TaskModel>("dbo.spGetWeekHours @WeekStart, @WeekEnd", new { WeekStart = weekStart, WeekEnd = weekEnd }).ToList();
 
                 return tasks;
             }
-        }
-        public static List<Week> GetWeekHours(string weekStart, string weekEnd, List<string> departmentList, string resourceType)
-        {
-            List<Week> weekList = new List<Week>();
-            List<Week> deptWeekList = new List<Week>();
-            Week weekTemp;
-            DateTime wsDate = Convert.ToDateTime(weekStart);
-            int weekNum;
-            Stopwatch stopwatch = new Stopwatch();
-
-            using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
-            {
-                SqlCommand cmd = new SqlCommand("dbo.spGetWeekHours", connection);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@WeekStart", SqlDbType.VarChar).Value = weekStart;
-                cmd.Parameters.Add("@WeekEnd", SqlDbType.VarChar).Value = weekEnd;
-
-                weekList = InitializeDeptWeeksList(wsDate, departmentList);
-
-                //Console.WriteLine("\nLoad");
-
-                connection.Open();
-
-                stopwatch.Start();
-
-                using (var rdr = cmd.ExecuteReader())
-                {
-                    if (rdr.HasRows)
-                    {
-                        while (rdr.Read())
-                        {
-                            //Console.WriteLine($"{++count} {rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {rdr["Hours"].ToString()}");
-
-                            if (resourceType == "Department")
-                            {
-                                var weeks = from wk in weekList
-                                            where (rdr["TaskName"].ToString().StartsWith(wk.Department) || (rdr["TaskName"].ToString().Contains("Grind") && rdr["TaskName"].ToString().Contains(wk.Department))) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
-                                            orderby wk.WeekNum ascending
-                                            select wk;
-
-                                deptWeekList = weeks.ToList();
-                            }
-                            else if (resourceType == "Personnel")
-                            {
-                                var weeks = from wk in weekList
-                                            where (rdr["Resource"].ToString().Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
-                                            orderby wk.WeekNum ascending
-                                            select wk;
-
-                                deptWeekList = weeks.ToList();
-                            }
-
-                            if (deptWeekList.Any())
-                            {
-                                weekTemp = deptWeekList.Find(x => x.WeekStart <= Convert.ToDateTime(rdr["StartDate"]) && x.WeekEnd >= Convert.ToDateTime(rdr["StartDate"]));
-                                weekNum = weekTemp.WeekNum;
-                                //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
-
-                                //Console.WriteLine(rdr["Duration"].ToString());
-
-                                //Console.WriteLine($"{rdr["JobNumber"].ToString()}-{rdr["ProjectNumber"].ToString()} {rdr["TaskName"].ToString()} {rdr["Duration"].ToString()} {Convert.ToDateTime(rdr["StartDate"]).ToShortDateString()} {Convert.ToDateTime(rdr["FinishDate"]).ToShortDateString()} {rdr["Hours"].ToString()}");
-
-                                double hours = Convert.ToInt32(rdr["Hours"]);
-                                double days = (int)GetBusinessDays(Convert.ToDateTime(rdr["StartDate"]), Convert.ToDateTime(rdr["FinishDate"]));
-                                DateTime date = Convert.ToDateTime(rdr["StartDate"]);
-                                decimal dailyAVG;
-
-                                if (days == 0)
-                                {
-                                    dailyAVG = (decimal)hours;
-                                }
-                                else
-                                {
-                                    dailyAVG = (decimal)(hours / days);
-                                }
-
-                                if (days >= 1)
-                                {
-                                    while (days > 0)
-                                    {
-                                        if (date.DayOfWeek == DayOfWeek.Saturday)
-                                        {
-                                            date = date.AddDays(1);
-
-                                            weekNum++;
-
-                                            if (weekNum > 20)
-                                            {
-                                                goto MyEnd;
-                                            }
-
-                                            //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
-                                            weekTemp = deptWeekList[weekNum - 1];
-                                            //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                            //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
-                                        }
-                                        else
-                                        {
-                                            weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                            //if (weekTemp.Department == "CNC Finish")
-                                            //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
-                                            days -= 1;
-                                        }
-
-
-                                        date = date.AddDays(1);
-                                    }
-                                }
-                                else
-                                {
-                                    weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
-                                    //if (weekTemp.Department == "CNC Finish")
-                                    //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                    }
-                } 
-            }
-
-            TimeSpan ts = stopwatch.Elapsed;
-
-            // Format and display the TimeSpan value.
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                ts.Hours, ts.Minutes, ts.Seconds,
-                ts.Milliseconds / 10);
-
-            Console.WriteLine("RunTime " + elapsedTime);  // Stored procedure took .1 seconds vs over 2 seconds using in code query.
-
-            stopwatch.Stop();
-
-            MyEnd:;
-
-            //Console.WriteLine("\nReview:");
-
-            //foreach (Week week in weekList)
-            //{
-            //    Console.WriteLine($"{week.Department} {week.GetWeekHours()} {week.WeekStart.ToShortDateString()} - {week.WeekEnd.ToShortDateString()}");
-            //}
-
-            return weekList;
         }
 
         private static string SetQueryString(string department)
@@ -2104,29 +1788,59 @@ namespace ClassLibrary
         public static double GetBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
-                1 + ((endD - startD).TotalDays * 5 -
+                ((endD - startD).TotalDays * 5 -
                 (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
 
-            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
+            if (endD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
             if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
 
             return calcBusinessDays;
         }
-
-        // Creates a weeklist with 20 weeks for each department.
-        public static List<Week> InitializeDeptWeeksList(DateTime wsDate, List<string> departmentArr)
+        // Save for future use in excluding holidays from schedule.
+        public static int BusinessDaysUntil(DateTime firstDay, DateTime lastDay, params DateTime[] bankHolidays)
         {
-            List<Week> weekList = new List<Week>();
+            firstDay = firstDay.Date;
+            lastDay = lastDay.Date;
+            if (firstDay > lastDay)
+                    throw new ArgumentException("Incorrect last day " + lastDay);
 
-            for (int i = 1; i <= 20; i++)
+                TimeSpan span = lastDay - firstDay;
+            int businessDays = span.Days + 1;
+            int fullWeekCount = businessDays / 7;
+            // find out if there are weekends during the time exceedng the full weeks
+            if (businessDays > fullWeekCount*7)
             {
-                foreach (string department in departmentArr)
+                // we are here to find out if there is a 1-day or 2-days weekend
+                // in the time interval remaining after subtracting the complete weeks
+                int firstDayOfWeek = firstDay.DayOfWeek == DayOfWeek.Sunday
+                    ? 7 : (int)firstDay.DayOfWeek;
+                int lastDayOfWeek = lastDay.DayOfWeek == DayOfWeek.Sunday
+                    ? 7 : (int)lastDay.DayOfWeek;
+                if (lastDayOfWeek < firstDayOfWeek)
+                    lastDayOfWeek += 7;
+                if (firstDayOfWeek <= 6)
                 {
-                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));
+                    if (lastDayOfWeek >= 7)// Both Saturday and Sunday are in the remaining time interval
+                        businessDays -= 2;
+                    else if (lastDayOfWeek >= 6)// Only Saturday is in the remaining time interval
+                        businessDays -= 1;
                 }
+                else if (firstDayOfWeek <= 7 && lastDayOfWeek >= 7)// Only Sunday is in the remaining time interval
+                    businessDays -= 1;
             }
 
-            return weekList;
+            // subtract the weekends during the full weeks in the interval
+            businessDays -= fullWeekCount + fullWeekCount;
+
+            // subtract the number of bank holidays during the time interval
+            foreach (DateTime bankHoliday in bankHolidays)
+            {
+                DateTime bh = bankHoliday.Date;
+                if (firstDay <= bh && bh <= lastDay)
+                    --businessDays;
+            }
+
+            return businessDays;
         }
     }
 }

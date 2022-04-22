@@ -37,9 +37,9 @@ namespace ClassLibrary
             string[] dayNameList = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             this.DayList = new List<Day>();
 
-            foreach (string dayName in dayNameList)
+            for (int i = 0; i <= 6; i++)
             {
-                this.DayList.Add(new Day(dayName));
+                this.DayList.Add(new Day(dayNameList[i], weekStart.AddDays(i)));
             }
         }
         /// <summary>
@@ -182,12 +182,19 @@ namespace ClassLibrary
 
     public class Day
     {
+        public DateTime Date { get; set; }
         public string DayName { get; private set; }
         public decimal Hours { get; private set; }
 
         public Day (string dayName)
         {
             this.DayName = dayName;
+        }
+
+        public Day(string dayName, DateTime date)
+        {
+            this.DayName = dayName;
+            this.Date = date;
         }
 
         public void AddHours(decimal hours)
