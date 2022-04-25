@@ -330,7 +330,9 @@
     <None Include="Resources\Forecasted_Hours.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Kan Ban Base File.xlsm" />
+    <None Include="Resources\Kan Ban Base File.xlsm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Toolroom Project Viewer_1_TemporaryKey.pfx" />
     <None Include="Toolroom Project Viewer_TemporaryKey.pfx" />
     <None Include="Workload_Tracking_System_DBDataSet.xsc">

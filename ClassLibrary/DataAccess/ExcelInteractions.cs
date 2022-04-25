@@ -18,7 +18,8 @@ namespace ClassLibrary
     {
         private static readonly string ColorPrinterString = "P-1336 HP CP5225 - Color";
         private readonly string XPSDocWriterString = "Microsoft XPS Document Writer";
-        private static string KanBanBaseFilePath = @"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm";
+        private static string KanBanBaseFilePath2 = @"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm";
+        private static string KanBanBaseFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\Resources\Kan Ban Base File.xlsm";
         private static string KanBanSheetCode = 
                    "Function IsMarkedComplete(row As Integer) As String\r\n" +
                    "\r\n" +
@@ -664,8 +665,8 @@ namespace ClassLibrary
                 return "";
             }
 
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             using (var wb = new XLWorkbook(KanBanBaseFilePath, XLEventTracking.Disabled))
             {
@@ -842,10 +843,10 @@ namespace ClassLibrary
                     Process.Start(kanBanSavePath); // Opens up generated Kan Ban.
                 }
 
-                //sw.Stop();
-                //MessageBox.Show($"Kan Ban Generated: {sw.ElapsedMilliseconds}");
+                sw.Stop();
+                MessageBox.Show($"Kan Ban Generated: {sw.ElapsedMilliseconds}");
 
-                
+
 
                 return kanBanSavePath;
             }

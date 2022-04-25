@@ -1987,7 +1987,6 @@ namespace Toolroom_Project_Viewer
                         {
                             return;
                         }
-
                     }
                     else
                     {
