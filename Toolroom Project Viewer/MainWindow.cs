@@ -121,7 +121,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
+                MessageBox.Show(e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -181,7 +182,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -883,13 +885,12 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
-                RefreshDepartmentScheduleView();
-
-                
+                RefreshDepartmentScheduleView();                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
@@ -1125,7 +1126,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -1151,7 +1153,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
 
