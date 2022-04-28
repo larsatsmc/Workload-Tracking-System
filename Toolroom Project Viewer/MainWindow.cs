@@ -94,28 +94,16 @@ namespace Toolroom_Project_Viewer
                 changeViewRadioGroup.SelectedIndex = 0;
                 chartRadioGroup.SelectedIndex = 0;
 
-                schedulerControl1.Start = DateTime.Today.AddDays(-7);
-                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.Custom;
-                schedulerControl1.AllowAppointmentDelete += new AppointmentOperationEventHandler(schedulerControl1_AllowAppointmentDelete);
-
                 PopulateDepartmentComboBoxes();
                 PopulateProjectComboBox();
                 PopulateProjectComboBox2();
                 PopulateTimeFrameComboBox();               
 
-                schedulerStorage2.Appointments.CommitIdToDataSource = false;
-                
-                schedulerControl2.Start = DateTime.Today.AddDays(-7);
-                schedulerControl2.Views.GanttView.ResourcesPerPage = 15;
-                schedulerControl2.GroupType = SchedulerGroupType.Resource;
-                schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
+                schedulerStorage2.Appointments.CommitIdToDataSource = false;               
 
                 string forecastedHoursSheetPath = AppDomain.CurrentDomain.BaseDirectory + @"\Resources\Forecasted_Hours.xlsx";
 
                 spreadsheetControl1.LoadDocument(forecastedHoursSheetPath);
-
-                schedulerControl3.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
-                schedulerControl3.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
 
                 if (ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
                 {
@@ -164,15 +152,32 @@ namespace Toolroom_Project_Viewer
                 gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false, filterTasksByDatesCheckEdit.Checked);
                 gridView3.ActiveFilterCriteria = CriteriaOperator.And(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
                 //MessageBox.Show($"{schedulerControl1.TimelineView.GetBaseTimeScale().Width}"); 
+
+                schedulerControl1.Start = DateTime.Today.AddDays(-7);
+                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.Custom;
+                schedulerControl1.AllowAppointmentDelete += new AppointmentOperationEventHandler(schedulerControl1_AllowAppointmentDelete);
                 schedulerControl1.GanttView.GetBaseTimeScale().Width = 60;
                 schedulerControl1.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl1.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl1.OptionsCustomization.AllowDisplayAppointmentForm = AllowDisplayAppointmentForm.Never;
+                schedulerControl1.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
+
+                schedulerControl2.Start = DateTime.Today.AddDays(-7);
+                schedulerControl2.Views.GanttView.ResourcesPerPage = 15;
+                schedulerControl2.GroupType = SchedulerGroupType.Resource;
+                schedulerControl2.ActiveViewType = SchedulerViewType.Gantt;
+                schedulerControl2.OptionsCustomization.AllowDisplayAppointmentForm = AllowDisplayAppointmentForm.Never;
+                schedulerControl2.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
 
                 schedulerControl3.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl3.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl3.TimelineView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl3.TimelineView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.OptionsCustomization.AllowDisplayAppointmentForm = AllowDisplayAppointmentForm.Never;
+                schedulerControl3.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
+                schedulerControl3.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+                schedulerControl3.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
             }
             catch (Exception ex)
             {
@@ -541,6 +546,74 @@ namespace Toolroom_Project_Viewer
             return AppointmentResourceIdCollectionXmlPersistenceHelper.ObjectFromXml(result, xml);
         }
 
+        private Color GetDeptColor(string department)
+        {
+            Color departmentColor;
+
+            if (department == "Design")
+            {
+                departmentColor = Color.LightBlue;
+            }
+            else if (department == "Program Rough")
+            {
+                departmentColor = Color.LightCoral;
+            }
+            else if (department == "Program Electrodes")
+            {
+                departmentColor = Color.LightGreen;
+            }
+            else if (department == "Program Finish")
+            {
+                departmentColor = Color.LightPink;
+            }
+            else if (department == "CNC Rough")
+            {
+                departmentColor = Color.Orange;
+            }
+            else if (department == "CNC Electrodes")
+            {
+                departmentColor = Color.Green;
+            }
+            else if (department == "CNC Finish")
+            {
+                departmentColor = Color.Aquamarine;
+            }
+            else if (department == "EDM Sinker")
+            {
+                departmentColor = Color.DodgerBlue;
+            }
+            else if (department.Contains("Grind"))
+            {
+                departmentColor = Color.NavajoWhite;
+            }
+            else if (department == "Heat Treat")
+            {
+                departmentColor = Color.Red;
+            }
+            else if (department.Contains("EDM Wire"))
+            {
+                departmentColor = Color.Gold;
+            }
+            else if (department.Contains("Polish"))
+            {
+                departmentColor = Color.Aqua;
+            }
+            else if (department.Contains("Inspection"))
+            {
+                departmentColor = Color.BlueViolet;
+            }
+            else if (department == "Hole Pop")
+            {
+                departmentColor = Color.Honeydew;
+            }
+            else
+            {
+                departmentColor = Color.LightGray;
+            }
+
+            return departmentColor;
+        }
+
         private void SetTasks()
         {
             string department = departmentComboBox.Text;
@@ -615,7 +688,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (department == "All")
             {
-                Tasks = "All";
+                Tasks = ".*";
             }
 
             TaskRegExpression = new Regex(Tasks);
@@ -1012,6 +1085,10 @@ namespace Toolroom_Project_Viewer
                     }
                 }
             }
+            else
+            {
+                e.Menu = null;
+            }
         }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
@@ -1019,16 +1096,13 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                if (Tasks != "All")
+                if (AllProjectItemsChecked == false)
                 {
-                    if (AllProjectItemsChecked == false)
-                    {
-                        e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch(apt.Location)).Any(); // 
-                    }
-                    else
-                    {
-                        e.Cancel = !TaskRegExpression.IsMatch(apt.Location);
-                    }
+                    e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch(apt.Location)).Any(); // 
+                }
+                else
+                {
+                    e.Cancel = !TaskRegExpression.IsMatch(apt.Location);
                 }
 
                 if (includeCompletesCheckEdit.Checked == false)
@@ -1078,6 +1152,14 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
+
+        private void schedulerControl1_AppointmentViewInfoCustomizing(object sender, AppointmentViewInfoCustomizingEventArgs e)
+        {
+            if (Tasks == ".*")
+            {
+                e.ViewInfo.Appearance.BackColor = GetDeptColor(e.ViewInfo.Appointment.CustomFields["TaskName"].ToString());
             }
         }
 

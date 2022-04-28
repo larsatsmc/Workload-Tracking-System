@@ -29,39 +29,39 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.RangeControlRange rangeControlRange3 = new DevExpress.XtraEditors.RangeControlRange();
-            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.SideBySideBarSeriesLabel sideBySideBarSeriesLabel2 = new DevExpress.XtraCharts.SideBySideBarSeriesLabel();
+            DevExpress.XtraEditors.RangeControlRange rangeControlRange1 = new DevExpress.XtraEditors.RangeControlRange();
+            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesLabel sideBySideBarSeriesLabel1 = new DevExpress.XtraCharts.SideBySideBarSeriesLabel();
             DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::Toolroom_Project_Viewer.MainSplashScreen), true, true);
-            DevExpress.XtraEditors.RangeControlRange rangeControlRange4 = new DevExpress.XtraEditors.RangeControlRange();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule5 = new DevExpress.XtraGrid.GridFormatRule();
-            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar4 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule6 = new DevExpress.XtraGrid.GridFormatRule();
-            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar5 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
-            DevExpress.XtraGrid.GridFormatRule gridFormatRule7 = new DevExpress.XtraGrid.GridFormatRule();
-            DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression2 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
+            DevExpress.XtraEditors.RangeControlRange rangeControlRange2 = new DevExpress.XtraEditors.RangeControlRange();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule1 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar1 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridFormatRule gridFormatRule2 = new DevExpress.XtraGrid.GridFormatRule();
             DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar2 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
-            DevExpress.XtraScheduler.TimeRuler timeRuler10 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler11 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeScaleYear timeScaleYear2 = new DevExpress.XtraScheduler.TimeScaleYear();
-            DevExpress.XtraScheduler.TimeScaleQuarter timeScaleQuarter2 = new DevExpress.XtraScheduler.TimeScaleQuarter();
-            DevExpress.XtraScheduler.TimeScaleMonth timeScaleMonth2 = new DevExpress.XtraScheduler.TimeScaleMonth();
-            DevExpress.XtraScheduler.TimeScaleWeek timeScaleWeek2 = new DevExpress.XtraScheduler.TimeScaleWeek();
-            DevExpress.XtraScheduler.TimeScaleDay timeScaleDay2 = new DevExpress.XtraScheduler.TimeScaleDay();
-            DevExpress.XtraScheduler.TimeScaleHour timeScaleHour2 = new DevExpress.XtraScheduler.TimeScaleHour();
-            DevExpress.XtraScheduler.TimeScale15Minutes timeScale15Minutes2 = new DevExpress.XtraScheduler.TimeScale15Minutes();
-            DevExpress.XtraScheduler.TimeRuler timeRuler12 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule3 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression1 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
+            DevExpress.XtraGrid.GridFormatRule gridFormatRule4 = new DevExpress.XtraGrid.GridFormatRule();
+            DevExpress.XtraEditors.FormatConditionRuleDataBar formatConditionRuleDataBar3 = new DevExpress.XtraEditors.FormatConditionRuleDataBar();
+            DevExpress.XtraScheduler.TimeRuler timeRuler1 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler2 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeScaleYear timeScaleYear1 = new DevExpress.XtraScheduler.TimeScaleYear();
+            DevExpress.XtraScheduler.TimeScaleQuarter timeScaleQuarter1 = new DevExpress.XtraScheduler.TimeScaleQuarter();
+            DevExpress.XtraScheduler.TimeScaleMonth timeScaleMonth1 = new DevExpress.XtraScheduler.TimeScaleMonth();
+            DevExpress.XtraScheduler.TimeScaleWeek timeScaleWeek1 = new DevExpress.XtraScheduler.TimeScaleWeek();
+            DevExpress.XtraScheduler.TimeScaleDay timeScaleDay1 = new DevExpress.XtraScheduler.TimeScaleDay();
+            DevExpress.XtraScheduler.TimeScaleHour timeScaleHour1 = new DevExpress.XtraScheduler.TimeScaleHour();
+            DevExpress.XtraScheduler.TimeScale15Minutes timeScale15Minutes1 = new DevExpress.XtraScheduler.TimeScale15Minutes();
+            DevExpress.XtraScheduler.TimeRuler timeRuler3 = new DevExpress.XtraScheduler.TimeRuler();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            DevExpress.XtraScheduler.TimeRuler timeRuler13 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler14 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler15 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler16 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler17 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler18 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler5 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler6 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler7 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler8 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler9 = new DevExpress.XtraScheduler.TimeRuler();
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
             this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
@@ -232,6 +232,7 @@
             this.copyButton = new DevExpress.XtraEditors.SimpleButton();
             this.RefreshProjectsButton = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
+            this.exportButton = new DevExpress.XtraEditors.SimpleButton();
             this.chartRadioGroup = new DevExpress.XtraEditors.RadioGroup();
             this.chartViewNavigationFrame = new DevExpress.XtraBars.Navigation.NavigationFrame();
             this.chartNavigationPage = new DevExpress.XtraBars.Navigation.NavigationPage();
@@ -268,12 +269,11 @@
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.componentsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.componentsTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.ComponentsTableAdapter();
-            this.exportButton = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
@@ -358,10 +358,10 @@
             this.rangeControl1.Location = new System.Drawing.Point(12, 849);
             this.rangeControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rangeControl1.Name = "rangeControl1";
-            rangeControlRange3.Maximum = 9.6D;
-            rangeControlRange3.Minimum = -0.6D;
-            rangeControlRange3.Owner = this.rangeControl1;
-            this.rangeControl1.SelectedRange = rangeControlRange3;
+            rangeControlRange1.Maximum = 9.6D;
+            rangeControlRange1.Minimum = -0.6D;
+            rangeControlRange1.Owner = this.rangeControl1;
+            this.rangeControl1.SelectedRange = rangeControlRange1;
             this.rangeControl1.Size = new System.Drawing.Size(1492, 52);
             this.rangeControl1.TabIndex = 16;
             this.rangeControl1.Text = "rangeControl1";
@@ -375,23 +375,23 @@
             this.chartControl1.CrosshairOptions.GroupHeaderPattern = "{A}";
             this.chartControl1.CrosshairOptions.HighlightPoints = false;
             this.chartControl1.DataSource = this.workload_Tracking_System_DBDataSet.Machines;
-            xyDiagram2.AxisX.Tickmarks.MinorVisible = false;
-            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
-            this.chartControl1.Diagram = xyDiagram2;
+            xyDiagram1.AxisX.Tickmarks.MinorVisible = false;
+            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
+            this.chartControl1.Diagram = xyDiagram1;
             this.chartControl1.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl1.Location = new System.Drawing.Point(10, 10);
             this.chartControl1.Margin = new System.Windows.Forms.Padding(5);
             this.chartControl1.Name = "chartControl1";
-            series2.Name = "Hours";
+            series1.Name = "Hours";
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series2};
+        series1};
             this.chartControl1.SeriesTemplate.CrosshairLabelPattern = "{A}:{V}";
-            sideBySideBarSeriesLabel2.ResolveOverlappingMode = DevExpress.XtraCharts.ResolveOverlappingMode.Default;
-            sideBySideBarSeriesLabel2.TextPattern = "{A}-{V}";
-            this.chartControl1.SeriesTemplate.Label = sideBySideBarSeriesLabel2;
+            sideBySideBarSeriesLabel1.ResolveOverlappingMode = DevExpress.XtraCharts.ResolveOverlappingMode.Default;
+            sideBySideBarSeriesLabel1.TextPattern = "{A}-{V}";
+            this.chartControl1.SeriesTemplate.Label = sideBySideBarSeriesLabel1;
             this.chartControl1.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl1.SeriesTemplate.SeriesColorizer = null;
             this.chartControl1.SeriesTemplate.ToolTipSeriesPattern = "{S}-";
@@ -413,10 +413,10 @@
             this.rangeControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rangeControl2.Location = new System.Drawing.Point(10, 660);
             this.rangeControl2.Name = "rangeControl2";
-            rangeControlRange4.Maximum = 9.6D;
-            rangeControlRange4.Minimum = -0.6D;
-            rangeControlRange4.Owner = this.rangeControl2;
-            this.rangeControl2.SelectedRange = rangeControlRange4;
+            rangeControlRange2.Maximum = 9.6D;
+            rangeControlRange2.Minimum = -0.6D;
+            rangeControlRange2.Owner = this.rangeControl2;
+            this.rangeControl2.SelectedRange = rangeControlRange2;
             this.rangeControl2.Size = new System.Drawing.Size(1570, 66);
             this.rangeControl2.TabIndex = 19;
             this.rangeControl2.Text = "rangeControl2";
@@ -453,18 +453,18 @@
             this.colSpares,
             this.colStatus2,
             this.colPercentComplete});
-            gridFormatRule5.Column = this.colPercentComplete;
-            gridFormatRule5.Name = "Format0";
-            formatConditionRuleDataBar4.Maximum = new decimal(new int[] {
+            gridFormatRule1.Column = this.colPercentComplete;
+            gridFormatRule1.Name = "Format0";
+            formatConditionRuleDataBar1.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            formatConditionRuleDataBar4.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar4.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar4.PredefinedName = "Blue";
-            gridFormatRule5.Rule = formatConditionRuleDataBar4;
-            this.gridView4.FormatRules.Add(gridFormatRule5);
+            formatConditionRuleDataBar1.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar1.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar1.PredefinedName = "Blue";
+            gridFormatRule1.Rule = formatConditionRuleDataBar1;
+            this.gridView4.FormatRules.Add(gridFormatRule1);
             this.gridView4.GridControl = this.gridControl3;
             this.gridView4.Name = "gridView4";
             this.gridView4.OptionsBehavior.EditingMode = DevExpress.XtraGrid.Views.Grid.GridEditingMode.Inplace;
@@ -617,14 +617,14 @@
             this.gridControl3.DataSource = this.projectsBindingSource;
             this.gridControl3.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl3.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            gridLevelNode3.LevelTemplate = this.gridView4;
-            gridLevelNode4.LevelTemplate = this.gridView5;
-            gridLevelNode4.RelationName = "Tasks";
-            gridLevelNode3.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode4});
-            gridLevelNode3.RelationName = "Components";
+            gridLevelNode1.LevelTemplate = this.gridView4;
+            gridLevelNode2.LevelTemplate = this.gridView5;
+            gridLevelNode2.RelationName = "Tasks";
+            gridLevelNode1.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode2});
+            gridLevelNode1.RelationName = "Components";
             this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode3});
+            gridLevelNode1});
             this.gridControl3.Location = new System.Drawing.Point(13, 41);
             this.gridControl3.MainView = this.projectBandedGridView;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -1109,28 +1109,28 @@
             this.colDateModified,
             this.colLastKanBanGenerationDate,
             this.colLatestFinishDate});
-            gridFormatRule6.Column = this.colPercentComplete1;
-            gridFormatRule6.ColumnApplyTo = this.colPercentComplete1;
-            gridFormatRule6.Name = "PercentCompleteFormat";
-            formatConditionRuleDataBar5.Maximum = new decimal(new int[] {
+            gridFormatRule2.Column = this.colPercentComplete1;
+            gridFormatRule2.ColumnApplyTo = this.colPercentComplete1;
+            gridFormatRule2.Name = "PercentCompleteFormat";
+            formatConditionRuleDataBar2.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            formatConditionRuleDataBar5.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar5.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar5.PredefinedName = "Blue";
-            gridFormatRule6.Rule = formatConditionRuleDataBar5;
-            gridFormatRule7.Column = this.colDueDate1;
-            gridFormatRule7.ColumnApplyTo = this.colDueDate1;
-            gridFormatRule7.Name = "DueDateViolated";
-            formatConditionRuleExpression2.Appearance.BackColor = System.Drawing.Color.Red;
-            formatConditionRuleExpression2.Appearance.ForeColor = System.Drawing.Color.White;
-            formatConditionRuleExpression2.Appearance.Options.UseBackColor = true;
-            formatConditionRuleExpression2.Appearance.Options.UseForeColor = true;
-            gridFormatRule7.Rule = formatConditionRuleExpression2;
-            this.gridView3.FormatRules.Add(gridFormatRule6);
-            this.gridView3.FormatRules.Add(gridFormatRule7);
+            formatConditionRuleDataBar2.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar2.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar2.PredefinedName = "Blue";
+            gridFormatRule2.Rule = formatConditionRuleDataBar2;
+            gridFormatRule3.Column = this.colDueDate1;
+            gridFormatRule3.ColumnApplyTo = this.colDueDate1;
+            gridFormatRule3.Name = "DueDateViolated";
+            formatConditionRuleExpression1.Appearance.BackColor = System.Drawing.Color.Red;
+            formatConditionRuleExpression1.Appearance.ForeColor = System.Drawing.Color.White;
+            formatConditionRuleExpression1.Appearance.Options.UseBackColor = true;
+            formatConditionRuleExpression1.Appearance.Options.UseForeColor = true;
+            gridFormatRule3.Rule = formatConditionRuleExpression1;
+            this.gridView3.FormatRules.Add(gridFormatRule2);
+            this.gridView3.FormatRules.Add(gridFormatRule3);
             this.gridView3.GridControl = this.gridControl3;
             this.gridView3.Name = "gridView3";
             this.gridView3.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.True;
@@ -1494,19 +1494,19 @@
             this.DeptProgressGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.DepartmentColDPV,
             this.PercentCompleteColDPV});
-            gridFormatRule2.Column = this.PercentCompleteColDPV;
-            gridFormatRule2.ColumnApplyTo = this.PercentCompleteColDPV;
-            gridFormatRule2.Name = "PercentCompleteFormat";
-            formatConditionRuleDataBar2.Maximum = new decimal(new int[] {
+            gridFormatRule4.Column = this.PercentCompleteColDPV;
+            gridFormatRule4.ColumnApplyTo = this.PercentCompleteColDPV;
+            gridFormatRule4.Name = "PercentCompleteFormat";
+            formatConditionRuleDataBar3.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            formatConditionRuleDataBar2.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar2.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
-            formatConditionRuleDataBar2.PredefinedName = "Blue";
-            gridFormatRule2.Rule = formatConditionRuleDataBar2;
-            this.DeptProgressGridView.FormatRules.Add(gridFormatRule2);
+            formatConditionRuleDataBar3.MaximumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar3.MinimumType = DevExpress.XtraEditors.FormatConditionValueType.Number;
+            formatConditionRuleDataBar3.PredefinedName = "Blue";
+            gridFormatRule4.Rule = formatConditionRuleDataBar3;
+            this.DeptProgressGridView.FormatRules.Add(gridFormatRule4);
             this.DeptProgressGridView.GridControl = this.gridControl3;
             this.DeptProgressGridView.Name = "DeptProgressGridView";
             this.DeptProgressGridView.OptionsView.ColumnAutoWidth = false;
@@ -1680,25 +1680,26 @@
             this.schedulerControl1.Start = new System.DateTime(2018, 12, 14, 0, 0, 0, 0);
             this.schedulerControl1.TabIndex = 2;
             this.schedulerControl1.Text = "schedulerControl1";
-            this.schedulerControl1.Views.DayView.TimeRulers.Add(timeRuler10);
+            this.schedulerControl1.Views.DayView.TimeRulers.Add(timeRuler1);
             this.schedulerControl1.Views.FullWeekView.Enabled = true;
-            this.schedulerControl1.Views.FullWeekView.TimeRulers.Add(timeRuler11);
+            this.schedulerControl1.Views.FullWeekView.TimeRulers.Add(timeRuler2);
             this.schedulerControl1.Views.TimelineView.ResourcesPerPage = 5;
-            timeScaleYear2.Enabled = false;
-            timeScaleQuarter2.Enabled = false;
-            timeScaleMonth2.Enabled = false;
-            timeScaleDay2.Width = 80;
-            timeScaleHour2.Enabled = false;
-            timeScale15Minutes2.Enabled = false;
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleYear2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleQuarter2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleMonth2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleWeek2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleDay2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleHour2);
-            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScale15Minutes2);
+            timeScaleYear1.Enabled = false;
+            timeScaleQuarter1.Enabled = false;
+            timeScaleMonth1.Enabled = false;
+            timeScaleDay1.Width = 80;
+            timeScaleHour1.Enabled = false;
+            timeScale15Minutes1.Enabled = false;
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleYear1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleQuarter1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleMonth1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleWeek1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleDay1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScaleHour1);
+            this.schedulerControl1.Views.TimelineView.Scales.Add(timeScale15Minutes1);
             this.schedulerControl1.Views.WeekView.Enabled = false;
-            this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler12);
+            this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler3);
+            this.schedulerControl1.AppointmentViewInfoCustomizing += new DevExpress.XtraScheduler.AppointmentViewInfoCustomizingEventHandler(this.schedulerControl1_AppointmentViewInfoCustomizing);
             this.schedulerControl1.AllowAppointmentDrag += new DevExpress.XtraScheduler.AppointmentOperationEventHandler(this.schedulerControl1_AllowAppointmentDrag);
             this.schedulerControl1.AppointmentDrop += new DevExpress.XtraScheduler.AppointmentDragEventHandler(this.schedulerControl1_AppointmentDrop);
             this.schedulerControl1.AppointmentResized += new DevExpress.XtraScheduler.AppointmentResizeEventHandler(this.schedulerControl1_AppointmentResized);
@@ -2430,6 +2431,17 @@
             this.xtraTabPage3.Size = new System.Drawing.Size(1596, 799);
             this.xtraTabPage3.Text = "Chart View";
             // 
+            // exportButton
+            // 
+            this.exportButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
+            this.exportButton.Location = new System.Drawing.Point(609, 8);
+            this.exportButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(69, 21);
+            this.exportButton.TabIndex = 23;
+            this.exportButton.Text = "Export";
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            // 
             // chartRadioGroup
             // 
             this.chartRadioGroup.Location = new System.Drawing.Point(333, 5);
@@ -2630,13 +2642,13 @@
             this.schedulerControl2.Start = new System.DateTime(2017, 12, 18, 0, 0, 0, 0);
             this.schedulerControl2.TabIndex = 0;
             this.schedulerControl2.Text = "schedulerControl2";
-            this.schedulerControl2.Views.DayView.TimeRulers.Add(timeRuler13);
+            this.schedulerControl2.Views.DayView.TimeRulers.Add(timeRuler4);
             this.schedulerControl2.Views.FullWeekView.Enabled = true;
-            this.schedulerControl2.Views.FullWeekView.TimeRulers.Add(timeRuler14);
+            this.schedulerControl2.Views.FullWeekView.TimeRulers.Add(timeRuler5);
             this.schedulerControl2.Views.GanttView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.TimelineView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.WeekView.Enabled = false;
-            this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler15);
+            this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler6);
             this.schedulerControl2.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl2_AppointmentFlyoutShowing);
             // 
             // schedulerStorage2
@@ -2723,11 +2735,11 @@
             this.schedulerControl3.Start = new System.DateTime(2021, 1, 24, 0, 0, 0, 0);
             this.schedulerControl3.TabIndex = 12;
             this.schedulerControl3.Text = "schedulerControl3";
-            this.schedulerControl3.Views.DayView.TimeRulers.Add(timeRuler16);
+            this.schedulerControl3.Views.DayView.TimeRulers.Add(timeRuler7);
             this.schedulerControl3.Views.FullWeekView.Enabled = true;
-            this.schedulerControl3.Views.FullWeekView.TimeRulers.Add(timeRuler17);
+            this.schedulerControl3.Views.FullWeekView.TimeRulers.Add(timeRuler8);
             this.schedulerControl3.Views.WeekView.Enabled = false;
-            this.schedulerControl3.Views.WorkWeekView.TimeRulers.Add(timeRuler18);
+            this.schedulerControl3.Views.WorkWeekView.TimeRulers.Add(timeRuler9);
             this.schedulerControl3.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl3_AppointmentFlyoutShowing);
             // 
             // calendarDataStorage
@@ -2792,17 +2804,6 @@
             // 
             this.componentsTableAdapter.ClearBeforeFill = true;
             // 
-            // exportButton
-            // 
-            this.exportButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.exportButton.Location = new System.Drawing.Point(609, 8);
-            this.exportButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(69, 21);
-            this.exportButton.TabIndex = 23;
-            this.exportButton.Text = "Export";
-            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
-            // 
             // MainWindow
             // 
             this.Appearance.Options.UseFont = true;
@@ -2819,9 +2820,9 @@
             this.Text = "Toolroom Scheduler";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(sideBySideBarSeriesLabel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl2)).EndInit();
