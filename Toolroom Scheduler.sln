@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolroom Project Viewer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{EA263FF2-AFEF-4570-8909-65446FFCD783}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskViewer", "TaskViewer\TaskViewer.csproj", "{ED6612A2-4F4E-4418-8076-3202DE469559}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolRoomProjectViewer.Tests", "MainWindow.Tests\ToolRoomProjectViewer.Tests.csproj", "{532812AD-9DA7-4327-8A4A-37096A1120DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportClassLibrary", "ReportClassLibrary\ReportClassLibrary.csproj", "{E0AF6EFB-371A-44F7-82E9-498EA469ED33}"
@@ -31,10 +29,6 @@ Global
 		{EA263FF2-AFEF-4570-8909-65446FFCD783}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA263FF2-AFEF-4570-8909-65446FFCD783}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA263FF2-AFEF-4570-8909-65446FFCD783}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED6612A2-4F4E-4418-8076-3202DE469559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED6612A2-4F4E-4418-8076-3202DE469559}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED6612A2-4F4E-4418-8076-3202DE469559}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED6612A2-4F4E-4418-8076-3202DE469559}.Release|Any CPU.Build.0 = Release|Any CPU
 		{532812AD-9DA7-4327-8A4A-37096A1120DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{532812AD-9DA7-4327-8A4A-37096A1120DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{532812AD-9DA7-4327-8A4A-37096A1120DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
