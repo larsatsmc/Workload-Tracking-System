@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB
+        static readonly string SQLClientConnectionName = "LocalSqlServerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -433,6 +433,20 @@ namespace ClassLibrary
                 throw e;
             }
         }
+        public static void UpdateProject(ProjectModel project, string field)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    connection.Execute($"Update Projects SET {field} = @{field}, DateModified = GETDATE() WHERE (ID = @ID)", project);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public static bool UpdateProjectField(WorkLoadModel workLoad, CellValueChangedEventArgs ev)
         {
             try
@@ -556,6 +570,21 @@ namespace ClassLibrary
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
                     connection.Execute($"Update Components SET {ev.Column.FieldName} = @{ev.Column.FieldName}, DateModified = GETDATE() WHERE (ID = @ID)", component);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static void UpdateComponent(ComponentModel component, string field)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+                {
+                    connection.Execute($"Update Components SET {field} = @{field}, DateModified = GETDATE() WHERE (ID = @ID)", component);
                 }
             }
             catch (Exception e)
@@ -962,6 +991,8 @@ namespace ClassLibrary
             {
                 component.ForwardDate(forwardDate);
 
+                Database.UpdateComponent(component, "AllTasksDated");
+
                 tasksToUpdate.AddRange(component.Tasks);
             }
 
@@ -992,6 +1023,8 @@ namespace ClassLibrary
             foreach (ComponentModel component in selectedComponents)
             {
                 component.BackDate(backDate);
+
+                Database.UpdateComponent(component, "AllTasksDated");
 
                 tasksToUpdate.AddRange(component.Tasks);
             }
@@ -1545,7 +1578,7 @@ namespace ClassLibrary
 
         #region Create
 
-        private static string CreateColorEntryString = "INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor) VALUES (@projectID, @columnFieldName, @aRGBColor)";
+        private static string CreateColorEntryString = "INSERT INTO WorkLoadColors (ProjectID, ColumnFieldName, ARGBColor, DateModified) VALUES (@projectID, @columnFieldName, @aRGBColor, GETDATE())";
 
         public static void AddColorEntry(int projectID, string column, int aRGBColor)
         {
@@ -1570,19 +1603,21 @@ namespace ClassLibrary
             }
         }
 
-        public static void AddColorEntry(ColorStruct colorItem)
+        public static bool AddColorEntry(ColorStruct colorItem)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
                     connection.Execute(CreateColorEntryString, colorItem);
+                    return true;
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 Console.WriteLine(e.ToString());
+                return false;
             }
         }
 
@@ -1611,7 +1646,7 @@ namespace ClassLibrary
 
         #region Update
 
-        private static string UpdateWorkColorsString = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor WHERE (ProjectID = @projectID AND ColumnFieldName = @columnFieldName)";
+        private static string UpdateWorkColorsString = "UPDATE WorkLoadColors SET ARGBColor = @aRGBColor, DateModified = GETDATE() WHERE (ProjectID = @projectID AND ColumnFieldName = @columnFieldName)";
 
         public static void UpdateColorEntry(int projectID, string column, int aRGBColor)
         {

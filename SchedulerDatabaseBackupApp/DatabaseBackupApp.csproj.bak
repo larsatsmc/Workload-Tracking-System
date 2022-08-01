@@ -35,12 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.Desktop.v21.2" />
-    <Reference Include="DevExpress.Xpf.Core.v21.2" />
-    <Reference Include="DevExpress.Data.v21.2" />
-    <Reference Include="DevExpress.Printing.v21.2.Core" />
-    <Reference Include="DevExpress.Mvvm.v21.2" />
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v21.2" />
+    <Reference Include="DevExpress.Xpf.Core.v19.1" />
+    <Reference Include="DevExpress.Data.v19.1" />
+    <Reference Include="DevExpress.Printing.v19.1.Core" />
+    <Reference Include="DevExpress.Mvvm.v19.1" />
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.1" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

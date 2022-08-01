@@ -55,13 +55,13 @@
             DevExpress.XtraScheduler.TimeScaleHour timeScaleHour1 = new DevExpress.XtraScheduler.TimeScaleHour();
             DevExpress.XtraScheduler.TimeScale15Minutes timeScale15Minutes1 = new DevExpress.XtraScheduler.TimeScale15Minutes();
             DevExpress.XtraScheduler.TimeRuler timeRuler3 = new DevExpress.XtraScheduler.TimeRuler();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler5 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler6 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler7 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler8 = new DevExpress.XtraScheduler.TimeRuler();
             DevExpress.XtraScheduler.TimeRuler timeRuler9 = new DevExpress.XtraScheduler.TimeRuler();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
             this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
@@ -84,44 +84,6 @@
             this.colStatus2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridControl3 = new DevExpress.XtraGrid.GridControl();
             this.projectsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.projectBandedGridView = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
-            this.SegoeUI = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colWorkTypeBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.workTypeComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.colJobNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colProjectNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colEngineeringProjectNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colStageBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.stageComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.colCustomerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colProjectBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colMoldCostBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colDeliveryInWeeksBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.milestonesGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colStatusBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colStartDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.genericDateEdit = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.colDueDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colAdjustedDeliveryDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.personnelGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colEngineerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.personnelComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.colDesignerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colToolMakerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colRoughProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colElectrodeProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colFinishProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colApprenticeBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.generalInfoGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
-            this.colManifoldBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colMoldBaseBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colGeneralNotesBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.colIDBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.repositoryItemImageEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
-            this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
-            this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
-            this.repositoryItemHyperLinkEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
-            this.repositoryItemTextEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colJobNumber1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -133,6 +95,7 @@
             this.colPriority = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colStatus1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDesigner1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.personnelComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.colToolMaker2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colRoughProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colElectrodeProgrammer1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -142,10 +105,47 @@
             this.colOverlapAllowed = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIncludeHours = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colKanBanWorkbookPath = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemHyperLinkEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
             this.colPercentComplete1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDateModified = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colLastKanBanGenerationDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colLatestFinishDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemImageEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
+            this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
+            this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
+            this.repositoryItemTextEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.stageComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.genericDateEdit = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
+            this.workTypeComboBoxEdit = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.projectBandedGridView = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
+            this.SegoeUI = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.colWorkTypeBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colJobNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colProjectNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colEngineeringProjectNumberBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colStageBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colCustomerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colProjectBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colMoldCostBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colDeliveryInWeeksBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.milestonesGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.colStatusBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colStartDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colDueDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colAdjustedDeliveryDateBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.personnelGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.colEngineerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colDesignerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colToolMakerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colRoughProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colElectrodeProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colFinishProgrammerBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colApprenticeBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.generalInfoGridBand = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
+            this.colManifoldBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colMoldBaseBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colGeneralNotesBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
+            this.colIDBGV = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.gridView5 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID4 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colTaskName1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -281,18 +281,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workTypeComboBoxEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageComboBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workTypeComboBoxEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).BeginInit();
@@ -334,6 +334,10 @@
             this.xtraTabPage4.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).BeginInit();
+            this.splitContainerControl1.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel2)).BeginInit();
+            this.splitContainerControl1.Panel2.SuspendLayout();
             this.splitContainerControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resourcesTree1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerControl2)).BeginInit();
@@ -393,7 +397,6 @@
             sideBySideBarSeriesLabel1.TextPattern = "{A}-{V}";
             this.chartControl1.SeriesTemplate.Label = sideBySideBarSeriesLabel1;
             this.chartControl1.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            this.chartControl1.SeriesTemplate.SeriesColorizer = null;
             this.chartControl1.SeriesTemplate.ToolTipSeriesPattern = "{S}-";
             this.chartControl1.Size = new System.Drawing.Size(1570, 642);
             this.chartControl1.TabIndex = 0;
@@ -644,8 +647,8 @@
             this.gridControl3.Size = new System.Drawing.Size(1573, 746);
             this.gridControl3.TabIndex = 0;
             this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.projectBandedGridView,
             this.gridView3,
+            this.projectBandedGridView,
             this.gridView5,
             this.DeptProgressGridView,
             this.gridView4});
@@ -655,426 +658,6 @@
             // 
             this.projectsBindingSource.DataMember = "Projects";
             this.projectsBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
-            // 
-            // projectBandedGridView
-            // 
-            this.projectBandedGridView.Appearance.GroupRow.BackColor = System.Drawing.Color.LightBlue;
-            this.projectBandedGridView.Appearance.GroupRow.ForeColor = System.Drawing.Color.Black;
-            this.projectBandedGridView.Appearance.GroupRow.Options.UseBackColor = true;
-            this.projectBandedGridView.Appearance.GroupRow.Options.UseForeColor = true;
-            this.projectBandedGridView.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.projectBandedGridView.Appearance.SelectedRow.Options.UseBackColor = true;
-            this.projectBandedGridView.AppearancePrint.BandPanel.BackColor = System.Drawing.Color.LightBlue;
-            this.projectBandedGridView.AppearancePrint.BandPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.projectBandedGridView.AppearancePrint.BandPanel.Options.UseBackColor = true;
-            this.projectBandedGridView.AppearancePrint.BandPanel.Options.UseFont = true;
-            this.projectBandedGridView.AppearancePrint.EvenRow.BackColor = System.Drawing.Color.Gainsboro;
-            this.projectBandedGridView.AppearancePrint.EvenRow.Options.UseBackColor = true;
-            this.projectBandedGridView.AppearancePrint.GroupRow.BackColor = System.Drawing.Color.LightBlue;
-            this.projectBandedGridView.AppearancePrint.GroupRow.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.projectBandedGridView.AppearancePrint.GroupRow.Options.UseBackColor = true;
-            this.projectBandedGridView.AppearancePrint.GroupRow.Options.UseFont = true;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.BackColor = System.Drawing.Color.LightBlue;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.ForeColor = System.Drawing.Color.Black;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseBackColor = true;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseFont = true;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseForeColor = true;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
-            this.projectBandedGridView.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.projectBandedGridView.Bands.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.GridBand[] {
-            this.SegoeUI,
-            this.milestonesGridBand,
-            this.personnelGridBand,
-            this.generalInfoGridBand});
-            this.projectBandedGridView.Columns.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn[] {
-            this.colIDBGV,
-            this.colJobNumberBGV,
-            this.colProjectNumberBGV,
-            this.colEngineeringProjectNumberBGV,
-            this.colStageBGV,
-            this.colCustomerBGV,
-            this.colProjectBGV,
-            this.colMoldCostBGV,
-            this.colStatusBGV,
-            this.colDeliveryInWeeksBGV,
-            this.colStartDateBGV,
-            this.colDueDateBGV,
-            this.colAdjustedDeliveryDateBGV,
-            this.colWorkTypeBGV,
-            this.colEngineerBGV,
-            this.colDesignerBGV,
-            this.colToolMakerBGV,
-            this.colRoughProgrammerBGV,
-            this.colElectrodeProgrammerBGV,
-            this.colFinishProgrammerBGV,
-            this.colApprenticeBGV,
-            this.colManifoldBGV,
-            this.colMoldBaseBGV,
-            this.colGeneralNotesBGV});
-            this.projectBandedGridView.GridControl = this.gridControl3;
-            this.projectBandedGridView.GroupCount = 1;
-            this.projectBandedGridView.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "Project", null, ", Count = {0}"),
-            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Sum, "MoldCost", this.colMoldCostBGV, "{0:c0}")});
-            this.projectBandedGridView.Name = "projectBandedGridView";
-            this.projectBandedGridView.OptionsBehavior.AutoExpandAllGroups = true;
-            this.projectBandedGridView.OptionsPrint.AutoWidth = false;
-            this.projectBandedGridView.OptionsPrint.EnableAppearanceEvenRow = true;
-            this.projectBandedGridView.OptionsPrint.PrintSelectedRowsOnly = true;
-            this.projectBandedGridView.OptionsSelection.MultiSelect = true;
-            this.projectBandedGridView.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect;
-            this.projectBandedGridView.OptionsSelection.ShowCheckBoxSelectorInGroupRow = DevExpress.Utils.DefaultBoolean.True;
-            this.projectBandedGridView.OptionsView.ColumnAutoWidth = false;
-            this.projectBandedGridView.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
-            this.projectBandedGridView.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
-            this.projectBandedGridView.OptionsView.ShowFooter = true;
-            this.projectBandedGridView.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
-            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colStageBGV, DevExpress.Data.ColumnSortOrder.Ascending)});
-            this.projectBandedGridView.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.projectBandedGridView_RowCellStyle);
-            this.projectBandedGridView.CustomRowCellEditForEditing += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.projectBandedGridView_CustomRowCellEditForEditing);
-            this.projectBandedGridView.ShownEditor += new System.EventHandler(this.projectBandedGridView_ShownEditor);
-            this.projectBandedGridView.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.projectBandedGridView_CellValueChanged);
-            this.projectBandedGridView.InvalidRowException += new DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventHandler(this.projectBandedGridView_InvalidRowException);
-            this.projectBandedGridView.ValidateRow += new DevExpress.XtraGrid.Views.Base.ValidateRowEventHandler(this.projectBandedGridView_ValidateRow);
-            this.projectBandedGridView.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.projectBandedGridView_RowUpdated);
-            this.projectBandedGridView.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.projectBandedGridView_PrintInitialize);
-            this.projectBandedGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.projectBandedGridView_KeyDown);
-            this.projectBandedGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.projectBandedGridView_MouseDown);
-            this.projectBandedGridView.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.projectBandedGridView_ValidatingEditor);
-            // 
-            // SegoeUI
-            // 
-            this.SegoeUI.Caption = "Project";
-            this.SegoeUI.Columns.Add(this.colWorkTypeBGV);
-            this.SegoeUI.Columns.Add(this.colJobNumberBGV);
-            this.SegoeUI.Columns.Add(this.colProjectNumberBGV);
-            this.SegoeUI.Columns.Add(this.colEngineeringProjectNumberBGV);
-            this.SegoeUI.Columns.Add(this.colStageBGV);
-            this.SegoeUI.Columns.Add(this.colCustomerBGV);
-            this.SegoeUI.Columns.Add(this.colProjectBGV);
-            this.SegoeUI.Columns.Add(this.colMoldCostBGV);
-            this.SegoeUI.Columns.Add(this.colDeliveryInWeeksBGV);
-            this.SegoeUI.Name = "SegoeUI";
-            this.SegoeUI.VisibleIndex = 0;
-            this.SegoeUI.Width = 673;
-            // 
-            // colWorkTypeBGV
-            // 
-            this.colWorkTypeBGV.Caption = "Work Type";
-            this.colWorkTypeBGV.ColumnEdit = this.workTypeComboBoxEdit;
-            this.colWorkTypeBGV.FieldName = "WorkType";
-            this.colWorkTypeBGV.Name = "colWorkTypeBGV";
-            this.colWorkTypeBGV.Visible = true;
-            this.colWorkTypeBGV.Width = 108;
-            // 
-            // workTypeComboBoxEdit
-            // 
-            this.workTypeComboBoxEdit.AutoHeight = false;
-            this.workTypeComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.workTypeComboBoxEdit.Items.AddRange(new object[] {
-            "New Tool",
-            "Revision",
-            "Development",
-            "Repair",
-            "Miscellaneous"});
-            this.workTypeComboBoxEdit.Name = "workTypeComboBoxEdit";
-            // 
-            // colJobNumberBGV
-            // 
-            this.colJobNumberBGV.Caption = "Job #";
-            this.colJobNumberBGV.FieldName = "JobNumber";
-            this.colJobNumberBGV.Name = "colJobNumberBGV";
-            this.colJobNumberBGV.Visible = true;
-            this.colJobNumberBGV.Width = 99;
-            // 
-            // colProjectNumberBGV
-            // 
-            this.colProjectNumberBGV.Caption = "Project #";
-            this.colProjectNumberBGV.FieldName = "ProjectNumber";
-            this.colProjectNumberBGV.Name = "colProjectNumberBGV";
-            this.colProjectNumberBGV.Visible = true;
-            this.colProjectNumberBGV.Width = 69;
-            // 
-            // colEngineeringProjectNumberBGV
-            // 
-            this.colEngineeringProjectNumberBGV.AppearanceCell.Options.UseTextOptions = true;
-            this.colEngineeringProjectNumberBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.colEngineeringProjectNumberBGV.Caption = "Engineering Project #";
-            this.colEngineeringProjectNumberBGV.FieldName = "EngineeringProjectNumber";
-            this.colEngineeringProjectNumberBGV.Name = "colEngineeringProjectNumberBGV";
-            this.colEngineeringProjectNumberBGV.Width = 91;
-            // 
-            // colStageBGV
-            // 
-            this.colStageBGV.Caption = "Stage";
-            this.colStageBGV.ColumnEdit = this.stageComboBoxEdit;
-            this.colStageBGV.FieldName = "Stage";
-            this.colStageBGV.Name = "colStageBGV";
-            this.colStageBGV.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
-            this.colStageBGV.Visible = true;
-            this.colStageBGV.Width = 65;
-            // 
-            // stageComboBoxEdit
-            // 
-            this.stageComboBoxEdit.AutoHeight = false;
-            this.stageComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.stageComboBoxEdit.Items.AddRange(new object[] {
-            "1 - In-Design",
-            "2 - In-Programming",
-            "3 - In-Shop",
-            "4 - In-Mold Check-In or Outside Vendors",
-            "5 - Rework",
-            "6 - In-Repair / Development",
-            "7 - Completed",
-            "8 - Quoted / Forecasted"});
-            this.stageComboBoxEdit.Name = "stageComboBoxEdit";
-            // 
-            // colCustomerBGV
-            // 
-            this.colCustomerBGV.Caption = "Customer";
-            this.colCustomerBGV.FieldName = "Customer";
-            this.colCustomerBGV.Name = "colCustomerBGV";
-            this.colCustomerBGV.Visible = true;
-            this.colCustomerBGV.Width = 99;
-            // 
-            // colProjectBGV
-            // 
-            this.colProjectBGV.Caption = "Part Name / Project";
-            this.colProjectBGV.FieldName = "Project";
-            this.colProjectBGV.Name = "colProjectBGV";
-            this.colProjectBGV.Visible = true;
-            this.colProjectBGV.Width = 99;
-            // 
-            // colMoldCostBGV
-            // 
-            this.colMoldCostBGV.Caption = "Mold Cost";
-            this.colMoldCostBGV.DisplayFormat.FormatString = "c0";
-            this.colMoldCostBGV.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colMoldCostBGV.FieldName = "MoldCost";
-            this.colMoldCostBGV.Name = "colMoldCostBGV";
-            this.colMoldCostBGV.Visible = true;
-            this.colMoldCostBGV.Width = 69;
-            // 
-            // colDeliveryInWeeksBGV
-            // 
-            this.colDeliveryInWeeksBGV.Caption = "Delivery In Weeks";
-            this.colDeliveryInWeeksBGV.FieldName = "DeliveryInWeeks";
-            this.colDeliveryInWeeksBGV.Name = "colDeliveryInWeeksBGV";
-            this.colDeliveryInWeeksBGV.Visible = true;
-            this.colDeliveryInWeeksBGV.Width = 65;
-            // 
-            // milestonesGridBand
-            // 
-            this.milestonesGridBand.Caption = "Milestones";
-            this.milestonesGridBand.Columns.Add(this.colStatusBGV);
-            this.milestonesGridBand.Columns.Add(this.colStartDateBGV);
-            this.milestonesGridBand.Columns.Add(this.colDueDateBGV);
-            this.milestonesGridBand.Columns.Add(this.colAdjustedDeliveryDateBGV);
-            this.milestonesGridBand.Name = "milestonesGridBand";
-            this.milestonesGridBand.VisibleIndex = 1;
-            this.milestonesGridBand.Width = 138;
-            // 
-            // colStatusBGV
-            // 
-            this.colStatusBGV.Caption = "Status";
-            this.colStatusBGV.FieldName = "Status";
-            this.colStatusBGV.Name = "colStatusBGV";
-            // 
-            // colStartDateBGV
-            // 
-            this.colStartDateBGV.Caption = "Start Date";
-            this.colStartDateBGV.ColumnEdit = this.genericDateEdit;
-            this.colStartDateBGV.FieldName = "StartDate";
-            this.colStartDateBGV.Name = "colStartDateBGV";
-            this.colStartDateBGV.Visible = true;
-            this.colStartDateBGV.Width = 69;
-            // 
-            // genericDateEdit
-            // 
-            this.genericDateEdit.AutoHeight = false;
-            this.genericDateEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.genericDateEdit.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.genericDateEdit.Name = "genericDateEdit";
-            // 
-            // colDueDateBGV
-            // 
-            this.colDueDateBGV.Caption = "Due Date";
-            this.colDueDateBGV.ColumnEdit = this.genericDateEdit;
-            this.colDueDateBGV.FieldName = "DueDate";
-            this.colDueDateBGV.Name = "colDueDateBGV";
-            this.colDueDateBGV.Visible = true;
-            this.colDueDateBGV.Width = 69;
-            // 
-            // colAdjustedDeliveryDateBGV
-            // 
-            this.colAdjustedDeliveryDateBGV.Caption = "Adj. Delivery Date";
-            this.colAdjustedDeliveryDateBGV.ColumnEdit = this.genericDateEdit;
-            this.colAdjustedDeliveryDateBGV.FieldName = "AdjustedDeliveryDate";
-            this.colAdjustedDeliveryDateBGV.Name = "colAdjustedDeliveryDateBGV";
-            this.colAdjustedDeliveryDateBGV.Width = 69;
-            // 
-            // personnelGridBand
-            // 
-            this.personnelGridBand.Caption = "Personnel";
-            this.personnelGridBand.Columns.Add(this.colEngineerBGV);
-            this.personnelGridBand.Columns.Add(this.colDesignerBGV);
-            this.personnelGridBand.Columns.Add(this.colToolMakerBGV);
-            this.personnelGridBand.Columns.Add(this.colRoughProgrammerBGV);
-            this.personnelGridBand.Columns.Add(this.colElectrodeProgrammerBGV);
-            this.personnelGridBand.Columns.Add(this.colFinishProgrammerBGV);
-            this.personnelGridBand.Columns.Add(this.colApprenticeBGV);
-            this.personnelGridBand.Name = "personnelGridBand";
-            this.personnelGridBand.VisibleIndex = 2;
-            this.personnelGridBand.Width = 454;
-            // 
-            // colEngineerBGV
-            // 
-            this.colEngineerBGV.Caption = "Engineer";
-            this.colEngineerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colEngineerBGV.FieldName = "Engineer";
-            this.colEngineerBGV.Name = "colEngineerBGV";
-            this.colEngineerBGV.Visible = true;
-            this.colEngineerBGV.Width = 64;
-            // 
-            // personnelComboBoxEdit
-            // 
-            this.personnelComboBoxEdit.AutoHeight = false;
-            this.personnelComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.personnelComboBoxEdit.Name = "personnelComboBoxEdit";
-            // 
-            // colDesignerBGV
-            // 
-            this.colDesignerBGV.Caption = "Designer";
-            this.colDesignerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colDesignerBGV.FieldName = "Designer";
-            this.colDesignerBGV.Name = "colDesignerBGV";
-            this.colDesignerBGV.Visible = true;
-            this.colDesignerBGV.Width = 65;
-            // 
-            // colToolMakerBGV
-            // 
-            this.colToolMakerBGV.Caption = "Tool Maker";
-            this.colToolMakerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colToolMakerBGV.FieldName = "ToolMaker";
-            this.colToolMakerBGV.Name = "colToolMakerBGV";
-            this.colToolMakerBGV.Visible = true;
-            this.colToolMakerBGV.Width = 65;
-            // 
-            // colRoughProgrammerBGV
-            // 
-            this.colRoughProgrammerBGV.Caption = "Rough Programmer";
-            this.colRoughProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colRoughProgrammerBGV.FieldName = "RoughProgrammer";
-            this.colRoughProgrammerBGV.Name = "colRoughProgrammerBGV";
-            this.colRoughProgrammerBGV.Visible = true;
-            this.colRoughProgrammerBGV.Width = 65;
-            // 
-            // colElectrodeProgrammerBGV
-            // 
-            this.colElectrodeProgrammerBGV.Caption = "Electrode Programmer";
-            this.colElectrodeProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colElectrodeProgrammerBGV.FieldName = "ElectrodeProgrammer";
-            this.colElectrodeProgrammerBGV.Name = "colElectrodeProgrammerBGV";
-            this.colElectrodeProgrammerBGV.Visible = true;
-            this.colElectrodeProgrammerBGV.Width = 65;
-            // 
-            // colFinishProgrammerBGV
-            // 
-            this.colFinishProgrammerBGV.Caption = "Finish Programmer";
-            this.colFinishProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colFinishProgrammerBGV.FieldName = "FinishProgrammer";
-            this.colFinishProgrammerBGV.Name = "colFinishProgrammerBGV";
-            this.colFinishProgrammerBGV.Visible = true;
-            this.colFinishProgrammerBGV.Width = 65;
-            // 
-            // colApprenticeBGV
-            // 
-            this.colApprenticeBGV.Caption = "Apprentice";
-            this.colApprenticeBGV.ColumnEdit = this.personnelComboBoxEdit;
-            this.colApprenticeBGV.FieldName = "Apprentice";
-            this.colApprenticeBGV.Name = "colApprenticeBGV";
-            this.colApprenticeBGV.Visible = true;
-            this.colApprenticeBGV.Width = 65;
-            // 
-            // generalInfoGridBand
-            // 
-            this.generalInfoGridBand.Caption = "General Info";
-            this.generalInfoGridBand.Columns.Add(this.colManifoldBGV);
-            this.generalInfoGridBand.Columns.Add(this.colMoldBaseBGV);
-            this.generalInfoGridBand.Columns.Add(this.colGeneralNotesBGV);
-            this.generalInfoGridBand.Name = "generalInfoGridBand";
-            this.generalInfoGridBand.VisibleIndex = 3;
-            this.generalInfoGridBand.Width = 871;
-            // 
-            // colManifoldBGV
-            // 
-            this.colManifoldBGV.Caption = "Manifold";
-            this.colManifoldBGV.FieldName = "Manifold";
-            this.colManifoldBGV.Name = "colManifoldBGV";
-            this.colManifoldBGV.Visible = true;
-            // 
-            // colMoldBaseBGV
-            // 
-            this.colMoldBaseBGV.Caption = "Mold Base";
-            this.colMoldBaseBGV.FieldName = "Moldbase";
-            this.colMoldBaseBGV.Name = "colMoldBaseBGV";
-            this.colMoldBaseBGV.Visible = true;
-            this.colMoldBaseBGV.Width = 71;
-            // 
-            // colGeneralNotesBGV
-            // 
-            this.colGeneralNotesBGV.Caption = "General Notes";
-            this.colGeneralNotesBGV.FieldName = "GeneralNotes";
-            this.colGeneralNotesBGV.Name = "colGeneralNotesBGV";
-            this.colGeneralNotesBGV.Visible = true;
-            this.colGeneralNotesBGV.Width = 725;
-            // 
-            // colIDBGV
-            // 
-            this.colIDBGV.AppearanceCell.Options.UseTextOptions = true;
-            this.colIDBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.colIDBGV.FieldName = "ID";
-            this.colIDBGV.Name = "colIDBGV";
-            // 
-            // repositoryItemImageEdit2
-            // 
-            this.repositoryItemImageEdit2.AutoHeight = false;
-            this.repositoryItemImageEdit2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemImageEdit2.Name = "repositoryItemImageEdit2";
-            this.repositoryItemImageEdit2.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
-            this.repositoryItemImageEdit2.PopupFormSize = new System.Drawing.Size(600, 599);
-            this.repositoryItemImageEdit2.Validating += new System.ComponentModel.CancelEventHandler(this.RepositoryItemImageEdit2_Validating);
-            // 
-            // repositoryItemPictureEdit1
-            // 
-            this.repositoryItemPictureEdit1.Name = "repositoryItemPictureEdit1";
-            this.repositoryItemPictureEdit1.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
-            // 
-            // repositoryItemImageComboBox1
-            // 
-            this.repositoryItemImageComboBox1.AutoHeight = false;
-            this.repositoryItemImageComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemImageComboBox1.Name = "repositoryItemImageComboBox1";
-            // 
-            // repositoryItemHyperLinkEdit2
-            // 
-            this.repositoryItemHyperLinkEdit2.AutoHeight = false;
-            this.repositoryItemHyperLinkEdit2.LinkColor = System.Drawing.Color.Blue;
-            this.repositoryItemHyperLinkEdit2.Name = "repositoryItemHyperLinkEdit2";
-            this.repositoryItemHyperLinkEdit2.SingleClick = true;
-            // 
-            // repositoryItemTextEdit2
-            // 
-            this.repositoryItemTextEdit2.AutoHeight = false;
-            this.repositoryItemTextEdit2.Name = "repositoryItemTextEdit2";
             // 
             // gridView3
             // 
@@ -1236,6 +819,13 @@
             this.colDesigner1.VisibleIndex = 7;
             this.colDesigner1.Width = 105;
             // 
+            // personnelComboBoxEdit
+            // 
+            this.personnelComboBoxEdit.AutoHeight = false;
+            this.personnelComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.personnelComboBoxEdit.Name = "personnelComboBoxEdit";
+            // 
             // colToolMaker2
             // 
             this.colToolMaker2.ColumnEdit = this.personnelComboBoxEdit;
@@ -1318,6 +908,13 @@
             this.colKanBanWorkbookPath.VisibleIndex = 15;
             this.colKanBanWorkbookPath.Width = 357;
             // 
+            // repositoryItemHyperLinkEdit2
+            // 
+            this.repositoryItemHyperLinkEdit2.AutoHeight = false;
+            this.repositoryItemHyperLinkEdit2.LinkColor = System.Drawing.Color.Blue;
+            this.repositoryItemHyperLinkEdit2.Name = "repositoryItemHyperLinkEdit2";
+            this.repositoryItemHyperLinkEdit2.SingleClick = true;
+            // 
             // colPercentComplete1
             // 
             this.colPercentComplete1.DisplayFormat.FormatString = "P0";
@@ -1346,6 +943,412 @@
             this.colLatestFinishDate.Name = "colLatestFinishDate";
             this.colLatestFinishDate.Visible = true;
             this.colLatestFinishDate.VisibleIndex = 16;
+            // 
+            // repositoryItemImageEdit2
+            // 
+            this.repositoryItemImageEdit2.AutoHeight = false;
+            this.repositoryItemImageEdit2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemImageEdit2.Name = "repositoryItemImageEdit2";
+            this.repositoryItemImageEdit2.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
+            this.repositoryItemImageEdit2.PopupFormSize = new System.Drawing.Size(600, 599);
+            this.repositoryItemImageEdit2.Validating += new System.ComponentModel.CancelEventHandler(this.RepositoryItemImageEdit2_Validating);
+            // 
+            // repositoryItemPictureEdit1
+            // 
+            this.repositoryItemPictureEdit1.Name = "repositoryItemPictureEdit1";
+            this.repositoryItemPictureEdit1.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
+            // 
+            // repositoryItemImageComboBox1
+            // 
+            this.repositoryItemImageComboBox1.AutoHeight = false;
+            this.repositoryItemImageComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemImageComboBox1.Name = "repositoryItemImageComboBox1";
+            // 
+            // repositoryItemTextEdit2
+            // 
+            this.repositoryItemTextEdit2.AutoHeight = false;
+            this.repositoryItemTextEdit2.Name = "repositoryItemTextEdit2";
+            // 
+            // stageComboBoxEdit
+            // 
+            this.stageComboBoxEdit.AutoHeight = false;
+            this.stageComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.stageComboBoxEdit.Items.AddRange(new object[] {
+            "1 - In-Design",
+            "2 - In-Programming",
+            "3 - In-Shop",
+            "4 - In-Mold Check-In or Outside Vendors",
+            "5 - Rework",
+            "6 - In-Repair / Development",
+            "7 - Completed",
+            "8 - Quoted / Forecasted"});
+            this.stageComboBoxEdit.Name = "stageComboBoxEdit";
+            // 
+            // genericDateEdit
+            // 
+            this.genericDateEdit.AutoHeight = false;
+            this.genericDateEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.genericDateEdit.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.genericDateEdit.Name = "genericDateEdit";
+            // 
+            // workTypeComboBoxEdit
+            // 
+            this.workTypeComboBoxEdit.AutoHeight = false;
+            this.workTypeComboBoxEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.workTypeComboBoxEdit.Items.AddRange(new object[] {
+            "New Tool",
+            "Revision",
+            "Development",
+            "Repair",
+            "Miscellaneous"});
+            this.workTypeComboBoxEdit.Name = "workTypeComboBoxEdit";
+            // 
+            // projectBandedGridView
+            // 
+            this.projectBandedGridView.Appearance.GroupRow.BackColor = System.Drawing.Color.LightBlue;
+            this.projectBandedGridView.Appearance.GroupRow.ForeColor = System.Drawing.Color.Black;
+            this.projectBandedGridView.Appearance.GroupRow.Options.UseBackColor = true;
+            this.projectBandedGridView.Appearance.GroupRow.Options.UseForeColor = true;
+            this.projectBandedGridView.Appearance.SelectedRow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.projectBandedGridView.Appearance.SelectedRow.Options.UseBackColor = true;
+            this.projectBandedGridView.AppearancePrint.BandPanel.BackColor = System.Drawing.Color.LightBlue;
+            this.projectBandedGridView.AppearancePrint.BandPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.projectBandedGridView.AppearancePrint.BandPanel.Options.UseBackColor = true;
+            this.projectBandedGridView.AppearancePrint.BandPanel.Options.UseFont = true;
+            this.projectBandedGridView.AppearancePrint.EvenRow.BackColor = System.Drawing.Color.Gainsboro;
+            this.projectBandedGridView.AppearancePrint.EvenRow.Options.UseBackColor = true;
+            this.projectBandedGridView.AppearancePrint.GroupRow.BackColor = System.Drawing.Color.LightBlue;
+            this.projectBandedGridView.AppearancePrint.GroupRow.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.projectBandedGridView.AppearancePrint.GroupRow.Options.UseBackColor = true;
+            this.projectBandedGridView.AppearancePrint.GroupRow.Options.UseFont = true;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.BackColor = System.Drawing.Color.LightBlue;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.ForeColor = System.Drawing.Color.Black;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseBackColor = true;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseFont = true;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseForeColor = true;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
+            this.projectBandedGridView.AppearancePrint.HeaderPanel.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.projectBandedGridView.Bands.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.GridBand[] {
+            this.SegoeUI,
+            this.milestonesGridBand,
+            this.personnelGridBand,
+            this.generalInfoGridBand});
+            this.projectBandedGridView.Columns.AddRange(new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn[] {
+            this.colIDBGV,
+            this.colJobNumberBGV,
+            this.colProjectNumberBGV,
+            this.colEngineeringProjectNumberBGV,
+            this.colStageBGV,
+            this.colCustomerBGV,
+            this.colProjectBGV,
+            this.colMoldCostBGV,
+            this.colStatusBGV,
+            this.colDeliveryInWeeksBGV,
+            this.colStartDateBGV,
+            this.colDueDateBGV,
+            this.colAdjustedDeliveryDateBGV,
+            this.colWorkTypeBGV,
+            this.colEngineerBGV,
+            this.colDesignerBGV,
+            this.colToolMakerBGV,
+            this.colRoughProgrammerBGV,
+            this.colElectrodeProgrammerBGV,
+            this.colFinishProgrammerBGV,
+            this.colApprenticeBGV,
+            this.colManifoldBGV,
+            this.colMoldBaseBGV,
+            this.colGeneralNotesBGV});
+            this.projectBandedGridView.GridControl = this.gridControl3;
+            this.projectBandedGridView.GroupCount = 1;
+            this.projectBandedGridView.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
+            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "Project", null, ", Count = {0}"),
+            new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Sum, "MoldCost", this.colMoldCostBGV, "{0:c0}")});
+            this.projectBandedGridView.Name = "projectBandedGridView";
+            this.projectBandedGridView.OptionsBehavior.AutoExpandAllGroups = true;
+            this.projectBandedGridView.OptionsPrint.AutoWidth = false;
+            this.projectBandedGridView.OptionsPrint.EnableAppearanceEvenRow = true;
+            this.projectBandedGridView.OptionsPrint.PrintSelectedRowsOnly = true;
+            this.projectBandedGridView.OptionsSelection.MultiSelect = true;
+            this.projectBandedGridView.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect;
+            this.projectBandedGridView.OptionsSelection.ShowCheckBoxSelectorInGroupRow = DevExpress.Utils.DefaultBoolean.True;
+            this.projectBandedGridView.OptionsView.ColumnAutoWidth = false;
+            this.projectBandedGridView.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
+            this.projectBandedGridView.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
+            this.projectBandedGridView.OptionsView.ShowFooter = true;
+            this.projectBandedGridView.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
+            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colStageBGV, DevExpress.Data.ColumnSortOrder.Ascending)});
+            this.projectBandedGridView.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.projectBandedGridView_RowCellStyle);
+            this.projectBandedGridView.CustomRowCellEditForEditing += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.projectBandedGridView_CustomRowCellEditForEditing);
+            this.projectBandedGridView.ShownEditor += new System.EventHandler(this.projectBandedGridView_ShownEditor);
+            this.projectBandedGridView.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.projectBandedGridView_CellValueChanged);
+            this.projectBandedGridView.InvalidRowException += new DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventHandler(this.projectBandedGridView_InvalidRowException);
+            this.projectBandedGridView.ValidateRow += new DevExpress.XtraGrid.Views.Base.ValidateRowEventHandler(this.projectBandedGridView_ValidateRow);
+            this.projectBandedGridView.RowUpdated += new DevExpress.XtraGrid.Views.Base.RowObjectEventHandler(this.projectBandedGridView_RowUpdated);
+            this.projectBandedGridView.PrintInitialize += new DevExpress.XtraGrid.Views.Base.PrintInitializeEventHandler(this.projectBandedGridView_PrintInitialize);
+            this.projectBandedGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.projectBandedGridView_KeyDown);
+            this.projectBandedGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.projectBandedGridView_MouseDown);
+            this.projectBandedGridView.ValidatingEditor += new DevExpress.XtraEditors.Controls.BaseContainerValidateEditorEventHandler(this.projectBandedGridView_ValidatingEditor);
+            // 
+            // SegoeUI
+            // 
+            this.SegoeUI.Caption = "Project";
+            this.SegoeUI.Columns.Add(this.colWorkTypeBGV);
+            this.SegoeUI.Columns.Add(this.colJobNumberBGV);
+            this.SegoeUI.Columns.Add(this.colProjectNumberBGV);
+            this.SegoeUI.Columns.Add(this.colEngineeringProjectNumberBGV);
+            this.SegoeUI.Columns.Add(this.colStageBGV);
+            this.SegoeUI.Columns.Add(this.colCustomerBGV);
+            this.SegoeUI.Columns.Add(this.colProjectBGV);
+            this.SegoeUI.Columns.Add(this.colMoldCostBGV);
+            this.SegoeUI.Columns.Add(this.colDeliveryInWeeksBGV);
+            this.SegoeUI.Name = "SegoeUI";
+            this.SegoeUI.VisibleIndex = 0;
+            this.SegoeUI.Width = 673;
+            // 
+            // colWorkTypeBGV
+            // 
+            this.colWorkTypeBGV.Caption = "Work Type";
+            this.colWorkTypeBGV.ColumnEdit = this.workTypeComboBoxEdit;
+            this.colWorkTypeBGV.FieldName = "WorkType";
+            this.colWorkTypeBGV.Name = "colWorkTypeBGV";
+            this.colWorkTypeBGV.Visible = true;
+            this.colWorkTypeBGV.Width = 108;
+            // 
+            // colJobNumberBGV
+            // 
+            this.colJobNumberBGV.Caption = "Job #";
+            this.colJobNumberBGV.FieldName = "JobNumber";
+            this.colJobNumberBGV.Name = "colJobNumberBGV";
+            this.colJobNumberBGV.Visible = true;
+            this.colJobNumberBGV.Width = 99;
+            // 
+            // colProjectNumberBGV
+            // 
+            this.colProjectNumberBGV.Caption = "Project #";
+            this.colProjectNumberBGV.FieldName = "ProjectNumber";
+            this.colProjectNumberBGV.Name = "colProjectNumberBGV";
+            this.colProjectNumberBGV.Visible = true;
+            this.colProjectNumberBGV.Width = 69;
+            // 
+            // colEngineeringProjectNumberBGV
+            // 
+            this.colEngineeringProjectNumberBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colEngineeringProjectNumberBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.colEngineeringProjectNumberBGV.Caption = "Engineering Project #";
+            this.colEngineeringProjectNumberBGV.FieldName = "EngineeringProjectNumber";
+            this.colEngineeringProjectNumberBGV.Name = "colEngineeringProjectNumberBGV";
+            this.colEngineeringProjectNumberBGV.Width = 91;
+            // 
+            // colStageBGV
+            // 
+            this.colStageBGV.Caption = "Stage";
+            this.colStageBGV.ColumnEdit = this.stageComboBoxEdit;
+            this.colStageBGV.FieldName = "Stage";
+            this.colStageBGV.Name = "colStageBGV";
+            this.colStageBGV.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.colStageBGV.Visible = true;
+            this.colStageBGV.Width = 65;
+            // 
+            // colCustomerBGV
+            // 
+            this.colCustomerBGV.Caption = "Customer";
+            this.colCustomerBGV.FieldName = "Customer";
+            this.colCustomerBGV.Name = "colCustomerBGV";
+            this.colCustomerBGV.Visible = true;
+            this.colCustomerBGV.Width = 99;
+            // 
+            // colProjectBGV
+            // 
+            this.colProjectBGV.Caption = "Part Name / Project";
+            this.colProjectBGV.FieldName = "Project";
+            this.colProjectBGV.Name = "colProjectBGV";
+            this.colProjectBGV.Visible = true;
+            this.colProjectBGV.Width = 99;
+            // 
+            // colMoldCostBGV
+            // 
+            this.colMoldCostBGV.Caption = "Mold Cost";
+            this.colMoldCostBGV.DisplayFormat.FormatString = "c0";
+            this.colMoldCostBGV.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colMoldCostBGV.FieldName = "MoldCost";
+            this.colMoldCostBGV.Name = "colMoldCostBGV";
+            this.colMoldCostBGV.Visible = true;
+            this.colMoldCostBGV.Width = 69;
+            // 
+            // colDeliveryInWeeksBGV
+            // 
+            this.colDeliveryInWeeksBGV.Caption = "Delivery In Weeks";
+            this.colDeliveryInWeeksBGV.FieldName = "DeliveryInWeeks";
+            this.colDeliveryInWeeksBGV.Name = "colDeliveryInWeeksBGV";
+            this.colDeliveryInWeeksBGV.Visible = true;
+            this.colDeliveryInWeeksBGV.Width = 65;
+            // 
+            // milestonesGridBand
+            // 
+            this.milestonesGridBand.Caption = "Milestones";
+            this.milestonesGridBand.Columns.Add(this.colStatusBGV);
+            this.milestonesGridBand.Columns.Add(this.colStartDateBGV);
+            this.milestonesGridBand.Columns.Add(this.colDueDateBGV);
+            this.milestonesGridBand.Columns.Add(this.colAdjustedDeliveryDateBGV);
+            this.milestonesGridBand.Name = "milestonesGridBand";
+            this.milestonesGridBand.VisibleIndex = 1;
+            this.milestonesGridBand.Width = 138;
+            // 
+            // colStatusBGV
+            // 
+            this.colStatusBGV.Caption = "Status";
+            this.colStatusBGV.FieldName = "Status";
+            this.colStatusBGV.Name = "colStatusBGV";
+            // 
+            // colStartDateBGV
+            // 
+            this.colStartDateBGV.Caption = "Start Date";
+            this.colStartDateBGV.ColumnEdit = this.genericDateEdit;
+            this.colStartDateBGV.FieldName = "StartDate";
+            this.colStartDateBGV.Name = "colStartDateBGV";
+            this.colStartDateBGV.Visible = true;
+            this.colStartDateBGV.Width = 69;
+            // 
+            // colDueDateBGV
+            // 
+            this.colDueDateBGV.Caption = "Due Date";
+            this.colDueDateBGV.ColumnEdit = this.genericDateEdit;
+            this.colDueDateBGV.FieldName = "DueDate";
+            this.colDueDateBGV.Name = "colDueDateBGV";
+            this.colDueDateBGV.Visible = true;
+            this.colDueDateBGV.Width = 69;
+            // 
+            // colAdjustedDeliveryDateBGV
+            // 
+            this.colAdjustedDeliveryDateBGV.Caption = "Adj. Delivery Date";
+            this.colAdjustedDeliveryDateBGV.ColumnEdit = this.genericDateEdit;
+            this.colAdjustedDeliveryDateBGV.FieldName = "AdjustedDeliveryDate";
+            this.colAdjustedDeliveryDateBGV.Name = "colAdjustedDeliveryDateBGV";
+            this.colAdjustedDeliveryDateBGV.Width = 69;
+            // 
+            // personnelGridBand
+            // 
+            this.personnelGridBand.Caption = "Personnel";
+            this.personnelGridBand.Columns.Add(this.colEngineerBGV);
+            this.personnelGridBand.Columns.Add(this.colDesignerBGV);
+            this.personnelGridBand.Columns.Add(this.colToolMakerBGV);
+            this.personnelGridBand.Columns.Add(this.colRoughProgrammerBGV);
+            this.personnelGridBand.Columns.Add(this.colElectrodeProgrammerBGV);
+            this.personnelGridBand.Columns.Add(this.colFinishProgrammerBGV);
+            this.personnelGridBand.Columns.Add(this.colApprenticeBGV);
+            this.personnelGridBand.Name = "personnelGridBand";
+            this.personnelGridBand.VisibleIndex = 2;
+            this.personnelGridBand.Width = 454;
+            // 
+            // colEngineerBGV
+            // 
+            this.colEngineerBGV.Caption = "Engineer";
+            this.colEngineerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colEngineerBGV.FieldName = "Engineer";
+            this.colEngineerBGV.Name = "colEngineerBGV";
+            this.colEngineerBGV.Visible = true;
+            this.colEngineerBGV.Width = 64;
+            // 
+            // colDesignerBGV
+            // 
+            this.colDesignerBGV.Caption = "Designer";
+            this.colDesignerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colDesignerBGV.FieldName = "Designer";
+            this.colDesignerBGV.Name = "colDesignerBGV";
+            this.colDesignerBGV.Visible = true;
+            this.colDesignerBGV.Width = 65;
+            // 
+            // colToolMakerBGV
+            // 
+            this.colToolMakerBGV.Caption = "Tool Maker";
+            this.colToolMakerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colToolMakerBGV.FieldName = "ToolMaker";
+            this.colToolMakerBGV.Name = "colToolMakerBGV";
+            this.colToolMakerBGV.Visible = true;
+            this.colToolMakerBGV.Width = 65;
+            // 
+            // colRoughProgrammerBGV
+            // 
+            this.colRoughProgrammerBGV.Caption = "Rough Programmer";
+            this.colRoughProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colRoughProgrammerBGV.FieldName = "RoughProgrammer";
+            this.colRoughProgrammerBGV.Name = "colRoughProgrammerBGV";
+            this.colRoughProgrammerBGV.Visible = true;
+            this.colRoughProgrammerBGV.Width = 65;
+            // 
+            // colElectrodeProgrammerBGV
+            // 
+            this.colElectrodeProgrammerBGV.Caption = "Electrode Programmer";
+            this.colElectrodeProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colElectrodeProgrammerBGV.FieldName = "ElectrodeProgrammer";
+            this.colElectrodeProgrammerBGV.Name = "colElectrodeProgrammerBGV";
+            this.colElectrodeProgrammerBGV.Visible = true;
+            this.colElectrodeProgrammerBGV.Width = 65;
+            // 
+            // colFinishProgrammerBGV
+            // 
+            this.colFinishProgrammerBGV.Caption = "Finish Programmer";
+            this.colFinishProgrammerBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colFinishProgrammerBGV.FieldName = "FinishProgrammer";
+            this.colFinishProgrammerBGV.Name = "colFinishProgrammerBGV";
+            this.colFinishProgrammerBGV.Visible = true;
+            this.colFinishProgrammerBGV.Width = 65;
+            // 
+            // colApprenticeBGV
+            // 
+            this.colApprenticeBGV.Caption = "Apprentice";
+            this.colApprenticeBGV.ColumnEdit = this.personnelComboBoxEdit;
+            this.colApprenticeBGV.FieldName = "Apprentice";
+            this.colApprenticeBGV.Name = "colApprenticeBGV";
+            this.colApprenticeBGV.Visible = true;
+            this.colApprenticeBGV.Width = 65;
+            // 
+            // generalInfoGridBand
+            // 
+            this.generalInfoGridBand.Caption = "General Info";
+            this.generalInfoGridBand.Columns.Add(this.colManifoldBGV);
+            this.generalInfoGridBand.Columns.Add(this.colMoldBaseBGV);
+            this.generalInfoGridBand.Columns.Add(this.colGeneralNotesBGV);
+            this.generalInfoGridBand.Name = "generalInfoGridBand";
+            this.generalInfoGridBand.VisibleIndex = 3;
+            this.generalInfoGridBand.Width = 871;
+            // 
+            // colManifoldBGV
+            // 
+            this.colManifoldBGV.Caption = "Manifold";
+            this.colManifoldBGV.FieldName = "Manifold";
+            this.colManifoldBGV.Name = "colManifoldBGV";
+            this.colManifoldBGV.Visible = true;
+            // 
+            // colMoldBaseBGV
+            // 
+            this.colMoldBaseBGV.Caption = "Mold Base";
+            this.colMoldBaseBGV.FieldName = "Moldbase";
+            this.colMoldBaseBGV.Name = "colMoldBaseBGV";
+            this.colMoldBaseBGV.Visible = true;
+            this.colMoldBaseBGV.Width = 71;
+            // 
+            // colGeneralNotesBGV
+            // 
+            this.colGeneralNotesBGV.Caption = "General Notes";
+            this.colGeneralNotesBGV.FieldName = "GeneralNotes";
+            this.colGeneralNotesBGV.Name = "colGeneralNotesBGV";
+            this.colGeneralNotesBGV.Visible = true;
+            this.colGeneralNotesBGV.Width = 725;
+            // 
+            // colIDBGV
+            // 
+            this.colIDBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colIDBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.colIDBGV.FieldName = "ID";
+            this.colIDBGV.Name = "colIDBGV";
             // 
             // gridView5
             // 
@@ -1559,7 +1562,7 @@
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1602, 827);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1594, 827);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -1583,7 +1586,7 @@
             this.xtraTabPage1.Controls.Add(this.departmentComboBox);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage1.Text = "Department Schedule View";
             // 
             // includeCompletesCheckEdit
@@ -1670,13 +1673,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.schedulerControl1.DataStorage = this.schedulerStorage1;
-            this.schedulerControl1.GroupType = DevExpress.XtraScheduler.SchedulerGroupType.Resource;
             this.schedulerControl1.Location = new System.Drawing.Point(12, 36);
             this.schedulerControl1.LookAndFeel.SkinName = "DevExpress Dark Style";
             this.schedulerControl1.Margin = new System.Windows.Forms.Padding(4);
             this.schedulerControl1.Name = "schedulerControl1";
             this.schedulerControl1.OptionsCustomization.AllowAppointmentDrag = DevExpress.XtraScheduler.UsedAppointmentType.Custom;
-            this.schedulerControl1.Size = new System.Drawing.Size(1573, 750);
+            this.schedulerControl1.Size = new System.Drawing.Size(1561, 747);
             this.schedulerControl1.Start = new System.DateTime(2018, 12, 14, 0, 0, 0, 0);
             this.schedulerControl1.TabIndex = 2;
             this.schedulerControl1.Text = "schedulerControl1";
@@ -1699,6 +1701,7 @@
             this.schedulerControl1.Views.TimelineView.Scales.Add(timeScale15Minutes1);
             this.schedulerControl1.Views.WeekView.Enabled = false;
             this.schedulerControl1.Views.WorkWeekView.TimeRulers.Add(timeRuler3);
+            this.schedulerControl1.Views.YearView.UseOptimizedScrolling = false;
             this.schedulerControl1.AppointmentViewInfoCustomizing += new DevExpress.XtraScheduler.AppointmentViewInfoCustomizingEventHandler(this.schedulerControl1_AppointmentViewInfoCustomizing);
             this.schedulerControl1.AllowAppointmentDrag += new DevExpress.XtraScheduler.AppointmentOperationEventHandler(this.schedulerControl1_AllowAppointmentDrag);
             this.schedulerControl1.AppointmentDrop += new DevExpress.XtraScheduler.AppointmentDragEventHandler(this.schedulerControl1_AppointmentDrop);
@@ -1735,7 +1738,7 @@
             this.xtraTabPage2.Controls.Add(this.gridControl1);
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage2.Text = "Department Task View";
             // 
             // PrintEmployeeWorkCheckedComboBoxEdit
@@ -2195,7 +2198,7 @@
             this.xtraTabPage7.Controls.Add(this.gridControl3);
             this.xtraTabPage7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage7.Name = "xtraTabPage7";
-            this.xtraTabPage7.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage7.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage7.Text = "Project View";
             // 
             // restoreProjectButton
@@ -2428,7 +2431,7 @@
             this.xtraTabPage3.Controls.Add(this.RefreshChartButton);
             this.xtraTabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage3.Text = "Chart View";
             // 
             // exportButton
@@ -2489,8 +2492,6 @@
             this.spreadsheetControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.spreadsheetControl1.Location = new System.Drawing.Point(10, 10);
             this.spreadsheetControl1.Name = "spreadsheetControl1";
-            this.spreadsheetControl1.Options.Import.Csv.Encoding = ((System.Text.Encoding)(resources.GetObject("spreadsheetControl1.Options.Import.Csv.Encoding")));
-            this.spreadsheetControl1.Options.Import.Txt.Encoding = ((System.Text.Encoding)(resources.GetObject("spreadsheetControl1.Options.Import.Txt.Encoding")));
             this.spreadsheetControl1.Size = new System.Drawing.Size(1570, 716);
             this.spreadsheetControl1.TabIndex = 0;
             this.spreadsheetControl1.Text = "spreadsheetControl1";
@@ -2558,7 +2559,7 @@
             this.xtraTabPage4.Controls.Add(this.RefreshGanttButton);
             this.xtraTabPage4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage4.Text = "Gantt View";
             // 
             // labelControl6
@@ -2588,8 +2589,14 @@
             this.splitContainerControl1.Location = new System.Drawing.Point(0, 0);
             this.splitContainerControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainerControl1.Name = "splitContainerControl1";
+            // 
+            // splitContainerControl1.Panel1
+            // 
             this.splitContainerControl1.Panel1.Controls.Add(this.resourcesTree1);
             this.splitContainerControl1.Panel1.Text = "Panel1";
+            // 
+            // splitContainerControl1.Panel2
+            // 
             this.splitContainerControl1.Panel2.Controls.Add(this.schedulerControl2);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(1569, 749);
@@ -2634,7 +2641,6 @@
             this.schedulerControl2.ActiveViewType = DevExpress.XtraScheduler.SchedulerViewType.Gantt;
             this.schedulerControl2.DataStorage = this.schedulerStorage2;
             this.schedulerControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.schedulerControl2.GroupType = DevExpress.XtraScheduler.SchedulerGroupType.Resource;
             this.schedulerControl2.Location = new System.Drawing.Point(0, 0);
             this.schedulerControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.schedulerControl2.Name = "schedulerControl2";
@@ -2649,6 +2655,7 @@
             this.schedulerControl2.Views.TimelineView.ShowResourceHeaders = false;
             this.schedulerControl2.Views.WeekView.Enabled = false;
             this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler6);
+            this.schedulerControl2.Views.YearView.UseOptimizedScrolling = false;
             this.schedulerControl2.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl2_AppointmentFlyoutShowing);
             // 
             // schedulerStorage2
@@ -2688,7 +2695,7 @@
             this.xtraTabPage5.Controls.Add(this.projectComboBox2);
             this.xtraTabPage5.Controls.Add(this.RefreshCalendarButton);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(1596, 799);
+            this.xtraTabPage5.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage5.Text = "Calendar View";
             // 
             // labelControl10
@@ -2740,6 +2747,7 @@
             this.schedulerControl3.Views.FullWeekView.TimeRulers.Add(timeRuler8);
             this.schedulerControl3.Views.WeekView.Enabled = false;
             this.schedulerControl3.Views.WorkWeekView.TimeRulers.Add(timeRuler9);
+            this.schedulerControl3.Views.YearView.UseOptimizedScrolling = false;
             this.schedulerControl3.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl3_AppointmentFlyoutShowing);
             // 
             // calendarDataStorage
@@ -2748,6 +2756,20 @@
             // 
             // 
             this.calendarDataStorage.AppointmentDependencies.AutoReload = false;
+            // 
+            // 
+            // 
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(0, "None", "&None", System.Drawing.SystemColors.Window);
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(1, "Important", "&Important", System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(194)))), ((int)(((byte)(190))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(2, "Business", "&Business", System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(213)))), ((int)(((byte)(255))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(3, "Personal", "&Personal", System.Drawing.Color.FromArgb(((int)(((byte)(193)))), ((int)(((byte)(244)))), ((int)(((byte)(156))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(4, "Vacation", "&Vacation", System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(228)))), ((int)(((byte)(199))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(5, "Must Attend", "Must &Attend", System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(206)))), ((int)(((byte)(147))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(6, "Travel Required", "&Travel Required", System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(244)))), ((int)(((byte)(255))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(7, "Needs Preparation", "&Needs Preparation", System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(219)))), ((int)(((byte)(152))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(8, "Birthday", "&Birthday", System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(207)))), ((int)(((byte)(233))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(9, "Anniversary", "&Anniversary", System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(233)))), ((int)(((byte)(223))))));
+            this.calendarDataStorage.Appointments.Labels.CreateNewLabel(10, "Phone Call", "Phone &Call", System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(247)))), ((int)(((byte)(165))))));
             this.calendarDataStorage.AppointmentChanging += new DevExpress.XtraScheduler.PersistentObjectCancelEventHandler(this.calendarDataStorage_AppointmentChanging);
             // 
             // labelControl9
@@ -2786,6 +2808,10 @@
             this.tasksBindingSource.DataMember = "Tasks";
             this.tasksBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
             // 
+            // defaultLookAndFeel1
+            // 
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "DevExpress Style";
+            // 
             // resourcesBindingSource
             // 
             this.resourcesBindingSource.DataMember = "Resources";
@@ -2809,11 +2835,11 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1628, 852);
+            this.ClientSize = new System.Drawing.Size(1620, 852);
             this.Controls.Add(this.xtraTabControl1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderEffect = DevExpress.XtraEditors.FormBorderEffect.Shadow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.IconOptions.Icon = ((System.Drawing.Icon)(resources.GetObject("MainWindow.IconOptions.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -2831,18 +2857,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workTypeComboBoxEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.personnelComboBoxEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageComboBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stageComboBoxEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit.CalendarTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genericDateEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workTypeComboBoxEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectBandedGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeptProgressGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.schedulerStorage1)).EndInit();
@@ -2888,6 +2914,10 @@
             this.xtraTabPage4.ResumeLayout(false);
             this.xtraTabPage4.PerformLayout();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();
+            this.splitContainerControl1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel2)).EndInit();
+            this.splitContainerControl1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
             this.splitContainerControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.resourcesTree1)).EndInit();

@@ -5,6 +5,7 @@ namespace ClassLibrary
 {
     public class ColorStruct
     {
+        public int ID { get; set; }
         public int ProjectID { get; set; }
 
         public int ProjectNumber { get; set; }

@@ -42,21 +42,21 @@ namespace ClassLibrary
             get { return GetLatestFinishDate(); }
             //set { latestFinishDate = value; }
         }
-
-        public bool AllTasksDated 
-        { 
-            get 
-            {
-                if (Tasks.Count(x => x.StartDate == null || x.FinishDate == null) > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }                                    
-            } 
-        }
+        public bool AllTasksDated { get; set; }
+        //public bool AllTasksDated
+        //{
+        //    get
+        //    {
+        //        if (Tasks.Count(x => x.StartDate == null || x.FinishDate == null) > 0)
+        //        {
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //}
 
         public static int ComponentCharacterLimit = 31;
 
@@ -252,6 +252,17 @@ namespace ClassLibrary
 
             return tasks;
         }        
+        public bool CheckIfAllTasksDated()
+        {
+            if (Tasks.Count(x => x.StartDate == null || x.FinishDate == null) > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         /// <summary>
         /// Adds a picture to a component's picture list from a filepath.
         /// </summary>        
@@ -456,6 +467,10 @@ namespace ClassLibrary
                 UpdateStartAndFinishDates(task.TaskID, (DateTime)task.FinishDate);
             }
 
+            this.AllTasksDated = CheckIfAllTasksDated();
+
+            Database.UpdateComponent(this, "AllTasksDated");
+
             Database.UpdateTaskDates(Tasks);
         }
         /// <summary>
@@ -542,6 +557,8 @@ namespace ClassLibrary
                 Database.UpdateTaskDates(this.Tasks);
             }
 
+            this.AllTasksDated = CheckIfAllTasksDated();
+
             return true;
         }
         /// <summary>
@@ -555,6 +572,8 @@ namespace ClassLibrary
             {
                 this.ForwardDateTask(task.TaskID, forwardDate);
             }
+
+            this.AllTasksDated = CheckIfAllTasksDated();
         }
         public void ForwardDateTask(int successorID, DateTime predecessorFinishDate)
         {
@@ -582,6 +601,8 @@ namespace ClassLibrary
             TaskModel finalTask = this.Tasks.Find(x => x.TaskID == this.Tasks.Max(x2 => x2.TaskID));
 
             BackDateTask(finalTask.TaskID, backDate);
+
+            this.AllTasksDated = CheckIfAllTasksDated();
         }
         private void BackDateTask(int predecessorID, DateTime successorStartDate)
         {

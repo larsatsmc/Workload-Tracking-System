@@ -139,6 +139,15 @@ namespace Toolroom_Project_Viewer
                 LoadProjectView();
                 LoadTaskView();
 
+                //foreach (var component in ComponentsList)
+                //{
+                //    if (component.Tasks.Count() > 0)
+                //    {
+                //        component.AllTasksDated = component.CheckIfAllTasksDated();
+                //        Database.UpdateComponent(component, "AllTasksDated");
+                //    }
+                //}
+
                 InitializeAppointments();
                 InitializeDepartmentPrintOptions();
                 InitializePersonnelPrintOptions();
@@ -244,7 +253,8 @@ namespace Toolroom_Project_Viewer
                              //where task.ProjectNumber == 37242
                              group task by task.TaskName into grp
                              select 
-                             new { 
+                             new 
+                             { 
                                  Department = grp.Key, 
                                  PercentComplete = (double)grp.Where(x => x.Status == "Completed").Sum(x => x.Hours) / grp.Sum(x => x.Hours)
                              };
@@ -2174,9 +2184,10 @@ namespace Toolroom_Project_Viewer
                 {
                     colorItem = new ColorStruct { ProjectID = project.ID, ColumnFieldName = cell.Column.FieldName, ARGBColor = ((Color)color).ToArgb() };
 
-                    ColorList.Add(colorItem);
-
-                    Database.AddColorEntry(colorItem);
+                    if (Database.AddColorEntry(colorItem))
+                    {
+                        ColorList.Add(colorItem); 
+                    }
                 }
                 else if (colorItem != null && rowColor == ((Color)color))
                 {
@@ -2892,6 +2903,13 @@ namespace Toolroom_Project_Viewer
                     e.Appearance.BackColor2 = Color.SeaShell;
                     e.HighPriority = true;
                 }
+
+                if (!project.AllComponentsDated)
+                {
+                    e.Appearance.BackColor = Color.Orange;
+                    e.Appearance.BackColor2 = Color.SeaShell;
+                    e.HighPriority = true;
+                }
             }
         }
         private void gridView_MasterRowExpanded(object sender, CustomMasterRowEventArgs e)
@@ -2939,7 +2957,7 @@ namespace Toolroom_Project_Viewer
             {
                 if (!component.AllTasksDated)
                 {
-                    e.Appearance.BackColor = Color.Salmon;
+                    e.Appearance.BackColor = Color.Orange;
                     e.Appearance.BackColor2 = Color.SeaShell;
                     e.HighPriority = true;
                 }

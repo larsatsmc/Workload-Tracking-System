@@ -96,6 +96,23 @@ namespace ClassLibrary
             set { latestFinishDate = value; }
         }
 
+        public bool AllComponentsDated
+        {
+            get 
+            {
+                foreach (var component in Components)
+                {
+                    if (component.AllTasksDated == false)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+
         public object this[string propertyName]
         {
             get
@@ -587,39 +604,6 @@ namespace ClassLibrary
             }
 
             return false;
-        }
-
-        private void PrintComponentList()
-        {
-            Components.ForEach(x => Console.WriteLine(x.Component));
-
-            Console.WriteLine("");
-        }
-        public void ForwardDate(DateTime forwardDate)
-        {
-            List<TaskModel> tasksToUpdate = new List<TaskModel>();
-
-            foreach (var component in Components)
-            {
-                component.ForwardDate(forwardDate);
-
-                tasksToUpdate.AddRange(component.Tasks);
-            }
-
-            Database.UpdateTaskDates(tasksToUpdate);
-        }
-        public void BackDate(DateTime backDate)
-        {
-            List<TaskModel> tasksToUpdate = new List<TaskModel>();
-
-            foreach (var component in Components)
-            {
-                component.BackDate(backDate);
-
-                tasksToUpdate.AddRange(component.Tasks);
-            }
-
-            Database.UpdateTaskDates(tasksToUpdate);
         }
         public DateTime? GetLatestFinishDate()
         {

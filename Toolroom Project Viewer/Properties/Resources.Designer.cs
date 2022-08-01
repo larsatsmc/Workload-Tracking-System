@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClassLibrary.Properties {
+namespace Toolroom_Project_Viewer.Properties {
     using System;
     
     
