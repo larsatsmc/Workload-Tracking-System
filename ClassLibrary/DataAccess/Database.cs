@@ -34,8 +34,8 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateModified) " + // 
-                                          "VALUES (@JobNumber, @ProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE())"; // 
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, EngineeringProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @engineeringProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE())"; // 
 
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Picture, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish)"; // 
@@ -83,8 +83,8 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string queryString = "INSERT INTO Projects (WorkType, JobNumber, ProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, OverlapAllowed, IncludeHours) " +
-                                     "VALUES (@workType, @jobNumber, @projectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @dueDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes, @overlapAllowed, @includeHours)";
+                string queryString = "INSERT INTO Projects (WorkType, JobNumber, ProjectNumber, EngineeringProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, MoldCost, Engineer, Designer, ToolMaker, RoughProgrammer, FinishProgrammer, ElectrodeProgrammer, Apprentice, Manifold, MoldBase, GeneralNotes, OverlapAllowed, IncludeHours) " +
+                                     "VALUES (@workType, @jobNumber, @projectNumber, @engineeringProjectNumber, @stage, @customer, @project, @deliveryInWeeks, @startDate, @dueDate, @moldCost, @engineer, @designer, @toolMaker, @roughProgrammer, @finishProgrammer, @electrodeProgrammer, @apprentice, @manifold, @moldBase, @generalNotes, @overlapAllowed, @includeHours)";
 
                 connection.Execute(queryString, project);
             }
