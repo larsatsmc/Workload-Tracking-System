@@ -2139,6 +2139,8 @@ namespace Toolroom_Project_Viewer
 
             foreach (var item in Project.Components)
             {
+                item.AllTasksDated = item.CheckIfAllTasksDated();
+
                 if (item.Component.Length > ComponentModel.ComponentCharacterLimit)
                 {
                     MessageBox.Show($"Component: '{item.Component}' is greater than {ComponentModel.ComponentCharacterLimit} characters. \n\nPlease shorten name.");
