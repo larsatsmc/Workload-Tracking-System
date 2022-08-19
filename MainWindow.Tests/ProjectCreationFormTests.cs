@@ -43,16 +43,15 @@ namespace MainWindow.Tests
         [Fact]
         public void FindMatchingDepartment_ShouldWork()
         {
-            ProjectCreationForm pcf = new ProjectCreationForm(schedulerStorage);
 
-            Assert.True(pcf.FindMatchingDepartment("RoughProgrammerComboBox") == "Program Rough", $"Failed to select Program Rough Department.");
-            Assert.True(pcf.FindMatchingDepartment("ElectrodeProgrammerComboBox") == "Program Electrodes", $"Failed to select Program Electrodes Department.");
-            Assert.True(pcf.FindMatchingDepartment("FinishProgrammerComboBox") == "Program Finish", $"Failed to select Program Finish Department.");
-            Assert.True(pcf.FindMatchingDepartment("EDMSinkerOperatorComboBox") == "EDM Sinker", $"Failed to select EDM Sinker Department.");
-            Assert.True(pcf.FindMatchingDepartment("RoughCNCOperatorComboBox") == "CNC Rough", $"Failed to select CNC Rough Department.");
-            Assert.True(pcf.FindMatchingDepartment("ElectrodeCNCOperatorComboBox") == "CNC Electrodes", $"Failed to select CNC Electrodes Department.");
-            Assert.True(pcf.FindMatchingDepartment("FinishCNCOperatorComboBox") == "CNC Finish", $"Failed to select CNC Finish Department.");
-            Assert.True(pcf.FindMatchingDepartment("EDMWireOperaterComboBox") == "EDM Wire (In-House)", $"Failed to select EDM Wire Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("RoughProgrammerComboBox") == "Program Rough", $"Failed to select Program Rough Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("ElectrodeProgrammerComboBox") == "Program Electrodes", $"Failed to select Program Electrodes Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("FinishProgrammerComboBox") == "Program Finish", $"Failed to select Program Finish Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("EDMSinkerOperatorComboBox") == "EDM Sinker", $"Failed to select EDM Sinker Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("RoughCNCOperatorComboBox") == "CNC Rough", $"Failed to select CNC Rough Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("ElectrodeCNCOperatorComboBox") == "CNC Electrodes", $"Failed to select CNC Electrodes Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("FinishCNCOperatorComboBox") == "CNC Finish", $"Failed to select CNC Finish Department.");
+            Assert.True(GeneralOperations.FindMatchingDepartment("EDMWireOperaterComboBox") == "EDM Wire (In-House)", $"Failed to select EDM Wire Department.");
         }
     }
 }

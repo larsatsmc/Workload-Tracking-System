@@ -2574,9 +2574,9 @@ namespace Toolroom_Project_Viewer
                         return;
                     }
 
-                    if (e.Column.FieldName == "RoughProgrammer" || e.Column.FieldName == "ElectrodeProgrammer" || e.Column.FieldName == "FinishProgrammer")
+                    if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
-                        Database.SetTaskResources(sender, e, schedulerStorage1);
+                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerStorage1);
                         RefreshProjectGrid();
                         RefreshDepartmentScheduleView();
                     } 
@@ -2841,18 +2841,11 @@ namespace Toolroom_Project_Viewer
                 }
                 else
                 {
-                    //if (e.Column.FieldName == "JobNumber" || e.Column.FieldName == "ProjectNumber" || e.Column.FieldName == "ToolMaker" )
-                    //{
-                    //    //Database.UpdateTaskProjectInfo(project); // This isn't needed because the database is set to cascade changes made to the Project table.
-                    //    project.DateModified = DateTime.Now;
-                    //}
-
                     project.DateModified = DateTime.Now;
 
-                    if (e.Column.FieldName.Contains("Programmer"))
+                    if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
-                        Database.SetTaskResources(sender, e, schedulerStorage1);
-                        //SetAppointmentResources(sender, e);
+                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerStorage1);
                         RefreshProjectGrid();
                         RefreshDepartmentScheduleView();
                     }

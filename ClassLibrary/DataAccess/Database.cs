@@ -896,21 +896,11 @@ namespace ClassLibrary
             }
         }
         // This means both machines and personnel.
-        public static void SetTaskResources(object s, CellValueChangedEventArgs ev, SchedulerStorage schedulerStorage)
+        public static void SetTaskPersonnel(int projectNumber, string taskName, string personnel, SchedulerStorage schedulerStorage)
         {
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string taskName;
-                int? projectNumber;
-
-                var grid = (s as DevExpress.XtraGrid.Views.Grid.GridView);
-
-                //WorkLoadModel wli = grid.GetRow(ev.RowHandle) as WorkLoadModel;
-
                 DataTable dt = new DataTable();
-
-                //string queryString = "UPDATE Tasks SET Resource = @resource " +
-                //                     "WHERE JobNumber = @jobNumber AND ProjectNumber = @projectNumber AND TaskName = @taskName";
 
                 string queryString = "SELECT * FROM Tasks WHERE ProjectNumber = @projectNumber AND TaskName = @taskName";
 
@@ -919,29 +909,7 @@ namespace ClassLibrary
                 command.Connection = connection;
                 command.CommandType = CommandType.Text;
 
-                if (grid.GetRowCellValue(ev.RowHandle, grid.Columns["MWONumber"]) != null) // If there is an MWONumber use it for the project number.
-                {
-                    projectNumber = (int)grid.GetRowCellValue(ev.RowHandle, grid.Columns["MWONumber"]);
-                }
-                else
-                {
-                    projectNumber = (int)grid.GetRowCellValue(ev.RowHandle, grid.Columns["ProjectNumber"]);
-                }
-
-                if (projectNumber == null)
-                {
-                    return;
-                }
-
                 command.Parameters.Add("@projectNumber", SqlDbType.Int, 12).Value = projectNumber;
-
-                taskName = "Program " + ev.Column.FieldName.Remove(ev.Column.FieldName.Length - 10, 10);
-
-                if (taskName.Contains("Electrode"))
-                {
-                    taskName = taskName + "s";
-                }
-
                 command.Parameters.Add("@taskName", SqlDbType.VarChar, 20).Value = taskName;
 
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
@@ -952,7 +920,7 @@ namespace ClassLibrary
 
                 foreach (DataRow nrow in dt.Rows)
                 {
-                    nrow["Personnel"] = ev.Value.ToString();
+                    nrow["Personnel"] = personnel;
                     nrow["Resources"] = GeneralOperations.GenerateResourceIDsString(schedulerStorage, nrow["Machine"].ToString(), nrow["Personnel"].ToString());
                 }
 
