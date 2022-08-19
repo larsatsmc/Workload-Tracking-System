@@ -189,7 +189,7 @@ namespace Toolroom_Project_Viewer
 
             string taskName = "";
 
-            taskName = FindMatchingDepartment(combo.Name);
+            taskName = GeneralOperations.FindMatchingDepartment(combo.Name, DeptRoleTable);
 
             Project[combo.Name.Replace("ComboBox", "")] = combo.Text;
 

@@ -1,6 +1,8 @@
 ﻿using DevExpress.XtraScheduler;
 using DevExpress.XtraScheduler.Xml;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -121,6 +123,24 @@ namespace ClassLibrary
             {
                 return true;
             }
+        }
+        public static string FindMatchingDepartment(string role, DataTable deptRoleDataTable)
+        {
+            List<string> searchWords = new List<string>();
+
+            foreach (var item in deptRoleDataTable.AsEnumerable())
+            {
+                searchWords = item.Field<string>("Role").Split(' ').ToList();
+
+                Console.WriteLine($"Word Count: {searchWords.Count}");
+
+                if (searchWords.All(x => role.Contains(x)))
+                {
+                    return item.Field<string>("Department");
+                }
+            }
+
+            return $"";
         }
         public static Regex GetDurationPatternToMatch()
         {
