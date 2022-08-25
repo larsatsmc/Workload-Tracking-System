@@ -139,14 +139,14 @@ namespace Toolroom_Project_Viewer
                 LoadProjectView();
                 LoadTaskView();
 
-                foreach (var component in ComponentsList)
-                {
-                    if (component.Tasks.Count() > 0)
-                    {
-                        component.AllTasksDated = component.CheckIfAllTasksDated();
-                        Database.UpdateComponent(component, "AllTasksDated");
-                    }
-                }
+                //foreach (var component in ComponentsList)
+                //{
+                //    if (component.Tasks.Count() > 0)
+                //    {
+                //        component.AllTasksDated = component.CheckIfAllTasksDated();
+                //        Database.UpdateComponent(component, "AllTasksDated");
+                //    }
+                //}
 
                 InitializeAppointments();
                 InitializeDepartmentPrintOptions();
