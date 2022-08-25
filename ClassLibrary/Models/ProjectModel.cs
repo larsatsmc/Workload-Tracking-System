@@ -96,7 +96,7 @@ namespace ClassLibrary
             set { latestFinishDate = value; }
         }
 
-        public bool AllComponentsDated
+        public bool AllTasksDated
         {
             get 
             {

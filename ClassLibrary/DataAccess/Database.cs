@@ -336,7 +336,7 @@ namespace ClassLibrary
 
                 connection.Execute("dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, " +
                     "@RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, " +
-                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @ID", project);                
+                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @AllTasksDated @ID", project);                
 
                 int idIndex;
 
@@ -375,7 +375,7 @@ namespace ClassLibrary
 
                 connection.Execute("dbo.spCreateComponent @JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, " +
                     "@Picture, @Finish, @Status, @PercentComplete", componentsToAdd.ToList());
-                connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Picture, @Material, @Finish, @TaskIDCount, @ID", componentsToUpdate.ToList());
+                connection.Execute("dbo.spUpdateComponent @Component, @Notes, @Priority, @Position, @Quantity, @Spares, @Picture, @Material, @Finish, @TaskIDCount, @AllTasksDated, @ID", componentsToUpdate.ToList());
                 connection.Execute("DELETE FROM Components WHERE ID = @ID", componentsToRemove.ToList());
 
                 databaseProject.Components.ForEach(x => databaseTaskList.AddRange(x.Tasks));

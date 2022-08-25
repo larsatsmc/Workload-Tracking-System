@@ -123,6 +123,8 @@ namespace ClassLibrary
             this.TaskID = id;
             this.TaskName = name;
             this.Component = component;
+            this.StartDate = null;
+            this.FinishDate = null;
             this.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage, this.Machine, this.Personnel);
         }
 
