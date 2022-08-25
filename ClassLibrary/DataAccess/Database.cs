@@ -336,7 +336,7 @@ namespace ClassLibrary
 
                 connection.Execute("dbo.spUpdateProject @JobNumber, @ProjectNumber, @Customer, @Project, @DueDate, @Status, @PercentComplete, @Designer, @ToolMaker, " +
                     "@RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @Apprentice, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, " +
-                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @AllTasksDated @ID", project);                
+                    "@EDMWireOperator, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @AllTasksDated, @ID", project);                
 
                 int idIndex;
 
