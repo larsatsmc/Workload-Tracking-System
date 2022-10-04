@@ -112,7 +112,7 @@ namespace ClassLibrary
             }
         }
 
-        public ProjectModel ReadProjectFromTextFile(string filePath, SchedulerStorage schedulerStorage)
+        public static ProjectModel ReadProjectFromTextFile(string filePath, SchedulerStorage schedulerStorage)
         {
             ProjectModel project = new ProjectModel();
             ComponentModel component = new ComponentModel();
@@ -290,12 +290,12 @@ namespace ClassLibrary
                 //    reader.Close();
             }
         }
-        public string OpenTemplateFile()
+        public static string OpenTemplateFile(string initialDirectory)
         {
             string filename = "";
             OpenFileDialog openTemplateDialog = new OpenFileDialog();
             //MessageBox.Show("Make Project file is saved if it is currently open! Then click OK.");
-            openTemplateDialog.InitialDirectory = @"X:\TOOLROOM\Workload Tracking System\Templates";
+            openTemplateDialog.InitialDirectory = initialDirectory;
             openTemplateDialog.Filter = "Template files (*.txt, *.xml)|*.txt;*.xml";
             openTemplateDialog.Title = "Load Template";
 
@@ -308,10 +308,10 @@ namespace ClassLibrary
             return filename;
         }
 
-        public string SaveTemplateFile(string fileName)
+        public static string SaveTemplateFile(string fileName, string initialDirectory)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = @"X:\TOOLROOM\Workload Tracking System\Templates";
+            saveFileDialog.InitialDirectory = initialDirectory;
             saveFileDialog.Filter = "XML Files (*.xml)|*.xml"; // Text files (*.txt)|*.txt|
             saveFileDialog.FilterIndex = 0;
             saveFileDialog.RestoreDirectory = true;

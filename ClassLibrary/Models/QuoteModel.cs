@@ -42,7 +42,7 @@ namespace ClassLibrary
             this.EDMSinkerHours = Convert.ToInt16(edmSinkerHours);
             this.EDMWireHours = Convert.ToInt16(edmWireHours);
 
-            CreateTaskList();
+            CreateTaskListForQuote();
         }
 
         private int GetTaskHours(string taskName)
@@ -91,9 +91,11 @@ namespace ClassLibrary
             return 0;
         }
 
-        private void CreateTaskList()
+        private void CreateTaskListForQuote()
         {
             List<string> taskNameList = new List<string> {"Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "Grind-Fitting", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)"};
+            List<string> taskPredecessorList = new List<string>() { "", "1", "1", "2", "2", "3,5", "5", "4", "6", "9"};
+            int index = 0;
             TaskList = new List<TaskModel>();
 
             foreach (string taskName in taskNameList)
@@ -105,6 +107,7 @@ namespace ClassLibrary
                 task.SetComponent("Quote");
                 task.SetHours(hours);
                 task.SetDuration((int)(hours * 1.4 / 8));
+                task.Predecessors = taskPredecessorList.ElementAt(index++);
                 task.HasInfo = true;
 
 

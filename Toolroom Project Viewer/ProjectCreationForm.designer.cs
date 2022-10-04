@@ -990,7 +990,7 @@
             this.BSideRadioButton.Location = new System.Drawing.Point(102, 10);
             this.BSideRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BSideRadioButton.Name = "BSideRadioButton";
-            this.BSideRadioButton.Size = new System.Drawing.Size(67, 20);
+            this.BSideRadioButton.Size = new System.Drawing.Size(66, 20);
             this.BSideRadioButton.TabIndex = 53;
             this.BSideRadioButton.Text = "B-Side";
             this.BSideRadioButton.UseVisualStyleBackColor = true;
@@ -1004,7 +1004,7 @@
             this.ASideRadioButton.Location = new System.Drawing.Point(17, 10);
             this.ASideRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ASideRadioButton.Name = "ASideRadioButton";
-            this.ASideRadioButton.Size = new System.Drawing.Size(67, 20);
+            this.ASideRadioButton.Size = new System.Drawing.Size(66, 20);
             this.ASideRadioButton.TabIndex = 52;
             this.ASideRadioButton.TabStop = true;
             this.ASideRadioButton.Text = "A-Side";
@@ -1310,9 +1310,9 @@
             this.Controls.Add(this.panelControl1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.IconOptions.ShowIcon = false;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ProjectCreationForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create Project";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProjectCreationForm_FormClosed);

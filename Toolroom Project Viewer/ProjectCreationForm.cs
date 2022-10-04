@@ -13,6 +13,8 @@ using ClassLibrary;
 using DevExpress.XtraScheduler;
 using DevExpress.XtraEditors;
 using System.Diagnostics;
+using System.Runtime.InteropServices.ComTypes;
+using NuGet;
 
 namespace Toolroom_Project_Viewer
 {
@@ -25,7 +27,7 @@ namespace Toolroom_Project_Viewer
         string prefix;
         bool formLoad = false;
         bool missingTaskInfo = false;
-        bool quoteLoaded = false;
+        //bool quoteLoaded = false;
 
         private DataTable RoleTable { get; set; }
         private DataTable DeptRoleTable { get; set; }
@@ -33,6 +35,7 @@ namespace Toolroom_Project_Viewer
         private ComponentModel SelectedComponent { get; set; }
         private TaskModel SelectedTask { get; set; }
         public SchedulerStorage SchedulerStorageProp { get; private set; }
+        private ContextMenuStrip ComponentMenu, ProjectMenu;
         public bool DataValidated { get; private set; }
 
         public ProjectCreationForm()
@@ -51,6 +54,7 @@ namespace Toolroom_Project_Viewer
             SchedulerStorageProp = schedulerStorage;
             RoleTable = Database.GetRoleTable();
             DeptRoleTable = Database.GetDepartmentRoles();
+
             InitializeComponent();
 
             if (GetDPI() == 120)
@@ -82,7 +86,28 @@ namespace Toolroom_Project_Viewer
                 this.CreateProjectButton.Text = "Change";
             }
 
-            
+            ProjectMenu = new ContextMenuStrip();
+
+            ToolStripMenuItem componentLabel = new ToolStripMenuItem();
+
+            componentLabel.Text = "Load Component";
+
+            ProjectMenu.Items.AddRange(new ToolStripItem[] { componentLabel });
+            ProjectMenu.Click += ProjectMenuStrip_Click;
+            MoldBuildTreeView.Nodes[0].ContextMenuStrip = ProjectMenu;
+
+            ComponentMenu = new ContextMenuStrip();
+            // Create component menu items.
+            ToolStripMenuItem copyLabel = new ToolStripMenuItem();
+            copyLabel.Text = "Copy";
+            ToolStripMenuItem createTemplateLabel = new ToolStripMenuItem();
+            createTemplateLabel.Text = "Create Template";
+            ToolStripMenuItem loadTemplateLabel = new ToolStripMenuItem();
+            loadTemplateLabel.Text = "Load Template";
+
+            ComponentMenu.Items.AddRange(new ToolStripMenuItem[] { copyLabel, createTemplateLabel, loadTemplateLabel });
+            ComponentMenu.Click += ComponentMenuStrip_Click;
+
             prefix = "A-";
         }
 
@@ -513,14 +538,14 @@ namespace Toolroom_Project_Viewer
 
             LoadProjectInfoToForm(project);
 
-            LoadComponentListToForm(project.Components);
+            LoadComponentListToTreeView(project.Components);
 
             MoldBuildTreeView.SelectedNode = MoldBuildTreeView.Nodes[0];
             this.ActiveControl = MoldBuildTreeView;
             MoldBuildTreeView.Nodes[0].Expand();
         }
 
-        private void LoadComponentListToForm(List<ComponentModel> components)
+        private void LoadComponentListToTreeView(List<ComponentModel> components)
         {
             TreeNode currentComponentNode, currentTaskNode;
 
@@ -545,6 +570,26 @@ namespace Toolroom_Project_Viewer
             }
         }
 
+        private void AddTaskListToTreeView(TreeNode selectedComponentNode, List<TaskModel> tasks)
+        {
+            TreeNode currentTaskNode;
+
+            foreach (TaskModel task in tasks)
+            {
+                currentTaskNode = selectedComponentNode.Nodes.Add(task.TaskName);
+
+                if (task.HasInfo == true)
+                {
+                    currentTaskNode.Nodes.Add(task.Hours + " Hour(s)");
+                    currentTaskNode.Nodes.Add(task.Duration);
+                    currentTaskNode.Nodes.Add(task.Machine);
+                    currentTaskNode.Nodes.Add(task.Personnel);
+                    currentTaskNode.Nodes.Add(task.Predecessors);
+                    currentTaskNode.Nodes.Add(task.Notes);
+                }
+            }
+        }
+
         private ProjectModel ConvertQuoteToProject(ProjectModel project)
         {
             // Need to check if form already contains project data.
@@ -561,6 +606,8 @@ namespace Toolroom_Project_Viewer
 
             // Task list is automatically generated inside the QuoteInfo class when quote is read.
             project.Components.First().AddTaskList(project.QuoteInfo.TaskList);
+
+            project.Components.First().Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
 
             return project;
         }
@@ -786,6 +833,70 @@ namespace Toolroom_Project_Viewer
             }
 
             return ti;
+        }
+
+        private string GetTaskPersonnel(string taskName)
+        {
+            string personnel = "";
+
+            if (taskName == "Design")
+            {
+                personnel = DesignerComboBox.Text;
+            }
+            else if (taskName == "Program Rough")
+            {
+                personnel = RoughProgrammerComboBox.Text;
+            }
+            else if (taskName == "Program Finish")
+            {
+                personnel = FinishProgrammerComboBox.Text;
+            }
+            else if (taskName == "Program Electrodes")
+            {
+                personnel = ElectrodeProgrammerComboBox.Text;
+            }
+            else if (taskName == "CNC Rough")
+            {
+                personnel = RoughCNCOperatorComboBox.Text;
+            }
+            else if (taskName == "CNC Finish")
+            {
+                personnel = FinishCNCOperatorComboBox.Text;
+            }
+            else if (taskName == "CNC Electrodes")
+            {
+                personnel = ElectrodeCNCOperatorComboBox.Text;
+            }
+            else if (taskName == "Heat Treat")
+            {
+                // No personnel are assigned to Heat Treat.
+            }
+            else if (taskName.Contains("Inspection"))
+            {
+                // There's no global input for inspection.
+            }
+            else if (taskName.Contains("Grind"))
+            {
+                personnel = ToolMakerComboBox.Text;
+            }
+            else if (taskName.Contains("EDM Sinker"))
+            {
+                personnel = EDMSinkerOperatorComboBox.Text;
+            }
+            else if (taskName.Contains("EDM Wire"))
+            {
+                personnel = EDMWireOperatorComboBox.Text;
+            }
+            else if (taskName == "Polish")
+            {
+                // There is no global input for Polish.
+            }
+            else if (taskName == "Texturing")
+            {
+                // There is no global input for Texture.
+            }
+
+            return personnel;
         }
 
         private List<string> GetPredecessorList(TreeNode node)
@@ -1204,7 +1315,7 @@ namespace Toolroom_Project_Viewer
 
             predecessorsListBox.ClearSelected();
 
-            if (selectedNode.Nodes.Count > 0 && quoteLoaded == false)
+            if (selectedNode.Nodes.Count > 0) // && quoteLoaded == true
             {
                 if (selectedNode.Nodes[4].Text == "")
                 {
@@ -1416,7 +1527,6 @@ namespace Toolroom_Project_Viewer
         private void SaveTemplate(bool autosaved = false)
         {
             string fileName;
-            Template tmpt = new Template();
             SetProjectInfo();
 
             if (autosaved == true)
@@ -1426,7 +1536,7 @@ namespace Toolroom_Project_Viewer
             else
             {
                 //fileName = @"X:\TOOLROOM\Workload Tracking System\Templates\Created Projects\" + Project.JobNumber + " - #" + Project.ProjectNumber + ".xml";
-                fileName = tmpt.SaveTemplateFile(Project.JobNumber + " - #" + Project.ProjectNumber);
+                fileName = Template.SaveTemplateFile(Project.JobNumber + " - #" + Project.ProjectNumber, @"X:\TOOLROOM\Workload Tracking System\Templates");
             }
 
             if (fileName != "")
@@ -1575,15 +1685,15 @@ namespace Toolroom_Project_Viewer
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (MoldBuildTreeView.SelectedNode.Level == 1)
-                {
-                    var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
+                //if (MoldBuildTreeView.SelectedNode.Level == 1)
+                //{
+                //    var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
 
-                    if (result.Length > 0) // Editor returns empty string when cancel is clicked.
-                    {
-                        AddCopiedComponentToTree(new ComponentModel(SelectedComponent, result));
-                    }
-                }
+                //    if (result.Length > 0) // Editor returns empty string when cancel is clicked.
+                //    {
+                //        AddCopiedComponentToTree(new ComponentModel(SelectedComponent, result));
+                //    }
+                //}
             }
         }
 
@@ -1620,6 +1730,11 @@ namespace Toolroom_Project_Viewer
                 materialComboBox.Text = SelectedComponent.Material;
                 finishTextBox.Text = SelectedComponent.Finish;
                 ComponentPictureEdit.Image = SelectedComponent.picture;
+
+                if (selectedNode.ContextMenuStrip == null)
+                {
+                    selectedNode.ContextMenuStrip = ComponentMenu;
+                }
 
                 //if(ActiveComponent.Picture.Count > 0)
                 //{
@@ -1737,7 +1852,85 @@ namespace Toolroom_Project_Viewer
                 selectedNode.ForeColor = SystemColors.HighlightText;
             }
         }
+        private void ProjectMenuStrip_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip contextMenuStrip = (ContextMenuStrip)sender;
 
+            ToolStripMenuItem selectedToolStripMenuItem = null;
+
+            ComponentModel componentToAdd = new ComponentModel();
+
+            string fileName;
+
+            foreach (ToolStripMenuItem item in contextMenuStrip.Items)
+            {
+                if (item.Pressed == true)
+                {
+                    selectedToolStripMenuItem = item;
+                }
+            }
+
+            if (selectedToolStripMenuItem.Text == "Load Component")
+            {
+                contextMenuStrip.Close();
+                fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates\Components");
+                if (fileName.Length > 0)
+                {
+                    componentToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName);
+                    componentToAdd.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
+                    AddCopiedComponentToTree(componentToAdd); // Adds component to project object.
+                }
+            }
+        }
+        private void ComponentMenuStrip_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip contextMenuStrip = (ContextMenuStrip)sender;
+
+            ToolStripMenuItem selectedToolStripMenuItem = null;
+
+            List<TaskModel> tasksToAdd = new List<TaskModel>();
+
+            string fileName;
+
+            foreach (ToolStripMenuItem item in contextMenuStrip.Items)
+            {
+                if (item.Pressed == true)
+                {
+                    selectedToolStripMenuItem = item;
+                }
+            }
+
+            if (selectedToolStripMenuItem.Text == "Copy")
+            {
+                var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
+
+                if (result.Length > 0) // Editor returns empty string when cancel is clicked.
+                {
+                    AddCopiedComponentToTree(new ComponentModel(SelectedComponent, result));
+                }
+            }
+            else if (selectedToolStripMenuItem.Text == "Create Template")
+            {
+                contextMenuStrip.Close();
+                fileName = Template.SaveTemplateFile(SelectedComponent.Component, @"X:\TOOLROOM\Workload Tracking System\Templates\Components");
+                if (fileName.Length > 0)
+                {
+                    Template.WriteToXmlFile(fileName, SelectedComponent);
+                }
+            }
+            else if (selectedToolStripMenuItem.Text == "Load Tasks")
+            {
+                contextMenuStrip.Close();
+                fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates\Components");
+                if (fileName.Length > 0)
+                {
+                    tasksToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName).Tasks;
+                    SelectedComponent.Tasks.AddRange(tasksToAdd);
+                    SelectedComponent.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
+                    AddTaskListToTreeView(MoldBuildTreeView.SelectedNode, tasksToAdd);
+                }
+            }
+        }
         private void updateInfoButton_Click(object sender, EventArgs e)
         {
             SetTaskInfoForSelectedTask();
@@ -1809,7 +2002,7 @@ namespace Toolroom_Project_Viewer
                     Project.SetQuoteInfo(ExcelInteractions.GetQuoteInfo(filename));
 
                     LoadProjectToForm(ConvertQuoteToProject(Project));
-                    quoteLoaded = true;
+                    //quoteLoaded = true;
                 }
                 else
                 {
@@ -2009,8 +2202,7 @@ namespace Toolroom_Project_Viewer
         }
         private void loadTemplateButton_Click(object sender, EventArgs e)
         {
-            Template tmpt = new Template();
-            string fileName = tmpt.OpenTemplateFile();
+            string fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates");
             ProjectModel tempProject = new ProjectModel();
             ComponentModel tempComponent = new ComponentModel();
             List<ComponentModel> componentsToRemove = new List<ComponentModel>();
@@ -2027,7 +2219,7 @@ namespace Toolroom_Project_Viewer
 
                     if (fileName.Split('.')[fileName.Count(x => x == '.')] == "txt")
                     {
-                        tempProject = tmpt.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
+                        tempProject = Template.ReadProjectFromTextFile(fileName, SchedulerStorageProp);
                     }
                     else if (fileName.Split('.')[fileName.Count(x => x == '.')] == "xml")
                     {

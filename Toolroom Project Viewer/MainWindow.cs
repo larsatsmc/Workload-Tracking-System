@@ -2013,7 +2013,7 @@ namespace Toolroom_Project_Viewer
         }
         private void CollapseGroups()
         {
-            GridView view = projectBandedGridView;
+            BandedGridView view = projectBandedGridView;
 
             int count = 0;
             for (int i = 0; i < view.RowCount; i++)
@@ -2023,7 +2023,7 @@ namespace Toolroom_Project_Viewer
                 {
                     count++;
                     //MessageBox.Show(count.ToString() + " " + rowHandle + " " + bandedGridView1.GetGroupRowDisplayText(rowHandle));
-                    if (view.GetGroupRowDisplayText(rowHandle).Contains("Completed") || view.GetGroupRowDisplayText(rowHandle).Contains("Quoted / Forecasted"))
+                    if (view.GetGroupRowDisplayText(rowHandle).Contains("7") || view.GetGroupRowDisplayText(rowHandle).Contains("8"))
                     {
                         view.CollapseGroupRow(rowHandle);
                     }
@@ -2422,7 +2422,7 @@ namespace Toolroom_Project_Viewer
         {
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
             ColorList = Database.GetColorEntries();
-            CollapseGroups();
+            //CollapseGroups();  Calling CollapseGroups from here doesn't work.  For reason the rows do not yet exist on the grid.
         }
         private CriteriaOperator FilterGridView3()
         {
@@ -2757,6 +2757,7 @@ namespace Toolroom_Project_Viewer
                 workLoadViewPrintButton.Visible = true;
                 workLoadViewPrint2Button.Visible = true;
                 gridView3.OptionsPrint.PrintDetails = false;
+                CollapseGroups();
             }
             else
             {
