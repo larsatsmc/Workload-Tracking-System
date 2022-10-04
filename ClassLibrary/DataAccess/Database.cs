@@ -484,7 +484,7 @@ namespace ClassLibrary
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + "\n\n" + e.StackTrace);
+                Console.WriteLine(e.ToString());
                 throw e;
             }
         }

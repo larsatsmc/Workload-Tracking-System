@@ -121,7 +121,7 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message + "\n\n" + e.StackTrace);
                 Console.WriteLine(e.ToString());
             }
         }
@@ -2098,7 +2098,7 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
                 Console.WriteLine(ex.ToString());
             }
             finally
@@ -2610,7 +2610,7 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
                 Console.WriteLine(ex.ToString());
             }
         }
@@ -2970,7 +2970,7 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -3006,8 +3006,8 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + "\n\n" + ex.StackTrace);
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                Console.WriteLine(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
         }
         private void gridView4_CustomRowCellEditForEditing(object sender, CustomRowCellEditEventArgs e)
@@ -3135,6 +3135,7 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
@@ -3153,6 +3154,7 @@ namespace Toolroom_Project_Viewer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
