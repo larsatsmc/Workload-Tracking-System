@@ -1900,35 +1900,43 @@ namespace Toolroom_Project_Viewer
                 }
             }
 
-            if (selectedToolStripMenuItem.Text == "Copy")
+            try
             {
-                var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
+                if (selectedToolStripMenuItem.Text == "Copy")
+                {
+                    var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
 
-                if (result.Length > 0) // Editor returns empty string when cancel is clicked.
+                    if (result.Length > 0) // Editor returns empty string when cancel is clicked.
+                    {
+                        AddCopiedComponentToTree(new ComponentModel(SelectedComponent, result));
+                    }
+                }
+                else if (selectedToolStripMenuItem.Text == "Create Template")
                 {
-                    AddCopiedComponentToTree(new ComponentModel(SelectedComponent, result));
+                    contextMenuStrip.Close();
+                    fileName = Template.SaveTemplateFile(SelectedComponent.Component, @"X:\TOOLROOM\Workload Tracking System\Templates\Components");
+                    if (fileName.Length > 0)
+                    {
+                        Template.WriteToXmlFile(fileName, SelectedComponent);
+                    }
+                }
+                else if (selectedToolStripMenuItem.Text == "Load Template")
+                {
+                    contextMenuStrip.Close();
+                    fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates\Components");
+                    if (fileName.Length > 0)
+                    {
+                        tasksToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName).Tasks;
+                        SelectedComponent.Tasks.AddRange(tasksToAdd);
+                        SelectedComponent.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
+                        AddTaskListToTreeView(MoldBuildTreeView.SelectedNode, tasksToAdd);
+                    }
                 }
             }
-            else if (selectedToolStripMenuItem.Text == "Create Template")
+            catch (Exception ex)
             {
-                contextMenuStrip.Close();
-                fileName = Template.SaveTemplateFile(SelectedComponent.Component, @"X:\TOOLROOM\Workload Tracking System\Templates\Components");
-                if (fileName.Length > 0)
-                {
-                    Template.WriteToXmlFile(fileName, SelectedComponent);
-                }
-            }
-            else if (selectedToolStripMenuItem.Text == "Load Tasks")
-            {
-                contextMenuStrip.Close();
-                fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates\Components");
-                if (fileName.Length > 0)
-                {
-                    tasksToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName).Tasks;
-                    SelectedComponent.Tasks.AddRange(tasksToAdd);
-                    SelectedComponent.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
-                    AddTaskListToTreeView(MoldBuildTreeView.SelectedNode, tasksToAdd);
-                }
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
         private void updateInfoButton_Click(object sender, EventArgs e)
