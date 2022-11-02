@@ -2022,10 +2022,13 @@ namespace Toolroom_Project_Viewer
                 if (view.IsGroupRow(rowHandle))
                 {
                     count++;
-                    //MessageBox.Show(count.ToString() + " " + rowHandle + " " + bandedGridView1.GetGroupRowDisplayText(rowHandle));
-                    if (view.GetGroupRowDisplayText(rowHandle).Contains("7") || view.GetGroupRowDisplayText(rowHandle).Contains("8"))
+
+                    // Using GetGroupRowValue causes an error to occur when it is null.
+                    if (view.GetGroupRowDisplayText(rowHandle).Contains("On Hold") || view.GetGroupRowDisplayText(rowHandle).Contains("Completed"))
                     {
                         view.CollapseGroupRow(rowHandle);
+
+                        //MessageBox.Show(view.GetGroupRowDisplayText(rowHandle));
                     }
                 }
             }

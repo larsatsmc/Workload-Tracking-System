@@ -550,6 +550,12 @@ C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.dll
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.dll
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
 C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\FastMember.dll
