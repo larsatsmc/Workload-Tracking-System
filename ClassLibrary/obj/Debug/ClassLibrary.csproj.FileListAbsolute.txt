@@ -1,0 +1,664 @@
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Images.v19.1.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.xml
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Data.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Data.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Data.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Data.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Utils.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Utils.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Printing.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Printing.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Office.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Office.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Office.v19.1.Core.resources.dll
+\\s29b-smdrv\MyDocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Office.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Images.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Data.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Data.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Data.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Data.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Utils.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Utils.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Printing.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Printing.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v19.1.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Office.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Office.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Office.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Office.v19.1.Core.resources.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\FastMember.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\System.IO.Packaging.dll
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.pdb
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.xml
+\\s-fs1-smdrv\mydocs$\Joshua.Meservey\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\FastMember.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\System.IO.Packaging.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Images.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.pdb
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v19.1.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v19.1.Core.xml
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Data.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Data.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Data.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Data.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Utils.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Utils.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Printing.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Printing.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v19.1.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Office.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Office.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Office.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Office.v19.1.Core.resources.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\Joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.xml
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\Documents\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\FastMember.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\System.IO.Packaging.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Images.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.pdb
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\Dapper.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ExcelNumberFormat.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.xml
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\source\repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\FastMember.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\System.IO.Packaging.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Images.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ClosedXML.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\Dapper.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ExcelNumberFormat.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\de\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\es\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ja\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\bin\Debug\ru\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Repos\WorkloadTrackingSystem\ClassLibrary\obj\Debug\ClassLibrary.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\FastMember.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\System.IO.Packaging.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Images.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.pdb
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ClosedXML.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\Dapper.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraEditors.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraGrid.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.Desktop.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraScheduler.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ExcelNumberFormat.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Utils.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Data.Desktop.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Printing.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Sparkline.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraLayout.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraPrinting.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraBars.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Pdf.v21.2.Drawing.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.RichEdit.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.XtraTreeList.v21.2.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\DevExpress.Office.v21.2.Core.xml
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Data.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraEditors.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraGrid.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraScheduler.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Utils.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Printing.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Sparkline.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraLayout.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraPrinting.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraBars.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Pdf.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.RichEdit.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.XtraTreeList.v21.2.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\de\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\es\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ja\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\bin\Debug\ru\DevExpress.Office.v21.2.Core.resources.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.ResolveComReference.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\joshua.meservey\OneDrive - SMC Ltd\Visual Studio 2017\Projects\Toolroom Scheduler\ClassLibrary\obj\Debug\ClassLibrary.pdb
