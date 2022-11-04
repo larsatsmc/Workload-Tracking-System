@@ -503,6 +503,7 @@ namespace ClassLibrary
             int componentActiveTaskCount = 0;
 
             TotalActiveComponents = 0;
+            TotalActiveTasks = 0;
 
             foreach (var component in Components)
             {
