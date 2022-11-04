@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.workLoadBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.workload_Tracking_System_DBDataSet = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSet();
             this.bandedGridView1 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridView();
             this.gridBand1 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.colToolNumber = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
@@ -61,10 +59,7 @@
             this.colGeneralNotes = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGeneralNotesRTF = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.UseSelectedProjectButton = new DevExpress.XtraEditors.SimpleButton();
-            this.workLoadTableAdapter = new Toolroom_Project_Viewer.Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bandedGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,7 +68,6 @@
             this.gridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridControl1.DataSource = this.workLoadBindingSource;
             this.gridControl1.Location = new System.Drawing.Point(12, 46);
             this.gridControl1.MainView = this.bandedGridView1;
             this.gridControl1.Name = "gridControl1";
@@ -81,16 +75,6 @@
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.bandedGridView1});
-            // 
-            // workLoadBindingSource
-            // 
-            this.workLoadBindingSource.DataMember = "WorkLoad";
-            this.workLoadBindingSource.DataSource = this.workload_Tracking_System_DBDataSet;
-            // 
-            // workload_Tracking_System_DBDataSet
-            // 
-            this.workload_Tracking_System_DBDataSet.DataSetName = "Workload_Tracking_System_DBDataSet";
-            this.workload_Tracking_System_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // bandedGridView1
             // 
@@ -350,10 +334,6 @@
             this.UseSelectedProjectButton.Text = "Use Selected Project";
             this.UseSelectedProjectButton.Click += new System.EventHandler(this.UseSelectedProjectButton_Click);
             // 
-            // workLoadTableAdapter
-            // 
-            this.workLoadTableAdapter.ClearBeforeFill = true;
-            // 
             // ProjectSelectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,14 +341,12 @@
             this.ClientSize = new System.Drawing.Size(1143, 627);
             this.Controls.Add(this.UseSelectedProjectButton);
             this.Controls.Add(this.gridControl1);
+            this.IconOptions.ShowIcon = false;
             this.Name = "ProjectSelectionForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Project Selection Form";
             this.Load += new System.EventHandler(this.ProjectSelectionForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workLoadBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.workload_Tracking_System_DBDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bandedGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -401,9 +379,6 @@
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colMoldBase;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotes;
         private DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn colGeneralNotesRTF;
-        private Workload_Tracking_System_DBDataSet workload_Tracking_System_DBDataSet;
-        private System.Windows.Forms.BindingSource workLoadBindingSource;
-        private Workload_Tracking_System_DBDataSetTableAdapters.WorkLoadTableAdapter workLoadTableAdapter;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand1;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand2;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand gridBand3;

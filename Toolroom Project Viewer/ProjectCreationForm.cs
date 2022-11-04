@@ -2362,6 +2362,7 @@ namespace Toolroom_Project_Viewer
             try
             {
                 SetProjectInfo();
+                Project.SetActiveCounts();
 
                 //Stopwatch sw = new Stopwatch();
 

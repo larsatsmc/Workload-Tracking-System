@@ -57,6 +57,10 @@ namespace ClassLibrary
         public double PercentComplete { get; set; }
         public string Apprentice { get; set; } = "";
         [XmlIgnore]
+        public int TotalActiveComponents { get; set; }
+        [XmlIgnore]
+        public int TotalActiveTasks { get; set; }
+        [XmlIgnore]
         public string Manifold { get; set; }
         [XmlIgnore]
         public string Moldbase { get; set; }
@@ -493,6 +497,23 @@ namespace ClassLibrary
             }
 
             return false;
+        }
+        public void SetActiveCounts()
+        {
+            int componentActiveTaskCount = 0;
+
+            TotalActiveComponents = 0;
+
+            foreach (var component in Components)
+            {
+                componentActiveTaskCount = component.Tasks.Count(x => x.Status != "Completed");
+                TotalActiveTasks += componentActiveTaskCount;
+
+                if (componentActiveTaskCount > 0)
+                {
+                    TotalActiveComponents++;
+                }
+            }
         }
         public bool AddComponent(string name)
         {

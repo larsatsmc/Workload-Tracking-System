@@ -626,6 +626,23 @@ namespace Toolroom_Project_Viewer
             return departmentColor;
         }
 
+        private Color GetTaskReadinessColor(TaskModel task)
+        {
+            var result = from tempTask in TasksList
+                         where tempTask.ProjectNumber == task.ProjectNumber && tempTask.Component == task.Component && task.HasMatchingPredecessor(tempTask.TaskID)
+                         select tempTask;
+
+            foreach (var item in result)
+            {
+                if (item.Status != "Completed")
+                {
+                    return Color.LightSalmon;
+                }
+            }
+
+            return Color.LightGreen;
+        }
+
         private void SetTasks()
         {
             string department = departmentComboBox.Text;
@@ -1173,6 +1190,10 @@ namespace Toolroom_Project_Viewer
             if (Tasks == ".*")
             {
                 e.ViewInfo.Appearance.BackColor = GetDeptColor(e.ViewInfo.Appointment.CustomFields["TaskName"].ToString());
+            }
+            else
+            {
+                e.ViewInfo.Appearance.BackColor = GetTaskReadinessColor((TaskModel)e.ViewInfo.Appointment.GetSourceObject(schedulerStorage1));
             }
         }
 

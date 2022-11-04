@@ -261,14 +261,6 @@
     <Compile Include="WaitForm1.Designer.cs">
       <DependentUpon>WaitForm1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Workload_Tracking_System_DBDataSet.cs">
-      <DependentUpon>Workload_Tracking_System_DBDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Workload_Tracking_System_DBDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Workload_Tracking_System_DBDataSet.xsd</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="ForwardDateWindow.resx">
       <DependentUpon>ForwardDateWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -340,17 +332,6 @@
     </None>
     <None Include="Toolroom Project Viewer_1_TemporaryKey.pfx" />
     <None Include="Toolroom Project Viewer_TemporaryKey.pfx" />
-    <None Include="Workload_Tracking_System_DBDataSet.xsc">
-      <DependentUpon>Workload_Tracking_System_DBDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Workload_Tracking_System_DBDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Workload_Tracking_System_DBDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Workload_Tracking_System_DBDataSet.xss">
-      <DependentUpon>Workload_Tracking_System_DBDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB
+        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB, AzureSqlServerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -34,8 +34,8 @@ namespace ClassLibrary
             {
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
-                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, EngineeringProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, DateModified) " + // 
-                                          "VALUES (@JobNumber, @ProjectNumber, @EngineeringProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, GETDATE())"; // 
+                    string queryString1 = "INSERT INTO Projects (JobNumber, ProjectNumber, EngineeringProjectNumber, Stage, Customer, Project, DeliveryInWeeks, StartDate, DueDate, AdjustedDeliveryDate, MoldCost, Priority, Engineer, Designer, ToolMaker, RoughProgrammer, ElectrodeProgrammer, FinishProgrammer, EDMSinkerOperator, RoughCNCOperator, ElectrodeCNCOperator, FinishCNCOperator, EDMWireOperator, Apprentice, Manifold, Moldbase, GeneralNotes, OverlapAllowed, IncludeHours, KanBanWorkbookPath, TotalActiveComponents, TotalActiveTasks, DateModified) " + // 
+                                          "VALUES (@JobNumber, @ProjectNumber, @EngineeringProjectNumber, @Stage, @Customer, @Project, @DeliveryInWeeks, @StartDate, @DueDate, @AdjustedDeliveryDate, @MoldCost, @Priority, @Engineer, @Designer, @ToolMaker, @RoughProgrammer, @ElectrodeProgrammer, @FinishProgrammer, @EDMSinkerOperator, @RoughCNCOperator, @ElectrodeCNCOperator, @FinishCNCOperator, @EDMWireOperator, @Apprentice, @Manifold, @Moldbase, @GeneralNotes, @OverlapAllowed, @IncludeHours, @KanBanWorkbookPath, @TotalActiveComponents, @TotalActiveTasks, GETDATE())"; // 
 
                     string queryString2 = "INSERT INTO Components (JobNumber, ProjectNumber, Component, Notes, Priority, [Position], Material, TaskIDCount, Quantity, Spares, Picture, Finish) " + // 
                                           "VALUES (@JobNumber, @ProjectNumber, @Component, @Notes, @Priority, @Position, @Material, @TaskIDCount, @Quantity, @Spares, @Picture, @Finish)"; // 
@@ -816,44 +816,6 @@ namespace ClassLibrary
             }
 
             return queryString;
-        }
-        public static List<TaskModel> GetAppointments(string department) // This is meant to replace the above GetAppointmentsData method.
-        {
-            string queryString = SetQueryString(department);
-
-            using (IDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
-            {
-                List<TaskModel> appointments = connection.Query<TaskModel>(queryString).ToList();
-
-                return appointments;
-            }
-        }
-        public DataTable GetAppointmentData()
-        {
-            DataTable dt = new DataTable();
-
-            try
-            {
-                using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
-                {
-                    //string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resources FROM Tasks WHERE TaskName LIKE 'CNC Finish'";
-                    string queryString = "SELECT JobNumber & ' ' & Component & ' ' & TaskName As Subject, StartDate, FinishDate, Machine, Resource, ToolMaker, Notes FROM Tasks WHERE TaskName = 'CNC Rough'";
-
-                    OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
-
-                    adapter.Fill(dt);
-                }
-            }
-            catch (OleDbException ex)
-            {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "OledbException Error");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message + "\n\n" + e.StackTrace, "getAppointmentsData");
-            }
-
-            return dt;
         }
 
         #endregion
@@ -1693,29 +1655,6 @@ namespace ClassLibrary
 
         #region Read
 
-        public List<string> GetMachineList(string machineType)
-        {
-            List<string> machineList = new List<string>();
-            DataTable dt = new DataTable();
-
-            string queryString = "SELECT MachineName From Machines WHERE MachineType LIKE @machineType ORDER BY MachineName ASC";
-
-            using (OleDbConnection connection = new OleDbConnection(Helper.CnnValue(OLEDBConnectionName)))
-            {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(queryString, connection);
-
-                adapter.SelectCommand.Parameters.AddWithValue("@machineType", "%" + machineType + "%");
-
-                adapter.Fill(dt);
-
-                foreach (DataRow nrow in dt.Rows)
-                {
-                    machineList.Add($"{nrow["MachineName"]}");
-                } 
-            }
-
-            return machineList;
-        }
 
         #endregion
 
