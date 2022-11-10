@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB, AzureSqlServerDB
+        static readonly string SQLClientConnectionName = "AzureSqlServerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB, AzureSqlServerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -728,7 +728,7 @@ namespace ClassLibrary
 
         public static List<string> GetDepartments()
         {
-            return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind", "Mold Service" };
+            return new List<string>() { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "EDM Sinker", "EDM Wire (In-House)", "Polish (In-House)", "Inspection", "Grind", "Mold Service", "Manual" };
         }
         public static List<TaskModel> GetTasks(string weekStart, string weekEnd)
         {
@@ -1225,7 +1225,7 @@ namespace ClassLibrary
                 row2["ResourceName"] = "No Personnel";
                 row2["Role"] = "None";
                 row2["Department"] = "None";
-                row2["ResourceType"] = "Personnel";
+                row2["ResourceType"] = "Person";
 
                 dt.Rows.Add(row2);
 

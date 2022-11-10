@@ -1137,12 +1137,13 @@
             "Inspection Post Polish",
             "Texturing",
             "Hole Pop",
-            "Mold Service"});
+            "Mold Service",
+            "Manual"});
             this.TaskListBox.Location = new System.Drawing.Point(13, 34);
             this.TaskListBox.Margin = new System.Windows.Forms.Padding(4);
             this.TaskListBox.Name = "TaskListBox";
             this.TaskListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.TaskListBox.Size = new System.Drawing.Size(201, 404);
+            this.TaskListBox.Size = new System.Drawing.Size(201, 436);
             this.TaskListBox.TabIndex = 28;
             this.TaskListBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TaskListBox_MouseClick);
             // 

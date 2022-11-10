@@ -48,7 +48,7 @@ namespace Toolroom_Project_Viewer
         private List<ColorStruct> ColorList = new List<ColorStruct>();
         private RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit = new RepositoryItemPopupContainerEdit();
         private string PrintOrientation, PaperSize;
-        private string[] departmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish" };
+        private string[] DepartmentArr = { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish" };
 
         object DraggedResourceId = null;
         public DataTable RoleTable { get; set; }
@@ -280,12 +280,17 @@ namespace Toolroom_Project_Viewer
             DataTable dt = new DataTable();
 
             schedulerStorage1.Resources.Clear();
+            schedulerStorage1.Resources.CustomFieldMappings.Clear();
 
             ResourceStorage resourceStorage = new ResourceStorage(schedulerStorage1);
             ResourceMappingInfo resourceMappings = schedulerStorage1.Resources.Mappings;
 
             resourceMappings.Caption = "ResourceName";
             resourceMappings.Id = "ResourceName";
+
+            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("ResourceType", "ResourceType"));
+            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Role", "Role"));
+            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Department", "Department"));
 
             //if (departmentComboBox.Text == "Programming")
             //{
@@ -715,6 +720,10 @@ namespace Toolroom_Project_Viewer
             {
                 Tasks = @"Mold Service";
             }
+            else if (department == "Manual")
+            {
+                Tasks = @"Manual";
+            }
             else if (department == "All")
             {
                 Tasks = ".*";
@@ -813,6 +822,12 @@ namespace Toolroom_Project_Viewer
             else if (department == "Mold Service")
             {
                 Role = "Tool Maker";
+                NoResourceName = "No Personnel";
+                schedulerControl1.ActiveView.ResourcesPerPage = 8;
+            }
+            else if (department == "Manual")
+            {
+                Role = "Manual";
                 NoResourceName = "No Personnel";
                 schedulerControl1.ActiveView.ResourcesPerPage = 8;
             }
@@ -1169,7 +1184,16 @@ namespace Toolroom_Project_Viewer
                 {
                     if (GroupByRadioGroup.SelectedIndex == 0)
                     {
-                        e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("ResourceName") == NoResourceName || x.Field<string>("ResourceName") == "None")).Count() < 1;
+                        if (Role != "Manual")
+                        {
+                            // Modify this to use resource custom fields.
+                            //e.Cancel = !(RoleRegExpression.IsMatch(res.CustomFields["Role"].ToString()) || res.Id.ToString() == NoResourceName);
+                            e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("ResourceName") == NoResourceName || x.Field<string>("ResourceName") == "None")).Count() < 1;
+                        }
+                        else
+                        {
+                            e.Cancel = res.CustomFields["ResourceType"].ToString() != "Person";                     
+                        }
                     }
                     else if (GroupByRadioGroup.SelectedIndex == 1)
                     {
@@ -1205,7 +1229,7 @@ namespace Toolroom_Project_Viewer
         {
             // string[] departmentArr = { "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Polish" };
 
-            foreach (string item in departmentArr)
+            foreach (string item in DepartmentArr)
             {
                 PrintDeptsCheckedComboBoxEdit.Properties.Items.Add(item, CheckState.Unchecked, true);
             }
@@ -1329,6 +1353,10 @@ namespace Toolroom_Project_Viewer
                 criteriaOperators.Add(new FunctionOperator(FunctionOperatorType.StartsWith, new OperandProperty("TaskName"), department));
             }
             else if (department == "Mold Service")
+            {
+                criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
+            }
+            else if (department == "Manual")
             {
                 criteriaOperators.Add(new BinaryOperator("TaskName", department, BinaryOperatorType.Equal));
             }
@@ -3703,7 +3731,7 @@ namespace Toolroom_Project_Viewer
                 currentDate2 = DateTime.Parse(worksheet2.Cells[2, c].Value.ToString());
                 currentWeekList2 = weekList.FindAll(x => x.WeekStart <= currentDate2 && x.WeekEnd >= currentDate2);
 
-                for (int r = 3; r <= 15; r++)
+                for (int r = 3; r <= 16; r++)
                 {
                     worksheet1.Cells[r, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r, 1].Value.ToString())).GetWeekHours(),1);
 
@@ -4592,8 +4620,8 @@ namespace Toolroom_Project_Viewer
         }
         private void PopulateDepartmentComboBoxes()
         {
-            List<string> departmentList1 = new List<string> { "Design", "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "All" };
-            List<string> departmentList2 = new List<string> { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "All" };
+            List<string> departmentList1 = new List<string> { "Design", "Programming", "Program Rough", "Program Finish", "Program Electrodes", "CNCs", "CNC People", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "Manual", "All" };
+            List<string> departmentList2 = new List<string> { "Design", "Program Rough", "Program Finish", "Program Electrodes", "CNC Rough", "CNC Finish", "CNC Electrodes", "Grind", "Inspection", "EDM Sinker", "EDM Wire (In-House)", "Mold Service", "Polish", "Manual", "All" };
 
             departmentComboBox.Properties.Items.AddRange(departmentList1);
             departmentComboBox2.Properties.Items.AddRange(departmentList2);
