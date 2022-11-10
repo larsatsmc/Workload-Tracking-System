@@ -173,6 +173,10 @@ namespace Toolroom_Project_Viewer
                 schedulerControl1.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
 
+                zoomTrackBarControl1.Properties.Maximum = 215;
+                zoomTrackBarControl1.Properties.Minimum = 60;
+                zoomTrackBarControl1.Value = schedulerControl1.GanttView.GetBaseTimeScale().Width;
+
                 schedulerControl2.Start = DateTime.Today.AddDays(-7);
                 schedulerControl2.Views.GanttView.ResourcesPerPage = 15;
                 schedulerControl2.GroupType = SchedulerGroupType.Resource;
@@ -955,6 +959,11 @@ namespace Toolroom_Project_Viewer
         private void includeQuotesCheckEdit_CheckedChanged(object sender, EventArgs e)
         {
             schedulerControl1.ActiveView.LayoutChanged();
+        }
+        private void zoomTrackBarControl1_ValueChanged(object sender, EventArgs e)
+        {
+            schedulerControl1.GanttView.GetBaseTimeScale().Width = zoomTrackBarControl1.Value;
+            Console.WriteLine(zoomTrackBarControl1.Value);
         }
         private void schedulerControl1_AllowAppointmentDelete(object sender, AppointmentOperationEventArgs e)
         {

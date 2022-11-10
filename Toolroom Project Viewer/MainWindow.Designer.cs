@@ -167,6 +167,7 @@
             this.schedulerStorage1 = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.zoomTrackBarControl1 = new DevExpress.XtraEditors.ZoomTrackBarControl();
             this.includeCompletesCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.includeQuotesCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
@@ -290,6 +291,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBarControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBarControl1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.includeCompletesCheckEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.includeQuotesCheckEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectCheckedComboBoxEdit.Properties)).BeginInit();
@@ -1570,6 +1573,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.zoomTrackBarControl1);
             this.xtraTabPage1.Controls.Add(this.includeCompletesCheckEdit);
             this.xtraTabPage1.Controls.Add(this.includeQuotesCheckEdit);
             this.xtraTabPage1.Controls.Add(this.labelControl7);
@@ -1584,6 +1588,16 @@
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage1.Text = "Department Schedule View";
+            // 
+            // zoomTrackBarControl1
+            // 
+            this.zoomTrackBarControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.zoomTrackBarControl1.EditValue = null;
+            this.zoomTrackBarControl1.Location = new System.Drawing.Point(1372, 6);
+            this.zoomTrackBarControl1.Name = "zoomTrackBarControl1";
+            this.zoomTrackBarControl1.Size = new System.Drawing.Size(205, 23);
+            this.zoomTrackBarControl1.TabIndex = 12;
+            this.zoomTrackBarControl1.ValueChanged += new System.EventHandler(this.zoomTrackBarControl1_ValueChanged);
             // 
             // includeCompletesCheckEdit
             // 
@@ -2852,6 +2866,8 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBarControl1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBarControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.includeCompletesCheckEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.includeQuotesCheckEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectCheckedComboBoxEdit.Properties)).EndInit();
@@ -3113,6 +3129,7 @@
         private DevExpress.XtraEditors.SimpleButton exportButton;
         private DevExpress.XtraGrid.Columns.GridColumn colTotalActiveComponents;
         private DevExpress.XtraGrid.Columns.GridColumn colTotalActiveTasks;
+        private DevExpress.XtraEditors.ZoomTrackBarControl zoomTrackBarControl1;
     }
 }
 
