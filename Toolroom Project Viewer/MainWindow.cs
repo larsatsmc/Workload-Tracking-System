@@ -292,27 +292,6 @@ namespace Toolroom_Project_Viewer
             schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Role", "Role"));
             schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Department", "Department"));
 
-            //if (departmentComboBox.Text == "Programming")
-            //{
-            //    dt = db.GetResourceData().AsEnumerable().Where(x => x.Field<string>("Role").Contains("Programmer")).GroupBy(x => x.Field<string>("ResourceName")).Select(x => x.FirstOrDefault()).CopyToDataTable();
-            //}
-            //else if(departmentComboBox.Text == "CNC")
-            //{
-            //    dt = db.GetResourceData().AsEnumerable().Where(x => x.Field<string>("Role").Contains("Mill")).GroupBy(x => x.Field<string>("ResourceName")).Select(x => x.FirstOrDefault()).CopyToDataTable();
-            //}
-            //else
-            //{
-            //    dt = db.GetResourceData().AsEnumerable().Where(x => x.Field<string>("Department") == departmentComboBox.Text &&
-            //                              x.Field<string>("Role").Contains(GetRoleFromDepartmentName(departmentComboBox.Text))).CopyToDataTable();
-            //}
-
-            //dt = db.GetResourceData();
-
-            //foreach (DataRow nrow in dt.Rows)
-            //{
-            //    Console.WriteLine($"{nrow["ID"]} {nrow["ResourceName"]} {nrow["Role"]} {nrow["Department"]}");
-            //}
-
             schedulerStorage1.Resources.DataSource = ResourceDataTable.AsEnumerable().GroupBy(x => x.Field<string>("ResourceName")).Select(x => x.FirstOrDefault()).CopyToDataTable();
 
             Console.WriteLine();
