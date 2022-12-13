@@ -16,9 +16,6 @@ namespace Toolroom_Project_Viewer
 
         private void ProjectSelectionForm_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'workload_Tracking_System_DBDataSet.WorkLoad' table. You can move, or remove it, as needed.
-            //this.workLoadTableAdapter.Fill(this.workload_Tracking_System_DBDataSet.WorkLoad);
-
             BindingList<WorkLoadModel> workloads = new BindingList<WorkLoadModel>(Database.GetWorkloads());
 
             gridControl1.DataSource = workloads;

@@ -328,7 +328,7 @@ namespace Toolroom_Project_Viewer
             appointmentMappings.Start = "StartDate";
             appointmentMappings.End = "FinishDate";
             appointmentMappings.Subject = "Subject";
-            appointmentMappings.Location = "Location";
+            //appointmentMappings.Location = "Location";
             appointmentMappings.PercentComplete = "PercentComplete";
             appointmentMappings.ResourceId = "Resources";
             appointmentMappings.Description = "Notes";
@@ -657,7 +657,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (department == "CNC Rough")
             {
-                Tasks = @"^(CNC Rough)\w*";
+                Tasks = @"CNC Rough";
             }
             else if (department == "Rough")
             {
@@ -665,11 +665,11 @@ namespace Toolroom_Project_Viewer
             }
             else if (department == "CNC Finish")
             {
-                Tasks = @"^(CNC Finish)\w*";
+                Tasks = @"^CNC Finish\w*";
             }
             else if (department == "CNC Electrodes")
             {
-                Tasks = @"^(CNC Electrodes)";
+                Tasks = @"^CNC Electrodes";
             }
             else if (department == "CNCs")
             {
@@ -1118,7 +1118,7 @@ namespace Toolroom_Project_Viewer
             }
             else
             {
-                e.Menu = null;
+                //e.Menu = null;  // Hides the scheduler control menu.
             }
         }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
@@ -1129,11 +1129,11 @@ namespace Toolroom_Project_Viewer
             {
                 if (AllProjectItemsChecked == false)
                 {
-                    e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch(apt.Location)).Any(); // 
+                    e.Cancel = !projectCheckedComboBoxEdit.Properties.Items.Where(x => x.Value.ToString().Contains($"#{apt.CustomFields["ProjectNumber"]}") && x.CheckState == CheckState.Checked && TaskRegExpression.IsMatch($"{apt.CustomFields["TaskName"]}")).Any(); // 
                 }
                 else
                 {
-                    e.Cancel = !TaskRegExpression.IsMatch(apt.Location);
+                    e.Cancel = !TaskRegExpression.IsMatch($"{apt.CustomFields["TaskName"]}");
                 }
 
                 if (includeCompletesCheckEdit.Checked == false)
@@ -1174,7 +1174,7 @@ namespace Toolroom_Project_Viewer
                     {
                         if (Role != "Manual")
                         {
-                            // Modify this to use resource custom fields.
+                            //TODO: Modify this to use resource custom fields.
                             //e.Cancel = !(RoleRegExpression.IsMatch(res.CustomFields["Role"].ToString()) || res.Id.ToString() == NoResourceName);
                             e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (RoleRegExpression.IsMatch(x.Field<string>("Role")) || x.Field<string>("ResourceName") == NoResourceName || x.Field<string>("ResourceName") == "None")).Count() < 1;
                         }
@@ -1185,7 +1185,8 @@ namespace Toolroom_Project_Viewer
                     }
                     else if (GroupByRadioGroup.SelectedIndex == 1)
                     {
-                        Console.WriteLine($"Resource: {res.Id.ToString()}");
+                        Console.WriteLine($"Resource: {res.Id}");
+                        //TODO: Modify this to use resource custom fields.
                         e.Cancel = ResourceDataTable.AsEnumerable().Where(x => x.Field<string>("ResourceName") == res.Id.ToString() && (x.Field<string>("Department").Contains(departmentComboBox.Text) || x.Field<string>("ResourceName") == NoResourceName || x.Field<string>("ResourceName") == "None")).Count() < 1;
                     }
                 }
@@ -3505,7 +3506,7 @@ namespace Toolroom_Project_Viewer
         #endregion
 
         #region Chart View
-        public List<Week> InitializeDeptWeeksList(List<string> departmentArr)
+        public List<Week> InitializeWeeksList(List<string> weekCategoryList)
         {
             List<Week> weekList = new List<Week>();
             DateTime wsDate, weDate;
@@ -3513,9 +3514,9 @@ namespace Toolroom_Project_Viewer
 
             for (int i = 1; i <= 20; i++)
             {
-                foreach (string department in departmentArr)
+                foreach (string category in weekCategoryList)
                 {
-                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), department));
+                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), category));
                 }
             }
 
@@ -3523,10 +3524,22 @@ namespace Toolroom_Project_Viewer
         }
         private List<Week> GetWeeks(List<TaskModel> tasks, string resourceType = "Department")
         {
-            List<Week> weekList = InitializeDeptWeeksList(Database.GetDepartments());
+            List<string> categories = new List<string>();
+            List<Week> weekList;
             List<Week> deptWeekList = new List<Week>();
             Week weekTemp;
             int weekNum;
+
+            if (resourceType == "Department")
+            {
+                categories = Database.GetDepartments();
+            }
+            else if (resourceType == "Machines")
+            {
+                categories = Database.GetMachines();
+            }
+
+            weekList = InitializeWeeksList(categories);
 
             foreach (TaskModel task in tasks)
             {
@@ -3534,7 +3547,7 @@ namespace Toolroom_Project_Viewer
                 {
                     goto Skip;
                 }
-
+                // Selects the weeks with the correct category item.
                 if (resourceType == "Department")
                 {
                     var results = from wk in weekList
@@ -3547,13 +3560,22 @@ namespace Toolroom_Project_Viewer
                 else if (resourceType == "Personnel")
                 {
                     var results = from wk in weekList
-                                  where (task.Resource.Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
+                                  where (task.Personnel.Contains(wk.Department)) // && Convert.ToDateTime(rdr["StartDate"]) >= wk.WeekStart && Convert.ToDateTime(rdr["StartDate"]) <= wk.WeekEnd
                                   orderby wk.WeekNum ascending
                                   select wk;
 
                     deptWeekList = results.ToList();
                 }
+                else if (resourceType == "Machines")
+                {
+                    var results = from wk in weekList
+                                  where (task.Machine != null && task.Machine.Contains(wk.Department))
+                                  orderby wk.WeekNum ascending
+                                  select wk;
 
+                    deptWeekList = results.ToList();
+                }
+                // Deposits hours into correct day buckets.
                 if (deptWeekList.Any())
                 {
                     weekTemp = deptWeekList.Find(x => (x.WeekStart <= task.StartDate && x.WeekEnd >= task.StartDate) || (x.WeekStart > task.StartDate && x.WeekNum == 1));
@@ -3697,11 +3719,11 @@ namespace Toolroom_Project_Viewer
             }
         }
 
-        private void PopulateForecastHoursSpreadsheetControl(List<Week> weekList)
+        private void PopulateDeptForecastHours(List<Week> deptWeekList)
         {
             IWorkbook workbook = spreadsheetControl1.Document;
-            Worksheet worksheet1 = workbook.Worksheets["Weekly Hrs"];
-            Worksheet worksheet2 = workbook.Worksheets["Daily Hrs"];
+            Worksheet worksheet1 = workbook.Worksheets["Dept. Weekly Hrs"];
+            Worksheet worksheet2 = workbook.Worksheets["Dept. Daily Hrs"];
             List<Week> currentWeekList1, currentWeekList2;
             DateTime currentDate1, currentDate2;
             DateTime wsDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
@@ -3713,17 +3735,60 @@ namespace Toolroom_Project_Viewer
             {
                 worksheet1.Cells[2, c].Value = wsDate.AddDays((c - 2) * 7);
                 currentDate1 = DateTime.Parse(worksheet1.Cells[2, c].Value.ToString());
-                currentWeekList1 = weekList.FindAll(x => x.WeekStart == currentDate1);
+                currentWeekList1 = deptWeekList.FindAll(x => x.WeekStart == currentDate1);
 
                 worksheet2.Cells[2, c].Value = GeneralOperations.AddBusinessDays(date, c - 2);
                 currentDate2 = DateTime.Parse(worksheet2.Cells[2, c].Value.ToString());
-                currentWeekList2 = weekList.FindAll(x => x.WeekStart <= currentDate2 && x.WeekEnd >= currentDate2);
+                currentWeekList2 = deptWeekList.FindAll(x => x.WeekStart <= currentDate2 && x.WeekEnd >= currentDate2);
 
                 for (int r = 3; r <= 16; r++)
                 {
                     worksheet1.Cells[r, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r, 1].Value.ToString())).GetWeekHours(),1);
 
                     worksheet2.Cells[r, c].Value = Decimal.Round(currentWeekList2.Find(x => x.Department.Contains(worksheet2.Cells[r, 1].Value.ToString())).DayList.Find(x => x.Date == currentDate2).Hours,1);
+                }
+            }
+
+            spreadsheetControl1.EndUpdate();
+        }
+
+        private void PopulateMachineHours(List<Week> machineWeekList)
+        {
+            IWorkbook workbook = spreadsheetControl1.Document;
+            Worksheet worksheet1 = workbook.Worksheets["Mach. Weekly Hrs"];
+            Worksheet worksheet2 = workbook.Worksheets["Mach. Daily Hrs"];
+
+            List<Week> currentWeekList1, currentWeekList2;
+            DateTime currentDate1, currentDate2;
+            DateTime wsDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            DateTime date = DateTime.Today;
+            List<string> machineList = machineWeekList.Select(x => x.Department).Distinct().ToList();
+
+            spreadsheetControl1.BeginUpdate();
+
+            int r1 = 3;
+
+            foreach (var machine in machineList)
+            {
+                worksheet1.Cells[r1, 1].Value = machine;
+                worksheet2.Cells[r1++, 1].Value = machine;
+            }
+
+            for (int c = 2; c <= 20; c++)
+            {
+                worksheet1.Cells[2, c].Value = wsDate.AddDays((c - 2) * 7);
+                currentDate1 = DateTime.Parse(worksheet1.Cells[2, c].Value.ToString());
+                currentWeekList1 = machineWeekList.FindAll(x => x.WeekStart == currentDate1);
+
+                worksheet2.Cells[2, c].Value = GeneralOperations.AddBusinessDays(date, c - 2);
+                currentDate2 = DateTime.Parse(worksheet2.Cells[2, c].Value.ToString());
+                currentWeekList2 = machineWeekList.FindAll(x => x.WeekStart <= currentDate2 && x.WeekEnd >= currentDate2);
+
+                for (int r2 = 3; r2 <= 14; r2++)
+                {
+                    worksheet1.Cells[r2, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r2, 1].Value.ToString())).GetWeekHours(), 1);
+
+                    worksheet2.Cells[r2, c].Value = Decimal.Round(currentWeekList2.Find(x => x.Department.Contains(worksheet2.Cells[r2, 1].Value.ToString())).DayList.Find(x => x.Date == currentDate2).Hours, 1);
                 }
             }
 
@@ -3788,7 +3853,8 @@ namespace Toolroom_Project_Viewer
         private void GetOverallToolRoomHours()
         {
             List<TaskModel> taskList = new List<TaskModel>();
-            List<Week> weeksList = new List<Week>();
+            List<Week> deptWeeksList = new List<Week>();
+            List<Week> machineWeekList = new List<Week>();
             List<string> departmentList = new List<string>();
 
             departmentList = Database.GetDepartments();
@@ -3802,11 +3868,13 @@ namespace Toolroom_Project_Viewer
 
                 taskList = Database.GetTasks(weekStart, weekEnd);
 
-                weeksList = GetWeeks(taskList);
+                deptWeeksList = GetWeeks(taskList);
+                machineWeekList = GetWeeks(taskList, "Machines");
 
-                LoadGraph(weeksList, departmentList);
+                LoadGraph(deptWeeksList, departmentList);
 
-                PopulateForecastHoursSpreadsheetControl(weeksList);
+                PopulateDeptForecastHours(deptWeeksList);
+                PopulateMachineHours(machineWeekList);
             }
         }
         private string GetResourceType()

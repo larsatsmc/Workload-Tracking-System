@@ -10,6 +10,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraScheduler;
 using Dapper;
 using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace ClassLibrary
 {
@@ -17,7 +18,7 @@ namespace ClassLibrary
     {
         // WorkloadTrackingSystemDB, LocalSqlServerDB See App.config for list of connection names.
         static readonly string DatabaseType = "SQL Server"; // Either 'Access' or 'SQL Server'.
-        static readonly string SQLClientConnectionName = "AzureSqlServerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB, AzureSqlServerDB
+        static readonly string SQLClientConnectionName = "SQLServerToolRoomSchedulerDB";  // LocalSqlServerDB, SQLServerToolRoomSchedulerDB, AzureSqlServerDB
         static readonly string OLEDBConnectionName = "LocalOLEDBSqlServerDB";
 
         #region Projects Table Operations
@@ -719,7 +720,7 @@ namespace ClassLibrary
                 {
                     //Console.WriteLine(nrow["JobNumber"]);
                     //
-                    jobNumberList.Add($"{nrow["JobNumber"].ToString()} - #{nrow["ProjectNumber"].ToString()}");
+                    jobNumberList.Add($"{nrow["JobNumber"]} - #{nrow["ProjectNumber"]}");
                 } 
             }
 
@@ -1170,7 +1171,19 @@ namespace ClassLibrary
                 return resourceID;
             }
         }
+        public static List<string> GetMachines()
+        {
+            List<string> machines = new List<string>() { "430", "950", "EDM1 AG60L", "EDM2 AQ55L", "EDM Wire", "Makino", "Mazak 1", "Mazak 2", "Mazak 3", "New 640", "Old 640", "Sodick" };
 
+            return machines;
+
+            //using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            //{
+            //    string queryString = "SELECT DISTINCT Resources.ResourceName FROM Resources INNER JOIN Roles ON Resources.ID = Roles.ResourceID WHERE Resources.ResourceName like 'Mazak%' OR Roles.Role in ('Graphite Mill','Finish Mill','Wire EDM', 'EDM Sinker') ORDER BY Resources.ResourceName ASC";
+
+            //return connection.Query<string>(queryString).ToList();
+            //}
+        }
         public static List<string> GetRoleList(string role)
         {
             DataTable dt = new DataTable();
