@@ -999,12 +999,17 @@ namespace Toolroom_Project_Viewer
         {
             //MessageBox.Show("Resize");
         }
+        private void schedulerControl1_AppointmentsDrag(object sender, AppointmentsDragEventArgs e)
+        {
+
+        }
         private void schedulerControl1_DragDrop(object sender, DragEventArgs e)
         {
             //MessageBox.Show("DragDrop");
         }
         private void schedulerControl1_AllowAppointmentDrag(object sender, AppointmentOperationEventArgs e)
         {
+            
             // Prevents user from dragging multiple tasks since doing so causes undesirable results.
             if (schedulerControl1.SelectedAppointments.Count > 1)
             {
@@ -1015,12 +1020,22 @@ namespace Toolroom_Project_Viewer
         private void schedulerControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var scheduler = sender as DevExpress.XtraScheduler.SchedulerControl;
-
+            if(e.Button == MouseButtons.Right)
+            {
+                // TODO: Add code to active locked dragging.
+            }
             var hitInfo = scheduler.ActiveView.CalcHitInfo(e.Location, false);
             if (hitInfo.HitTest != DevExpress.XtraScheduler.Drawing.SchedulerHitTest.AppointmentContent)
                 return;
 
             DraggedResourceId = ((DevExpress.XtraScheduler.Internal.Implementations.ResourceBase)hitInfo.ViewInfo.Resource).Id;
+        }
+        private void schedulerControl1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // TODO: Add code to deactivate locked dragging.
+            }
         }
         private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
@@ -3709,7 +3724,7 @@ namespace Toolroom_Project_Viewer
                     foreach (Week week in deptWeeks)
                     {
                         // Adds a point for each week using the sum of the weeks hours as a data point.
-                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , Decimal.Round(week.GetWeekHours(),1)));
+                        tempSeries.Points.Add(new SeriesPoint("WK " + weekTitleArr[i++] + " " + week.WeekStart.ToShortDateString() , Decimal.Round(week.Hours, 1)));
                     }
 
                     chartControl1.Series.Add(tempSeries);
@@ -3743,7 +3758,7 @@ namespace Toolroom_Project_Viewer
 
                 for (int r = 3; r <= 16; r++)
                 {
-                    worksheet1.Cells[r, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r, 1].Value.ToString())).GetWeekHours(),1);
+                    worksheet1.Cells[r, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r, 1].Value.ToString())).Hours, 1);
 
                     worksheet2.Cells[r, c].Value = Decimal.Round(currentWeekList2.Find(x => x.Department.Contains(worksheet2.Cells[r, 1].Value.ToString())).DayList.Find(x => x.Date == currentDate2).Hours,1);
                 }
@@ -3786,7 +3801,7 @@ namespace Toolroom_Project_Viewer
 
                 for (int r2 = 3; r2 <= 14; r2++)
                 {
-                    worksheet1.Cells[r2, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r2, 1].Value.ToString())).GetWeekHours(), 1);
+                    worksheet1.Cells[r2, c].Value = Decimal.Round(currentWeekList1.Find(x => x.Department.Contains(worksheet1.Cells[r2, 1].Value.ToString())).Hours, 1);
 
                     worksheet2.Cells[r2, c].Value = Decimal.Round(currentWeekList2.Find(x => x.Department.Contains(worksheet2.Cells[r2, 1].Value.ToString())).DayList.Find(x => x.Date == currentDate2).Hours, 1);
                 }

@@ -13,7 +13,10 @@ namespace ClassLibrary
         public DateTime WeekStart { get; private set; }
         public DateTime WeekEnd { get; private set; }
         public List<Day> DayList { get; private set; }
-
+        public decimal Hours
+        {
+            get { return DayList.Sum(x => x.Hours); }
+        }
 
         public Week(string department)
         {
@@ -64,7 +67,7 @@ namespace ClassLibrary
                     }
                     else
                     {
-                        DayList[(int)date.AddDays(i).DayOfWeek].AddHours(8);
+                        DayList[(int)date.AddDays(i).DayOfWeek].Hours += 8;
                     }
                 }
 
@@ -74,12 +77,12 @@ namespace ClassLibrary
                 }
                 else
                 {
-                    DayList[(int)date.AddDays(days).DayOfWeek].AddHours(remainHours);
+                    DayList[(int)date.AddDays(days).DayOfWeek].Hours += remainHours;
                 }
             }
             else
             {
-                DayList[(int)date.AddDays(days).DayOfWeek].AddHours(remainHours);
+                DayList[(int)date.AddDays(days).DayOfWeek].Hours += remainHours;
             }
 
         }
@@ -105,7 +108,7 @@ namespace ClassLibrary
                     }
                     else
                     {
-                        DayList[(int)date.AddDays(i).DayOfWeek].AddHours(dailyAVG);
+                        DayList[(int)date.AddDays(i).DayOfWeek].Hours += dailyAVG;
                         Console.WriteLine($"{(int)date.AddDays(i).DayOfWeek} {dailyAVG}");
                         dayCount--;
                     }
@@ -113,37 +116,25 @@ namespace ClassLibrary
             }
             else
             {
-                DayList[(int)date.AddDays(days).DayOfWeek].AddHours(dailyAVG);
+                DayList[(int)date.AddDays(days).DayOfWeek].Hours += dailyAVG;
                 Console.WriteLine($"{(int)date.AddDays(days).DayOfWeek} {dailyAVG}");
             }
 
             return dayCount;
         }
         /// <summary>
-        /// Adds hours to a specific day of the week.
+        /// Adds hours to a specific day of the week by DayOfWeek index 0 - 6.
+        /// 0 = Sunday,
+        /// 1 = Monday,
+        /// 2 = Tuesday,
+        /// 3 = Wednesday,
+        /// 4 = Thursday,
+        /// 5 = Friday,
+        /// 6 = Saturday
         /// </summary>
         public void AddHoursToDay(int dayOfWeek, decimal hours)
         {
-            DayList[dayOfWeek].AddHours(hours);
-        }
-        /// <summary>
-        /// Adds all the day hours together to get total week hours.
-        /// </summary>
-        public decimal GetWeekHours()
-        {
-            decimal hours = 0;
-
-            foreach (Day day in DayList)
-            {
-                hours += day.Hours;
-            }
-
-            return hours;
-        }
-
-        public void AddWeekHours(int hours, DateTime date)
-        {
-
+            DayList[dayOfWeek].Hours += hours;
         }
 
         private DateTime AddBusinessDays(DateTime date, int days)
@@ -184,7 +175,7 @@ namespace ClassLibrary
     {
         public DateTime Date { get; set; }
         public string DayName { get; private set; }
-        public decimal Hours { get; private set; }
+        public decimal Hours { get; set; }
 
         public Day (string dayName)
         {
@@ -195,11 +186,6 @@ namespace ClassLibrary
         {
             this.DayName = dayName;
             this.Date = date;
-        }
-
-        public void AddHours(decimal hours)
-        {
-            this.Hours += hours;
         }
     }
 }

@@ -1716,10 +1716,12 @@
             this.schedulerControl1.AllowAppointmentDrag += new DevExpress.XtraScheduler.AppointmentOperationEventHandler(this.schedulerControl1_AllowAppointmentDrag);
             this.schedulerControl1.AppointmentDrop += new DevExpress.XtraScheduler.AppointmentDragEventHandler(this.schedulerControl1_AppointmentDrop);
             this.schedulerControl1.AppointmentResized += new DevExpress.XtraScheduler.AppointmentResizeEventHandler(this.schedulerControl1_AppointmentResized);
+            this.schedulerControl1.AppointmentsDrag += new System.EventHandler<DevExpress.XtraScheduler.AppointmentsDragEventArgs>(this.schedulerControl1_AppointmentsDrag);
             this.schedulerControl1.PopupMenuShowing += new DevExpress.XtraScheduler.PopupMenuShowingEventHandler(this.schedulerControl1_PopupMenuShowing);
             this.schedulerControl1.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl1_AppointmentFlyoutShowing);
             this.schedulerControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragDrop);
             this.schedulerControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.schedulerControl1_MouseDown);
+            this.schedulerControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.schedulerControl1_MouseUp);
             // 
             // departmentComboBox
             // 
