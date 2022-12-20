@@ -31,12 +31,12 @@ namespace ClassLibrary
             }
         }
 
-        public Week(int weekNumber, DateTime weekStart, DateTime weekEnd, string department)
+        public Week(int weekNumber, DateTime weekStart, string department)
         {
             this.WeekNum = weekNumber;
             this.Department = department;
             this.WeekStart = weekStart;
-            this.WeekEnd = weekEnd;
+            this.WeekEnd = weekStart.AddDays(6);
             string[] dayNameList = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             this.DayList = new List<Day>();
 

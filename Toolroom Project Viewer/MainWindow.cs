@@ -3524,14 +3524,14 @@ namespace Toolroom_Project_Viewer
         public List<Week> InitializeWeeksList(List<string> weekCategoryList)
         {
             List<Week> weekList = new List<Week>();
-            DateTime wsDate, weDate;
+            DateTime wsDate;
             wsDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
             for (int i = 1; i <= 20; i++)
             {
                 foreach (string category in weekCategoryList)
                 {
-                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), wsDate.AddDays((i - 1) * 7 + 6), category));
+                    weekList.Add(new Week(i, wsDate.AddDays((i - 1) * 7), category));
                 }
             }
 
