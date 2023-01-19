@@ -24,7 +24,6 @@ using System.Drawing;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
-using DevExpress.XtraEditors.Mask;
 using System.Reflection;
 using System.IO;
 using System.Threading.Tasks;
@@ -36,6 +35,8 @@ using System.Threading;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraScheduler.Reporting;
 using DevExpress.Spreadsheet;
+using DevExpress.Utils.Menu;
+using DevExpress.XtraScheduler.Drawing;
 
 namespace Toolroom_Project_Viewer
 {
@@ -72,8 +73,11 @@ namespace Toolroom_Project_Viewer
         private DataTable ResourceDataTable;
         private string Role, Tasks;
         Regex TaskRegExpression, RoleRegExpression;
-        private bool AllProjectItemsChecked, MoveSelectedAppointments;
+        private bool AllProjectItemsChecked, MoveSelectedAppointments, RightMouseButtonPressed, MoveSubsequentTaskWithLockedSpacing;
         private List<string> ValidEditorList = new List<string>();
+        DateTime OldTaskStartDate;
+        Appointment DraggedAppointment;
+        SchedulerHitInfo HitInfo;
 
         private RefreshHelper helper1, helper2, deptTaskViewHelper;
 
@@ -160,7 +164,7 @@ namespace Toolroom_Project_Viewer
 
                 //PopulateEmployeeComboBox();
                 gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false, filterTasksByDatesCheckEdit.Checked);
-                gridView3.ActiveFilterCriteria = CriteriaOperator.And(new NotOperator(new BinaryOperator("Stage", "7 - Completed")));
+                gridView3.ActiveFilterCriteria = FilterTaskView3();
                 //MessageBox.Show($"{schedulerControl1.TimelineView.GetBaseTimeScale().Width}"); 
 
                 schedulerControl1.Start = DateTime.Today.AddDays(-7);
@@ -387,8 +391,9 @@ namespace Toolroom_Project_Viewer
         private bool UpdateTaskStorage1(TaskModel movedTask, Appointment apt)
         {            
             bool retryHit = false;
-            ComponentModel tempComponent = null;
-            TaskModel globalTask, tempTask = null;
+            ProjectModel globalProject = null;
+            ComponentModel globalComponent = null;
+            TaskModel globalTask = null;
 
             gridView1.BeginUpdate();
             gridView5.BeginUpdate();
@@ -396,49 +401,76 @@ namespace Toolroom_Project_Viewer
             movedTask.Resources = GenerateResourceIDsString(apt.ResourceIds);
             movedTask.Machine = GetResourceFromResourceIDs(apt.ResourceIds, "Machine");
             movedTask.Personnel = GetResourceFromResourceIDs(apt.ResourceIds, "Person");
-            movedTask.StartDate = apt.Start;
-            movedTask.FinishDate = apt.End;
+            //movedTask.StartDate = apt.Start;
+            //movedTask.FinishDate = apt.End;
 
             gridView5.EndUpdate();
             gridView1.EndUpdate();
 
             Retry:
 
-            ProjectModel globalProject = ProjectsList.Find(x => x.ProjectNumber == movedTask.ProjectNumber);
+            globalProject = ProjectsList.Find(x => x.ProjectNumber == movedTask.ProjectNumber);
 
-            ComponentModel globalComponent = ComponentsList.Find(x => x.Component == movedTask.Component && x.ProjectNumber == movedTask.ProjectNumber); 
+            globalComponent = ComponentsList.Find(x => x.Component == movedTask.Component && x.ProjectNumber == movedTask.ProjectNumber); 
 
-            if (globalComponent != null)
-            {
-                tempComponent = new ComponentModel(globalComponent); 
-            }
+            globalTask = globalComponent.Tasks.Find(x => x.TaskID == movedTask.TaskID);
 
-            if (tempComponent != null)
-            {
-                tempTask = tempComponent.Tasks.Find(x => x.TaskID == movedTask.TaskID); 
-            }
-
-            if ((globalProject == null || globalComponent == null || tempTask == null) && retryHit == false)
+            if ((globalProject == null || globalComponent == null || globalTask == null) && retryHit == false)
             {
                 RefreshProjectGrid();
                 retryHit = true;
                 goto Retry;
             }
 
-            if (tempComponent.UpdateTask(movedTask))
+            try
             {
                 gridView5.BeginUpdate();
                 schedulerControl1.BeginUpdate();
 
-                foreach (TaskModel currentTask in tempComponent.Tasks)
+                if (RightMouseButtonPressed)
                 {
-                    globalTask = TasksList.Find(x => x.ID == currentTask.ID);
+                    foreach (TaskModel task in globalComponent.Tasks)
+                    {
+                        Console.WriteLine($"Task: {task.TaskName,-13} Start Date: {((DateTime)task.StartDate).ToShortDateString(),-10} Finish Date: {GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration).ToShortDateString()}");
+                    }
 
-                    globalTask.StartDate = currentTask.StartDate;
-                    globalTask.FinishDate = currentTask.FinishDate;
-                    globalTask.Notes = currentTask.Notes;
+                    Console.WriteLine();
+
+                    if (MoveSubsequentTaskWithLockedSpacing)
+                    {
+                        if (((DateTime)movedTask.StartDate - OldTaskStartDate).Days > 0)
+                        {                            
+                            globalComponent.UpdateSuccessorTaskDates(movedTask, GeneralOperations.GetWorkingDays(OldTaskStartDate, (DateTime)movedTask.StartDate));
+                        }
+                        else
+                        {
+                            foreach (int taskID in movedTask.GetPredecessorList())
+                            {
+                                globalComponent.UpdatePredecessorTaskDates(taskID, GeneralOperations.GetWorkingDays((DateTime)movedTask.StartDate, OldTaskStartDate)); 
+                            }
+                        }
+
+                        Database.UpdateTaskDates(globalComponent.Tasks);
+
+                        MoveSubsequentTaskWithLockedSpacing = false;
+                    }
+                    else
+                    {
+                        globalComponent.UpdateTaskDates(movedTask, OldTaskStartDate);
+                    }
+
+                    return true;
                 }
-
+                else
+                {
+                    if (globalComponent.UpdateTaskDates(movedTask))
+                    {
+                        return true;
+                    }
+                }
+            }
+            finally
+            {
                 schedulerControl1.EndUpdate();
                 schedulerControl1.RefreshData();
                 gridView5.EndUpdate();
@@ -446,13 +478,9 @@ namespace Toolroom_Project_Viewer
                 gridView3.BeginUpdate();
                 globalProject.LatestFinishDate = globalProject.GetLatestFinishDate();
                 gridView3.EndUpdate();
+            }
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         private void SetAppointmentDate(Appointment apt, string column, DateTime date)
         {
@@ -1001,11 +1029,17 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerControl1_AppointmentsDrag(object sender, AppointmentsDragEventArgs e)
         {
-
+            //MessageBox.Show("Drag");
         }
         private void schedulerControl1_DragDrop(object sender, DragEventArgs e)
         {
             //MessageBox.Show("DragDrop");
+        }
+        private void schedulerControl1_DragOver(object sender, DragEventArgs e)
+        {
+            Point pos = schedulerControl1.PointToClient(Cursor.Position);
+            SchedulerViewInfoBase viewInfo = schedulerControl1.ActiveView.ViewInfo;
+            HitInfo = viewInfo.CalcHitInfo(pos, false);
         }
         private void schedulerControl1_AllowAppointmentDrag(object sender, AppointmentOperationEventArgs e)
         {
@@ -1020,21 +1054,30 @@ namespace Toolroom_Project_Viewer
         private void schedulerControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var scheduler = sender as DevExpress.XtraScheduler.SchedulerControl;
-            if(e.Button == MouseButtons.Right)
-            {
-                // TODO: Add code to active locked dragging.
-            }
             var hitInfo = scheduler.ActiveView.CalcHitInfo(e.Location, false);
+
+            if (e.Button == MouseButtons.Right)
+            {
+                RightMouseButtonPressed = true;
+
+                if (hitInfo.HitTest == SchedulerHitTest.AppointmentContent)
+                {
+                    Appointment apt = ((AppointmentViewInfo)hitInfo.ViewInfo).Appointment;
+                    DraggedAppointment = apt;
+                }
+            }
+
             if (hitInfo.HitTest != DevExpress.XtraScheduler.Drawing.SchedulerHitTest.AppointmentContent)
                 return;
 
             DraggedResourceId = ((DevExpress.XtraScheduler.Internal.Implementations.ResourceBase)hitInfo.ViewInfo.Resource).Id;
+            
         }
         private void schedulerControl1_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                // TODO: Add code to deactivate locked dragging.
+                RightMouseButtonPressed = false;
             }
         }
         private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
@@ -1043,6 +1086,32 @@ namespace Toolroom_Project_Viewer
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 e.Cancel = true;
+            }
+
+            // May want to go this route in the future.  But this would require switching schedulerStorage1 to a datastorage
+
+            //AdvPersistentObjectCancelEventArgs e2 = (AdvPersistentObjectCancelEventArgs)e;
+
+            //if (e2.PropertyName == "Start")
+            //{
+            //    TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerStorage1) as TaskModel;
+
+            //    ComponentModel tempComponent = ComponentsList.Find(x => x.Component == changingTask.Component && x.ProjectNumber == changingTask.ProjectNumber);
+
+            //    if (RightMouseButtonPressed)
+            //    {
+            //        tempComponent.UpdateTask(changingTask, ChangingTask);
+            //    } 
+            //}
+
+            if (RightMouseButtonPressed)
+            {
+                TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerStorage1) as TaskModel;
+
+                OldTaskStartDate = (DateTime)changingTask.StartDate;  // (DateTime)changingTask.StartDate
+
+                Console.WriteLine($"Old Date: {OldTaskStartDate}");
+                Console.WriteLine();
             }
         }
         private void schedulerStorage1_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
@@ -1133,8 +1202,29 @@ namespace Toolroom_Project_Viewer
             }
             else
             {
-                //e.Menu = null;  // Hides the scheduler control menu.
+                e.Menu.Items.Remove(e.Menu.Items.FirstOrDefault(x => x.Caption == "&Copy"));
+
+                if (e.Menu.Items.Count(x => x.Caption == "Mo&ve") > 0)
+                {
+                    DXMenuItem menuItem = e.Menu.Items.FirstOrDefault(x => x.Caption == "Mo&ve");
+                    menuItem.Caption = "Move All Component Tasks with Locked Spacing";
+                }
+
+                if (e.Menu.Items.Count(x => x.Caption == "Move Subsequent Component Tasks with Lock Spacing") == 0)
+                {
+                    e.Menu.Items.Insert(1, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing));
+                }
             }
+        }
+        private void schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing(object sender, EventArgs e)
+        {
+            MoveSubsequentTaskWithLockedSpacing = true;
+
+            //MessageBox.Show($"Final Start: {HitInfo.ViewInfo.Interval.Start.ToShortDateString()} Finish: {HitInfo.ViewInfo.Interval.End.ToShortDateString()}");
+
+            DraggedAppointment.Start = HitInfo.ViewInfo.Interval.Start;
+            DraggedAppointment.End = HitInfo.ViewInfo.Interval.End;
+
         }
         private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
@@ -1389,7 +1479,15 @@ namespace Toolroom_Project_Viewer
 
             footerDateTime = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
         }
+        private CriteriaOperator FilterTaskView3()
+        {
+            List<CriteriaOperator> criteriaOperators = new List<CriteriaOperator>();
 
+            criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("Stage"), "On Hold")));
+            criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("Stage"), "Completed")));
+
+            return CriteriaOperator.And(criteriaOperators);
+        }
         // This header is for when the datagrid gets printed.
         private void CreateHeaderRTFString()
         {
@@ -1621,20 +1719,18 @@ namespace Toolroom_Project_Viewer
                 TaskModel task = view.GetFocusedRow() as TaskModel;
                 ComponentModel component = ComponentsList.Find(x => x.Component == task.Component && x.ProjectNumber == task.ProjectNumber);
 
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
+                schedulerControl1.BeginUpdate();
+
                 deptTaskViewHelper = new RefreshHelper(gridView1, "ProjectNumber");
 
                 if (e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate")
                 {
-                    DateTime? date = (DateTime?)e.Value;
-
-                    Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
-                    SetAppointmentDate(apt, e.Column.FieldName, date ?? new DateTime(0001, 1, 1));
                     component.ChangeTaskDate(e.Column.FieldName, task);
                 }
                 else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                 {
-                    Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
-                    SetAppointmentResources(apt, task.Machine, task.Personnel);
                     task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
                     Database.UpdateTask(task, e);
                 }
@@ -1645,12 +1741,21 @@ namespace Toolroom_Project_Viewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
 
                 deptTaskViewHelper.SaveViewInfo();
                 LoadTaskView();
                 deptTaskViewHelper.LoadViewInfo();
             }
+            finally
+            {
+                gridView5.EndUpdate();
+                gridView1.EndUpdate();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+            }
+
         }
 
         private void gridView1_Click(object sender, EventArgs e)
@@ -2077,7 +2182,7 @@ namespace Toolroom_Project_Viewer
                     count++;
 
                     // Using GetGroupRowValue causes an error to occur when it is null.
-                    if (view.GetGroupRowDisplayText(rowHandle).Contains("On Hold") || view.GetGroupRowDisplayText(rowHandle).Contains("Completed"))
+                    if (view.GetGroupRowDisplayText(rowHandle).Contains("On Hold") || view.GetGroupRowDisplayText(rowHandle).Contains("Completed") || view.GetGroupRowDisplayText(rowHandle).Contains("Outsourced"))
                     {
                         view.CollapseGroupRow(rowHandle);
 
@@ -3163,30 +3268,27 @@ namespace Toolroom_Project_Viewer
 
                 GridView view = sender as GridView;
                 TaskModel task = view.GetFocusedRow() as TaskModel;
-                ComponentModel component = ComponentsList.Find(x => x.Component == task.Component && x.ProjectNumber == task.ProjectNumber);
                 ProjectModel project = ProjectsList.Find(x => x.ProjectNumber == task.ProjectNumber);
+                ComponentModel component = ComponentsList.Find(x => x.Component == task.Component && x.ProjectNumber == task.ProjectNumber);
+
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
 
                 if ((e.Column.FieldName == "StartDate" || e.Column.FieldName == "FinishDate") && e.Value != DBNull.Value)
                 {
-                    gridView5.BeginUpdate();
-                    component.ChangeTaskDate(e.Column.FieldName, task);
+                    component.ChangeTaskDate(e.Column.FieldName, task);  // Database update handled in this method.
                     //project.IsProjectOnTime();
-                    gridView5.EndUpdate();
                 }
                 else
                 {
                     if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                     {
-                        Appointment apt = schedulerStorage1.Appointments.GetAppointmentById(task.ID);
-                        // TODO: Determine why when I change a resource and the dates are blank the dates get set to 1/1/2001.
-                        SetAppointmentResources(apt, task.Machine, task.Personnel);
                         task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
                     }
 
                     Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
                 }
-
-                LoadTaskView();
             }
             catch (Exception ex)
             {
@@ -3197,6 +3299,11 @@ namespace Toolroom_Project_Viewer
             {
                 if(IsFormOpen("WaitForm1"))
                     SplashScreenManager.CloseForm();
+
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+                gridView1.EndUpdate();
+                gridView5.EndUpdate();
             }
         }
         private void RefreshProjectsButton_Click(object sender, EventArgs e)
@@ -3306,15 +3413,17 @@ namespace Toolroom_Project_Viewer
                     return;
                 }
 
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
+
                 using (var form = new ForwardDateWindow("Forward Date", DateTime.Today))
                 {
                     var result = form.ShowDialog();
 
                     if (result == DialogResult.OK)
                     {
-                        gridView5.BeginUpdate();
                         Database.ForwardDateTasks(compResult.ToList(), form.ForwardDate);
-                        gridView5.EndUpdate();
                     }
                 }
             }
@@ -3327,6 +3436,10 @@ namespace Toolroom_Project_Viewer
             finally
             {
                 SplashScreenManager.CloseForm();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+                gridView1.EndUpdate();
+                gridView5.EndUpdate();
             }
         }
 
@@ -3361,15 +3474,17 @@ namespace Toolroom_Project_Viewer
                     return;
                 }
 
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
+
                 using (var form = new ForwardDateWindow("Back Date", project.DueDate))
                 {
                     var result = form.ShowDialog();
 
                     if (result == DialogResult.OK)
                     {
-                        gridView5.BeginUpdate();
                         Database.BackDateTasks(compResult.ToList(), form.ForwardDate);
-                        gridView5.EndUpdate();  // TODO: Understand why there is a delay in updating the gridview and deal with it. 
                     }
                 }
             }
@@ -3381,6 +3496,10 @@ namespace Toolroom_Project_Viewer
             finally
             {
                 SplashScreenManager.CloseForm();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+                gridView1.EndUpdate();
+                gridView5.EndUpdate();
             }
         }
         // Recreate Create Project button to reactivate.
@@ -4122,6 +4241,8 @@ namespace Toolroom_Project_Viewer
         {
             Project = Database.GetProject(projectNumber);
 
+            //Project = ProjectsList.Find(x => x.ProjectNumber == projectNumber);
+
             Project.HasTasksWithNullDates();
 
             ResourceMappingInfo resourceMappings = this.schedulerStorage2.Resources.Mappings;
@@ -4247,84 +4368,89 @@ namespace Toolroom_Project_Viewer
 
             SplashScreenManager.CloseForm();
         }
-        private bool UpdateTaskStorage2(Appointment apt)
+        private bool UpdateTaskStorage2(TaskModel movedTask)
         {
             ComponentModel tempComponent;
-            TaskModel movedTask, globalTask;
             ProjectModel globalProject = null;
 
-            var number = GetProjectComboBoxInfo(projectComboBox);
+            //var number = GetProjectComboBoxInfo(projectComboBox);
 
             //Resource resource = schedulerStorage2.Resources[Convert.ToInt16(apt.ResourceId) - 1];
 
             //resource = schedulerStorage2.Resources[Convert.ToInt16(resource.ParentId) - 1];
 
-            globalProject = ProjectsList.Find(x => x.ProjectNumber == number.projectNumber);
+            //globalProject = ProjectsList.Find(x => x.ProjectNumber == movedTask.ProjectNumber);
 
-            tempComponent = Project.Components.Find(x => x.Component == apt.CustomFields["Component"].ToString());
+            tempComponent = Project.Components.Find(x => x.ProjectNumber == movedTask.ProjectNumber && x.Component == movedTask.Component);
 
-            movedTask = tempComponent.Tasks.Find(x => x.TaskID == (int)apt.CustomFields["TaskID"]);
+            //movedTask = globalComponent.Tasks.Find(x => x.TaskID == (int)apt.CustomFields["TaskID"]);
 
-            movedTask.SetDates(apt.Start, apt.End);
+            //movedTask.SetDates(apt.Start, apt.End);
 
-            if (tempComponent.UpdateTask(movedTask)) // Database.UpdateTask(movedTask, tempComponent), db.UpdateTask(number.jobNumber, number.projectNumber, component.Component, task.TaskID, apt.Start, apt.End, Project.OverlapAllowed)
-            {
-                // This doesn't work.  Don't do it.
-                //task2 = task;
+            //schedulerControl1.BeginUpdate();
+            //schedulerControl2.BeginUpdate();
+            //gridView1.BeginUpdate();
+            //gridView5.BeginUpdate();
 
-                bool retryHit = false;
-
-                schedulerControl1.BeginUpdate();
-                gridView1.BeginUpdate();
-                gridView5.BeginUpdate();
-
-                foreach (TaskModel currentTask in tempComponent.Tasks)
+            //try
+            //{
+                if (RightMouseButtonPressed)
                 {
-                    Retry:
-
-                    globalTask = TasksList.Find(x => x.ID == currentTask.ID);
-
-                    if (globalProject == null || globalTask == null)
+                    foreach (TaskModel task in tempComponent.Tasks)
                     {
-                        if (retryHit == false)
+                        Console.WriteLine($"Task: {task.TaskName,-13} Start Date: {((DateTime)task.StartDate).ToShortDateString(),-10} Finish Date: {GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration).ToShortDateString()}");
+                    }
+
+                    Console.WriteLine();
+
+                    if (MoveSubsequentTaskWithLockedSpacing)
+                    {
+                        if (((DateTime)movedTask.StartDate - OldTaskStartDate).Days > 0)
                         {
-                            RefreshProjectGrid();
-                            retryHit = true;
-                            goto Retry; 
+                            tempComponent.UpdateSuccessorTaskDates(movedTask, GeneralOperations.GetWorkingDays(OldTaskStartDate, (DateTime)movedTask.StartDate));
                         }
                         else
                         {
-                            if(globalProject == null)
-                                MessageBox.Show($"Project: {globalProject.JobNumber} {globalProject.ProjectNumber} doesn't exist.");
-
-                            if(globalTask == null)
-                                MessageBox.Show($"Task: {currentTask.TaskID} {currentTask.ID} {currentTask.TaskName} doesn't exist.");
-
-                            break;
+                            foreach (int taskID in movedTask.GetPredecessorList())
+                            {
+                                tempComponent.UpdatePredecessorTaskDates(taskID, GeneralOperations.GetWorkingDays((DateTime)movedTask.StartDate, OldTaskStartDate));
+                            }
                         }
+
+                        Database.UpdateTaskDates(tempComponent.Tasks);
+
+                        MoveSubsequentTaskWithLockedSpacing = false;
+                    }
+                    else
+                    {
+                        tempComponent.UpdateTaskDates(movedTask, OldTaskStartDate);
                     }
 
-                    globalTask.StartDate = currentTask.StartDate;
-                    globalTask.FinishDate = currentTask.FinishDate;
+                    return true;
                 }
+                else
+                {
+                    if (tempComponent.UpdateTaskDates(movedTask)) // Database.UpdateTask(movedTask, tempComponent), db.UpdateTask(number.jobNumber, number.projectNumber, component.Component, task.TaskID, apt.Start, apt.End, Project.OverlapAllowed)
+                    {
+                        return true;
+                    }
+                }
+            //}
+            //finally
+            //{
+            //    gridView5.EndUpdate();
+            //    gridView1.EndUpdate();
+            //    schedulerControl1.EndUpdate();
+            //    schedulerControl1.RefreshData();
+            //    schedulerControl2.EndUpdate();
+            //    schedulerControl2.RefreshData();
 
-                gridView5.EndUpdate();
-                gridView1.EndUpdate();
-                schedulerControl1.EndUpdate();
-                schedulerControl1.RefreshData();
+            //    gridView3.BeginUpdate();
+            //    globalProject.LatestFinishDate = globalProject.GetLatestFinishDate();
+            //    gridView3.EndUpdate();
+            //}
 
-                gridView3.BeginUpdate();
-                globalProject.LatestFinishDate = globalProject.GetLatestFinishDate();
-                gridView3.EndUpdate();
-
-                LoadTaskView();
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         private void projectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -4346,6 +4472,52 @@ namespace Toolroom_Project_Viewer
             //    e.Appearance.BackColor = resource.GetColor();
             //}
         }
+        private void schedulerControl2_DragOver(object sender, DragEventArgs e)
+        {
+            Point pos = schedulerControl2.PointToClient(Cursor.Position);
+            SchedulerViewInfoBase viewInfo = schedulerControl2.ActiveView.ViewInfo;
+            HitInfo = viewInfo.CalcHitInfo(pos, false);
+        }
+        private void schedulerControl2_MouseDown(object sender, MouseEventArgs e)
+        {
+            var scheduler = sender as DevExpress.XtraScheduler.SchedulerControl;
+            var hitInfo = scheduler.ActiveView.CalcHitInfo(e.Location, false);
+
+            if (e.Button == MouseButtons.Right)
+            {
+                RightMouseButtonPressed = true;
+
+                if (hitInfo.HitTest == SchedulerHitTest.AppointmentContent)
+                {
+                    Appointment apt = ((AppointmentViewInfo)hitInfo.ViewInfo).Appointment;
+                    DraggedAppointment = apt;
+                }
+            }
+        }
+        private void schedulerControl2_PopupMenuShowing(object sender, DevExpress.XtraScheduler.PopupMenuShowingEventArgs e)
+        {
+            e.Menu.Items.Remove(e.Menu.Items.FirstOrDefault(x => x.Caption == "&Copy"));
+
+            if (e.Menu.Items.Count(x => x.Caption == "Mo&ve") > 0)
+            {
+                DXMenuItem menuItem = e.Menu.Items.FirstOrDefault(x => x.Caption == "Mo&ve");
+                menuItem.Caption = "Move All Component Tasks with Locked Spacing";
+            }
+
+            if (e.Menu.Items.Count(x => x.Caption == "Move Subsequent Component Tasks with Lock Spacing") == 0)
+            {
+                e.Menu.Items.Insert(1, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerStorage2_MoveSubsequentComponentTasksWithLockedSpacing));
+            }
+        }
+        private void schedulerStorage2_MoveSubsequentComponentTasksWithLockedSpacing(object sender, EventArgs e)
+        {
+            MoveSubsequentTaskWithLockedSpacing = true;
+
+            //MessageBox.Show($"Final Start: {HitInfo.ViewInfo.Interval.Start.ToShortDateString()} Finish: {HitInfo.ViewInfo.Interval.End.ToShortDateString()}");
+
+            DraggedAppointment.Start = HitInfo.ViewInfo.Interval.Start;
+            DraggedAppointment.End = HitInfo.ViewInfo.Interval.End;
+        }
         private void schedulerStorage2_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
             if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
@@ -4362,16 +4534,29 @@ namespace Toolroom_Project_Viewer
             //{
             //    e.Cancel = true;
             //}
+            if (RightMouseButtonPressed)
+            {
+                TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerStorage2) as TaskModel;
+
+                OldTaskStartDate = (DateTime)changingTask.StartDate;  // (DateTime)changingTask.StartDate
+
+                Console.WriteLine($"Old Date: {OldTaskStartDate}");
+                Console.WriteLine();
+            }
         }
         private void schedulerStorage2_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
             List<int> collapsedNodes = new List<int>();
 
+            TaskModel movedTask;
+
             try
             {
                 foreach (Appointment apt in e.Objects)
                 {
-                    if (UpdateTaskStorage2(apt))
+                    movedTask = apt.GetSourceObject(schedulerStorage2) as TaskModel;
+
+                    if (UpdateTaskStorage2(movedTask))
                     {
                         var number = GetProjectComboBoxInfo(projectComboBox);
                         collapsedNodes = GetCollapsedNodes();
@@ -4411,13 +4596,17 @@ namespace Toolroom_Project_Viewer
 
         private void RefreshGanttButton_Click(object sender, EventArgs e)
         {
+            LoadProjects();
             PopulateProjectComboBox();
 
             try
             {
                 if (projectComboBox.Text != "")
                 {
+                    List<int> collapsedNodes = new List<int>();
+                    collapsedNodes = GetCollapsedNodes();
                     LoadProjectGantt();
+                    CollapseNodes(collapsedNodes);
                 }
             }
             catch (Exception ex)
@@ -4529,6 +4718,7 @@ namespace Toolroom_Project_Viewer
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
+
         private void PrintCalendarButton_Click(object sender, EventArgs e)
         {
             ShowSchedulerPreview(schedulerControl3);

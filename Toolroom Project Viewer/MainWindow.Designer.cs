@@ -991,7 +991,8 @@
             "5 - Rework",
             "6 - In-Repair / Development",
             "7 - Completed",
-            "8 - On Hold"});
+            "8 - On Hold",
+            "9 - Outsourced"});
             this.stageComboBoxEdit.Name = "stageComboBoxEdit";
             // 
             // genericDateEdit
@@ -1720,6 +1721,7 @@
             this.schedulerControl1.PopupMenuShowing += new DevExpress.XtraScheduler.PopupMenuShowingEventHandler(this.schedulerControl1_PopupMenuShowing);
             this.schedulerControl1.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl1_AppointmentFlyoutShowing);
             this.schedulerControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragDrop);
+            this.schedulerControl1.DragOver += new System.Windows.Forms.DragEventHandler(this.schedulerControl1_DragOver);
             this.schedulerControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.schedulerControl1_MouseDown);
             this.schedulerControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.schedulerControl1_MouseUp);
             // 
@@ -2673,7 +2675,10 @@
             this.schedulerControl2.Views.WeekView.Enabled = false;
             this.schedulerControl2.Views.WorkWeekView.TimeRulers.Add(timeRuler6);
             this.schedulerControl2.Views.YearView.UseOptimizedScrolling = false;
+            this.schedulerControl2.PopupMenuShowing += new DevExpress.XtraScheduler.PopupMenuShowingEventHandler(this.schedulerControl2_PopupMenuShowing);
             this.schedulerControl2.AppointmentFlyoutShowing += new DevExpress.XtraScheduler.AppointmentFlyoutShowingEventHandler(this.schedulerControl2_AppointmentFlyoutShowing);
+            this.schedulerControl2.DragOver += new System.Windows.Forms.DragEventHandler(this.schedulerControl2_DragOver);
+            this.schedulerControl2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.schedulerControl2_MouseDown);
             // 
             // schedulerStorage2
             // 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolroom Project Viewer", "Toolroom Project Viewer\Toolroom Project Viewer.csproj", "{4254216E-4359-45F5-A30E-0F7FAE13EEB9}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseBackupApp", "SchedulerDatabaseBackupApp\DatabaseBackupApp.csproj", "{BD8B70B7-BC57-411C-9DDE-EB0E29D1C97A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary.Tests", "ClassLibrary.Tests\ClassLibrary.Tests.csproj", "{346C3DB0-7198-4626-9FFE-F462265568BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerDemo", "SchedulerDemo\SchedulerDemo.csproj", "{C8A5CBF4-9A78-474D-A609-D1F95AAFC975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{346C3DB0-7198-4626-9FFE-F462265568BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{346C3DB0-7198-4626-9FFE-F462265568BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{346C3DB0-7198-4626-9FFE-F462265568BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A5CBF4-9A78-474D-A609-D1F95AAFC975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A5CBF4-9A78-474D-A609-D1F95AAFC975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A5CBF4-9A78-474D-A609-D1F95AAFC975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A5CBF4-9A78-474D-A609-D1F95AAFC975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

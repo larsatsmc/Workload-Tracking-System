@@ -239,6 +239,39 @@ namespace ClassLibrary
             }
         }
         /// <summary>
+        /// Gets predecessors as a list of integers.
+        /// </summary> 
+        public List<int> GetPredecessorList()
+        {
+            string[] predecessors;
+            List<int> predecessorList = new List<int>();
+
+            if (Predecessors != "")
+            {
+                if (Predecessors.Contains(","))
+                {
+                    predecessors = Predecessors.Split(',');
+
+                    foreach (string predecessor in predecessors)
+                    {
+                        if (int.TryParse(predecessor.Trim(), out int result))
+                        {
+                            predecessorList.Add(result);
+                        }
+                    }
+                }
+                else
+                {
+                    if (int.TryParse(Predecessors.Trim(), out int result))
+                    {
+                        predecessorList.Add(result); 
+                    }
+                }
+            }
+
+            return predecessorList;
+        }
+        /// <summary>
         /// Gets predecessors numbered according to what is needed for dependencies in the scheduler control.
         /// </summary> 
         public string GetNewPredecessors(int baseNumber)

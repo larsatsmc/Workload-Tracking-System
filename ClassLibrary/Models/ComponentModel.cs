@@ -441,7 +441,7 @@ namespace ClassLibrary
 
             return task;
         }
-        // Used by Department Task View and Tasks Gridview in Project View tab.
+        // Used by Department Task View and Tasks Gridview in Project View tab.  Can't push dates backward.
         public void ChangeTaskDate(string fieldName, TaskModel task)
         {
             // Checks if the start date changed.
@@ -464,7 +464,7 @@ namespace ClassLibrary
 
             if (task.FinishDate != null)
             {
-                UpdateStartAndFinishDates(task.TaskID, (DateTime)task.FinishDate);
+                UpdateSuccessorTaskDates(task.TaskID, (DateTime)task.FinishDate);
             }
 
             this.AllTasksDated = CheckIfAllTasksDated();
@@ -476,7 +476,7 @@ namespace ClassLibrary
         /// <summary>
         /// Updates a task and handles moving predecessors or successors that overlap.
         /// </summary> 
-        public bool UpdateTask(TaskModel task)
+        public bool UpdateTaskDates(TaskModel task)
         {
             bool batchUpdateTasks = false;
 
@@ -536,7 +536,7 @@ namespace ClassLibrary
                 {
                     if (task.FinishDate != null)
                     {
-                        UpdateStartAndFinishDates(task.TaskID, (DateTime)task.FinishDate);
+                        UpdateSuccessorTaskDates(task.TaskID, (DateTime)task.FinishDate);
                         batchUpdateTasks = true;
                     }
                 }
@@ -558,6 +558,38 @@ namespace ClassLibrary
             }
 
             this.AllTasksDated = CheckIfAllTasksDated();
+
+            return true;
+        }
+        /// <summary>
+        /// Updates a task and moves all other tasks within component by the same number of days.
+        /// </summary> 
+        public bool UpdateTaskDates(TaskModel movedTask, DateTime oldTaskStartDate)
+        {
+            List<TaskModel> tempTasks = Tasks.FindAll(x => x.ProjectNumber == movedTask.ProjectNumber && x.Component == movedTask.Component && x.TaskID != movedTask.TaskID && x.Status != "Completed");
+
+            TimeSpan dateDifference = ((DateTime)movedTask.StartDate - oldTaskStartDate);
+
+            foreach (TaskModel task in tempTasks)
+            {
+                if (dateDifference.Days > 0)
+                {
+                    task.StartDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, dateDifference.Days);
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.FinishDate, dateDifference.Days);  
+                }  // GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.FinishDate), dateDifference.Days);
+                else
+                {
+                    task.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)task.StartDate, dateDifference.Days * -1);
+                    task.FinishDate = GeneralOperations.SubtractBusinessDays((DateTime)task.FinishDate, dateDifference.Days * -1);
+                }
+            }
+
+            foreach (TaskModel task in Tasks)
+            {
+                Console.WriteLine($"Task: {task.TaskName,-13} Start Date: {((DateTime)task.StartDate).ToShortDateString(),-10} Finish Date: {GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration).ToShortDateString()}");
+            }
+
+            Database.UpdateTaskDates(Tasks);
 
             return true;
         }
@@ -616,25 +648,34 @@ namespace ClassLibrary
                 predecessorTask.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)predecessorTask.FinishDate, predecessorTask.Duration); 
             }
 
-            if (predecessorTask.Predecessors.Contains(','))
+            foreach (int predecessor in predecessorTask.GetPredecessorList())
             {
-                predecessors = predecessorTask.Predecessors.Split(',');
-
-                foreach (string predecessor in predecessors)
-                {
-                    BackDateTask(Convert.ToInt32(predecessor), (DateTime)predecessorTask.StartDate);
-                }
-            }
-            else if (predecessorTask.Predecessors != "")
-            {
-                BackDateTask(Convert.ToInt32(predecessorTask.Predecessors), (DateTime)predecessorTask.StartDate);
+                BackDateTask(predecessor,(DateTime)predecessorTask.StartDate);
             }
         }
-        public List<TaskModel> UpdateStartAndFinishDates(int id, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false, bool promptToPushDatesForward = false)
+        public void UpdatePredecessorTaskDates(int predecessorID, int daysToMove)
         {
-            var result = from tasks in Tasks
-                         where tasks.HasMatchingPredecessor(id)
-                         select tasks;
+            TaskModel predecessorTask = this.Tasks.FirstOrDefault(x => x.TaskID == predecessorID && x.Status != "Completed");
+
+            if (predecessorTask != null)
+            {
+                if (predecessorTask.FinishDate != null)
+                {
+                    predecessorTask.StartDate = GeneralOperations.SubtractBusinessDays((DateTime)predecessorTask.StartDate, daysToMove);
+                    predecessorTask.FinishDate = GeneralOperations.SubtractBusinessDays((DateTime)predecessorTask.FinishDate, daysToMove); 
+                }
+
+                foreach (int predecessor in predecessorTask.GetPredecessorList())
+                {
+                    UpdatePredecessorTaskDates(predecessor, daysToMove);
+                }
+            }
+        }
+        public List<TaskModel> UpdateSuccessorTaskDates(int taskID, DateTime? finishDate, bool fillBlanks = false, bool pullBackStartDates = false)
+        {
+            var result = from task in Tasks
+                         where task.HasMatchingPredecessor(taskID)
+                         select task;
 
             Console.WriteLine("Update Start and Finish Dates");
 
@@ -645,27 +686,52 @@ namespace ClassLibrary
                     if (fillBlanks == true)
                     {
                         task.StartDate = finishDate;
-                        task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
-
-                        Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + task.StartDate + " " + task.FinishDate + " " + task.Predecessors);
+                        task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration.ToString());
                     }
                 }
-                else if (Convert.ToDateTime(task.StartDate) < finishDate) // If start date of current task comes before finish date of predecessor.
+                else if (finishDate > (DateTime)task.StartDate) // If start date of current task comes before finish date of predecessor.
                 {
                     task.StartDate = finishDate;
-                    task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
-                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.Predecessors);
-                    //Console.WriteLine(currentTaskID + " " + currentTaskFinishDate + " " + nrow2["TaskID"] + " " + predecessorArr[i2].ToString() + " " + nrow2["Predecessors"]);
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration.ToString());
                 }
-                else if (Convert.ToDateTime(task.StartDate) > finishDate && pullBackStartDates == true) // If start date of current task comes after the finish date of predecessor.
+                else if (finishDate < (DateTime)task.StartDate && pullBackStartDates == true) // If start date of current task comes after the finish date of predecessor.
                 {
                     task.StartDate = finishDate;
-                    task.FinishDate = GeneralOperations.AddBusinessDays(Convert.ToDateTime(task.StartDate), task.Duration.ToString());
-                    Console.WriteLine(id + " " + task.TaskID + " " + task.TaskName + " " + Convert.ToDateTime(task.StartDate).ToShortDateString() + " " + Convert.ToDateTime(task.FinishDate).ToShortDateString() + " " + task.FinishDate);
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration.ToString());
                 }
 
                 if (task.FinishDate != null)
-                    UpdateStartAndFinishDates(task.TaskID, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
+                    UpdateSuccessorTaskDates(task.TaskID, Convert.ToDateTime(task.FinishDate), fillBlanks, pullBackStartDates);
+            }
+
+            return Tasks;
+        }
+        public List<TaskModel> UpdateSuccessorTaskDates(TaskModel movedTask, int daysToMove, bool fillBlanks = false)
+        {
+            var result = from tasks in Tasks
+                         where tasks.HasMatchingPredecessor(movedTask.TaskID)
+                         select tasks;
+
+            Console.WriteLine("Update Start and Finish Dates");
+
+            foreach (TaskModel task in result)
+            {
+                if (task.StartDate == null)
+                {
+                    if (fillBlanks == true)
+                    {
+                        task.StartDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, daysToMove);
+                        task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.FinishDate, daysToMove);
+                    }
+                }
+                else
+                {
+                    task.StartDate = GeneralOperations.AddBusinessDays((DateTime)task.StartDate, daysToMove);
+                    task.FinishDate = GeneralOperations.AddBusinessDays((DateTime)task.FinishDate, daysToMove);
+                }
+
+                if (task.FinishDate != null)
+                    UpdateSuccessorTaskDates(task, daysToMove);
             }
 
             return Tasks;
