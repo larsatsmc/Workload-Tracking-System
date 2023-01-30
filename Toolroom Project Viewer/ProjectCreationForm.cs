@@ -1877,7 +1877,11 @@ namespace Toolroom_Project_Viewer
                 if (fileName.Length > 0)
                 {
                     componentToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName);
-                    componentToAdd.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
+                    foreach (TaskModel task in componentToAdd.Tasks)
+                    {
+                        task.Personnel = GetTaskPersonnel(task.TaskName);
+                        task.ID = 0;
+                    }
                     AddCopiedComponentToTree(componentToAdd); // Adds component to project object.
                 }
             }
@@ -1928,7 +1932,11 @@ namespace Toolroom_Project_Viewer
                     {
                         tasksToAdd = Template.ReadFromXmlFile<ComponentModel>(fileName).Tasks;
                         SelectedComponent.Tasks.AddRange(tasksToAdd);
-                        SelectedComponent.Tasks.ForEach(x => x.Personnel = GetTaskPersonnel(x.TaskName));
+                        foreach (TaskModel task in SelectedComponent.Tasks)
+                        {
+                            task.Personnel = GetTaskPersonnel(task.TaskName);
+                            task.ID = 0;
+                        }
                         AddTaskListToTreeView(MoldBuildTreeView.SelectedNode, tasksToAdd);
                     }
                 }
