@@ -173,8 +173,8 @@ namespace Toolroom_Project_Viewer
                 schedulerControl1.GanttView.GetBaseTimeScale().Width = 60;
                 schedulerControl1.GanttView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
                 schedulerControl1.GanttView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
-                schedulerControl1.OptionsCustomization.AllowDisplayAppointmentForm = AllowDisplayAppointmentForm.Never;
-                schedulerControl1.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
+                //schedulerControl1.OptionsCustomization.AllowDisplayAppointmentForm = AllowDisplayAppointmentForm.Never;
+                //schedulerControl1.OptionsCustomization.AllowInplaceEditor = UsedAppointmentType.None;
                 //gridView3.Columns["IncludeHours"].VisibleIndex = 14;
 
                 zoomTrackBarControl1.Properties.Maximum = 215;
@@ -1210,11 +1210,22 @@ namespace Toolroom_Project_Viewer
                     menuItem.Caption = "Move All Component Tasks with Locked Spacing";
                 }
 
+                if (e.Menu.Items.Count(x => x.Caption == "Open Kan Ban") == 0)
+                {
+                    e.Menu.Items.Insert(1, new SchedulerMenuItem("Open Kan Ban", schedulerStorage1_OpenKanBan));
+                }
+
                 if (e.Menu.Items.Count(x => x.Caption == "Move Subsequent Component Tasks with Lock Spacing") == 0)
                 {
-                    e.Menu.Items.Insert(1, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing));
+                    e.Menu.Items.Insert(2, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing));
                 }
             }
+        }
+        private void schedulerStorage1_OpenKanBan(object sender, EventArgs e)
+        {
+            string filePath = ProjectsList.Find(x => x.ProjectNumber == int.Parse(DraggedAppointment.CustomFields["ProjectNumber"].ToString())).KanBanWorkbookPath;
+            string component = DraggedAppointment.CustomFields["Component"].ToString();
+            ExcelInteractions.OpenKanBanWorkbook(filePath, component);
         }
         private void schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing(object sender, EventArgs e)
         {
