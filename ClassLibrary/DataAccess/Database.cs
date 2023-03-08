@@ -11,6 +11,8 @@ using DevExpress.XtraScheduler;
 using Dapper;
 using System.Data.SqlClient;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using ClassLibrary.Models;
+using static DevExpress.XtraEditors.Mask.MaskSettings;
 
 namespace ClassLibrary
 {
@@ -1730,11 +1732,51 @@ namespace ClassLibrary
 
         #region User Table Operations
 
+        public static void CreateUser(UserModel user)
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                string queryString = "INSERT INTO Users (FirstName, LastName, LoginName, IsAdmin, CanChangeDates, EngineeringNumberVisible, CanReadOnly, CanOnlyChangeDesignWork, CanChangeProjectData)" +
+                                                "VALUES (@FirstName, @LastName, @LoginName, @IsAdmin, @CanChangeDates, @EngineeringNumberVisible, @CanReadOnly, @CanOnlyChangeDesignWork, @CanChangeProjectData)";
+
+                connection.Open();  // For some reason this is needed in order to obtain the id of the newly created User in the database.
+
+                connection.Execute(queryString, user);
+
+                user.ID = int.Parse(connection.ExecuteScalar("SELECT @@IDENTITY").ToString());
+            }
+        }
         public static List<string> GetEditLogins()
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
                 return connection.Query<string>("SELECT LoginName FROM Users").ToList();
+            }
+        }
+
+        public static List<UserModel> GetUsers() 
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                return connection.Query<UserModel>("SELECT * FROM Users").ToList();
+            }
+        }
+
+        public static void UpdateUser(UserModel user, CellValueChangedEventArgs ev)
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                string queryString = $"UPDATE Users SET {ev.Column.FieldName} = @{ev.Column.FieldName}, DateModified = GETDATE() WHERE ID = @ID";
+                connection.Execute(queryString, user);
+            }
+        }
+        public static bool DeleteUser(int userId) 
+        {
+            using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
+            {
+                string queryString = $"DELETE FROM Users WHERE ID = @ID";
+                connection.Execute(queryString, new { ID = userId });
+                return true;
             }
         }
 

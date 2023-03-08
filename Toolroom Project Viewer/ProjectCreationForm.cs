@@ -602,7 +602,7 @@ namespace Toolroom_Project_Viewer
             project.JobNumber = project.QuoteInfo.Customer + "_" + project.QuoteInfo.PartName + "-Quote"; // What to do when these two pieces of information are missing?
             project.SetProjectDueDate(DateTime.Today);
             project.HasProjectInfo = true;
-            project.AddComponent("Quote");
+            project.AddComponent("Mold");
 
             // Task list is automatically generated inside the QuoteInfo class when quote is read.
             project.Components.First().AddTaskList(project.QuoteInfo.TaskList);

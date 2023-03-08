@@ -263,6 +263,7 @@
             this.RefreshCalendarButton = new DevExpress.XtraEditors.SimpleButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
+            this.adminButton = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
@@ -614,7 +615,7 @@
             gridLevelNode1.RelationName = "Components";
             this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode1});
-            this.gridControl3.Location = new System.Drawing.Point(13, 41);
+            this.gridControl3.Location = new System.Drawing.Point(13, 57);
             this.gridControl3.MainView = this.gridView3;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl3.Name = "gridControl3";
@@ -630,7 +631,7 @@
             this.genericDateEdit,
             this.personnelComboBoxEdit,
             this.workTypeComboBoxEdit});
-            this.gridControl3.Size = new System.Drawing.Size(1562, 744);
+            this.gridControl3.Size = new System.Drawing.Size(1562, 728);
             this.gridControl3.TabIndex = 0;
             this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView3,
@@ -2195,6 +2196,7 @@
             // xtraTabPage7
             // 
             this.xtraTabPage7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.xtraTabPage7.Controls.Add(this.adminButton);
             this.xtraTabPage7.Controls.Add(this.restoreProjectButton);
             this.xtraTabPage7.Controls.Add(this.workLoadViewPrintPreviewButton);
             this.xtraTabPage7.Controls.Add(this.workLoadViewPrint2Button);
@@ -2217,15 +2219,17 @@
             // 
             // restoreProjectButton
             // 
+            this.restoreProjectButton.Appearance.Options.UseTextOptions = true;
+            this.restoreProjectButton.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.restoreProjectButton.AppearanceHovered.BackColor = System.Drawing.Color.DimGray;
             this.restoreProjectButton.AppearanceHovered.ForeColor = System.Drawing.Color.White;
             this.restoreProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.restoreProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.restoreProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.restoreProjectButton.Location = new System.Drawing.Point(646, 7);
+            this.restoreProjectButton.Location = new System.Drawing.Point(590, 7);
             this.restoreProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.restoreProjectButton.Name = "restoreProjectButton";
-            this.restoreProjectButton.Size = new System.Drawing.Size(85, 21);
+            this.restoreProjectButton.Size = new System.Drawing.Size(70, 38);
             this.restoreProjectButton.TabIndex = 20;
             this.restoreProjectButton.Text = "Restore Project";
             this.restoreProjectButton.ToolTip = "Creates a new project.";
@@ -2234,11 +2238,13 @@
             // 
             // workLoadViewPrintPreviewButton
             // 
+            this.workLoadViewPrintPreviewButton.Appearance.Options.UseTextOptions = true;
+            this.workLoadViewPrintPreviewButton.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.workLoadViewPrintPreviewButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.workLoadViewPrintPreviewButton.Location = new System.Drawing.Point(1241, 8);
+            this.workLoadViewPrintPreviewButton.Location = new System.Drawing.Point(1248, 8);
             this.workLoadViewPrintPreviewButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.workLoadViewPrintPreviewButton.Name = "workLoadViewPrintPreviewButton";
-            this.workLoadViewPrintPreviewButton.Size = new System.Drawing.Size(75, 23);
+            this.workLoadViewPrintPreviewButton.Size = new System.Drawing.Size(70, 38);
             this.workLoadViewPrintPreviewButton.TabIndex = 19;
             this.workLoadViewPrintPreviewButton.Text = "Print Preview";
             this.workLoadViewPrintPreviewButton.ToolTip = "Prints the grid onto an 8.5 x 11 sheet of paper.";
@@ -2250,7 +2256,7 @@
             this.workLoadViewPrint2Button.Location = new System.Drawing.Point(1171, 8);
             this.workLoadViewPrint2Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.workLoadViewPrint2Button.Name = "workLoadViewPrint2Button";
-            this.workLoadViewPrint2Button.Size = new System.Drawing.Size(64, 23);
+            this.workLoadViewPrint2Button.Size = new System.Drawing.Size(70, 38);
             this.workLoadViewPrint2Button.TabIndex = 18;
             this.workLoadViewPrint2Button.Text = "Print Part";
             this.workLoadViewPrint2Button.ToolTip = "Prints the grid onto an 8.5 x 11 sheet of paper.";
@@ -2259,10 +2265,10 @@
             // workLoadViewPrintButton
             // 
             this.workLoadViewPrintButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.workLoadViewPrintButton.Location = new System.Drawing.Point(1101, 8);
+            this.workLoadViewPrintButton.Location = new System.Drawing.Point(1094, 8);
             this.workLoadViewPrintButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.workLoadViewPrintButton.Name = "workLoadViewPrintButton";
-            this.workLoadViewPrintButton.Size = new System.Drawing.Size(64, 23);
+            this.workLoadViewPrintButton.Size = new System.Drawing.Size(70, 38);
             this.workLoadViewPrintButton.TabIndex = 15;
             this.workLoadViewPrintButton.Text = "Print Full";
             this.workLoadViewPrintButton.ToolTip = "Prints the full grid onto an 11 x 17 sheet of paper.";
@@ -2270,7 +2276,7 @@
             // 
             // changeViewRadioGroup
             // 
-            this.changeViewRadioGroup.Location = new System.Drawing.Point(864, 4);
+            this.changeViewRadioGroup.Location = new System.Drawing.Point(864, 12);
             this.changeViewRadioGroup.Name = "changeViewRadioGroup";
             this.changeViewRadioGroup.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
             new DevExpress.XtraEditors.Controls.RadioGroupItem(true, "Project"),
@@ -2304,10 +2310,10 @@
             this.resourceButton.AppearanceHovered.Options.UseBackColor = true;
             this.resourceButton.AppearanceHovered.Options.UseForeColor = true;
             this.resourceButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.resourceButton.Location = new System.Drawing.Point(761, 7);
+            this.resourceButton.Location = new System.Drawing.Point(683, 7);
             this.resourceButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.resourceButton.Name = "resourceButton";
-            this.resourceButton.Size = new System.Drawing.Size(85, 21);
+            this.resourceButton.Size = new System.Drawing.Size(70, 38);
             this.resourceButton.TabIndex = 12;
             this.resourceButton.Text = "Resources";
             this.resourceButton.ToolTip = "Allows user to create and assign resources to departments.";
@@ -2321,10 +2327,10 @@
             this.editProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.editProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.editProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.editProjectButton.Location = new System.Drawing.Point(291, 7);
+            this.editProjectButton.Location = new System.Drawing.Point(263, 7);
             this.editProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.editProjectButton.Name = "editProjectButton";
-            this.editProjectButton.Size = new System.Drawing.Size(85, 21);
+            this.editProjectButton.Size = new System.Drawing.Size(70, 38);
             this.editProjectButton.TabIndex = 11;
             this.editProjectButton.Text = "Edit Project";
             this.editProjectButton.ToolTip = "Edits a selected project.";
@@ -2333,15 +2339,18 @@
             // 
             // createProjectButton
             // 
+            this.createProjectButton.Appearance.Options.UseTextOptions = true;
+            this.createProjectButton.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.createProjectButton.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.createProjectButton.AppearanceHovered.BackColor = System.Drawing.Color.DimGray;
             this.createProjectButton.AppearanceHovered.ForeColor = System.Drawing.Color.White;
             this.createProjectButton.AppearanceHovered.Options.UseBackColor = true;
             this.createProjectButton.AppearanceHovered.Options.UseForeColor = true;
             this.createProjectButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.createProjectButton.Location = new System.Drawing.Point(115, 7);
+            this.createProjectButton.Location = new System.Drawing.Point(107, 7);
             this.createProjectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createProjectButton.Name = "createProjectButton";
-            this.createProjectButton.Size = new System.Drawing.Size(85, 21);
+            this.createProjectButton.Size = new System.Drawing.Size(70, 38);
             this.createProjectButton.TabIndex = 10;
             this.createProjectButton.Text = "Create Project";
             this.createProjectButton.ToolTip = "Creates a new project.";
@@ -2355,10 +2364,10 @@
             this.backDateButton.AppearanceHovered.Options.UseBackColor = true;
             this.backDateButton.AppearanceHovered.Options.UseForeColor = true;
             this.backDateButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.backDateButton.Location = new System.Drawing.Point(467, 7);
+            this.backDateButton.Location = new System.Drawing.Point(430, 7);
             this.backDateButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.backDateButton.Name = "backDateButton";
-            this.backDateButton.Size = new System.Drawing.Size(85, 21);
+            this.backDateButton.Size = new System.Drawing.Size(70, 38);
             this.backDateButton.TabIndex = 9;
             this.backDateButton.Text = "Back Date";
             this.backDateButton.ToolTip = "Back dates selected components.";
@@ -2367,15 +2376,17 @@
             // 
             // forwardDateButton
             // 
+            this.forwardDateButton.Appearance.Options.UseTextOptions = true;
+            this.forwardDateButton.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.forwardDateButton.AppearanceHovered.BackColor = System.Drawing.Color.DimGray;
             this.forwardDateButton.AppearanceHovered.ForeColor = System.Drawing.Color.White;
             this.forwardDateButton.AppearanceHovered.Options.UseBackColor = true;
             this.forwardDateButton.AppearanceHovered.Options.UseForeColor = true;
             this.forwardDateButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.forwardDateButton.Location = new System.Drawing.Point(379, 7);
+            this.forwardDateButton.Location = new System.Drawing.Point(351, 7);
             this.forwardDateButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.forwardDateButton.Name = "forwardDateButton";
-            this.forwardDateButton.Size = new System.Drawing.Size(85, 21);
+            this.forwardDateButton.Size = new System.Drawing.Size(70, 38);
             this.forwardDateButton.TabIndex = 8;
             this.forwardDateButton.Text = "Forward Date";
             this.forwardDateButton.ToolTip = "Forward dates selected components.";
@@ -2389,10 +2400,10 @@
             this.kanBanButton.AppearanceHovered.Options.UseBackColor = true;
             this.kanBanButton.AppearanceHovered.Options.UseForeColor = true;
             this.kanBanButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.kanBanButton.Location = new System.Drawing.Point(555, 7);
+            this.kanBanButton.Location = new System.Drawing.Point(510, 7);
             this.kanBanButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.kanBanButton.Name = "kanBanButton";
-            this.kanBanButton.Size = new System.Drawing.Size(85, 21);
+            this.kanBanButton.Size = new System.Drawing.Size(70, 38);
             this.kanBanButton.TabIndex = 7;
             this.kanBanButton.Text = "Kan Ban";
             this.kanBanButton.ToolTip = "Creates or modifies Kan Ban for selected project.";
@@ -2401,15 +2412,18 @@
             // 
             // copyButton
             // 
+            this.copyButton.Appearance.Options.UseTextOptions = true;
+            this.copyButton.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.copyButton.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.copyButton.AppearanceHovered.BackColor = System.Drawing.Color.DimGray;
             this.copyButton.AppearanceHovered.ForeColor = System.Drawing.Color.White;
             this.copyButton.AppearanceHovered.Options.UseBackColor = true;
             this.copyButton.AppearanceHovered.Options.UseForeColor = true;
             this.copyButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            this.copyButton.Location = new System.Drawing.Point(203, 7);
+            this.copyButton.Location = new System.Drawing.Point(185, 7);
             this.copyButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.copyButton.Name = "copyButton";
-            this.copyButton.Size = new System.Drawing.Size(85, 21);
+            this.copyButton.Size = new System.Drawing.Size(70, 38);
             this.copyButton.TabIndex = 6;
             this.copyButton.Text = "Copy Project";
             this.copyButton.ToolTip = "Copies a selected project.";
@@ -2426,7 +2440,7 @@
             this.RefreshProjectsButton.Location = new System.Drawing.Point(17, 7);
             this.RefreshProjectsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RefreshProjectsButton.Name = "RefreshProjectsButton";
-            this.RefreshProjectsButton.Size = new System.Drawing.Size(85, 21);
+            this.RefreshProjectsButton.Size = new System.Drawing.Size(70, 38);
             this.RefreshProjectsButton.TabIndex = 5;
             this.RefreshProjectsButton.Text = "Refresh";
             this.RefreshProjectsButton.ToolTip = "Refreshes data grid to what\'s in the database.";
@@ -2829,6 +2843,23 @@
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "DevExpress Style";
             // 
+            // adminButton
+            // 
+            this.adminButton.AppearanceHovered.BackColor = System.Drawing.Color.DimGray;
+            this.adminButton.AppearanceHovered.ForeColor = System.Drawing.Color.White;
+            this.adminButton.AppearanceHovered.Options.UseBackColor = true;
+            this.adminButton.AppearanceHovered.Options.UseForeColor = true;
+            this.adminButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
+            this.adminButton.Location = new System.Drawing.Point(761, 7);
+            this.adminButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.adminButton.Name = "adminButton";
+            this.adminButton.Size = new System.Drawing.Size(70, 38);
+            this.adminButton.TabIndex = 21;
+            this.adminButton.Text = "Admin";
+            this.adminButton.ToolTip = "Allows user to create and assign resources to departments.";
+            this.adminButton.ToolTipAnchor = DevExpress.Utils.ToolTipAnchor.Cursor;
+            this.adminButton.Click += new System.EventHandler(this.adminButton_Click);
+            // 
             // MainWindow
             // 
             this.Appearance.Options.UseFont = true;
@@ -3137,6 +3168,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colTotalActiveComponents;
         private DevExpress.XtraGrid.Columns.GridColumn colTotalActiveTasks;
         private DevExpress.XtraEditors.ZoomTrackBarControl zoomTrackBarControl1;
+        private DevExpress.XtraEditors.SimpleButton adminButton;
     }
 }
 

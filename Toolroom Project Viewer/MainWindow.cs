@@ -37,6 +37,7 @@ using DevExpress.XtraScheduler.Reporting;
 using DevExpress.Spreadsheet;
 using DevExpress.Utils.Menu;
 using DevExpress.XtraScheduler.Drawing;
+using ClassLibrary.Models;
 
 namespace Toolroom_Project_Viewer
 {
@@ -62,6 +63,7 @@ namespace Toolroom_Project_Viewer
         public List<TaskModel> TasksList { get; set; }
         //private List<WorkLoadModel> WorkloadList { get; set; }
         public List<ProjectModel> DeletedProjects { get; set; } = new List<ProjectModel>();
+        private List<UserModel> UserList { get; set; }
 
         private List<int> gridView3ExpandedRowsList = new List<int>();
         private List<int> gridView4ExpandedRowsList = new List<int>();
@@ -74,7 +76,6 @@ namespace Toolroom_Project_Viewer
         private string Role, Tasks;
         Regex TaskRegExpression, RoleRegExpression;
         private bool AllProjectItemsChecked, MoveSelectedAppointments, RightMouseButtonPressed, MoveSubsequentTaskWithLockedSpacing;
-        private List<string> ValidEditorList = new List<string>();
         DateTime OldTaskStartDate;
         Appointment DraggedAppointment;
         SchedulerHitInfo HitInfo;
@@ -87,7 +88,7 @@ namespace Toolroom_Project_Viewer
             {
                 this.TimeUnits = "Days";
                 ResourceDataTable = Database.GetResourceData();
-                ValidEditorList = Database.GetEditLogins();
+                UserList = Database.GetUsers();
                 InitializeComponent();
                 SetRole();
                 SetTasks();
@@ -109,7 +110,7 @@ namespace Toolroom_Project_Viewer
 
                 spreadsheetControl1.LoadDocument(forecastedHoursSheetPath);
 
-                if (ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                if (UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.EngineeringNumberVisible))
                 {
                     projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = true; 
                 }
@@ -1082,7 +1083,7 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
-            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 e.Cancel = true;
@@ -1715,7 +1716,7 @@ namespace Toolroom_Project_Viewer
 
             if (column.FieldName == "StartDate" || column.FieldName == "FinishDate")
             {
-                if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
                 {
                     MessageBox.Show("This login is not authorized to make changes to dates.  Hit ESC to cancel editing.");
                     e.Valid = false;
@@ -2680,7 +2681,7 @@ namespace Toolroom_Project_Viewer
 
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
 
-            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()) && column.FieldName != "GeneralNotes")
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData) && column.FieldName != "GeneralNotes")
             {
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;
@@ -2769,7 +2770,7 @@ namespace Toolroom_Project_Viewer
             {
                 if (view.IsNewItemRow(e.RowHandle))
                 {
-                    if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
                     {
                         MessageBox.Show("This login is not authorized to make changes to project level data.");
                         return;
@@ -2833,7 +2834,7 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Button == MouseButtons.Right)
                 {
-                    if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
                     {
                         MessageBox.Show("This login is not authorized to make changes to work load tab.");
                         return;
@@ -3253,7 +3254,7 @@ namespace Toolroom_Project_Viewer
             }
             else if (column.FieldName == "StartDate" || column.FieldName == "FinishDate")
             {
-                if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
                 {
                     e.ErrorText = "This login is not authorized to make changes to dates.";
                     e.Valid = false;
@@ -3395,7 +3396,7 @@ namespace Toolroom_Project_Viewer
 
         private void forwardDateButton_Click(object sender, EventArgs e)
         {
-            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 return;
@@ -3456,7 +3457,7 @@ namespace Toolroom_Project_Viewer
 
         private void backDateButton_Click(object sender, EventArgs e)
         {
-            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 return;
@@ -3611,6 +3612,13 @@ namespace Toolroom_Project_Viewer
             {
                 form.ShowDialog(); // Code execution stops until user does something with the window.
                 RoleTable = Database.GetRoleTable();
+            }
+        }
+        private void adminButton_Click(object sender, EventArgs e)
+        {
+            using (AdminWindow adminWindow = new AdminWindow())
+            {
+                adminWindow.ShowDialog();
             }
         }
         private void workLoadViewPrintButton_Click(object sender, EventArgs e)
@@ -4531,7 +4539,7 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerStorage2_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
-            if (!ValidEditorList.Exists(x => x == Environment.UserName.ToString().ToLower()))
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
             {
                 MessageBox.Show("This login is not authorized to make changes to dates.");
                 e.Cancel = true;
