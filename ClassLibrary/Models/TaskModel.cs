@@ -52,20 +52,7 @@ namespace ClassLibrary
         public string Subject { get { return $"{JobNumber} {Hours} Hrs {Component}"; } }
 
         public string Subject2 { get { return $"{Component}"; } }
-        public int PercentComplete 
-        { 
-            get 
-            {
-                if (Status == "Completed")
-                {
-                    return 100;
-                }
-                else
-                {
-                    return 0;
-                }
-            } 
-        }
+        public int PercentComplete { get; set; }
         [XmlIgnore]
         public DateTime DueDate { get; set; }  // This is only here for the task view grid.
         /// <summary>

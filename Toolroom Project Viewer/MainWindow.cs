@@ -110,9 +110,9 @@ namespace Toolroom_Project_Viewer
 
                 spreadsheetControl1.LoadDocument(forecastedHoursSheetPath);
 
-                if (UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.EngineeringNumberVisible))
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.EngineeringNumberVisible))
                 {
-                    projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = true; 
+                    projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = false; 
                 }
                 //InitializeExample();
                 AddRepositoryItemToGrid();
@@ -402,6 +402,7 @@ namespace Toolroom_Project_Viewer
             movedTask.Resources = GenerateResourceIDsString(apt.ResourceIds);
             movedTask.Machine = GetResourceFromResourceIDs(apt.ResourceIds, "Machine");
             movedTask.Personnel = GetResourceFromResourceIDs(apt.ResourceIds, "Person");
+            movedTask.PercentComplete = apt.PercentComplete;
             //movedTask.StartDate = apt.Start;
             //movedTask.FinishDate = apt.End;
 
@@ -2682,6 +2683,11 @@ namespace Toolroom_Project_Viewer
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
 
             if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData) && column.FieldName != "GeneralNotes")
+            {
+                e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
+                e.Valid = false;
+            }
+            else if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanReadOnly) && column.FieldName == "GeneralNotes")
             {
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;

@@ -64,11 +64,11 @@
             this.colLastName,
             this.colLoginName,
             this.colIsAdmin,
+            this.colCanChangeProjectData,
             this.colCanChangeDates,
-            this.colEngineeringNumberVisible,
-            this.colCanReadOnly,
             this.colCanOnlyChangeDesignWork,
-            this.colCanChangeProjectData});
+            this.colCanReadOnly,
+            this.colEngineeringNumberVisible});
             this.userGridView.GridControl = this.gridControl1;
             this.userGridView.Name = "userGridView";
             this.userGridView.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
@@ -124,7 +124,7 @@
             this.colCanChangeDates.FieldName = "CanChangeDates";
             this.colCanChangeDates.Name = "colCanChangeDates";
             this.colCanChangeDates.Visible = true;
-            this.colCanChangeDates.VisibleIndex = 4;
+            this.colCanChangeDates.VisibleIndex = 5;
             // 
             // colEngineeringNumberVisible
             // 
@@ -133,7 +133,7 @@
             this.colEngineeringNumberVisible.FieldName = "EngineeringNumberVisible";
             this.colEngineeringNumberVisible.Name = "colEngineeringNumberVisible";
             this.colEngineeringNumberVisible.Visible = true;
-            this.colEngineeringNumberVisible.VisibleIndex = 5;
+            this.colEngineeringNumberVisible.VisibleIndex = 7;
             // 
             // colCanReadOnly
             // 
@@ -150,8 +150,6 @@
             this.colCanOnlyChangeDesignWork.ColumnEdit = this.riCheckEdit;
             this.colCanOnlyChangeDesignWork.FieldName = "CanOnlyChangeDesignWork";
             this.colCanOnlyChangeDesignWork.Name = "colCanOnlyChangeDesignWork";
-            this.colCanOnlyChangeDesignWork.Visible = true;
-            this.colCanOnlyChangeDesignWork.VisibleIndex = 7;
             // 
             // colCanChangeProjectData
             // 
@@ -160,7 +158,7 @@
             this.colCanChangeProjectData.FieldName = "CanChangeProjectData";
             this.colCanChangeProjectData.Name = "colCanChangeProjectData";
             this.colCanChangeProjectData.Visible = true;
-            this.colCanChangeProjectData.VisibleIndex = 8;
+            this.colCanChangeProjectData.VisibleIndex = 4;
             // 
             // AdminWindow
             // 

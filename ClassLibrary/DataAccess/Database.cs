@@ -831,7 +831,7 @@ namespace ClassLibrary
                 string queryString;
 
                 queryString = "UPDATE Tasks SET StartDate = @StartDate, FinishDate = @finishDate, Machine = @Machine, Personnel = @Personnel, Resources = @Resources, DateModified = GETDATE(), " +
-                              "Notes = @Notes " +
+                              "Notes = @Notes, PercentComplete = @PercentComplete " +
                               "WHERE ID = @ID";
 
                 connection.Execute(queryString, task);

@@ -58,6 +58,13 @@ namespace Toolroom_Project_Viewer
                         user.CanChangeProjectData = false;
                     }
                 }
+                else if (e.Column.FieldName == "CanChangeProject")
+                {
+                    if (user.)
+                    {
+
+                    }
+                }
 
                 if (!gridView.IsNewItemRow(e.RowHandle))
                 {

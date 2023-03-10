@@ -15,6 +15,7 @@ using DevExpress.XtraEditors;
 using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
 using NuGet;
+using ClassLibrary.Models;
 
 namespace Toolroom_Project_Viewer
 {
@@ -37,6 +38,7 @@ namespace Toolroom_Project_Viewer
         public SchedulerStorage SchedulerStorageProp { get; private set; }
         private ContextMenuStrip ComponentMenu, ProjectMenu;
         public bool DataValidated { get; private set; }
+        public List<UserModel> UserList { get; set; }
 
         public ProjectCreationForm()
         {
@@ -54,6 +56,7 @@ namespace Toolroom_Project_Viewer
             SchedulerStorageProp = schedulerStorage;
             RoleTable = Database.GetRoleTable();
             DeptRoleTable = Database.GetDepartmentRoles();
+            UserList = Database.GetUsers();
 
             InitializeComponent();
 
@@ -2290,6 +2293,12 @@ namespace Toolroom_Project_Viewer
         private void CreateProjectButton_Click(object sender, EventArgs e)
         {
             DataValidated = true;
+
+            if (UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanReadOnly))
+            {
+                MessageBox.Show("This login is not authorized to make changes to projects.");
+                return;
+            }
 
             if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
             {

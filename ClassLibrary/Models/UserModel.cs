@@ -18,5 +18,7 @@ namespace ClassLibrary.Models
         public bool CanReadOnly { get; set; }
         public bool CanOnlyChangeDesignWork { get; set; }
         public bool CanChangeProjectData { get; set; }
+        public bool CanCreateProjects { get; set; }
+        public bool CanDeleteProjects { get; set; }
     }
 }
