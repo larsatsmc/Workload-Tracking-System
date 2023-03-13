@@ -114,6 +114,10 @@ namespace Toolroom_Project_Viewer
                 {
                     projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = false; 
                 }
+                else
+                {
+                    projectBandedGridView.Columns["EngineeringProjectNumber"].Visible = true;
+                }
                 //InitializeExample();
                 AddRepositoryItemToGrid();
 
