@@ -78,6 +78,7 @@ namespace Toolroom_Project_Viewer
             SchedulerStorageProp = schedulerStorage;
             RoleTable = Database.GetRoleTable();
             DeptRoleTable = Database.GetDepartmentRoles();
+            UserList = Database.GetUsers();
             InitializeComponent();
         }
         private void ProjectCreationForm_Load(object sender, EventArgs e)
@@ -91,24 +92,37 @@ namespace Toolroom_Project_Viewer
 
             ProjectMenu = new ContextMenuStrip();
 
+            ToolStripMenuItem renameLabel1 = new ToolStripMenuItem();
+
+            renameLabel1.Text = "Rename";
+
             ToolStripMenuItem componentLabel = new ToolStripMenuItem();
 
             componentLabel.Text = "Load Component";
 
-            ProjectMenu.Items.AddRange(new ToolStripItem[] { componentLabel });
+            ProjectMenu.Items.AddRange(new ToolStripMenuItem[] { renameLabel1, componentLabel });
             ProjectMenu.Click += ProjectMenuStrip_Click;
             MoldBuildTreeView.Nodes[0].ContextMenuStrip = ProjectMenu;
 
             ComponentMenu = new ContextMenuStrip();
             // Create component menu items.
+            ToolStripMenuItem renameLabel2 = new ToolStripMenuItem();
+
+            renameLabel2.Text = "Rename";
+
             ToolStripMenuItem copyLabel = new ToolStripMenuItem();
+
             copyLabel.Text = "Copy";
+
             ToolStripMenuItem createTemplateLabel = new ToolStripMenuItem();
+
             createTemplateLabel.Text = "Create Template";
+
             ToolStripMenuItem loadTemplateLabel = new ToolStripMenuItem();
+
             loadTemplateLabel.Text = "Load Template";
 
-            ComponentMenu.Items.AddRange(new ToolStripMenuItem[] { copyLabel, createTemplateLabel, loadTemplateLabel });
+            ComponentMenu.Items.AddRange(new ToolStripMenuItem[] { renameLabel2, copyLabel, createTemplateLabel, loadTemplateLabel });
             ComponentMenu.Click += ComponentMenuStrip_Click;
 
             prefix = "A-";
@@ -261,6 +275,30 @@ namespace Toolroom_Project_Viewer
             }
 
             return resourceList;
+        }
+        private void RenameNode()
+        {
+            string input = Interaction.InputBox("Enter a new name:", "Change Name", MoldBuildTreeView.SelectedNode.Text, -1, -1);
+
+            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
+
+            if (selectedNode.Level >= 0 && selectedNode.Level <= 2)
+            {
+                RenameNode(input);
+            }
+
+            if (selectedNode.Level == 2)
+            {
+                predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+
+                predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
+
+                predecessorsListBox.ClearSelected();
+
+                SelectPredecessors(selectedNode);
+
+                predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
+            }
         }
         private void RenameNode(string newName)
         {
@@ -1573,27 +1611,7 @@ namespace Toolroom_Project_Viewer
                 return;
             }
 
-            string input = Interaction.InputBox("Enter a new name:", "Change Name", MoldBuildTreeView.SelectedNode.Text, -1, -1);
-
-            TreeNode selectedNode = MoldBuildTreeView.SelectedNode;
-
-            if (selectedNode.Level >= 0 && selectedNode.Level <= 2)
-            {
-                RenameNode(input);
-            }
-
-            if (selectedNode.Level == 2)
-            {
-                predecessorsListBox.SelectedIndexChanged -= new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-
-                predecessorsListBox.DataSource = GetPredecessorList(selectedNode.Parent);
-
-                predecessorsListBox.ClearSelected();
-
-                SelectPredecessors(selectedNode);
-
-                predecessorsListBox.SelectedIndexChanged += new System.EventHandler(predecessorsListBox_SelectedIndexChanged);
-            }
+            RenameNode();
         }
 
         private void UpButton_Click(object sender, EventArgs e)
@@ -1873,7 +1891,11 @@ namespace Toolroom_Project_Viewer
                 }
             }
 
-            if (selectedToolStripMenuItem.Text == "Load Component")
+            if (selectedToolStripMenuItem.Text == "Rename")
+            {
+                RenameNode();
+            }
+            else if (selectedToolStripMenuItem.Text == "Load Component")
             {
                 contextMenuStrip.Close();
                 fileName = Template.OpenTemplateFile(@"X:\TOOLROOM\Workload Tracking System\Templates\Components");
@@ -1909,7 +1931,11 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                if (selectedToolStripMenuItem.Text == "Copy")
+                if (selectedToolStripMenuItem.Text == "Rename")
+                {
+                    RenameNode();
+                }
+                else if (selectedToolStripMenuItem.Text == "Copy")
                 {
                     var result = XtraInputBox.Show("Copied Component Name", "Copy Component", SelectedComponent.Component);
 
@@ -2294,10 +2320,22 @@ namespace Toolroom_Project_Viewer
         {
             DataValidated = true;
 
-            if (UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanReadOnly))
+            if (CreateProjectButton.Text == "Create")
             {
-                MessageBox.Show("This login is not authorized to make changes to projects.");
-                return;
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanCreateProjects))
+                {
+                    MessageBox.Show("This login is not authorized to create projects.");
+                    return;
+                } 
+            }
+
+            if (CreateProjectButton.Text == "Change")
+            {
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
+                {
+                    MessageBox.Show("This login is not authorized to change data.");
+                    return;
+                } 
             }
 
             if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")

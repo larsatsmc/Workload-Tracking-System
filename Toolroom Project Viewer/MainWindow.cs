@@ -2687,7 +2687,7 @@ namespace Toolroom_Project_Viewer
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;
             }
-            else if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanReadOnly) && column.FieldName == "GeneralNotes")
+            else if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeGeneralNotes) && column.FieldName == "GeneralNotes")
             {
                 e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
                 e.Valid = false;
@@ -2776,9 +2776,9 @@ namespace Toolroom_Project_Viewer
             {
                 if (view.IsNewItemRow(e.RowHandle))
                 {
-                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanCreateProjects))
                     {
-                        MessageBox.Show("This login is not authorized to make changes to project level data.");
+                        MessageBox.Show("This login is not authorized to create projects.");
                         return;
                     }
 
@@ -2916,6 +2916,12 @@ namespace Toolroom_Project_Viewer
         {
             if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control)
             {
+                if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanDeleteProjects))
+                {
+                    MessageBox.Show("This login is not authorized to delete projects.");
+                    return;
+                }
+
                 DeleteProject(sender, e);
             }
         }
@@ -3529,6 +3535,10 @@ namespace Toolroom_Project_Viewer
             {
                 SplashScreenManager.ShowForm(typeof(WaitForm1));
 
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
+
                 CreateProject();
             }
             catch (Exception ex)
@@ -3538,6 +3548,10 @@ namespace Toolroom_Project_Viewer
             finally
             {
                 SplashScreenManager.CloseForm();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+                gridView1.EndUpdate();
+                gridView5.EndUpdate();
             }
         }
 
@@ -3555,6 +3569,10 @@ namespace Toolroom_Project_Viewer
 
                 project.OldProjectNumber = project.ProjectNumber;
 
+                schedulerControl1.BeginUpdate();
+                gridView1.BeginUpdate();
+                gridView5.BeginUpdate();
+
                 EditProject(project);
             }
             catch (Exception ex)
@@ -3564,6 +3582,10 @@ namespace Toolroom_Project_Viewer
             finally
             {
                 SplashScreenManager.CloseForm();
+                schedulerControl1.EndUpdate();
+                schedulerControl1.RefreshData();
+                gridView1.EndUpdate();
+                gridView5.EndUpdate();
             }
         }
 
@@ -3625,6 +3647,7 @@ namespace Toolroom_Project_Viewer
             using (AdminWindow adminWindow = new AdminWindow())
             {
                 adminWindow.ShowDialog();
+                UserList = Database.GetUsers();
             }
         }
         private void workLoadViewPrintButton_Click(object sender, EventArgs e)

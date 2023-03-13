@@ -1736,8 +1736,8 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string queryString = "INSERT INTO Users (FirstName, LastName, LoginName, IsAdmin, CanChangeDates, EngineeringNumberVisible, CanReadOnly, CanOnlyChangeDesignWork, CanChangeProjectData)" +
-                                                "VALUES (@FirstName, @LastName, @LoginName, @IsAdmin, @CanChangeDates, @EngineeringNumberVisible, @CanReadOnly, @CanOnlyChangeDesignWork, @CanChangeProjectData)";
+                string queryString = "INSERT INTO Users (FirstName, LastName, LoginName, IsAdmin, CanChangeDates, EngineeringNumberVisible, CanReadOnly, CanOnlyChangeDesignWork, CanChangeProjectData, CanChangeGeneralNotes)" +
+                                                "VALUES (@FirstName, @LastName, @LoginName, @IsAdmin, @CanChangeDates, @EngineeringNumberVisible, @CanReadOnly, @CanOnlyChangeDesignWork, @CanChangeProjectData, @CanChangeGeneralNotes)";
 
                 connection.Open();  // For some reason this is needed in order to obtain the id of the newly created User in the database.
 

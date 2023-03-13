@@ -35,11 +35,14 @@
             this.colLoginName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIsAdmin = new DevExpress.XtraGrid.Columns.GridColumn();
             this.riCheckEdit = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.colCanChangeDates = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colEngineeringNumberVisible = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colCanReadOnly = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colCanOnlyChangeDesignWork = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colCanChangeProjectData = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanChangeDates = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanOnlyChangeDesignWork = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanReadOnly = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEngineeringNumberVisible = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanCreateProjects = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanDeleteProjects = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCanChangeGeneralNotes = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.riCheckEdit)).BeginInit();
@@ -68,7 +71,10 @@
             this.colCanChangeDates,
             this.colCanOnlyChangeDesignWork,
             this.colCanReadOnly,
-            this.colEngineeringNumberVisible});
+            this.colEngineeringNumberVisible,
+            this.colCanCreateProjects,
+            this.colCanDeleteProjects,
+            this.colCanChangeGeneralNotes});
             this.userGridView.GridControl = this.gridControl1;
             this.userGridView.Name = "userGridView";
             this.userGridView.OptionsView.ColumnHeaderAutoHeight = DevExpress.Utils.DefaultBoolean.True;
@@ -117,6 +123,15 @@
             this.riCheckEdit.AutoHeight = false;
             this.riCheckEdit.Name = "riCheckEdit";
             // 
+            // colCanChangeProjectData
+            // 
+            this.colCanChangeProjectData.Caption = "Change Project Data";
+            this.colCanChangeProjectData.ColumnEdit = this.riCheckEdit;
+            this.colCanChangeProjectData.FieldName = "CanChangeProjectData";
+            this.colCanChangeProjectData.Name = "colCanChangeProjectData";
+            this.colCanChangeProjectData.Visible = true;
+            this.colCanChangeProjectData.VisibleIndex = 5;
+            // 
             // colCanChangeDates
             // 
             this.colCanChangeDates.Caption = "Change Dates";
@@ -124,25 +139,7 @@
             this.colCanChangeDates.FieldName = "CanChangeDates";
             this.colCanChangeDates.Name = "colCanChangeDates";
             this.colCanChangeDates.Visible = true;
-            this.colCanChangeDates.VisibleIndex = 5;
-            // 
-            // colEngineeringNumberVisible
-            // 
-            this.colEngineeringNumberVisible.Caption = "Engineering # Visible";
-            this.colEngineeringNumberVisible.ColumnEdit = this.riCheckEdit;
-            this.colEngineeringNumberVisible.FieldName = "EngineeringNumberVisible";
-            this.colEngineeringNumberVisible.Name = "colEngineeringNumberVisible";
-            this.colEngineeringNumberVisible.Visible = true;
-            this.colEngineeringNumberVisible.VisibleIndex = 7;
-            // 
-            // colCanReadOnly
-            // 
-            this.colCanReadOnly.Caption = "Read Only";
-            this.colCanReadOnly.ColumnEdit = this.riCheckEdit;
-            this.colCanReadOnly.FieldName = "CanReadOnly";
-            this.colCanReadOnly.Name = "colCanReadOnly";
-            this.colCanReadOnly.Visible = true;
-            this.colCanReadOnly.VisibleIndex = 6;
+            this.colCanChangeDates.VisibleIndex = 6;
             // 
             // colCanOnlyChangeDesignWork
             // 
@@ -151,14 +148,48 @@
             this.colCanOnlyChangeDesignWork.FieldName = "CanOnlyChangeDesignWork";
             this.colCanOnlyChangeDesignWork.Name = "colCanOnlyChangeDesignWork";
             // 
-            // colCanChangeProjectData
+            // colCanReadOnly
             // 
-            this.colCanChangeProjectData.Caption = "Change Project Data";
-            this.colCanChangeProjectData.ColumnEdit = this.riCheckEdit;
-            this.colCanChangeProjectData.FieldName = "CanChangeProjectData";
-            this.colCanChangeProjectData.Name = "colCanChangeProjectData";
-            this.colCanChangeProjectData.Visible = true;
-            this.colCanChangeProjectData.VisibleIndex = 4;
+            this.colCanReadOnly.Caption = "Read Only";
+            this.colCanReadOnly.ColumnEdit = this.riCheckEdit;
+            this.colCanReadOnly.FieldName = "CanReadOnly";
+            this.colCanReadOnly.Name = "colCanReadOnly";
+            // 
+            // colEngineeringNumberVisible
+            // 
+            this.colEngineeringNumberVisible.Caption = "Engineering # Visible";
+            this.colEngineeringNumberVisible.ColumnEdit = this.riCheckEdit;
+            this.colEngineeringNumberVisible.FieldName = "EngineeringNumberVisible";
+            this.colEngineeringNumberVisible.Name = "colEngineeringNumberVisible";
+            this.colEngineeringNumberVisible.Visible = true;
+            this.colEngineeringNumberVisible.VisibleIndex = 9;
+            // 
+            // colCanCreateProjects
+            // 
+            this.colCanCreateProjects.Caption = "Create Projects";
+            this.colCanCreateProjects.ColumnEdit = this.riCheckEdit;
+            this.colCanCreateProjects.FieldName = "CanCreateProjects";
+            this.colCanCreateProjects.Name = "colCanCreateProjects";
+            this.colCanCreateProjects.Visible = true;
+            this.colCanCreateProjects.VisibleIndex = 4;
+            // 
+            // colCanDeleteProjects
+            // 
+            this.colCanDeleteProjects.Caption = "Delete Projects";
+            this.colCanDeleteProjects.ColumnEdit = this.riCheckEdit;
+            this.colCanDeleteProjects.FieldName = "CanDeleteProjects";
+            this.colCanDeleteProjects.Name = "colCanDeleteProjects";
+            this.colCanDeleteProjects.Visible = true;
+            this.colCanDeleteProjects.VisibleIndex = 7;
+            // 
+            // colCanChangeGeneralNotes
+            // 
+            this.colCanChangeGeneralNotes.Caption = "Change General Notes";
+            this.colCanChangeGeneralNotes.ColumnEdit = this.riCheckEdit;
+            this.colCanChangeGeneralNotes.FieldName = "CanChangeGeneralNotes";
+            this.colCanChangeGeneralNotes.Name = "colCanChangeGeneralNotes";
+            this.colCanChangeGeneralNotes.Visible = true;
+            this.colCanChangeGeneralNotes.VisibleIndex = 8;
             // 
             // AdminWindow
             // 
@@ -191,5 +222,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn colCanOnlyChangeDesignWork;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit riCheckEdit;
         private DevExpress.XtraGrid.Columns.GridColumn colCanChangeProjectData;
+        private DevExpress.XtraGrid.Columns.GridColumn colCanCreateProjects;
+        private DevExpress.XtraGrid.Columns.GridColumn colCanDeleteProjects;
+        private DevExpress.XtraGrid.Columns.GridColumn colCanChangeGeneralNotes;
     }
 }

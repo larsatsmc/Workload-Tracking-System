@@ -46,6 +46,8 @@ namespace Toolroom_Project_Viewer
                         user.CanReadOnly = false;
                         user.CanChangeProjectData = true;
                         user.CanChangeDates = true;
+                        user.CanCreateProjects = true;
+                        user.CanDeleteProjects = true;
                     }
                 }
                 else if (e.Column.FieldName == "CanReadOnly")
@@ -56,13 +58,8 @@ namespace Toolroom_Project_Viewer
                         user.CanOnlyChangeDesignWork = false;
                         user.CanChangeDates = false;
                         user.CanChangeProjectData = false;
-                    }
-                }
-                else if (e.Column.FieldName == "CanChangeProject")
-                {
-                    if (user.)
-                    {
-
+                        user.CanCreateProjects = false;
+                        user.CanDeleteProjects = false;
                     }
                 }
 

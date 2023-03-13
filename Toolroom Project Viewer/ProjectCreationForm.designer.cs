@@ -1046,6 +1046,7 @@
             "Insert",
             "Lifter",
             "Lock Block",
+            "Mold",
             "Runner Block",
             "Wear Plate"});
             this.ComponentListBox.Location = new System.Drawing.Point(13, 87);
@@ -1115,6 +1116,7 @@
             this.TaskListBox.Items.AddRange(new object[] {
             "Order Steel / Steel Arrival",
             "Initial Inspection",
+            "Design",
             "Design Change",
             "Weld",
             "Program Rough",
@@ -1143,7 +1145,7 @@
             this.TaskListBox.Margin = new System.Windows.Forms.Padding(4);
             this.TaskListBox.Name = "TaskListBox";
             this.TaskListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.TaskListBox.Size = new System.Drawing.Size(201, 436);
+            this.TaskListBox.Size = new System.Drawing.Size(201, 452);
             this.TaskListBox.TabIndex = 28;
             this.TaskListBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TaskListBox_MouseClick);
             // 

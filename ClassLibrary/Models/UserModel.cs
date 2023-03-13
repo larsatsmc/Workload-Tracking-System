@@ -20,5 +20,6 @@ namespace ClassLibrary.Models
         public bool CanChangeProjectData { get; set; }
         public bool CanCreateProjects { get; set; }
         public bool CanDeleteProjects { get; set; }
+        public bool CanChangeGeneralNotes { get; set; }
     }
 }
