@@ -1046,7 +1046,7 @@
             "Insert",
             "Lifter",
             "Lock Block",
-            "Mold",
+            "Mold Design",
             "Runner Block",
             "Wear Plate"});
             this.ComponentListBox.Location = new System.Drawing.Point(13, 87);

@@ -36,7 +36,7 @@ namespace Toolroom_Project_Viewer
         private ComponentModel SelectedComponent { get; set; }
         private TaskModel SelectedTask { get; set; }
         public SchedulerStorage SchedulerStorageProp { get; private set; }
-        private ContextMenuStrip ComponentMenu, ProjectMenu;
+        private ContextMenuStrip ComponentMenu, ProjectMenu, TaskMenu;
         public bool DataValidated { get; private set; }
         public List<UserModel> UserList { get; set; }
 
@@ -124,6 +124,15 @@ namespace Toolroom_Project_Viewer
 
             ComponentMenu.Items.AddRange(new ToolStripMenuItem[] { renameLabel2, copyLabel, createTemplateLabel, loadTemplateLabel });
             ComponentMenu.Click += ComponentMenuStrip_Click;
+
+            TaskMenu = new ContextMenuStrip();
+
+            ToolStripMenuItem renameLabel3 = new ToolStripMenuItem();
+
+            renameLabel3.Text = "Rename";
+
+            TaskMenu.Items.AddRange(new ToolStripMenuItem[] { renameLabel3 });
+            TaskMenu.Click += TaskMenuStrip_Click;
 
             prefix = "A-";
         }
@@ -1795,6 +1804,11 @@ namespace Toolroom_Project_Viewer
 
                     taskInfo = GetDefaultTaskInfo(SelectedTask.TaskName);
 
+                    if (selectedNode.ContextMenuStrip == null)
+                    {
+                        selectedNode.ContextMenuStrip = TaskMenu;
+                    }
+
                     if (selectedNode.Nodes.Count > 0)
                     {
                         str1Arr = selectedNode.Nodes[0].Text.Split(' ');
@@ -1974,6 +1988,33 @@ namespace Toolroom_Project_Viewer
             {
                 MessageBox.Show(ex.Message);
                 Console.WriteLine(ex.ToString());
+            }
+        }
+        private void TaskMenuStrip_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip contextMenuStrip = (ContextMenuStrip)sender;
+
+            ToolStripMenuItem selectedToolStripMenuItem = null;
+
+            foreach (ToolStripMenuItem item in contextMenuStrip.Items)
+            {
+                if (item.Pressed == true)
+                {
+                    selectedToolStripMenuItem = item;
+                }
+            }
+
+            try
+            {
+                if (selectedToolStripMenuItem.Text == "Rename")
+                {
+                    RenameNode();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Console.WriteLine();
             }
         }
         private void updateInfoButton_Click(object sender, EventArgs e)

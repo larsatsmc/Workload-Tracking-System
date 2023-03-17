@@ -2990,7 +2990,12 @@ namespace Toolroom_Project_Viewer
             ColumnView view = sender as ColumnView;
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
 
-            if (column.FieldName == "ProjectNumber")
+            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
+            {
+                e.ErrorText = "This login is not authorized to make changes to project level data.  Hit ESC to cancel editing.";
+                e.Valid = false;
+            }
+            else if (column.FieldName == "ProjectNumber")
             {
                 if (int.TryParse(e.Value.ToString(), out int result) == true)
                 {
