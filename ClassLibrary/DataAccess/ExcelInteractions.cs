@@ -18,7 +18,7 @@ namespace ClassLibrary
     {
         private static readonly string ColorPrinterString = "P-1336 HP CP5225 - Color";
         private readonly string XPSDocWriterString = "Microsoft XPS Document Writer";
-        private static string KanBanBaseFilePath2 = @"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm";
+        //private static string KanBanBaseFilePath2 = @"X:\TOOLROOM\Workload Tracking System\Resource Files\Kan Ban Base File.xlsm";
         private static string KanBanBaseFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\Resources\Kan Ban Base File.xlsm";
         private static string KanBanSheetCode = 
                    "Function IsMarkedComplete(row As Integer) As String\r\n" +

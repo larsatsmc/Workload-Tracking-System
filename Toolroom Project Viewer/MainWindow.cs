@@ -38,6 +38,7 @@ using DevExpress.Spreadsheet;
 using DevExpress.Utils.Menu;
 using DevExpress.XtraScheduler.Drawing;
 using ClassLibrary.Models;
+using DevExpress.Utils;
 
 namespace Toolroom_Project_Viewer
 {
@@ -75,10 +76,10 @@ namespace Toolroom_Project_Viewer
         private DataTable ResourceDataTable;
         private string Role, Tasks;
         Regex TaskRegExpression, RoleRegExpression;
-        private bool AllProjectItemsChecked, MoveSelectedAppointments, RightMouseButtonPressed, MoveSubsequentTaskWithLockedSpacing;
+        private bool AllProjectItemsChecked, MoveSelectedAppointments, RightMouseButtonPressed, MoveSubsequentTaskWithLockedSpacing, AppointmentErrorSent, AppointmentResourceChanged, AppointmentDateChanged, EditAppointmentByForm;
         DateTime OldTaskStartDate;
         Appointment DraggedAppointment;
-        SchedulerHitInfo HitInfo;
+        private SchedulerHitInfo HitInfo { get; set; }
 
         private RefreshHelper helper1, helper2, deptTaskViewHelper;
 
@@ -292,46 +293,46 @@ namespace Toolroom_Project_Viewer
             Database db = new Database();
             DataTable dt = new DataTable();
 
-            schedulerStorage1.Resources.Clear();
-            schedulerStorage1.Resources.CustomFieldMappings.Clear();
+            schedulerDataStorage1.Resources.Clear();
+            schedulerDataStorage1.Resources.CustomFieldMappings.Clear();
 
-            ResourceStorage resourceStorage = new ResourceStorage(schedulerStorage1);
-            ResourceMappingInfo resourceMappings = schedulerStorage1.Resources.Mappings;
+            ResourceStorage resourceStorage = new ResourceStorage(schedulerDataStorage1);
+            ResourceMappingInfo resourceMappings = schedulerDataStorage1.Resources.Mappings;
 
             resourceMappings.Caption = "ResourceName";
             resourceMappings.Id = "ResourceName";
 
-            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("ResourceType", "ResourceType"));
-            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Role", "Role"));
-            schedulerStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Department", "Department"));
+            schedulerDataStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("ResourceType", "ResourceType"));
+            schedulerDataStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Role", "Role"));
+            schedulerDataStorage1.Resources.CustomFieldMappings.Add(new ResourceCustomFieldMapping("Department", "Department"));
 
-            schedulerStorage1.Resources.DataSource = ResourceDataTable.AsEnumerable().GroupBy(x => x.Field<string>("ResourceName")).Select(x => x.FirstOrDefault()).CopyToDataTable();
+            schedulerDataStorage1.Resources.DataSource = ResourceDataTable.AsEnumerable().GroupBy(x => x.Field<string>("ResourceName")).Select(x => x.FirstOrDefault()).CopyToDataTable();
 
             Console.WriteLine();
             Console.WriteLine("Resources");
 
-            //for (int i = 0; i < schedulerStorage1.Resources.Items.Count; i++)
+            //for (int i = 0; i < schedulerDataStorage1.Resources.Items.Count; i++)
             //{
-            //    Console.WriteLine($"{schedulerStorage1.Resources[i].Id} {schedulerStorage1.Resources[i].Caption}");
+            //    Console.WriteLine($"{schedulerDataStorage1.Resources[i].Id} {schedulerDataStorage1.Resources[i].Caption}");
             //}
         }
         private void InitializeAppointments()
         {
             //bool grouped;
 
-            schedulerStorage1.Appointments.Clear();
-            schedulerStorage1.Appointments.CustomFieldMappings.Clear();
+            schedulerDataStorage1.Appointments.Clear();
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Clear();
 
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("JobNumber", "JobNumber"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("ProjectNumber", "ProjectNumber"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskName", "TaskName"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Hours", "Hours"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Predecessors", "Predecessors"));
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("DueDate", "DueDate"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("JobNumber", "JobNumber"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("ProjectNumber", "ProjectNumber"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskID", "TaskID"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("TaskName", "TaskName"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Component", "Component"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Hours", "Hours"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("Predecessors", "Predecessors"));
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(new AppointmentCustomFieldMapping("DueDate", "DueDate"));
 
-            AppointmentMappingInfo appointmentMappings = schedulerStorage1.Appointments.Mappings;
+            AppointmentMappingInfo appointmentMappings = schedulerDataStorage1.Appointments.Mappings;
 
             appointmentMappings.AppointmentId = "ID";
             appointmentMappings.Start = "StartDate";
@@ -340,7 +341,7 @@ namespace Toolroom_Project_Viewer
             //appointmentMappings.Location = "Location";
             appointmentMappings.PercentComplete = "PercentComplete";
             appointmentMappings.ResourceId = "Resources";
-            appointmentMappings.Description = "Notes";
+            appointmentMappings.Description = "Notes";            
 
             // TODO: Uncomment the code below to setup resource tree.
 
@@ -367,38 +368,29 @@ namespace Toolroom_Project_Viewer
 
             //}
 
-            //schedulerStorage1.Appointments.DataSource = Database.GetAppointmentData("All");
+            //schedulerDataStorage1.Appointments.DataSource = Database.GetAppointmentData("All");
 
             BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
 
-            schedulerStorage1.Appointments.DataSource = tasks;
+            schedulerDataStorage1.Appointments.DataSource = tasks;
 
-            //for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
-            //{
-            //    Console.WriteLine($"{schedulerStorage1.Appointments[i].Id} Project#: {schedulerStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerStorage1.Appointments[i].Start} Resource: {schedulerStorage1.Appointments[i].ResourceId} TaskName: {schedulerStorage1.Appointments[i].CustomFields["TaskName"]}");
-            //}
+            for (int i = 0; i < schedulerDataStorage1.Appointments.Items.Count; i++)
+            {
+                Console.WriteLine($"{schedulerDataStorage1.Appointments[i].Id} Project#: {schedulerDataStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerDataStorage1.Appointments[i].Start} Resource: {schedulerDataStorage1.Appointments[i].ResourceId} TaskName: {schedulerDataStorage1.Appointments[i].CustomFields["TaskName"]}");
+            }
 
             //Console.WriteLine();
             //Console.WriteLine($"{departmentComboBox.Text} Appointments");
-
-            //if (GroupByRadioGroup.SelectedIndex == 1)
-            //{
-            //    this.schedulerStorage1.AppointmentsChanged -= new DevExpress.XtraScheduler.PersistentObjectsEventHandler(this.schedulerStorage1_AppointmentsChanged);
-
-            //    for (int i = 0; i < schedulerStorage1.Appointments.Items.Count; i++)
-            //    {
-            //        schedulerStorage1.Appointments[i].ResourceId = null;
-            //    }
-
-            //    this.schedulerStorage1.AppointmentsChanged += new DevExpress.XtraScheduler.PersistentObjectsEventHandler(this.schedulerStorage1_AppointmentsChanged);
-            //}
         }
-        private bool UpdateTaskStorage1(TaskModel movedTask, Appointment apt)
+        private bool UpdateTaskStorage1(TaskModel movedTask, Appointment apt, PersistentObjectsEventArgs e)
         {            
             bool retryHit = false;
             ProjectModel globalProject = null;
             ComponentModel globalComponent = null;
             TaskModel globalTask = null;
+            //AdvPersistentObjectsEventArgs e2 = (AdvPersistentObjectsEventArgs)e;
+
+            //MessageBox.Show(e2.PropertyName);
 
             gridView1.BeginUpdate();
             gridView5.BeginUpdate();
@@ -430,49 +422,57 @@ namespace Toolroom_Project_Viewer
 
             try
             {
-                gridView5.BeginUpdate();
-                schedulerControl1.BeginUpdate();
-
-                if (RightMouseButtonPressed)
+                if (AppointmentDateChanged)
                 {
-                    foreach (TaskModel task in globalComponent.Tasks)
-                    {
-                        Console.WriteLine($"Task: {task.TaskName,-13} Start Date: {((DateTime)task.StartDate).ToShortDateString(),-10} Finish Date: {GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration).ToShortDateString()}");
-                    }
+                    gridView5.BeginUpdate();
+                    schedulerControl1.BeginUpdate();
 
-                    Console.WriteLine();
-
-                    if (MoveSubsequentTaskWithLockedSpacing)
+                    if (RightMouseButtonPressed)
                     {
-                        if (((DateTime)movedTask.StartDate - OldTaskStartDate).Days > 0)
-                        {                            
-                            globalComponent.UpdateSuccessorTaskDates(movedTask, GeneralOperations.GetWorkingDays(OldTaskStartDate, (DateTime)movedTask.StartDate));
+                        foreach (TaskModel task in globalComponent.Tasks)
+                        {
+                            Console.WriteLine($"Task: {task.TaskName,-13} Start Date: {((DateTime)task.StartDate).ToShortDateString(),-10} Finish Date: {GeneralOperations.AddBusinessDays((DateTime)task.StartDate, task.Duration).ToShortDateString()}");
+                        }
+
+                        Console.WriteLine();
+
+                        if (MoveSubsequentTaskWithLockedSpacing)
+                        {
+                            if (((DateTime)movedTask.StartDate - OldTaskStartDate).Days > 0)
+                            {
+                                globalComponent.UpdateSuccessorTaskDates(movedTask, GeneralOperations.GetWorkingDays(OldTaskStartDate, (DateTime)movedTask.StartDate));
+                            }
+                            else
+                            {
+                                foreach (int taskID in movedTask.GetPredecessorList())
+                                {
+                                    globalComponent.UpdatePredecessorTaskDates(taskID, GeneralOperations.GetWorkingDays((DateTime)movedTask.StartDate, OldTaskStartDate));
+                                }
+                            }
+
+                            Database.UpdateTaskDates(globalComponent.Tasks);
+
+                            MoveSubsequentTaskWithLockedSpacing = false;
                         }
                         else
                         {
-                            foreach (int taskID in movedTask.GetPredecessorList())
-                            {
-                                globalComponent.UpdatePredecessorTaskDates(taskID, GeneralOperations.GetWorkingDays((DateTime)movedTask.StartDate, OldTaskStartDate)); 
-                            }
+                            globalComponent.UpdateTaskDates(movedTask, OldTaskStartDate);
                         }
 
-                        Database.UpdateTaskDates(globalComponent.Tasks);
-
-                        MoveSubsequentTaskWithLockedSpacing = false;
+                        return true;
                     }
                     else
                     {
-                        globalComponent.UpdateTaskDates(movedTask, OldTaskStartDate);
-                    }
-
-                    return true;
+                        if (globalComponent.UpdateTaskDates(movedTask))
+                        {
+                            return true;
+                        }
+                    } 
                 }
                 else
                 {
-                    if (globalComponent.UpdateTaskDates(movedTask))
-                    {
-                        return true;
-                    }
+                    Database.UpdateTask(movedTask);
+                    return true;
                 }
             }
             finally
@@ -487,55 +487,6 @@ namespace Toolroom_Project_Viewer
             }
 
             return false;
-        }
-        private void SetAppointmentDate(Appointment apt, string column, DateTime date)
-        {
-            schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
-
-            if (column == "StartDate")
-            {
-                apt.Start = date;
-            }
-            else if (column == "FinishDate")
-            {
-                apt.End = date;
-            }
-
-            schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
-        }
-        private void SetAppointmentResources(Appointment apt, string machine, string personnel)
-        {
-            Resource res;
-
-            schedulerStorage1.AppointmentsChanged -= schedulerStorage1_AppointmentsChanged;
-            apt.ResourceIds.Clear();
-
-            int machineCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == machine).Count();
-            int personnelCount = schedulerStorage1.Resources.Items.Where(x => x.Id.ToString() == personnel).Count();
-
-            if (machineCount == 0)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById("No Machine");
-                apt.ResourceIds.Add(res.Id);
-            }
-            else if (machine != "" && machineCount == 1)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById(machine);
-                apt.ResourceIds.Add(res.Id);
-            }
-
-            if (personnelCount == 0)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById("No Personnel");
-                apt.ResourceIds.Add(res.Id);
-            }
-            else if (personnel != "" && personnelCount == 1)
-            {
-                res = schedulerStorage1.Resources.Items.GetResourceById(personnel);
-                apt.ResourceIds.Add(res.Id);
-            }
-
-            schedulerStorage1.AppointmentsChanged += schedulerStorage1_AppointmentsChanged;
         }
 
         /// <summary>
@@ -869,7 +820,7 @@ namespace Toolroom_Project_Viewer
             LoadProjects();
             BindingList<TaskModel> tasks = new BindingList<TaskModel>(TasksList);
 
-            schedulerStorage1.Appointments.DataSource = tasks;
+            schedulerDataStorage1.Appointments.DataSource = tasks;
             //InitializeAppointments();
             schedulerControl1.RefreshData();
         }
@@ -1011,7 +962,9 @@ namespace Toolroom_Project_Viewer
             foreach (var id in e.SourceAppointment.ResourceIds)
             {
                 if (!Equals(id, DraggedResourceId))
+                {
                     e.EditedAppointment.ResourceIds.Add(id);
+                }
             }
         }
         private void schedulerControl1_AppointmentFlyoutShowing(object sender, AppointmentFlyoutShowingEventArgs e)
@@ -1049,7 +1002,8 @@ namespace Toolroom_Project_Viewer
         }
         private void schedulerControl1_AllowAppointmentDrag(object sender, AppointmentOperationEventArgs e)
         {
-            
+            AppointmentErrorSent = false;
+            AppointmentDateChanged = false;
             // Prevents user from dragging multiple tasks since doing so causes undesirable results.
             if (schedulerControl1.SelectedAppointments.Count > 1)
             {
@@ -1077,7 +1031,15 @@ namespace Toolroom_Project_Viewer
                 return;
 
             DraggedResourceId = ((DevExpress.XtraScheduler.Internal.Implementations.ResourceBase)hitInfo.ViewInfo.Resource).Id;
-            
+
+            AppointmentResourceChanged = false;
+            EditAppointmentByForm = false;
+        }
+        private void schedulerControl1_EditAppointmentFormShowing(object sender, AppointmentFormEventArgs e)
+        {
+            AppointmentErrorSent = false;
+            AppointmentDateChanged = false;
+            EditAppointmentByForm = true;
         }
         private void schedulerControl1_MouseUp(object sender, MouseEventArgs e)
         {
@@ -1086,41 +1048,93 @@ namespace Toolroom_Project_Viewer
                 RightMouseButtonPressed = false;
             }
         }
-        private void schedulerStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
+        private void schedulerDataStorage1_AppointmentChanging(object sender, PersistentObjectCancelEventArgs e)
         {
-            if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
+            try
             {
-                MessageBox.Show("This login is not authorized to make changes to dates.");
-                e.Cancel = true;
+                // May want to go this route in the future.  But this would require switching schedulerStorage1 to a datastorage
+
+                AdvPersistentObjectCancelEventArgs e2 = (AdvPersistentObjectCancelEventArgs)e;
+
+                //MessageBox.Show(e2.PropertyName);
+
+                if (e2.PropertyName == "Start")
+                {
+                    //TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerDataStorage1) as TaskModel;
+
+                    //ComponentModel tempComponent = ComponentsList.Find(x => x.Component == changingTask.Component && x.ProjectNumber == changingTask.ProjectNumber);
+
+                    //if (RightMouseButtonPressed)
+                    //{
+                    //    tempComponent.UpdateTask(changingTask, ChangingTask);
+                    //}
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
+                    {
+                        e.Cancel = true;
+                        throw new Exception("This login is not authorized to make changes to dates.");
+                    }
+
+                    AppointmentDateChanged = true;
+                }
+                else if (e2.PropertyName == "End")
+                {
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeDates))
+                    {
+                        e.Cancel = true;
+                        throw new Exception("This login is not authorized to make changes to dates.");
+                    }
+
+                    AppointmentDateChanged = true;
+                }
+                else if (e2.PropertyName == "Reminders")
+                {
+                    e.Cancel = true;
+                }
+                else if (e2.PropertyName == "ResourceIds")
+                {
+                    //MessageBox.Show(((AppointmentResourceIdCollection)e2.OldValue)[0].ToString());
+                    //MessageBox.Show(((Appointment)e.Object).ResourceIds[0].ToString());
+
+                    if (!EditAppointmentByForm && ((DevExpress.XtraScheduler.Internal.Implementations.ResourceBase)HitInfo.ViewInfo.Resource).Id != DraggedResourceId)
+                    {
+                        if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
+                        {
+                            e.Cancel = true;
+                            throw new Exception("This login is not authorized to make changes to project data.");
+                        } 
+                    }
+                }
+                else
+                {
+                    if (!UserList.Exists(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.CanChangeProjectData))
+                    {
+                        e.Cancel = true;
+                        throw new Exception("This login is not authorized to make changes to project data.");
+                    }
+                }
+
+                if (RightMouseButtonPressed)
+                {
+                    TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerDataStorage1) as TaskModel;
+
+                    OldTaskStartDate = (DateTime)changingTask.StartDate;  // (DateTime)changingTask.StartDate
+
+                    Console.WriteLine($"Old Date: {OldTaskStartDate}");
+                    Console.WriteLine();
+                }
             }
-
-            // May want to go this route in the future.  But this would require switching schedulerStorage1 to a datastorage
-
-            //AdvPersistentObjectCancelEventArgs e2 = (AdvPersistentObjectCancelEventArgs)e;
-
-            //if (e2.PropertyName == "Start")
-            //{
-            //    TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerStorage1) as TaskModel;
-
-            //    ComponentModel tempComponent = ComponentsList.Find(x => x.Component == changingTask.Component && x.ProjectNumber == changingTask.ProjectNumber);
-
-            //    if (RightMouseButtonPressed)
-            //    {
-            //        tempComponent.UpdateTask(changingTask, ChangingTask);
-            //    } 
-            //}
-
-            if (RightMouseButtonPressed)
+            catch (Exception ex)
             {
-                TaskModel changingTask = ((Appointment)e.Object).GetSourceObject(schedulerStorage1) as TaskModel;
+                if (!AppointmentErrorSent)
+                {
+                    MessageBox.Show(ex.Message); 
+                }
 
-                OldTaskStartDate = (DateTime)changingTask.StartDate;  // (DateTime)changingTask.StartDate
-
-                Console.WriteLine($"Old Date: {OldTaskStartDate}");
-                Console.WriteLine();
+                Console.WriteLine(ex.ToString());
+                AppointmentErrorSent = true;
             }
         }
-        private void schedulerStorage1_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
+        private void schedulerDataStorage1_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
             //LoadProjects();
             if (!IsFormOpen("WaitForm1") && !MoveSelectedAppointments)
@@ -1136,11 +1150,11 @@ namespace Toolroom_Project_Viewer
             {
                 foreach (Appointment apt in e.Objects)
                 {
-                    movedTask = apt.GetSourceObject(schedulerStorage1) as TaskModel;
-
-                    if (UpdateTaskStorage1(movedTask, apt))
+                    movedTask = apt.GetSourceObject(schedulerDataStorage1) as TaskModel;
+                    
+                    if (UpdateTaskStorage1(movedTask, apt, e))
                     {
-                        
+
                     }
                     else
                     {
@@ -1197,7 +1211,7 @@ namespace Toolroom_Project_Viewer
 
                         foreach (int apt in selectedAptIDs)
                         {
-                            Appointment appointment = schedulerStorage1.Appointments.Items.Where(x => int.Parse(x.Id.ToString()) == apt).First();
+                            Appointment appointment = schedulerDataStorage1.Appointments.Items.Where(x => int.Parse(x.Id.ToString()) == apt).First();
 
                             appointment.Start = appointment.Start.AddDays(numOfDays);
                         }
@@ -1218,22 +1232,22 @@ namespace Toolroom_Project_Viewer
 
                 if (e.Menu.Items.Count(x => x.Caption == "Open Kan Ban") == 0)
                 {
-                    e.Menu.Items.Insert(1, new SchedulerMenuItem("Open Kan Ban", schedulerStorage1_OpenKanBan));
+                    e.Menu.Items.Insert(1, new SchedulerMenuItem("Open Kan Ban", schedulerDataStorage1_OpenKanBan));
                 }
 
                 if (e.Menu.Items.Count(x => x.Caption == "Move Subsequent Component Tasks with Lock Spacing") == 0)
                 {
-                    e.Menu.Items.Insert(2, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing));
+                    e.Menu.Items.Insert(2, new SchedulerMenuItem("Move Subsequent Component Tasks with Lock Spacing", schedulerDataStorage1_MoveSubsequentComponentTasksWithLockedSpacing));
                 }
             }
         }
-        private void schedulerStorage1_OpenKanBan(object sender, EventArgs e)
+        private void schedulerDataStorage1_OpenKanBan(object sender, EventArgs e)
         {
             string filePath = ProjectsList.Find(x => x.ProjectNumber == int.Parse(DraggedAppointment.CustomFields["ProjectNumber"].ToString())).KanBanWorkbookPath;
             string component = DraggedAppointment.CustomFields["Component"].ToString();
             ExcelInteractions.OpenKanBanWorkbook(filePath, component);
         }
-        private void schedulerStorage1_MoveSubsequentComponentTasksWithLockedSpacing(object sender, EventArgs e)
+        private void schedulerDataStorage1_MoveSubsequentComponentTasksWithLockedSpacing(object sender, EventArgs e)
         {
             MoveSubsequentTaskWithLockedSpacing = true;
 
@@ -1243,7 +1257,7 @@ namespace Toolroom_Project_Viewer
             DraggedAppointment.End = HitInfo.ViewInfo.Interval.End;
 
         }
-        private void schedulerStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
+        private void schedulerDataStorage1_FilterAppointment(object sender, PersistentObjectCancelEventArgs e)
         {
             Appointment apt = (Appointment)e.Object;
 
@@ -1274,7 +1288,7 @@ namespace Toolroom_Project_Viewer
                     }
                 }
 
-                    //e.Cancel = !apt.Location.Contains(Tasks);
+                //e.Cancel = !apt.Location.Contains(Tasks);
             }
             catch (Exception ex)
             {
@@ -1282,12 +1296,11 @@ namespace Toolroom_Project_Viewer
                 Console.WriteLine(ex.ToString());
             }
         }
-
-        private void schedulerStorage1_FilterResource(object sender, PersistentObjectCancelEventArgs e)
+        private void schedulerDataStorage1_FilterResource(object sender, PersistentObjectCancelEventArgs e)
         {
             try
             {
-                SchedulerStorage storage = (SchedulerStorage)sender;
+                SchedulerDataStorage storage = (SchedulerDataStorage)sender;
                 Resource res = (Resource)e.Object;
 
                 if (Role != "All")
@@ -1302,7 +1315,7 @@ namespace Toolroom_Project_Viewer
                         }
                         else
                         {
-                            e.Cancel = res.CustomFields["ResourceType"].ToString() != "Person";                     
+                            e.Cancel = res.CustomFields["ResourceType"].ToString() != "Person";
                         }
                     }
                     else if (GroupByRadioGroup.SelectedIndex == 1)
@@ -1319,7 +1332,6 @@ namespace Toolroom_Project_Viewer
                 Console.WriteLine(ex.ToString());
             }
         }
-
         private void schedulerControl1_AppointmentViewInfoCustomizing(object sender, AppointmentViewInfoCustomizingEventArgs e)
         {
             if (Tasks == ".*")
@@ -1328,7 +1340,7 @@ namespace Toolroom_Project_Viewer
             }
             else
             {
-                e.ViewInfo.Appearance.BackColor = GetTaskReadinessColor((TaskModel)e.ViewInfo.Appointment.GetSourceObject(schedulerStorage1));
+                e.ViewInfo.Appearance.BackColor = GetTaskReadinessColor((TaskModel)e.ViewInfo.Appointment.GetSourceObject(schedulerDataStorage1));
             }
         }
 
@@ -1748,7 +1760,7 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                 {
-                    task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
+                    task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerDataStorage1, task.Machine, task.Personnel);
                     Database.UpdateTask(task, e);
                 }
                 else
@@ -2088,7 +2100,7 @@ namespace Toolroom_Project_Viewer
 
         private void CreateProject()
         {
-            using (var form = new ProjectCreationForm(schedulerStorage1))
+            using (var form = new ProjectCreationForm(schedulerDataStorage1))
             {
                 var result = form.ShowDialog();
 
@@ -2111,7 +2123,7 @@ namespace Toolroom_Project_Viewer
         }
         private void EditProject(ProjectModel project)
         {
-            using (var form = new ProjectCreationForm(project, schedulerStorage1))
+            using (var form = new ProjectCreationForm(project, schedulerDataStorage1))
             {
                 var result = form.ShowDialog();
 
@@ -2673,6 +2685,27 @@ namespace Toolroom_Project_Viewer
                 MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
         }
+        private void projectBandedGridView_CustomColumnSort(object sender, CustomColumnSortEventArgs e)
+        {
+            GridView view = sender as GridView;
+            if (view == null) return;
+
+            try
+            {
+                if (e.Column.FieldName == "Stage")
+                {
+                    object val1 = view.GetListSourceRowCellValue(e.ListSourceRowIndex1, "StageNumber");
+                    object val2 = view.GetListSourceRowCellValue(e.ListSourceRowIndex2, "StageNumber");
+                    e.Result = System.Collections.Comparer.Default.Compare(val1, val2);
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.ToString());
+            }
+        }
         private void projectBandedGridView_CustomRowCellEditForEditing(object sender, CustomRowCellEditEventArgs e)
         {
             if (e.Column.FieldName == "GeneralNotes")
@@ -2759,7 +2792,7 @@ namespace Toolroom_Project_Viewer
 
                     if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
-                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerStorage1);
+                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerDataStorage1);
                         RefreshProjectGrid();
                         RefreshDepartmentScheduleView();
                     } 
@@ -3040,7 +3073,7 @@ namespace Toolroom_Project_Viewer
 
                     if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
-                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerStorage1);
+                        Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerDataStorage1);
                         RefreshProjectGrid();
                         RefreshDepartmentScheduleView();
                     }
@@ -3317,7 +3350,7 @@ namespace Toolroom_Project_Viewer
                 {
                     if (e.Column.FieldName == "Machine" || e.Column.FieldName == "Personnel")
                     {
-                        task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage1, task.Machine, task.Personnel);
+                        task.Resources = GeneralOperations.GenerateResourceIDsString(schedulerDataStorage1, task.Machine, task.Personnel);
                     }
 
                     Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
@@ -3379,7 +3412,7 @@ namespace Toolroom_Project_Viewer
                     {
                         if (int.TryParse(result.ToString(), out int projectNumber))
                         {
-                            project.AvailableResources = schedulerStorage1;
+                            project.AvailableResources = schedulerDataStorage1;
                             copiedProject = new ProjectModel(project, projectNumber);
 
                             if(Database.CreateProject(copiedProject))
@@ -4694,6 +4727,7 @@ namespace Toolroom_Project_Viewer
 
             componentComboBox.Properties.Items.Add("");
         }
+
         private void LoadProjectCalendar(string comboBoxName)
         {
             SplashScreenManager.ShowForm(typeof(WaitForm1));
@@ -4739,6 +4773,7 @@ namespace Toolroom_Project_Viewer
 
             SplashScreenManager.CloseForm();
         }
+
         private void projectComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             var number = GetProjectComboBoxInfo(projectComboBox2);
@@ -4750,6 +4785,7 @@ namespace Toolroom_Project_Viewer
 
             LoadProjectCalendar(control.Name);
         }
+
         private void componentComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var control = sender as ComboBoxEdit;

@@ -105,7 +105,7 @@ namespace ClassLibrary
             this.TaskName = name;
         }
 
-        public TaskModel(int id, string name, string component, SchedulerStorage schedulerStorage)
+        public TaskModel(int id, string name, string component, SchedulerDataStorage schedulerStorage)
         {
             this.TaskID = id;
             this.TaskName = name;
@@ -361,7 +361,7 @@ namespace ClassLibrary
         /// <summary>
         /// Sets the task info for a given task from task info tab.
         /// </summary> 
-        public void SetTaskInfo(decimal hours, string duration, string machine, string personnel, string predecessors, string notes, SchedulerStorage schedulerStorage)
+        public void SetTaskInfo(decimal hours, string duration, string machine, string personnel, string predecessors, string notes, SchedulerDataStorage schedulerStorage)
         {
             this.Hours = Convert.ToInt32(hours);
             this.Duration = duration;
@@ -424,7 +424,7 @@ namespace ClassLibrary
             this.Notes = notesLine.Trim();
         }
 
-        public void SetResources(SchedulerStorage schedulerStorage)
+        public void SetResources(SchedulerDataStorage schedulerStorage)
         {
             this.Resources = GeneralOperations.GenerateResourceIDsString(schedulerStorage, this.Machine, this.Personnel);
         }

@@ -18,6 +18,7 @@ namespace ClassLibrary
         public bool ProjectNumberChanged { get; set; }
         public int OldProjectNumber { get; set; }
         public string Project { get; set; } = "";
+        public string Program { get; set; }
         public string JobNumber { get; set; }
         [XmlIgnore]
         public string EngineeringProjectNumber { get; set; }
@@ -82,7 +83,7 @@ namespace ClassLibrary
         public QuoteModel QuoteInfo { get; set; }
         public bool HasProjectInfo { get; set; }
         [XmlIgnore]
-        public SchedulerStorage AvailableResources { get; set; }
+        public SchedulerDataStorage AvailableResources { get; set; }
         [XmlIgnore]
         public bool OverlapAllowed { get; set; }
         [XmlIgnore]
@@ -113,6 +114,14 @@ namespace ClassLibrary
                 }
 
                 return true;
+            }
+        }
+        [XmlIgnore]
+        public int StageNumber 
+        {
+            get
+            { 
+                return GetStageNumber();
             }
         }
 
@@ -361,6 +370,38 @@ namespace ClassLibrary
         public void SetProjectDueDate(DateTime dueDate)
         {
             this.DueDate = dueDate;
+        }
+        public int GetStageNumber()
+        {
+            switch (Stage)
+            {
+                case "Quoted / Forecasted":
+                    return 1;
+                case "On Hold":
+                    return 2;
+                case "Design":
+                    return 3;
+                case "Programming":
+                    return 4;
+                case "In-Shop":
+                    return 5;
+                case "Rework":
+                    return 6;
+                case "Outsourced":
+                    return 7;
+                case "Mold Check-In":
+                    return 8;
+                case "Development":
+                    return 9;
+                case "Repair":
+                    return 10;
+                case "Completed":
+                    return 11;
+                case "Closed":
+                    return 12;
+                default:
+                    return 0;
+            }
         }
         public void IsProjectOnTime()
         {

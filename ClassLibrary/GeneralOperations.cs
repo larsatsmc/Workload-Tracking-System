@@ -155,7 +155,7 @@ namespace ClassLibrary
             return new Regex(@"^\s*(\d+)\sDay\(s\)\s*$");
         }
         // Seems like there would be a way of doing this without passing in a SchedulerStorage object.
-        public static string GenerateResourceIDsString(SchedulerStorage schedulerStorage, string machine, string personnel)
+        public static string GenerateResourceIDsString(SchedulerDataStorage schedulerStorage, string machine, string personnel)
         {
             AppointmentResourceIdCollection appointmentResourceIdCollection = new AppointmentResourceIdCollection();
             Resource res;

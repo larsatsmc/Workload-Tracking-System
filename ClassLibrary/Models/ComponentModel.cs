@@ -218,7 +218,7 @@ namespace ClassLibrary
         /// <summary>
         /// Adds a task to a component.
         /// </summary>
-        public void AddTask(string name, string component, SchedulerStorage schedulerStorage)
+        public void AddTask(string name, string component, SchedulerDataStorage schedulerStorage)
         {
             this.ReloadTaskList = true;
             this.Tasks.Add(new TaskModel(++TaskIDCount, name, component, schedulerStorage));
@@ -638,8 +638,6 @@ namespace ClassLibrary
         }
         private void BackDateTask(int predecessorID, DateTime successorStartDate)
         {
-            string[] predecessors;
-
             TaskModel predecessorTask = this.Tasks.Find(x => x.TaskID == predecessorID);
 
             if (predecessorTask.FinishDate == null || predecessorTask.FinishDate > successorStartDate)

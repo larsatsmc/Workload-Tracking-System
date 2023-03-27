@@ -861,7 +861,7 @@ namespace ClassLibrary
             }
         }
         // This means both machines and personnel.
-        public static void SetTaskPersonnel(int projectNumber, string taskName, string personnel, SchedulerStorage schedulerStorage)
+        public static void SetTaskPersonnel(int projectNumber, string taskName, string personnel, SchedulerDataStorage schedulerStorage)
         {
             using (SqlConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {

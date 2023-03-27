@@ -112,7 +112,7 @@ namespace ClassLibrary
             }
         }
 
-        public static ProjectModel ReadProjectFromTextFile(string filePath, SchedulerStorage schedulerStorage)
+        public static ProjectModel ReadProjectFromTextFile(string filePath, SchedulerDataStorage schedulerStorage)
         {
             ProjectModel project = new ProjectModel();
             ComponentModel component = new ComponentModel();

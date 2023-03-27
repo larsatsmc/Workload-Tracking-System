@@ -35,7 +35,7 @@ namespace Toolroom_Project_Viewer
         public ProjectModel Project { get; private set; }
         private ComponentModel SelectedComponent { get; set; }
         private TaskModel SelectedTask { get; set; }
-        public SchedulerStorage SchedulerStorageProp { get; private set; }
+        public SchedulerDataStorage SchedulerStorageProp { get; private set; }
         private ContextMenuStrip ComponentMenu, ProjectMenu, TaskMenu;
         public bool DataValidated { get; private set; }
         public List<UserModel> UserList { get; set; }
@@ -47,7 +47,7 @@ namespace Toolroom_Project_Viewer
         /// <summary>
         /// Initializes a new Project Form.
         /// </summary> 
-        public ProjectCreationForm(SchedulerStorage schedulerStorage)
+        public ProjectCreationForm(SchedulerDataStorage schedulerStorage)
         {
             Console.WriteLine("ProjectCreationForm Constructor");
 
@@ -69,7 +69,7 @@ namespace Toolroom_Project_Viewer
         /// <summary>
         /// Initializes a new Project Form and sets the project property of the form to an instance of a property.
         /// </summary> 
-        public ProjectCreationForm(ProjectModel project, SchedulerStorage schedulerStorage)
+        public ProjectCreationForm(ProjectModel project, SchedulerDataStorage schedulerStorage)
         {
             Console.WriteLine("ProjectCreationForm Constructor");
 
