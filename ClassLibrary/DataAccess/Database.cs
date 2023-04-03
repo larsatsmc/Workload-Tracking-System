@@ -423,7 +423,7 @@ namespace ClassLibrary
                         updateDueDateString = ", DueDate = @DueDate";
                     }
 
-                    string queryString = $"UPDATE Projects SET {ev.Column.FieldName} = @{ev.Column.FieldName}{updateDueDateString} WHERE ID = @ID";
+                    string queryString = $"UPDATE Projects SET {ev.Column.FieldName} = @{ev.Column.FieldName}{updateDueDateString}, DateModified = GETDATE() WHERE ID = @ID";
                     
                     connection.Execute(queryString, project);
 

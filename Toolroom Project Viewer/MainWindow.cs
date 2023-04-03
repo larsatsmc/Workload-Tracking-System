@@ -2211,7 +2211,7 @@ namespace Toolroom_Project_Viewer
                     count++;
 
                     // Using GetGroupRowValue causes an error to occur when it is null.
-                    if (view.GetGroupRowDisplayText(rowHandle).Contains("On Hold") || view.GetGroupRowDisplayText(rowHandle).Contains("Completed") || view.GetGroupRowDisplayText(rowHandle).Contains("Outsourced"))
+                    if (view.GetGroupRowDisplayText(rowHandle).Contains("On Hold") || view.GetGroupRowDisplayText(rowHandle).Contains("Completed") || view.GetGroupRowDisplayText(rowHandle).Contains("Outsourced") || view.GetGroupRowDisplayText(rowHandle).Contains("Closed"))
                     {
                         view.CollapseGroupRow(rowHandle);
 
@@ -2769,7 +2769,7 @@ namespace Toolroom_Project_Viewer
                 }
                 else if (e.Column.FieldName == "Stage")
                 {
-                    if (e.Value.ToString() == "7 - Completed")
+                    if (e.Value.ToString() == "Completed")
                     {
                         PreserveNotes();
                     }
