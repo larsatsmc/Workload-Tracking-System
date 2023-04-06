@@ -181,6 +181,7 @@
             this.schedulerDataStorage1 = new DevExpress.XtraScheduler.SchedulerDataStorage(this.components);
             this.departmentComboBox = new DevExpress.XtraEditors.ComboBoxEdit();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
+            this.taskViewExportButton = new DevExpress.XtraEditors.SimpleButton();
             this.PrintEmployeeWorkCheckedComboBoxEdit = new DevExpress.XtraEditors.CheckedComboBoxEdit();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.daysAheadSpinEdit = new DevExpress.XtraEditors.SpinEdit();
@@ -618,7 +619,7 @@
             this.gridControl3.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode1});
             this.gridControl3.Location = new System.Drawing.Point(13, 57);
-            this.gridControl3.MainView = this.projectBandedGridView;
+            this.gridControl3.MainView = this.gridView3;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl3.Name = "gridControl3";
             this.gridControl3.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
@@ -1784,6 +1785,7 @@
             // 
             // xtraTabPage2
             // 
+            this.xtraTabPage2.Controls.Add(this.taskViewExportButton);
             this.xtraTabPage2.Controls.Add(this.PrintEmployeeWorkCheckedComboBoxEdit);
             this.xtraTabPage2.Controls.Add(this.labelControl8);
             this.xtraTabPage2.Controls.Add(this.daysAheadSpinEdit);
@@ -1799,6 +1801,17 @@
             this.xtraTabPage2.Name = "xtraTabPage2";
             this.xtraTabPage2.Size = new System.Drawing.Size(1588, 799);
             this.xtraTabPage2.Text = "Department Task View";
+            // 
+            // taskViewExportButton
+            // 
+            this.taskViewExportButton.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
+            this.taskViewExportButton.Location = new System.Drawing.Point(881, 6);
+            this.taskViewExportButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.taskViewExportButton.Name = "taskViewExportButton";
+            this.taskViewExportButton.Size = new System.Drawing.Size(69, 21);
+            this.taskViewExportButton.TabIndex = 17;
+            this.taskViewExportButton.Text = "Export";
+            this.taskViewExportButton.Click += new System.EventHandler(this.taskViewExportButton_Click);
             // 
             // PrintEmployeeWorkCheckedComboBoxEdit
             // 
@@ -3214,6 +3227,7 @@
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand milestonesGridBand;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand personnelGridBand;
         private DevExpress.XtraGrid.Views.BandedGrid.GridBand generalInfoGridBand;
+        private DevExpress.XtraEditors.SimpleButton taskViewExportButton;
     }
 }
 

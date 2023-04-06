@@ -92,6 +92,8 @@ namespace ClassLibrary
         public bool IsOnTime { get; set; }
         [XmlIgnore]
         public bool IsChanged { get; set; } = false;
+        [XmlIgnore]
+        public bool UpdateKanBan { get; set; }
 
         private DateTime? latestFinishDate;
         [XmlIgnore]

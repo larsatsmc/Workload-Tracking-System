@@ -1682,7 +1682,19 @@ namespace Toolroom_Project_Viewer
 
             gridView1.ActiveFilterCriteria = FilterTaskView(departmentComboBox2.Text, false, false, filterTasksByDatesCheckEdit.Checked);
         }
+        private void taskViewExportButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel File (*.xlsx) |*.xlsx";
+            saveFileDialog.InitialDirectory = @"C:\Users\" + Environment.UserName + @"\Desktop";
+            saveFileDialog.FileName = "Tool Room Tasks " + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year;
+            saveFileDialog.DefaultExt = "xlsx";
 
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                gridView1.ExportToXlsx(saveFileDialog.FileName);
+            }
+        }
         private void gridControl1_MouseDown(object sender, MouseEventArgs e)
         {
             try
@@ -2789,6 +2801,13 @@ namespace Toolroom_Project_Viewer
                         LoadProjects();
                         return;
                     }
+                    else
+                    {
+                        if (e.Column.FieldName == "ProjectNumber" || e.Column.FieldName == "JobNumber" || e.Column.FieldName == "DeliveryInWeeks" || e.Column.FieldName == "StartDate" || e.Column.FieldName == "DueDate")
+                        {
+                            project.UpdateKanBan = true;
+                        }
+                    }
 
                     if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
@@ -3071,6 +3090,11 @@ namespace Toolroom_Project_Viewer
                 {
                     project.DateModified = DateTime.Now;
 
+                    if (e.Column.FieldName == "ProjectNumber" || e.Column.FieldName == "JobNumber" || e.Column.FieldName == "DueDate")
+                    {
+                        project.UpdateKanBan = true;
+                    }
+
                     if (e.Column.FieldName.Contains("Programmer") || e.Column.FieldName == "Designer")
                     {
                         Database.SetTaskPersonnel(project.ProjectNumber, GeneralOperations.FindMatchingDepartment(e.Column.FieldName, Database.GetDepartmentRoles()), e.Value.ToString(), schedulerDataStorage1);
@@ -3118,7 +3142,7 @@ namespace Toolroom_Project_Viewer
 
             if (e.RowHandle >= 0)
             {
-                if (IsPastDate(project.LastKanBanGenerationDate, project.DateModified))
+                if (project.UpdateKanBan)
                 {
                     e.Appearance.BackColor = Color.Salmon;
                     e.Appearance.BackColor2 = Color.SeaShell;
@@ -3194,6 +3218,8 @@ namespace Toolroom_Project_Viewer
                 ComponentModel component = view.GetFocusedRow() as ComponentModel;
 
                 Database.UpdateComponent(component, e);
+
+                ProjectsList.Find(x => x.ProjectNumber == component.ProjectNumber).UpdateKanBan = true;
             }
             catch (Exception ex)
             {
@@ -3354,6 +3380,11 @@ namespace Toolroom_Project_Viewer
                     }
 
                     Database.UpdateTask(task, e);  // Resources field is only updated when the Machine or Resource fields change., resources
+
+                    if (e.Column.FieldName == "TaskName" || e.Column.FieldName == "Notes")
+                    {
+                        project.UpdateKanBan = true;
+                    }
                 }
             }
             catch (Exception ex)

@@ -833,7 +833,7 @@
             this.dueDateTimePicker.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dueDateTimePicker.Name = "dueDateTimePicker";
             this.dueDateTimePicker.Size = new System.Drawing.Size(113, 22);
-            this.dueDateTimePicker.TabIndex = 59;
+            this.dueDateTimePicker.TabIndex = 59;            
             // 
             // ProjectNumberTextBox
             // 

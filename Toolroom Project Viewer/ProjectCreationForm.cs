@@ -2376,7 +2376,7 @@ namespace Toolroom_Project_Viewer
                 {
                     MessageBox.Show("This login is not authorized to change data.");
                     return;
-                } 
+                }
             }
 
             if (MoldBuildTreeView.Nodes[0].Text == "Tool Number*")
@@ -2476,6 +2476,7 @@ namespace Toolroom_Project_Viewer
                     if (Database.UpdateWholeProject(Project))
                     {
                         this.DialogResult = DialogResult.OK;
+
                     }
                 }
 

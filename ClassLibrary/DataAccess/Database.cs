@@ -496,7 +496,7 @@ namespace ClassLibrary
         {
             using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
             {
-                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @Path, LastKanBanGenerationDate = GETDATE() " +
+                string queryString = "UPDATE Projects SET KanBanWorkbookPath = @Path, UpdateKanBan = 0, LastKanBanGenerationDate = GETDATE() " +
                                      "WHERE ProjectNumber = @ProjectNumber";
 
                 var p = new { Path = path, ProjectNumber = projectNumber };
@@ -573,6 +573,7 @@ namespace ClassLibrary
                 using (IDbConnection connection = new SqlConnection(Helper.CnnValue(SQLClientConnectionName)))
                 {
                     connection.Execute($"Update Components SET {ev.Column.FieldName} = @{ev.Column.FieldName}, DateModified = GETDATE() WHERE (ID = @ID)", component);
+                    connection.Execute($"Update Projects SET UpdateKanBan = 1 where ProjectNumber = @ProjectNumber", new { component.ProjectNumber });
                 }
             }
             catch (Exception e)
@@ -853,6 +854,11 @@ namespace ClassLibrary
                     queryString = $"UPDATE Tasks SET {ev.Column.FieldName} = @{ev.Column.FieldName}{resourceQueryString}, DateModified = GETDATE() WHERE (ID = @ID)";
 
                     connection.Execute(queryString, task);
+
+                    if (ev.Column.FieldName == "TaskName" || ev.Column.FieldName == "Notes")
+                    {
+                        connection.Execute($"UPDATE Projects SET UpdateKanBan = 1 WHERE ProjectNumber = @ProjectNumber", new { task.ProjectNumber });
+                    }
                 }
             }
             catch (Exception e)
