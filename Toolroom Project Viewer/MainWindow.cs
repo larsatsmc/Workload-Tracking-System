@@ -1514,6 +1514,7 @@ namespace Toolroom_Project_Viewer
 
             criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("Stage"), "On Hold")));
             criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("Stage"), "Completed")));
+            criteriaOperators.Add(new NotOperator(new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty("Stage"), "Closed")));
 
             return CriteriaOperator.And(criteriaOperators);
         }
