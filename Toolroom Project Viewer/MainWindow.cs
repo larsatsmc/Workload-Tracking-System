@@ -3275,6 +3275,7 @@ namespace Toolroom_Project_Viewer
         {
             ColumnView view = sender as ColumnView;
             GridColumn column = (e as EditFormValidateEditorEventArgs)?.Column ?? view.FocusedColumn;
+            TaskModel task = view.GetFocusedRow() as TaskModel;
             //MessageBox.Show(view.GetRowCellValue(view.FocusedRowHandle, "TaskID").ToString());
             if (column.FieldName == "Duration")
             {
@@ -3339,6 +3340,15 @@ namespace Toolroom_Project_Viewer
                 {
                     e.ErrorText = "This login is not authorized to make changes to dates.";
                     e.Valid = false;
+                }
+
+                if (column.FieldName == "FinishDate" && task.StartDate != null)
+                {
+                    if (e.Value != null && DateTime.Parse(e.Value.ToString()) < task.StartDate)
+                    {
+                        e.ErrorText = "You cannot have a finish date before a task's start date.";
+                        e.Valid = false;
+                    }
                 }
             }
         }

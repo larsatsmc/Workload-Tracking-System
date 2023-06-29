@@ -147,6 +147,12 @@ namespace Toolroom_Project_Viewer
             {
                 if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control)
                 {
+                    if (UserList.Count(x => x.LoginName == Environment.UserName.ToString().ToLower() && x.IsAdmin == true) == 0)
+                    {
+                        MessageBox.Show("You must be an admin to delete users.");
+                        return;
+                    }
+
                     UserModel user = userGridView.GetFocusedRow() as UserModel;
 
                     if (Database.DeleteUser(user.ID))

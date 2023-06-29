@@ -784,6 +784,8 @@
             // 
             // colProjectNumberBGV
             // 
+            this.colProjectNumberBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colProjectNumberBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colProjectNumberBGV.Caption = "MRO # / Project #";
             this.colProjectNumberBGV.FieldName = "ProjectNumber";
             this.colProjectNumberBGV.Name = "colProjectNumberBGV";
@@ -793,7 +795,7 @@
             // colEngineeringProjectNumberBGV
             // 
             this.colEngineeringProjectNumberBGV.AppearanceCell.Options.UseTextOptions = true;
-            this.colEngineeringProjectNumberBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.colEngineeringProjectNumberBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colEngineeringProjectNumberBGV.Caption = "Engineering Project #";
             this.colEngineeringProjectNumberBGV.FieldName = "EngineeringProjectNumber";
             this.colEngineeringProjectNumberBGV.Name = "colEngineeringProjectNumberBGV";
@@ -863,6 +865,8 @@
             // 
             // colMoldCostBGV
             // 
+            this.colMoldCostBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colMoldCostBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colMoldCostBGV.Caption = "Mold Cost";
             this.colMoldCostBGV.DisplayFormat.FormatString = "c0";
             this.colMoldCostBGV.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
@@ -873,6 +877,8 @@
             // 
             // colDeliveryInWeeksBGV
             // 
+            this.colDeliveryInWeeksBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colDeliveryInWeeksBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colDeliveryInWeeksBGV.Caption = "Delivery In Weeks";
             this.colDeliveryInWeeksBGV.FieldName = "DeliveryInWeeks";
             this.colDeliveryInWeeksBGV.Name = "colDeliveryInWeeksBGV";
@@ -898,6 +904,8 @@
             // 
             // colStartDateBGV
             // 
+            this.colStartDateBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colStartDateBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colStartDateBGV.Caption = "Start Date";
             this.colStartDateBGV.ColumnEdit = this.genericDateEdit;
             this.colStartDateBGV.FieldName = "StartDate";
@@ -916,6 +924,8 @@
             // 
             // colDueDateBGV
             // 
+            this.colDueDateBGV.AppearanceCell.Options.UseTextOptions = true;
+            this.colDueDateBGV.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.colDueDateBGV.Caption = "Due Date";
             this.colDueDateBGV.ColumnEdit = this.genericDateEdit;
             this.colDueDateBGV.FieldName = "DueDate";
