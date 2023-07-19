@@ -2885,7 +2885,7 @@ namespace Toolroom_Project_Viewer
             Console.WriteLine("bandedGridView1 Mouse down event.");
             BandedGridView bandedGridView = sender as BandedGridView;
             List<string> PersonnelColumns = new List<string> { "Engineer", "Designer", "ToolMaker", "RoughProgrammer", "FinishProgrammer", "ElectrodeProgrammer" };
-            List<string> OtherColumns = new List<string> { "AdjustDeliveryDate", "StartDate", "FinishDate", "GeneralNotes" };
+            List<string> OtherColumns = new List<string> { "JobNumber", "AdjustDeliveryDate", "StartDate", "FinishDate", "GeneralNotes" };
             var hitInfo = bandedGridView.CalcHitInfo(e.Location);
             Color? color;
             Color rowColor;
@@ -3346,7 +3346,7 @@ namespace Toolroom_Project_Viewer
                 {
                     if (e.Value != null && DateTime.Parse(e.Value.ToString()) < task.StartDate)
                     {
-                        e.ErrorText = "You cannot have a finish date before a task's start date.";
+                        e.ErrorText = "You cannot have a finish date before a start date in a given task.";
                         e.Valid = false;
                     }
                 }
