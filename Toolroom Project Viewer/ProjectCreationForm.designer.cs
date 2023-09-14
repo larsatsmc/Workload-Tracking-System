@@ -78,7 +78,6 @@
             this.SelectProjectButton = new DevExpress.XtraEditors.SimpleButton();
             this.overLapAllowedCheckEdit = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
@@ -86,7 +85,6 @@
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
             this.dueDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.ProjectNumberTextBox = new System.Windows.Forms.TextBox();
             this.ElectrodeProgrammerComboBox = new System.Windows.Forms.ComboBox();
@@ -138,7 +136,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.overLapAllowedCheckEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -569,7 +566,6 @@
             this.panelControl2.Controls.Add(this.SelectProjectButton);
             this.panelControl2.Controls.Add(this.overLapAllowedCheckEdit);
             this.panelControl2.Controls.Add(this.labelControl24);
-            this.panelControl2.Controls.Add(this.labelControl9);
             this.panelControl2.Controls.Add(this.labelControl8);
             this.panelControl2.Controls.Add(this.labelControl7);
             this.panelControl2.Controls.Add(this.labelControl6);
@@ -577,7 +573,6 @@
             this.panelControl2.Controls.Add(this.labelControl4);
             this.panelControl2.Controls.Add(this.labelControl3);
             this.panelControl2.Controls.Add(this.labelControl2);
-            this.panelControl2.Controls.Add(this.pictureEdit1);
             this.panelControl2.Controls.Add(this.dueDateTimePicker);
             this.panelControl2.Controls.Add(this.ProjectNumberTextBox);
             this.panelControl2.Controls.Add(this.ElectrodeProgrammerComboBox);
@@ -736,16 +731,6 @@
             this.labelControl24.TabIndex = 74;
             this.labelControl24.Text = "* = Indicates Required Field";
             // 
-            // labelControl9
-            // 
-            this.labelControl9.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl9.Appearance.Options.UseFont = true;
-            this.labelControl9.Location = new System.Drawing.Point(14, 373);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(51, 19);
-            this.labelControl9.TabIndex = 73;
-            this.labelControl9.Text = "Picture:";
-            // 
             // labelControl8
             // 
             this.labelControl8.Appearance.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -816,15 +801,6 @@
             this.labelControl2.TabIndex = 66;
             this.labelControl2.Text = "Project / MWO Number:*";
             // 
-            // pictureEdit1
-            // 
-            this.pictureEdit1.Enabled = false;
-            this.pictureEdit1.Location = new System.Drawing.Point(12, 393);
-            this.pictureEdit1.Name = "pictureEdit1";
-            this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.pictureEdit1.Size = new System.Drawing.Size(385, 318);
-            this.pictureEdit1.TabIndex = 65;
-            // 
             // dueDateTimePicker
             // 
             this.dueDateTimePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -833,7 +809,7 @@
             this.dueDateTimePicker.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dueDateTimePicker.Name = "dueDateTimePicker";
             this.dueDateTimePicker.Size = new System.Drawing.Size(113, 22);
-            this.dueDateTimePicker.TabIndex = 59;            
+            this.dueDateTimePicker.TabIndex = 59;
             // 
             // ProjectNumberTextBox
             // 
@@ -892,6 +868,7 @@
             this.DesignerComboBox.Size = new System.Drawing.Size(170, 24);
             this.DesignerComboBox.TabIndex = 52;
             this.DesignerComboBox.DropDown += new System.EventHandler(this.ResourceComboBox_DropDown);
+            this.DesignerComboBox.SelectedValueChanged += new System.EventHandler(this.Personnel_ValueChanged);
             // 
             // ToolMakerComboBox
             // 
@@ -1038,6 +1015,8 @@
             "Core",
             "Core Insert",
             "Core Pin",
+            "Design",
+            "Design Change",
             "Ejector Pin",
             "Gate Insert",
             "Gibs",
@@ -1046,7 +1025,6 @@
             "Insert",
             "Lifter",
             "Lock Block",
-            "Mold Design",
             "Runner Block",
             "Wear Plate"});
             this.ComponentListBox.Location = new System.Drawing.Point(13, 87);
@@ -1341,7 +1319,6 @@
             this.panelControl2.ResumeLayout(false);
             this.panelControl2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.overLapAllowedCheckEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
@@ -1416,9 +1393,7 @@
         private DevExpress.XtraEditors.PictureEdit ComponentPictureEdit;
         private DevExpress.XtraEditors.SimpleButton AddTasksButton;
         private DevExpress.XtraEditors.SimpleButton AddComponentButton;
-        private DevExpress.XtraEditors.PictureEdit pictureEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl1;
-        private DevExpress.XtraEditors.LabelControl labelControl9;
         private DevExpress.XtraEditors.LabelControl labelControl8;
         private DevExpress.XtraEditors.LabelControl labelControl7;
         private DevExpress.XtraEditors.LabelControl labelControl6;

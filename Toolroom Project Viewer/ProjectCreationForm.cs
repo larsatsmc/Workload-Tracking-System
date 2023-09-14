@@ -801,6 +801,10 @@ namespace Toolroom_Project_Viewer
             {
                 personnelList = GetResourceList("EDM Wire Operator");
             }
+            else if(taskName == "Design" || taskName == "Design Change")
+            {
+                personnelList = GetResourceList("Designer");
+            }
             else if (taskName == "Hole Pop")
             {
                 personnelList = GetResourceList("Hole Popper Operator");
@@ -848,6 +852,14 @@ namespace Toolroom_Project_Viewer
             else if (taskName == "CNC Electrodes")
             {
                 ti = new TaskModel(ElectrodeCNCOperatorComboBox.Text, "0", "1");
+            }
+            else if (taskName == "Design")
+            {
+                ti = new TaskModel(DesignerComboBox.Text, "0", "0");
+            }
+            else if (taskName == "Design Change")
+            {
+                ti = new TaskModel(DesignerComboBox.Text, "0", "0");
             }
             else if (taskName == "Heat Treat")
             {
