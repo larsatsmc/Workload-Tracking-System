@@ -374,10 +374,10 @@ namespace Toolroom_Project_Viewer
 
             schedulerDataStorage1.Appointments.DataSource = tasks;
 
-            for (int i = 0; i < schedulerDataStorage1.Appointments.Items.Count; i++)
-            {
-                Console.WriteLine($"{schedulerDataStorage1.Appointments[i].Id} Project#: {schedulerDataStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerDataStorage1.Appointments[i].Start} Resource: {schedulerDataStorage1.Appointments[i].ResourceId} TaskName: {schedulerDataStorage1.Appointments[i].CustomFields["TaskName"]}");
-            }
+            //for (int i = 0; i < schedulerDataStorage1.Appointments.Items.Count; i++)
+            //{
+            //    Console.WriteLine($"{schedulerDataStorage1.Appointments[i].Id} Project#: {schedulerDataStorage1.Appointments[i].CustomFields["ProjectNumber"]} {schedulerDataStorage1.Appointments[i].Start} Resource: {schedulerDataStorage1.Appointments[i].ResourceId} TaskName: {schedulerDataStorage1.Appointments[i].CustomFields["TaskName"]}");
+            //}
 
             //Console.WriteLine();
             //Console.WriteLine($"{departmentComboBox.Text} Appointments");
@@ -3810,6 +3810,7 @@ namespace Toolroom_Project_Viewer
 
             foreach (TaskModel task in tasks)
             {
+                //Console.WriteLine($"{task.ID} {task.TaskName}");
                 if (task.StartDate == null || task.FinishDate == null)
                 {
                     goto Skip;
@@ -3842,9 +3843,10 @@ namespace Toolroom_Project_Viewer
 
                     deptWeekList = results.ToList();
                 }
-                // Deposits hours into correct day buckets.
+                // Deposits hours into correct week and day buckets.
                 if (deptWeekList.Any())
                 {
+                    // Find week from week list with date range that matches current task.
                     weekTemp = deptWeekList.Find(x => (x.WeekStart <= task.StartDate && x.WeekEnd >= task.StartDate) || (x.WeekStart > task.StartDate && x.WeekNum == 1));
                     weekNum = weekTemp.WeekNum;
                     //weekTemp.AddDayHours(Convert.ToInt16(rdr["Hours"]), Convert.ToDateTime(rdr["StartDate"]));
@@ -3889,19 +3891,19 @@ namespace Toolroom_Project_Viewer
 
                                 if (weekNum > 20)
                                 {
-                                    goto MyEnd;
+                                    goto Skip;
                                 }
 
                                 //weekTemp = deptWeekList.Find(x => x.WeekNum == weekNum);
                                 weekTemp = deptWeekList[weekNum - 1];
                                 //weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
-                                //Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
+                                Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} {dailyAVG} {days}");
                             }
                             else
                             {
                                 weekTemp.AddHoursToDay((int)date.DayOfWeek, dailyAVG);
                                 //if (weekTemp.Department == "CNC Finish")
-                                //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
+                                Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.DayOfWeek} Daily AVG. {dailyAVG} Hrs {hours} Days {days}");
                                 days -= 1;
                             }
 
@@ -3913,14 +3915,12 @@ namespace Toolroom_Project_Viewer
                     {
                         weekTemp.AddHoursToDay((int)date.AddDays(days).DayOfWeek, dailyAVG);
                         //if (weekTemp.Department == "CNC Finish")
-                        //    Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
+                        Console.WriteLine($"{weekTemp.Department} {weekTemp.WeekStart.ToShortDateString()} {date.AddDays(days).DayOfWeek} {dailyAVG} {days}");
                     }
                 }
 
             Skip:;
             }
-
-        MyEnd:;
 
             return weekList;
         }
